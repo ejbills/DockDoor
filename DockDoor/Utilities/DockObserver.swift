@@ -595,9 +595,9 @@ final class DockObserver {
 
     /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
     /// This is used to correctly identify which instance of a multi-instance app is being hovered.
-    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
+    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int? {
         guard let allDockItems = getAllDockItemChildren() else {
-            return 0
+            return nil
         }
 
         // Filter to only AXApplicationDockItems with the same bundle ID
@@ -620,7 +620,7 @@ final class DockObserver {
             }
         }
 
-        return 0
+        return nil
     }
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
@@ -650,9 +650,27 @@ final class DockObserver {
 
             // For multiple instances, find the correct one based on dock position
             if runningApps.count > 1 {
-                let instanceIndex = findDockItemInstanceIndex(hoveredDockItem, bundleIdentifier: bundleIdentifier)
-                if instanceIndex < runningApps.count {
-                    return ApplicationReturnType(status: .success(runningApps[instanceIndex]), dockItemElement: hoveredDockItem)
+                let persistentDockItemCount = DockAppInstanceOrdering
+                    .persistentDockItemCount(for: bundleIdentifier)
+                let dockOrderedProcessIdentifiers = DockAppInstanceOrdering.processIdentifiers(
+                    for: runningApps.map {
+                        (processIdentifier: $0.processIdentifier, launchDate: $0.launchDate)
+                    },
+                    persistentDockItemCount: persistentDockItemCount
+                )
+                if let instanceIndex = findDockItemInstanceIndex(
+                    hoveredDockItem,
+                    bundleIdentifier: bundleIdentifier
+                ),
+                    dockOrderedProcessIdentifiers.indices.contains(instanceIndex),
+                    let runningApp = runningApps.first(where: {
+                        $0.processIdentifier == dockOrderedProcessIdentifiers[instanceIndex]
+                    })
+                {
+                    return ApplicationReturnType(
+                        status: .success(runningApp),
+                        dockItemElement: hoveredDockItem
+                    )
                 }
             }
 
