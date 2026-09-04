@@ -78,4 +78,67 @@ struct DockAppInstanceOrderingTests {
 
         #expect(processIdentifiers == [101, 202])
     }
+
+    @Test func closedFirstPersistentItemLeavesItsDockPositionEmpty() {
+        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
+            for: [
+                (processIdentifier: 101, launchDate: olderLaunchDate),
+            ],
+            persistentDockItemCount: 2,
+            dockItemRunningStates: [false, true]
+        )
+
+        #expect(processIdentifiers == [nil, 101])
+    }
+
+    @Test func closedSecondPersistentItemLeavesItsDockPositionEmpty() {
+        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
+            for: [
+                (processIdentifier: 202, launchDate: newerLaunchDate),
+            ],
+            persistentDockItemCount: 2,
+            dockItemRunningStates: [true, false]
+        )
+
+        #expect(processIdentifiers == [202, nil])
+    }
+
+    @Test func runningPersistentItemsStillUseReverseLaunchOrder() {
+        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
+            for: [
+                (processIdentifier: 101, launchDate: olderLaunchDate),
+                (processIdentifier: 202, launchDate: newerLaunchDate),
+            ],
+            persistentDockItemCount: 2,
+            dockItemRunningStates: [true, true]
+        )
+
+        #expect(processIdentifiers == [202, 101])
+    }
+
+    @Test func inactivePersistentItemBeforeTransientItemRemainsEmpty() {
+        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
+            for: [
+                (processIdentifier: 202, launchDate: newerLaunchDate),
+                (processIdentifier: 101, launchDate: olderLaunchDate),
+            ],
+            persistentDockItemCount: 2,
+            dockItemRunningStates: [true, false, true]
+        )
+
+        #expect(processIdentifiers == [101, nil, 202])
+    }
+
+    @Test func unavailableRunningStatesFallBackToDockPrefix() {
+        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
+            for: [
+                (processIdentifier: 202, launchDate: newerLaunchDate),
+                (processIdentifier: 101, launchDate: olderLaunchDate),
+            ],
+            persistentDockItemCount: 2,
+            dockItemRunningStates: [nil, nil]
+        )
+
+        #expect(processIdentifiers == [202, 101])
+    }
 }

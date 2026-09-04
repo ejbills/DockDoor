@@ -54,4 +54,45 @@ enum DockAppInstanceOrdering {
 
         return Array(persistentProcessIdentifiers) + Array(transientProcessIdentifiers)
     }
+
+    /// Returns a PID assignment aligned with the matching Dock items. A nil
+    /// entry represents an unoccupied tile whose application instance exited.
+    static func processIdentifiersByDockItem(
+        for runningApplications: [RunningApplicationIdentity],
+        persistentDockItemCount: Int,
+        dockItemRunningStates: [Bool?]
+    ) -> [pid_t?] {
+        let runningDockItemIndices = dockItemRunningStates.indices.filter {
+            dockItemRunningStates[$0] == true
+        }
+
+        // Trust the Accessibility occupancy flags when they account for every
+        // process. Otherwise retain the previous prefix-based behavior while
+        // the Dock and NSWorkspace are between updates.
+        let occupiedDockItemIndices = if runningDockItemIndices.count == runningApplications.count {
+            runningDockItemIndices
+        } else {
+            Array(dockItemRunningStates.indices.prefix(runningApplications.count))
+        }
+        let occupiedPersistentDockItemCount = occupiedDockItemIndices.count {
+            $0 < persistentDockItemCount
+        }
+        let processIdentifiers = processIdentifiers(
+            for: runningApplications,
+            persistentDockItemCount: occupiedPersistentDockItemCount
+        )
+
+        var processIdentifiersByDockItem = [pid_t?](
+            repeating: nil,
+            count: dockItemRunningStates.count
+        )
+        for (dockItemIndex, processIdentifier) in zip(
+            occupiedDockItemIndices,
+            processIdentifiers
+        ) {
+            processIdentifiersByDockItem[dockItemIndex] = processIdentifier
+        }
+
+        return processIdentifiersByDockItem
+    }
 }

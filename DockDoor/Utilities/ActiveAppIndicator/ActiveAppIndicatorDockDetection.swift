@@ -36,9 +36,9 @@ enum ActiveAppIndicatorDockDetection {
             (try? $0.subrole()) == "AXApplicationDockItem"
         }
 
-        // A Dock item does not expose the PID of the application instance it
-        // represents. Reconstruct that identity from launch order and whether
-        // the matching items are persistent or transient Dock tiles.
+        // A Dock item exposes whether its application instance is running, but
+        // not its PID. Combine that occupancy with launch order to reconstruct
+        // the identity represented by each matching tile.
         let bundleMatchingItems = applicationDockItems.filter { item in
             guard let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
                 .absoluteURL,
@@ -55,13 +55,17 @@ enum ActiveAppIndicatorDockDetection {
         let persistentDockItemCount = bundleMatchingItems.count > 1
             ? DockAppInstanceOrdering.persistentDockItemCount(for: bundleIdentifier)
             : 0
-        let dockOrderedProcessIdentifiers = DockAppInstanceOrdering.processIdentifiers(
+        let dockItemRunningStates: [Bool?] = bundleMatchingItems.map {
+            try? $0.appIsRunning()
+        }
+        let processIdentifiersByDockItem = DockAppInstanceOrdering.processIdentifiersByDockItem(
             for: runningApps.map {
                 (processIdentifier: $0.processIdentifier, launchDate: $0.launchDate)
             },
-            persistentDockItemCount: persistentDockItemCount
+            persistentDockItemCount: persistentDockItemCount,
+            dockItemRunningStates: dockItemRunningStates
         )
-        if let matchingItemIndex = dockOrderedProcessIdentifiers.firstIndex(
+        if let matchingItemIndex = processIdentifiersByDockItem.firstIndex(
             of: app.processIdentifier
         ),
             bundleMatchingItems.indices.contains(matchingItemIndex),
@@ -70,7 +74,9 @@ enum ActiveAppIndicatorDockDetection {
             return frame
         }
 
-        if let item = bundleMatchingItems.first {
+        if let item = bundleMatchingItems.first(where: {
+            (try? $0.appIsRunning()) == true
+        }) ?? bundleMatchingItems.first {
             return getFrameForDockItem(item)
         }
 

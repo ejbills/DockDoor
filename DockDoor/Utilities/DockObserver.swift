@@ -593,27 +593,26 @@ final class DockObserver {
         return dockChildren
     }
 
-    /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
-    /// This is used to correctly identify which instance of a multi-instance app is being hovered.
-    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int? {
+    /// Returns Dock items that share a bundle identifier in their visual order.
+    private func findDockItems(bundleIdentifier: String) -> [AXUIElement] {
         guard let allDockItems = getAllDockItemChildren() else {
-            return nil
+            return []
         }
 
-        // Filter to only AXApplicationDockItems with the same bundle ID
-        var matchingItems: [AXUIElement] = []
-        for item in allDockItems {
+        return allDockItems.filter { item in
             guard (try? item.subrole()) == "AXApplicationDockItem",
                   let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
-                  let itemBundle = Bundle(url: itemURL),
-                  itemBundle.bundleIdentifier == bundleIdentifier
-            else {
-                continue
-            }
-            matchingItems.append(item)
+                  let itemBundle = Bundle(url: itemURL)
+            else { return false }
+            return itemBundle.bundleIdentifier == bundleIdentifier
         }
+    }
 
-        // Find the index of the hovered item among matching items
+    /// Finds the hovered item's index among matching Dock items.
+    private func findDockItemInstanceIndex(
+        _ hoveredItem: AXUIElement,
+        matchingItems: [AXUIElement]
+    ) -> Int? {
         for (index, item) in matchingItems.enumerated() {
             if CFEqual(item, hoveredItem) {
                 return index
@@ -648,29 +647,55 @@ final class DockObserver {
 
             let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
 
-            // For multiple instances, find the correct one based on dock position
+            // A duplicate persistent tile can be inactive while another tile
+            // for the same bundle still has the sole running process.
+            if runningApps.count == 1,
+               (try? hoveredDockItem.appIsRunning()) == false
+            {
+                return ApplicationReturnType(
+                    status: .notRunning(bundleIdentifier: bundleIdentifier),
+                    dockItemElement: hoveredDockItem
+                )
+            }
+
+            // Resolve separate running and inactive tiles for duplicate bundles.
             if runningApps.count > 1 {
                 let persistentDockItemCount = DockAppInstanceOrdering
                     .persistentDockItemCount(for: bundleIdentifier)
-                let dockOrderedProcessIdentifiers = DockAppInstanceOrdering.processIdentifiers(
+                let matchingItems = findDockItems(bundleIdentifier: bundleIdentifier)
+                let dockItemRunningStates: [Bool?] = matchingItems.map {
+                    try? $0.appIsRunning()
+                }
+                let processIdentifiersByDockItem = DockAppInstanceOrdering.processIdentifiersByDockItem(
                     for: runningApps.map {
                         (processIdentifier: $0.processIdentifier, launchDate: $0.launchDate)
                     },
-                    persistentDockItemCount: persistentDockItemCount
+                    persistentDockItemCount: persistentDockItemCount,
+                    dockItemRunningStates: dockItemRunningStates
                 )
                 if let instanceIndex = findDockItemInstanceIndex(
                     hoveredDockItem,
-                    bundleIdentifier: bundleIdentifier
+                    matchingItems: matchingItems
                 ),
-                    dockOrderedProcessIdentifiers.indices.contains(instanceIndex),
-                    let runningApp = runningApps.first(where: {
-                        $0.processIdentifier == dockOrderedProcessIdentifiers[instanceIndex]
-                    })
+                    processIdentifiersByDockItem.indices.contains(instanceIndex)
                 {
-                    return ApplicationReturnType(
-                        status: .success(runningApp),
-                        dockItemElement: hoveredDockItem
-                    )
+                    if let processIdentifier = processIdentifiersByDockItem[instanceIndex],
+                       let runningApp = runningApps.first(where: {
+                           $0.processIdentifier == processIdentifier
+                       })
+                    {
+                        return ApplicationReturnType(
+                            status: .success(runningApp),
+                            dockItemElement: hoveredDockItem
+                        )
+                    }
+
+                    if dockItemRunningStates[instanceIndex] == false {
+                        return ApplicationReturnType(
+                            status: .notRunning(bundleIdentifier: bundleIdentifier),
+                            dockItemElement: hoveredDockItem
+                        )
+                    }
                 }
             }
 
