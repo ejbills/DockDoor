@@ -539,15 +539,16 @@ extension WindowUtil {
         let connectionID = CGSMainConnectionID()
         var windowIDUInt32 = UInt32(windowID)
         let qualityOption: CGSWindowCaptureOptions = (Defaults[.windowImageCaptureQuality] == .best) ? .bestResolution : .nominalResolution
-        guard let capturedWindows = CGSHWCaptureWindowList(
+        let capturedWindows = CGSHWCaptureWindowList(
             connectionID,
             &windowIDUInt32,
             1,
             [.ignoreGlobalClipShape, .fullSize, qualityOption]
-        ) as? [CGImage],
-            let capturedImage = capturedWindows.first,
-            !isFullyTransparent(capturedImage)
-        else {
+        ) as? [CGImage]
+        let capturedImage = capturedWindows?.first
+        let transparent = capturedImage.map(isFullyTransparent) ?? false
+        logCapture(windowID: windowID, pid: pid, title: windowTitle, image: capturedImage, transparent: transparent, quality: qualityOption)
+        guard let capturedImage, !transparent else {
             throw captureError
         }
         cgImage = capturedImage
@@ -578,6 +579,19 @@ extension WindowUtil {
         }
 
         return cgImage
+    }
+
+    private static func logCapture(windowID: CGWindowID, pid: pid_t, title: String?, image: CGImage?, transparent: Bool, quality: CGSWindowCaptureOptions) {
+        guard Defaults[.debugMode] else { return }
+        let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first
+        let bounds = (entry?[kCGWindowBounds as String] as? [String: AnyObject]).map {
+            "\(($0["Width"] as? NSNumber)?.intValue ?? -1)x\(($0["Height"] as? NSNumber)?.intValue ?? -1)@\(($0["X"] as? NSNumber)?.intValue ?? -1),\(($0["Y"] as? NSNumber)?.intValue ?? -1)"
+        } ?? "none"
+        let onscreen = (entry?[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
+        let spaces = windowID.cgsSpaces()
+        let active = currentActiveSpaceIDs()
+        let result = image.map { "\($0.width)x\($0.height)\(transparent ? " transparent" : "")" } ?? "nil"
+        DebugLogger.log("captureWindowImage", details: "PID: \(pid), window: \(windowID), title: \(title ?? ""), image: \(result), bounds: \(bounds), onscreen: \(onscreen), spaces: \(spaces), activeSpaces: \(active.sorted()), quality: \(quality == .bestResolution ? "best" : "nominal")")
     }
 
     private static func isFullyTransparent(_ image: CGImage) -> Bool {
