@@ -42,6 +42,7 @@
 		3BB072C8A800463CB09CC383 /* MouseActionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1919C22F1F48369D6FCCD1 /* MouseActionsSection.swift */; };
 		49327679B03B44DC8FC44058 /* WindowSwitcherGesturesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E0D699507444D3985957B6 /* WindowSwitcherGesturesSection.swift */; };
 		4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */; };
+		400B743394004E7F96049F86 /* DockAppInstanceOrderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBCF6588F2B4DEBA4E9B33B /* DockAppInstanceOrderingTests.swift */; };
 		555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */; };
 		5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */ = {isa = PBXBuildFile; fileRef = D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */; };
 		5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */; };
@@ -208,6 +209,7 @@
 		D4B28EF578BC4053BF908A5A /* CmdKeyShortcutsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */; };
 		D840D9FEDA7F4F129CAC9C455104296F /* SettingsSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E159457AD5CE4E54988FDAF2CB583AE3 /* SettingsSearchResultsView.swift */; };
 		D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */; };
+		E8023EA0AC0540E5AF723494 /* DockAppInstanceOrdering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030F08EC10F943C9B64311B6 /* DockAppInstanceOrdering.swift */; };
 		EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */; };
 		EE170699DAA44638A41F52048707488C /* SettingsSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C876FFD01A4267862BF125EA617987 /* SettingsSearchEngine.swift */; };
 		F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0970FA03935B41E59919A618 /* SettingsSliderRow.swift */; };
@@ -437,6 +439,7 @@
 		CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherAppearanceSection.swift; sourceTree = "<group>"; };
 		CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHoverContainer.swift; sourceTree = "<group>"; };
 		D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeTabGroupingTests.swift; sourceTree = "<group>"; };
+		DEBCF6588F2B4DEBA4E9B33B /* DockAppInstanceOrderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockAppInstanceOrderingTests.swift; sourceTree = "<group>"; };
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
 		D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Glow.wav; sourceTree = "<group>"; };
 		DBECBD93A13645B2A46E546AC58BD1A4 /* FolderWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderWidgetView.swift; sourceTree = "<group>"; };
@@ -446,6 +449,7 @@
 		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
 		F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdKeyShortcutsSection.swift; sourceTree = "<group>"; };
 		FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabAppearanceSection.swift; sourceTree = "<group>"; };
+		030F08EC10F943C9B64311B6 /* DockAppInstanceOrdering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockAppInstanceOrdering.swift; sourceTree = "<group>"; };
 		FCF95019606449008856E149 /* SettingsLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -623,6 +627,7 @@
 			isa = PBXGroup;
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
+				DEBCF6588F2B4DEBA4E9B33B /* DockAppInstanceOrderingTests.swift */,
 				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
 			);
 			path = DockDoorTests;
@@ -737,6 +742,7 @@
 				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
 				BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */,
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
+				030F08EC10F943C9B64311B6 /* DockAppInstanceOrdering.swift */,
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
@@ -1119,6 +1125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
+				400B743394004E7F96049F86 /* DockAppInstanceOrderingTests.swift in Sources */,
 				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1210,6 +1217,7 @@
 				BB638F1E2E0218EC0010077D /* CalendarContentView.swift in Sources */,
 				81BFDF0D2EE815FD00D56F65 /* CompactModeWarningBanner.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
+				E8023EA0AC0540E5AF723494 /* DockAppInstanceOrdering.swift in Sources */,
 				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
 				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,

@@ -32,27 +32,60 @@ enum ActiveAppIndicatorDockDetection {
             return nil
         }
 
-        // Find the dock item for this app
-        for item in dockItems {
-            guard let subrole = try? item.subrole(),
-                  subrole == "AXApplicationDockItem"
-            else { continue }
+        let applicationDockItems = dockItems.filter {
+            (try? $0.subrole()) == "AXApplicationDockItem"
+        }
 
-            // Check if this is our app by comparing bundle identifiers
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
+        // A Dock item exposes whether its application instance is running, but
+        // not its PID. Combine that occupancy with launch order to reconstruct
+        // the identity represented by each matching tile.
+        let bundleMatchingItems = applicationDockItems.filter { item in
+            guard let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
                 .absoluteURL,
-                let itemBundle = Bundle(url: itemURL),
-                itemBundle.bundleIdentifier == bundleIdentifier
-            {
-                return getFrameForDockItem(item)
+                let itemBundle = Bundle(url: itemURL)
+            else {
+                return false
             }
+            return itemBundle.bundleIdentifier == bundleIdentifier
+        }
 
-            // Check by running app if bundle ID check failed
-            if let itemTitle = try? item.title(),
-               itemTitle == app.localizedName
-            {
-                return getFrameForDockItem(item)
-            }
+        let runningApps = NSRunningApplication.runningApplications(
+            withBundleIdentifier: bundleIdentifier
+        )
+        let persistentDockItemCount = bundleMatchingItems.count > 1
+            ? DockAppInstanceOrdering.persistentDockItemCount(for: bundleIdentifier)
+            : 0
+        let dockItemRunningStates: [Bool?] = bundleMatchingItems.map {
+            try? $0.appIsRunning()
+        }
+        let processIdentifiersByDockItem = DockAppInstanceOrdering.processIdentifiersByDockItem(
+            for: runningApps.map {
+                (processIdentifier: $0.processIdentifier, launchDate: $0.launchDate)
+            },
+            persistentDockItemCount: persistentDockItemCount,
+            dockItemRunningStates: dockItemRunningStates
+        )
+        if let matchingItemIndex = processIdentifiersByDockItem.firstIndex(
+            of: app.processIdentifier
+        ),
+            bundleMatchingItems.indices.contains(matchingItemIndex),
+            let frame = getFrameForDockItem(bundleMatchingItems[matchingItemIndex])
+        {
+            return frame
+        }
+
+        if let item = bundleMatchingItems.first(where: {
+            (try? $0.appIsRunning()) == true
+        }) ?? bundleMatchingItems.first {
+            return getFrameForDockItem(item)
+        }
+
+        // Preserve the existing fallback for apps whose Dock URL cannot be
+        // resolved to a bundle, or while Launch Services is still settling.
+        if let title = app.localizedName,
+           let item = applicationDockItems.first(where: { (try? $0.title()) == title })
+        {
+            return getFrameForDockItem(item)
         }
 
         return nil
