@@ -679,8 +679,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (verborgen)"
           }
         },
         "no" : {
@@ -751,14 +751,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (隐藏)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : "（隱藏）"
           }
         }
       }
@@ -870,8 +870,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (geminimaliseerd)"
           }
         },
         "no" : {
@@ -942,14 +942,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (最小化)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : "（最小化）"
           }
         }
       }
@@ -4887,8 +4887,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "Eenmalig $20"
           }
         },
         "no" : {
@@ -4959,14 +4959,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "一次性买断：20 美元"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "$20 單次"
           }
         }
       }
@@ -6224,8 +6224,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 Macs · 14 dagen niet-goed-geld-terug-garantie"
           }
         },
         "no" : {
@@ -6296,14 +6296,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 台 Mac · 14 天退款保证"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3部Mac裝置・14天退款保證"
           }
         }
       }
@@ -17463,8 +17463,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "Een extra triggertoets, eventueel met een eigen modificatietoets, waarmee de switcher in een andere filtermodus wordt geactiveerd."
           }
         },
         "no" : {
@@ -17535,14 +17535,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "一个额外的触发键，可以根据需要搭配独立的修饰键，用于以不同的筛选模式调用切换器。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "以不同過濾模式打開切換器的額外的最終鍵（可選搭配專屬變更鍵）。"
           }
         }
       }
@@ -19557,8 +19557,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application"
+            "state" : "translated",
+            "value" : "Applicatie"
           }
         },
         "no" : {
@@ -19635,8 +19635,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application"
+            "state" : "translated",
+            "value" : "App"
           }
         }
       }
@@ -21080,8 +21080,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Arrange"
+            "state" : "translated",
+            "value" : "Ordenen"
           }
         },
         "no" : {
@@ -21158,8 +21158,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Arrange"
+            "state" : "translated",
+            "value" : "排列"
           }
         }
       }
@@ -46399,8 +46399,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy"
+            "state" : "translated",
+            "value" : "Kopiëren"
           }
         },
         "no" : {
@@ -46477,8 +46477,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy"
+            "state" : "translated",
+            "value" : "拷貝"
           }
         }
       }
@@ -48876,8 +48876,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cut"
+            "state" : "translated",
+            "value" : "Knippen"
           }
         },
         "no" : {
@@ -48948,14 +48948,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cut"
+            "state" : "translated",
+            "value" : "剪切"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cut"
+            "state" : "translated",
+            "value" : "剪下"
           }
         }
       }
@@ -59728,8 +59728,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project."
+            "state" : "translated",
+            "value" : "DockDoor Free heeft geen betaalmuur en zal die ook nooit krijgen. Pro is een aparte app die het macOS-Dock volledig vervangt en veel uitgebreidere systeemcontrole biedt; het aanschaffen ervan is de beste manier om het gratis project te steunen."
           }
         },
         "no" : {
@@ -59800,14 +59800,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project."
+            "state" : "translated",
+            "value" : "DockDoor Free 没有付费墙，而且永远不会有。Pro 是一个独立的应用，它会完全取代 macOS 的 Dock，从而提供更深入的系统控制。购买 Pro 也是支持这个免费项目的最佳方式。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project."
+            "state" : "translated",
+            "value" : "DockDoor免費版永遠不會有付費限制。Pro版本是完全取代macOS Dock來提供深層系統控制的另一個app。購買Pro版本是支持免費版本的最佳方式。"
           }
         }
       }
@@ -61441,8 +61441,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "Bewerken"
           }
         },
         "no" : {
@@ -61519,8 +61519,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "編輯"
           }
         }
       }
@@ -75547,8 +75547,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit App"
+            "state" : "translated",
+            "value" : "App geforceerd stoppen"
           }
         },
         "no" : {
@@ -75625,8 +75625,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit App"
+            "state" : "translated",
+            "value" : "強制結束App"
           }
         }
       }
@@ -78213,8 +78213,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro"
+            "state" : "translated",
+            "value" : "DockDoor Pro aanschaffen"
           }
         },
         "no" : {
@@ -78291,8 +78291,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro"
+            "state" : "translated",
+            "value" : "取得DockDoor Pro"
           }
         }
       }
@@ -78403,8 +78403,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro…"
+            "state" : "translated",
+            "value" : "DockDoor Pro aanschaffen…"
           }
         },
         "no" : {
@@ -78481,8 +78481,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro…"
+            "state" : "translated",
+            "value" : "取得DockDoor Pro…"
           }
         }
       }
@@ -92584,7 +92584,194 @@
       }
     },
     "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front." : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+          }
+        }
+      }
     },
     "Keep Open" : {
       "localizations" : {
@@ -92777,7 +92964,194 @@
       }
     },
     "Keep preview open after hover activation" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep preview open after hover activation"
+          }
+        }
+      }
     },
     "Keep preview when app terminates" : {
       "localizations" : {
@@ -99553,8 +99927,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free."
+            "state" : "translated",
+            "value" : "macOS kan het Dock niet op dit beeldscherm plaatsen omdat een ander beeldscherm direct tegen de rand van het Dock aan staat. Herschik je beeldschermen in Systeeminstellingen → Beeldschermen, zodat een deel van die rand vrij komt te liggen."
           }
         },
         "no" : {
@@ -99631,8 +100005,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free."
+            "state" : "translated",
+            "value" : "macOS 無法將 Dock 放置在此顯示器上，因為另一台顯示器緊貼著 Dock 的邊緣。請前往「系統設定」→「顯示器」重新排列顯示器，讓該邊緣留出部分空間。"
           }
         }
       }
@@ -105839,8 +106213,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier"
+            "state" : "translated",
+            "value" : "Modificatietoets"
           }
         },
         "no" : {
@@ -105917,8 +106291,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier"
+            "state" : "translated",
+            "value" : "變更鍵"
           }
         }
       }
@@ -113456,8 +113830,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Windows"
+            "state" : "translated",
+            "value" : "Geen vensters"
           }
         },
         "no" : {
@@ -113534,8 +113908,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Windows"
+            "state" : "translated",
+            "value" : "沒有視窗"
           }
         }
       }
@@ -120880,8 +121254,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Paste"
+            "state" : "translated",
+            "value" : "Plakken"
           }
         },
         "no" : {
@@ -120958,8 +121332,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Paste"
+            "state" : "translated",
+            "value" : "貼上"
           }
         }
       }
@@ -134212,8 +134586,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Redo"
+            "state" : "translated",
+            "value" : "Opnieuw"
           }
         },
         "no" : {
@@ -134290,8 +134664,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Redo"
+            "state" : "translated",
+            "value" : "重做"
           }
         }
       }
@@ -138017,8 +138391,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Replace the Dock entirely with the paid app from the same developer"
+            "state" : "translated",
+            "value" : "Dock volledig vervangen door de betaalde app van dezelfde ontwikkelaar"
           }
         },
         "no" : {
@@ -138095,8 +138469,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Replace the Dock entirely with the paid app from the same developer"
+            "state" : "translated",
+            "value" : "用來自相同開發者的收費App來取代整個Dock"
           }
         }
       }
@@ -143535,8 +143909,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Same as main (%@)"
+            "state" : "translated",
+            "value" : "Hetzelfde als hoofdscherm (%@)"
           }
         },
         "no" : {
@@ -143613,8 +143987,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Same as main (%@)"
+            "state" : "translated",
+            "value" : "與主要（%@）相同"
           }
         }
       }
@@ -149441,8 +149815,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "Alles selecteren"
           }
         },
         "no" : {
@@ -149519,8 +149893,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "選擇全部"
           }
         }
       }
@@ -175730,8 +176104,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display"
+            "state" : "translated",
+            "value" : "Hoofdscherm van het systeem"
           }
         },
         "no" : {
@@ -175808,8 +176182,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display"
+            "state" : "translated",
+            "value" : "系統主要顯示器"
           }
         }
       }
@@ -175920,8 +176294,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge."
+            "state" : "translated",
+            "value" : "Het hoofdscherm van het systeem volgt het scherm waarop de menubalk staat. DockDoor verplaatst het Dock automatisch naar het vergrendelde scherm; je kunt ook de cursor tegen de Dock-rand van dat scherm plaatsen."
           }
         },
         "no" : {
@@ -175998,8 +176372,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge."
+            "state" : "translated",
+            "value" : "系統主要顯示器是顯示選單列的畫面。DockDoor會自動移動Dock到鎖定的畫面；你也可以將指標移動到該畫面的Dock邊緣。"
           }
         }
       }
@@ -185828,8 +186202,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Undo"
+            "state" : "translated",
+            "value" : "Ongedaan maken"
           }
         },
         "no" : {
@@ -185906,8 +186280,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Undo"
+            "state" : "translated",
+            "value" : "還原"
           }
         }
       }
@@ -186019,8 +186393,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unhide App"
+            "state" : "translated",
+            "value" : "App weer zichtbaar maken"
           }
         },
         "no" : {
@@ -186097,8 +186471,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unhide App"
+            "state" : "translated",
+            "value" : "不隱藏App"
           }
         }
       }
@@ -186401,8 +186775,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown App"
+            "state" : "translated",
+            "value" : "Onbekende app"
           }
         },
         "no" : {
@@ -186479,8 +186853,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown App"
+            "state" : "translated",
+            "value" : "未知App"
           }
         }
       }
@@ -187353,8 +187727,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Untitled"
+            "state" : "translated",
+            "value" : "Naamloos"
           }
         },
         "no" : {
@@ -187431,8 +187805,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Untitled"
+            "state" : "translated",
+            "value" : "無標題"
           }
         }
       }
@@ -200698,8 +201072,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window"
+            "state" : "translated",
+            "value" : "Venster"
           }
         },
         "no" : {
@@ -200776,8 +201150,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window"
+            "state" : "translated",
+            "value" : "視窗"
           }
         }
       }
@@ -200889,8 +201263,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Actions"
+            "state" : "translated",
+            "value" : "Venster acties"
           }
         },
         "no" : {
@@ -200967,8 +201341,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Actions"
+            "state" : "translated",
+            "value" : "視窗動作"
           }
         }
       }
