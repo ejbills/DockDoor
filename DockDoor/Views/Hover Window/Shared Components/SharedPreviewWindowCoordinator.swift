@@ -24,6 +24,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     var mouseIsWithinPreviewWindow: Bool = false
     private var onWindowTap: (() -> Void)?
     private var fullPreviewWindow: NSPanel?
+    private var activeFullPreviewHoverID: UUID?
     private var pendingShowWorkItem: DispatchWorkItem?
 
     var windowSize: CGSize = getWindowSize()
@@ -190,11 +191,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         // Always restore dock auto-hide state, even if the preview isn't visible.
         restoreDockAutoHideState()
+        hideFullPreviewWindow()
 
         guard isVisible else { return }
 
         DragPreviewCoordinator.shared.endDragging()
-        hideFullPreviewWindow()
 
         searchWindow?.hideSearch()
 
@@ -474,6 +475,23 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
+    func beginFullPreviewHover() -> UUID? {
+        guard isVisible, !windowSwitcherCoordinator.windowSwitcherActive else { return nil }
+        hideFullPreviewWindow()
+        let hoverID = UUID()
+        activeFullPreviewHoverID = hoverID
+        return hoverID
+    }
+
+    func cancelFullPreviewHover(_ hoverID: UUID) {
+        guard activeFullPreviewHoverID == hoverID else { return }
+        hideFullPreviewWindow()
+    }
+
+    func isFullPreviewHoverActive(_ hoverID: UUID?) -> Bool {
+        isVisible && hoverID != nil && activeFullPreviewHoverID == hoverID
+    }
+
     @MainActor
     private func showFullPreviewWindow(for windowInfo: WindowInfo, on screen: NSScreen) {
         if fullPreviewWindow == nil {
@@ -512,6 +530,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     func hideFullPreviewWindow() {
+        activeFullPreviewHoverID = nil
         fullPreviewWindow?.orderOut(nil)
         if let currentFullPreviewContent = fullPreviewWindow?.contentView {
             currentFullPreviewContent.removeFromSuperview()
@@ -828,15 +847,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let shouldCenterOnScreen = centeredHoverWindowState != .none
 
         let screen = mouseScreen ?? NSScreen.main!
-        hideFullPreviewWindow()
-
-        if centeredHoverWindowState == .fullWindowPreview,
-           let windowInfo = windows.first,
-           let windowPosition = try? windowInfo.axElement.position(),
-           let windowScreen = windowPosition.screen()
-        {
+        if centeredHoverWindowState == .fullWindowPreview {
+            guard let windowInfo = windows.first,
+                  let windowPosition = try? windowInfo.axElement.position(),
+                  let windowScreen = windowPosition.screen() else { return }
             showFullPreviewWindow(for: windowInfo, on: windowScreen)
         } else {
+            hideFullPreviewWindow()
             self.appName = appName
             let activeDockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
             currentDockPosition = activeDockPosition
@@ -1059,10 +1076,14 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil,
                     bypassDockMouseValidation: Bool = false,
                     dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
-                    dockItemFrameOverride: CGRect? = nil)
+                    dockItemFrameOverride: CGRect? = nil, fullPreviewHoverID: UUID? = nil)
     {
         let renderStartTime = CFAbsoluteTimeGetCurrent()
         DebugLogger.log("PreviewRender", details: "showWindow called: \(windows.count) windows for \(appName)")
+
+        if centeredHoverWindowState == .fullWindowPreview, !isFullPreviewHoverActive(fullPreviewHoverID) {
+            return
+        }
 
         let shouldSkipDelay = overrideDelay || (Defaults[.useDelayOnlyForInitialOpen] && isVisible)
         let delay = shouldSkipDelay ? 0 : Defaults[.hoverWindowOpenDelay]
@@ -1102,6 +1123,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
 
             Task { @MainActor [weak self] in
+                if centeredHoverWindowState == .fullWindowPreview, self?.isFullPreviewHoverActive(fullPreviewHoverID) != true {
+                    return
+                }
                 self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
             }
         }

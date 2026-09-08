@@ -980,17 +980,19 @@ class KeybindHelper {
             keyCode == $0.keyCode && modifierFlagsMatch($0.modifierFlags, flags: flags)
         } ?? false
 
-        if previewIsCurrentlyVisible {
-            if keyCode == kVK_Escape, !isExactSwitcherShortcutPressed, !isAlternateShortcutPressed {
-                switcherSessionActive = false
-                return (true, { @MainActor in
-                    self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
-                    self.previewCoordinator.hideWindow()
-                    self.preventSwitcherHideOnRelease = false
-                    self.hasProcessedModifierRelease = true
-                })
-            }
+        if previewIsCurrentlyVisible || snapshot.fullPreviewFrame != nil,
+           keyCode == kVK_Escape, !isExactSwitcherShortcutPressed, !isAlternateShortcutPressed
+        {
+            switcherSessionActive = false
+            return (true, { @MainActor in
+                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                self.previewCoordinator.hideWindow()
+                self.preventSwitcherHideOnRelease = false
+                self.hasProcessedModifierRelease = true
+            })
+        }
 
+        if previewIsCurrentlyVisible {
             if flags.contains(.maskCommand), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                 if let action = getActionForCmdShortcut(keyCode: keyCode) {
                     preventSwitcherHideOnRelease = true
