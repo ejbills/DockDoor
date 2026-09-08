@@ -101,34 +101,107 @@ document.addEventListener('DOMContentLoaded', function() {
     setupSlideshow('dock-preview-slideshow');
     
     // Video playback controls
+    //
+    // Safari on iOS and macOS hands <video> loading to AVFoundation, which
+    // streams the file with HTTP Range requests. The CDN in front of the site
+    // can answer those in a way Safari rejects (200 instead of 206, weak ETags),
+    // so the element stays black while other browsers play the same file.
+    // To sidestep that, each clip is fetched lazily with one plain GET and
+    // attached as a blob: URL, so the media stack never issues a Range request.
+    // The markup uses preload="none" without autoplay so the browser does not
+    // start a competing native load; the <source> stays as a fallback.
     function handleVideoPlayback() {
-        const videos = document.querySelectorAll('video');
-        
+        const videos = Array.from(document.querySelectorAll('video'));
+        const pending = new WeakMap();
+        const canUseBlob = typeof window.fetch === 'function' &&
+            typeof window.URL === 'function' && typeof URL.createObjectURL === 'function';
+
+        function sourceUrl(video) {
+            const source = video.querySelector('source[src]');
+            return source ? source.getAttribute('src') : video.getAttribute('src');
+        }
+
+        function ensureLoaded(video) {
+            let load = pending.get(video);
+            if (load) return load;
+
+            const url = sourceUrl(video);
+            if (canUseBlob && url && !video.src) {
+                load = fetch(url)
+                    .then(response => {
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        video.src = URL.createObjectURL(blob);
+                    })
+                    .catch(() => {
+                        // Fall back to the native <source> load.
+                        video.load();
+                    });
+            } else {
+                load = Promise.resolve();
+            }
+            pending.set(video, load);
+            return load;
+        }
+
+        function playVideo(video) {
+            video.muted = true;
+            ensureLoaded(video).then(() => {
+                if (video.dataset.paused === 'true') return;
+                const attempt = video.play();
+                if (attempt && typeof attempt.catch === 'function') {
+                    attempt.catch(() => {
+                        video.addEventListener('canplay', () => {
+                            if (video.dataset.paused !== 'true') {
+                                video.play().catch(() => {});
+                            }
+                        }, { once: true });
+                    });
+                }
+            });
+        }
+
+        function pauseVideo(video) {
+            video.dataset.paused = 'true';
+            video.pause();
+        }
+
         if ('IntersectionObserver' in window) {
+            // Start fetching a little before the clip scrolls into view.
+            const preloadObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        ensureLoaded(entry.target);
+                        preloadObserver.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '400px 0px' });
+
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const video = entry.target;
-                        video.play().catch(() => {
-                            video.addEventListener('canplay', () => video.play(), { once: true });
-                        });
+                        entry.target.dataset.paused = 'false';
+                        playVideo(entry.target);
                     } else {
-                        entry.target.pause();
+                        pauseVideo(entry.target);
                     }
                 });
             }, { threshold: 0.5 });
-            
+
             videos.forEach(video => {
+                preloadObserver.observe(video);
                 videoObserver.observe(video);
             });
         } else {
             // Fallback for browsers that don't support IntersectionObserver
             videos.forEach(video => {
-                video.play();
+                playVideo(video);
             });
         }
     }
-    
+
     // Initialize video playback
     handleVideoPlayback();
     
