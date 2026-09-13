@@ -583,8 +583,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (مخفي)"
           }
         },
         "ca" : {
@@ -703,8 +703,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (oculto)"
           }
         },
         "ro" : {
@@ -774,8 +774,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (مصغر)"
           }
         },
         "ca" : {
@@ -894,8 +894,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (minimizado)"
           }
         },
         "ro" : {
@@ -964,7 +964,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "-%@"
           }
         },
@@ -1154,7 +1154,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1344,7 +1344,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ — %2$@"
           }
         },
@@ -1540,7 +1540,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -1730,8 +1730,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld app%2$@"
+            "state" : "translated",
+            "value" : "%1$lld تطبيق%2$@"
           }
         },
         "ca" : {
@@ -4911,8 +4911,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "$20 pagamento único"
           }
         },
         "ro" : {
@@ -6248,8 +6248,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 macs Garantia de reembolso de 14 dias"
           }
         },
         "ro" : {
@@ -8725,8 +8725,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A separate paid app that fully replaces the macOS Dock with profiles, widgets, file tray, media controls with lyrics, and a built-in switcher."
+            "state" : "translated",
+            "value" : "Uma aplicação paga independente que substitui totalmente a Dock do macOS com perfis, widgets, bandeja de ficheiros, controlos multimédia com letras de músicas e um seletor integrado."
           }
         },
         "ro" : {
@@ -9868,8 +9868,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide"
+            "state" : "translated",
+            "value" : "Ativar/Esconder"
           }
         },
         "ro" : {
@@ -14439,8 +14439,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow Access"
+            "state" : "translated",
+            "value" : "Permitir acesso"
           }
         },
         "ro" : {
@@ -14629,8 +14629,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow Access..."
+            "state" : "translated",
+            "value" : "Permitir acesso..."
           }
         },
         "ro" : {
@@ -92767,8 +92767,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+            "state" : "translated",
+            "value" : "指標停留將視窗移至最前時並停留在視窗上時，保持Dock預覽可見。"
           }
         }
       }
@@ -93147,8 +93147,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview open after hover activation"
+            "state" : "translated",
+            "value" : "指標停留將視窗移至最前時保持預覽打開"
           }
         }
       }
@@ -113884,8 +113884,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Windows"
+            "state" : "translated",
+            "value" : "Pencere yok"
           }
         },
         "uk" : {
@@ -118075,8 +118075,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open App Window"
+            "state" : "translated",
+            "value" : "Yeni Pencere Aç"
           }
         },
         "uk" : {
@@ -121308,8 +121308,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Paste"
+            "state" : "translated",
+            "value" : "Yapıştır"
           }
         },
         "uk" : {
@@ -129118,8 +129118,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview a folder's contents when hovering it in the Dock."
+            "state" : "translated",
+            "value" : "Dock'taki bir klasörün üzerine gelindiğinde içerik önizlemesini göster."
           }
         },
         "uk" : {
@@ -134640,8 +134640,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Redo"
+            "state" : "translated",
+            "value" : "İleri al"
           }
         },
         "uk" : {
@@ -149869,8 +149869,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "Tümünü seç"
           }
         },
         "uk" : {
@@ -155201,7 +155201,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Shift ⇧"
           }
         },
