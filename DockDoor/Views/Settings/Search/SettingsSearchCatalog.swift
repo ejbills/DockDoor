@@ -115,6 +115,23 @@ enum SettingsSearchCatalog {
             section: String(localized: "Active App Indicator"),
             icon: "arrow.left.arrow.right"
         ),
+        SettingsSearchItem(
+            id: "general.exportSettings",
+            title: String(localized: "Export Settings…"),
+            description: String(localized: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."),
+            keywords: ["backup", "export", "save", "json", "sync", "dotfiles", "icloud"],
+            tab: "General",
+            section: String(localized: "Backup & Restore"),
+            icon: "square.and.arrow.up"
+        ),
+        SettingsSearchItem(
+            id: "general.importSettings",
+            title: String(localized: "Import Settings…"),
+            keywords: ["backup", "import", "restore", "load", "json", "migrate", "transfer"],
+            tab: "General",
+            section: String(localized: "Backup & Restore"),
+            icon: "square.and.arrow.down"
+        ),
     ]
 
     // MARK: - Dock Previews

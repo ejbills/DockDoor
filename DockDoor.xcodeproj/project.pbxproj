@@ -66,6 +66,7 @@
 		AA11001122334455AA110022 /* DockLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110011 /* DockLocker.swift */; };
 		AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110033 /* DockLockingSettingsView.swift */; };
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
+		80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */; };
@@ -100,6 +101,7 @@
 		BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* MainSettingsView.swift */; };
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
+		8FB2998BF8DE43FD9339A63D /* SettingsBackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA56DB51EF945F086C8C551 /* SettingsBackupManager.swift */; };
 		BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1F60E42D238A9700808E05 /* CGSize.swift */; };
 		BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */; };
 		BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */; };
@@ -299,6 +301,7 @@
 		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110033 /* DockLockingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockingSettingsView.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
+		EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackupManagerTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
@@ -337,6 +340,7 @@
 		BB1A85F62D08E52A00326297 /* DragPreviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragPreviewCoordinator.swift; sourceTree = "<group>"; };
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
+		5EA56DB51EF945F086C8C551 /* SettingsBackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackupManager.swift; sourceTree = "<group>"; };
 		BB1F60E42D238A9700808E05 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDiscoveryShared.swift; sourceTree = "<group>"; };
 		BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabFocusFullOverlayView.swift; sourceTree = "<group>"; };
@@ -624,6 +628,7 @@
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
 				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
+				EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */,
 			);
 			path = DockDoorTests;
 			sourceTree = "<group>";
@@ -741,6 +746,7 @@
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
+				5EA56DB51EF945F086C8C551 /* SettingsBackupManager.swift */,
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 				AA11001122334455AA110011 /* DockLocker.swift */,
 				F875D112D98340CFAB1BC620 /* DockDoorPro.swift */,
@@ -1120,6 +1126,7 @@
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
 				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
+				80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1187,6 +1194,7 @@
 				BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
+				8FB2998BF8DE43FD9339A63D /* SettingsBackupManager.swift in Sources */,
 				BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
