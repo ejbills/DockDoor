@@ -1,5 +1,4 @@
 import AppKit
-import Defaults
 import UniformTypeIdentifiers
 
 enum SettingsBackupManager {
@@ -27,16 +26,6 @@ enum SettingsBackupManager {
             }
         }
     }
-
-    // Skips keys written by macOS, Sparkle and other frameworks, plus per-machine or transient DockDoor state
-    private static let excludedKeyPrefixes = ["NS", "Apple", "SU", "AK", "WebKit", "com.apple.", "_"]
-    private static let excludedKeys: Set<String> = [
-        Defaults.Keys.launched.name,
-        Defaults.Keys.reopenSettingsAfterRestart.name,
-        Defaults.Keys.lastKnownScreenRecordingPermission.name,
-        Defaults.Keys.persistedWindowOrder.name,
-        Defaults.Keys.folderWidgetAuthorizedBookmarks.name,
-    ]
 
     private static let dataTag = "$data"
     private static let dateTag = "$date"
@@ -94,7 +83,7 @@ enum SettingsBackupManager {
     // MARK: - Encoding
 
     static func encode(domain: [String: Any], appVersion: String? = SettingsBackupManager.currentAppVersion, exportedAt: Date = Date()) throws -> Data {
-        let settings = exportableSettings(from: domain).mapValues(jsonValue(fromPlist:))
+        let settings = domain.mapValues(jsonValue(fromPlist:))
         var envelope: [String: Any] = [
             "app": "DockDoor",
             "formatVersion": formatVersion,
@@ -127,31 +116,13 @@ enum SettingsBackupManager {
             throw BackupError.invalidFormat
         }
 
-        let settings = rawSettings
-            .filter { isExportable(key: $0.key) }
-            .mapValues(plistValue(fromJSON:))
+        let settings = rawSettings.mapValues(plistValue(fromJSON:))
         let exportedAt = (envelope["exportedAt"] as? String).flatMap { ISO8601DateFormatter().date(from: $0) }
         return Backup(appVersion: envelope["appVersion"] as? String, exportedAt: exportedAt, settings: settings)
     }
 
     static func apply(_ settings: [String: Any], to defaults: UserDefaults = .standard, domainName: String = SettingsBackupManager.domainName) {
-        // Every exportable key is replaced so settings absent from the backup fall back to their defaults
-        let current = defaults.persistentDomain(forName: domainName) ?? [:]
-        for key in exportableSettings(from: current).keys where settings[key] == nil {
-            defaults.removeObject(forKey: key)
-        }
-        for (key, value) in settings where isExportable(key: key) {
-            defaults.set(value, forKey: key)
-        }
-        defaults.set(true, forKey: Defaults.Keys.launched.name)
-    }
-
-    static func exportableSettings(from domain: [String: Any]) -> [String: Any] {
-        domain.filter { isExportable(key: $0.key) }
-    }
-
-    static func isExportable(key: String) -> Bool {
-        !excludedKeys.contains(key) && !excludedKeyPrefixes.contains { key.hasPrefix($0) }
+        defaults.setPersistentDomain(settings, forName: domainName)
     }
 
     // MARK: - Value conversion
