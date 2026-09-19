@@ -1430,6 +1430,32 @@ enum SettingsSearchCatalog {
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "app.badge.checkmark"
         ),
+        // Trackpad Swipe for Window Switcher
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipe",
+            title: String(localized: "Open window switcher with a trackpad swipe"),
+            description: String(localized: "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."),
+            keywords: ["trackpad", "swipe", "three finger", "four finger", "gesture", "switcher", "alt tab"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "hand.draw"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeFingers",
+            title: String(localized: "Fingers:"),
+            keywords: ["trackpad", "fingers", "three", "four", "swipe"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "hand.raised"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeDirection",
+            title: String(localized: "Direction:"),
+            keywords: ["trackpad", "direction", "horizontal", "vertical", "swipe"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "arrow.left.and.right"
+        ),
     ]
 
     // MARK: - Filters
