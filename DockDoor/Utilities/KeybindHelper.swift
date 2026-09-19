@@ -397,11 +397,17 @@ class KeybindHelper {
     private var runLoopSource: CFRunLoopSource?
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
+    private var trackpadSwipeTrigger: TrackpadSwipeTrigger?
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         setupEventTap()
         startMonitoring()
+        if Defaults[.enableWindowSwitcher], Defaults[.enableTrackpadSwitcherSwipe] {
+            trackpadSwipeTrigger = TrackpadSwipeTrigger { [weak self] event in
+                self?.handleTrackpadSwipe(event)
+            }
+        }
     }
 
     func reset() {
@@ -945,23 +951,45 @@ class KeybindHelper {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
                 hasProcessedModifierRelease = true
                 preventSwitcherHideOnRelease = false
-
-                windowSwitchingCoordinator.cancelPendingRender()
-
-                Task { @MainActor in
-                    if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        self.previewCoordinator.selectAndBringToFrontCurrentWindow()
-                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
-                    } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow(previewCoordinator: self.previewCoordinator) {
-                        selectedWindow.bringToFront()
-                        selectedWindow.warpMouseToCenterIfNeeded()
-                        if selectedWindow.isWindowlessApp, Defaults[.openNewWindowForWindowlessApps] {
-                            WindowUtil.activateAndOpenNewWindow(app: selectedWindow.app)
-                        }
-                        self.previewCoordinator.hideWindow()
-                    }
-                }
+                selectOnSwitcherRelease()
             }
+        }
+    }
+
+    @MainActor
+    private func selectOnSwitcherRelease() {
+        windowSwitchingCoordinator.cancelPendingRender()
+
+        Task { @MainActor in
+            if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+            } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow(previewCoordinator: self.previewCoordinator) {
+                selectedWindow.bringToFront()
+                selectedWindow.warpMouseToCenterIfNeeded()
+                if selectedWindow.isWindowlessApp, Defaults[.openNewWindowForWindowlessApps] {
+                    WindowUtil.activateAndOpenNewWindow(app: selectedWindow.app)
+                }
+                self.previewCoordinator.hideWindow()
+            }
+        }
+    }
+
+    @MainActor
+    private func handleTrackpadSwipe(_ event: TrackpadSwipeEvent) {
+        switch event {
+        case .open, .cycleForward, .cycleBackward:
+            Task { @MainActor in
+                await windowSwitchingCoordinator.handleWindowSwitching(
+                    previewCoordinator: previewCoordinator,
+                    isModifierPressed: event == .open,
+                    isShiftPressed: event == .cycleBackward
+                )
+            }
+        case .release:
+            // Same rules as releasing the keyboard modifier: stay open if the user asked the switcher not to hide.
+            guard !Defaults[.preventSwitcherHide], !previewCoordinator.isSearchWindowFocused else { return }
+            selectOnSwitcherRelease()
         }
     }
 

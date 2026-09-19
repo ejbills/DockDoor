@@ -12,6 +12,7 @@ struct GesturesAndKeybindsSettingsView: View {
                 MouseActionsSection()
                 CmdKeyShortcutsSection()
                 WindowSwitcherKeybindSection()
+                TrackpadSwitcherSwipeSection()
             }
         }
     }

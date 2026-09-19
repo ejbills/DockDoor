@@ -301,6 +301,11 @@ extension Defaults.Keys {
     static let switcherSwipeUpAction = Key<WindowAction>("switcherSwipeUpAction", default: .maximize)
     static let switcherSwipeDownAction = Key<WindowAction>("switcherSwipeDownAction", default: .minimize)
 
+    // Trackpad swipe that opens the window switcher from anywhere
+    static let enableTrackpadSwitcherSwipe = Key<Bool>("enableTrackpadSwitcherSwipe", default: false)
+    static let trackpadSwitcherSwipeFingers = Key<Int>("trackpadSwitcherSwipeFingers", default: 3)
+    static let trackpadSwitcherSwipeDirection = Key<TrackpadSwipeDirection>("trackpadSwitcherSwipeDirection", default: .horizontal)
+
     // MARK: - Middle Click Action
 
     static let middleClickAction = Key<WindowAction>("middleClickAction", default: .close)
@@ -800,6 +805,20 @@ enum MediaDetectionMode: String, CaseIterable, Defaults.Serializable {
             String(localized: "Shows controls for whichever app is currently playing — browsers, third-party players, etc. Only one source is active at a time.", comment: "Media detection mode description")
         case .appleScriptOnly:
             String(localized: "Only shows controls for Spotify and Apple Music. Each app gets its own controls that work independently, even when other apps are playing audio.", comment: "Media detection mode description")
+        }
+    }
+}
+
+enum TrackpadSwipeDirection: String, CaseIterable, Defaults.Serializable {
+    case horizontal
+    case vertical
+
+    var localizedName: String {
+        switch self {
+        case .horizontal:
+            String(localized: "Left or right", comment: "Trackpad swipe direction option")
+        case .vertical:
+            String(localized: "Up or down", comment: "Trackpad swipe direction option")
         }
     }
 }
