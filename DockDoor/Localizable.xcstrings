@@ -583,8 +583,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (مخفي)"
           }
         },
         "ca" : {
@@ -631,8 +631,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (masqué)"
           }
         },
         "he" : {
@@ -703,8 +703,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (oculto)"
           }
         },
         "ro" : {
@@ -774,8 +774,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (مصغر)"
           }
         },
         "ca" : {
@@ -894,8 +894,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (minimizado)"
           }
         },
         "ro" : {
@@ -964,7 +964,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "-%@"
           }
         },
@@ -1154,7 +1154,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1344,7 +1344,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ — %2$@"
           }
         },
@@ -1540,7 +1540,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -1730,8 +1730,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld app%2$@"
+            "state" : "translated",
+            "value" : "%1$lld تطبيق%2$@"
           }
         },
         "ca" : {
@@ -4911,8 +4911,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "$20 pagamento único"
           }
         },
         "ro" : {
@@ -6248,8 +6248,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 macs Garantia de reembolso de 14 dias"
           }
         },
         "ro" : {
@@ -8725,8 +8725,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A separate paid app that fully replaces the macOS Dock with profiles, widgets, file tray, media controls with lyrics, and a built-in switcher."
+            "state" : "translated",
+            "value" : "Uma aplicação paga independente que substitui totalmente a Dock do macOS com perfis, widgets, bandeja de ficheiros, controlos multimédia com letras de músicas e um seletor integrado."
           }
         },
         "ro" : {
@@ -9796,8 +9796,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide"
+            "state" : "translated",
+            "value" : "Activer/Masquer"
           }
         },
         "he" : {
@@ -9868,8 +9868,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide"
+            "state" : "translated",
+            "value" : "Ativar/Esconder"
           }
         },
         "ro" : {
@@ -14367,8 +14367,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow Access"
+            "state" : "translated",
+            "value" : "Permettre l'accès"
           }
         },
         "he" : {
@@ -14439,8 +14439,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow Access"
+            "state" : "translated",
+            "value" : "Permitir acesso"
           }
         },
         "ro" : {
@@ -14629,8 +14629,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow Access..."
+            "state" : "translated",
+            "value" : "Permitir acesso..."
           }
         },
         "ro" : {
@@ -19629,8 +19629,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application"
+            "state" : "translated",
+            "value" : "应用程序"
           }
         },
         "zh-Hant" : {
@@ -21152,8 +21152,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Arrange"
+            "state" : "translated",
+            "value" : "排列"
           }
         },
         "zh-Hant" : {
@@ -36450,8 +36450,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click each button below to open System Settings."
+            "state" : "translated",
+            "value" : "Cliquez sur chaque bouton ci-dessous pour ouvrir les paramètres système."
           }
         },
         "he" : {
@@ -46471,8 +46471,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy"
+            "state" : "translated",
+            "value" : "拷贝"
           }
         },
         "zh-Hant" : {
@@ -48257,8 +48257,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Background Color"
+            "state" : "translated",
+            "value" : "Personnaliser la couleur de fond"
           }
         },
         "he" : {
@@ -61513,8 +61513,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "编辑"
           }
         },
         "zh-Hant" : {
@@ -75619,8 +75619,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit App"
+            "state" : "translated",
+            "value" : "强制退出"
           }
         },
         "zh-Hant" : {
@@ -78285,8 +78285,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro"
+            "state" : "translated",
+            "value" : "获取 DockDoor Pro"
           }
         },
         "zh-Hant" : {
@@ -78475,8 +78475,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro…"
+            "state" : "translated",
+            "value" : "获取 DockDoor Pro……"
           }
         },
         "zh-Hant" : {
@@ -81020,8 +81020,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Headline"
+            "state" : "translated",
+            "value" : "Titre"
           }
         },
         "he" : {
@@ -92689,8 +92689,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+            "state" : "translated",
+            "value" : "Zorg ervoor dat de voorbeelden in het Dock zichtbaar blijven zolang de muisaanwijzer erop staat, nadat een venster door het aanwijzen naar voren is gehaald."
           }
         },
         "no" : {
@@ -92761,14 +92761,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+            "state" : "translated",
+            "value" : "保持 Dock 预览可见：悬停将窗口带到前台后，只要指针仍停留在预览上，就保持预览可见。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+            "state" : "translated",
+            "value" : "指標停留將視窗移至最前時並停留在視窗上時，保持Dock預覽可見。"
           }
         }
       }
@@ -93069,8 +93069,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview open after hover activation"
+            "state" : "translated",
+            "value" : "Het voorbeeld openhouden na activering door het aanwijzen met de muis"
           }
         },
         "no" : {
@@ -93141,14 +93141,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview open after hover activation"
+            "state" : "translated",
+            "value" : "悬停激活后保持预览打开"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview open after hover activation"
+            "state" : "translated",
+            "value" : "指標停留將視窗移至最前時保持預覽打開"
           }
         }
       }
@@ -99999,8 +99999,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free."
+            "state" : "translated",
+            "value" : "macOS 无法将程序坞放在此显示器上，因为另一台显示器紧贴其 Dock 边缘。请在“系统设置”→“显示器”中重新排列显示器，使该边缘的一部分空出。"
           }
         },
         "zh-Hant" : {
@@ -106285,8 +106285,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier"
+            "state" : "translated",
+            "value" : "修饰键"
           }
         },
         "zh-Hant" : {
@@ -113884,8 +113884,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Windows"
+            "state" : "translated",
+            "value" : "Pencere yok"
           }
         },
         "uk" : {
@@ -113902,8 +113902,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Windows"
+            "state" : "translated",
+            "value" : "无窗口"
           }
         },
         "zh-Hant" : {
@@ -118075,8 +118075,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open App Window"
+            "state" : "translated",
+            "value" : "Yeni Pencere Aç"
           }
         },
         "uk" : {
@@ -121308,8 +121308,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Paste"
+            "state" : "translated",
+            "value" : "Yapıştır"
           }
         },
         "uk" : {
@@ -121326,8 +121326,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Paste"
+            "state" : "translated",
+            "value" : "粘贴"
           }
         },
         "zh-Hant" : {
@@ -129118,8 +129118,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview a folder's contents when hovering it in the Dock."
+            "state" : "translated",
+            "value" : "Dock'taki bir klasörün üzerine gelindiğinde içerik önizlemesini göster."
           }
         },
         "uk" : {
@@ -134640,8 +134640,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Redo"
+            "state" : "translated",
+            "value" : "İleri al"
           }
         },
         "uk" : {
@@ -134658,8 +134658,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Redo"
+            "state" : "translated",
+            "value" : "重做"
           }
         },
         "zh-Hant" : {
@@ -138463,8 +138463,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Replace the Dock entirely with the paid app from the same developer"
+            "state" : "translated",
+            "value" : "用同一开发者的付费 App 完全替代 Dock"
           }
         },
         "zh-Hant" : {
@@ -143981,8 +143981,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Same as main (%@)"
+            "state" : "translated",
+            "value" : "与主(%@)相同"
           }
         },
         "zh-Hant" : {
@@ -149869,8 +149869,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "Tümünü seç"
           }
         },
         "uk" : {
@@ -149887,8 +149887,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "全选"
           }
         },
         "zh-Hant" : {
@@ -155201,7 +155201,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Shift ⇧"
           }
         },
@@ -176176,8 +176176,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display"
+            "state" : "translated",
+            "value" : "系统主显示器"
           }
         },
         "zh-Hant" : {
@@ -176366,8 +176366,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge."
+            "state" : "translated",
+            "value" : "系统主显示器会跟随菜单栏所在的屏幕。DockDoor 会自动将 Dock 移到锁定的屏幕；你也可以将光标推到该屏幕的 Dock 边缘。"
           }
         },
         "zh-Hant" : {
@@ -186274,8 +186274,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Undo"
+            "state" : "translated",
+            "value" : "撤销"
           }
         },
         "zh-Hant" : {
@@ -186465,8 +186465,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unhide App"
+            "state" : "translated",
+            "value" : "显示 App"
           }
         },
         "zh-Hant" : {
@@ -186847,8 +186847,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown App"
+            "state" : "translated",
+            "value" : "未知 App"
           }
         },
         "zh-Hant" : {
@@ -187799,8 +187799,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Untitled"
+            "state" : "translated",
+            "value" : "未命名"
           }
         },
         "zh-Hant" : {
@@ -188678,7 +188678,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update kanaal"
+            "value" : "Updatekanaal"
           }
         },
         "no" : {
@@ -201144,8 +201144,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window"
+            "state" : "translated",
+            "value" : "窗口"
           }
         },
         "zh-Hant" : {
@@ -201335,8 +201335,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Actions"
+            "state" : "translated",
+            "value" : "窗口操作"
           }
         },
         "zh-Hant" : {
