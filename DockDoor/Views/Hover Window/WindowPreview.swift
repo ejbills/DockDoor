@@ -120,6 +120,23 @@ struct PreviewAppearanceSettings: Equatable {
     }
 }
 
+struct WindowTitlePresentation: Equatable {
+    let isVisible: Bool
+    let reservesSpace: Bool
+
+    static func resolve(
+        title: String?,
+        showWindowTitle: Bool,
+        visibility: WindowTitleVisibility,
+        isHighlighted: Bool
+    ) -> Self {
+        let hasTitle = showWindowTitle && title != nil
+        let isVisible = hasTitle && (visibility == .alwaysVisible || isHighlighted)
+        let reservesSpace = hasTitle && (visibility == .whenHoveringPreview || isVisible)
+        return Self(isVisible: isVisible, reservesSpace: reservesSpace)
+    }
+}
+
 struct WindowPreview: View, Equatable {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
@@ -309,22 +326,26 @@ struct WindowPreview: View, Equatable {
             windowInfo.app.localizedName
         }
 
-        let hasTitle = appearance.showWindowTitle &&
-            titleToShow != nil &&
-            (appearance.windowTitleVisibility == .alwaysVisible || selected)
+        let titlePresentation = WindowTitlePresentation.resolve(
+            title: titleToShow,
+            showWindowTitle: appearance.showWindowTitle,
+            visibility: appearance.windowTitleVisibility,
+            isHighlighted: selected
+        )
 
         let hasTrafficLights = windowInfo.closeButton != nil &&
             appearance.trafficLightVisibility != .never &&
             (appearance.showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
-            if hasTitle, let title = titleToShow {
+            if titlePresentation.reservesSpace, let title = titleToShow {
                 titleLabel(title)
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
                     }
+                    .opacity(titlePresentation.isVisible ? 1 : 0)
             }
         }
 
@@ -357,7 +378,7 @@ struct WindowPreview: View, Equatable {
             }
         }
 
-        if hasTitle || hasTrafficLights {
+        if titlePresentation.reservesSpace || hasTrafficLights {
             switch appearance.controlPosition {
             case .topLeading, .topTrailing:
                 VStack {
@@ -657,22 +678,26 @@ struct WindowPreview: View, Equatable {
             windowInfo.app.localizedName
         }
 
-        let hasTitle = appearance.showWindowTitle &&
-            titleToShow != nil &&
-            (appearance.windowTitleVisibility == .alwaysVisible || selected)
+        let titlePresentation = WindowTitlePresentation.resolve(
+            title: titleToShow,
+            showWindowTitle: appearance.showWindowTitle,
+            visibility: appearance.windowTitleVisibility,
+            isHighlighted: selected
+        )
 
         let hasTrafficLights = windowInfo.closeButton != nil &&
             appearance.trafficLightVisibility != .never &&
             (appearance.showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
-            if hasTitle, let title = titleToShow {
+            if titlePresentation.reservesSpace, let title = titleToShow {
                 titleLabel(title)
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
                     }
+                    .opacity(titlePresentation.isVisible ? 1 : 0)
             }
         }
 
@@ -705,7 +730,7 @@ struct WindowPreview: View, Equatable {
             }
         }
 
-        if hasTitle || hasTrafficLights {
+        if titlePresentation.reservesSpace || hasTrafficLights {
             if appearance.controlPosition.isCentered {
                 return AnyView(
                     HStack(spacing: 4) {
