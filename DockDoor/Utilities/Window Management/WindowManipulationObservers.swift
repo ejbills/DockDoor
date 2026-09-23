@@ -40,6 +40,7 @@ class WindowManipulationObservers {
     private var observers: [pid_t: AXObserver] = [:]
     private var runningApplicationsObservation: NSKeyValueObservation?
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
+    @MainActor private var stageManagerRefreshTask: Task<Void, Never>?
     var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool, needsValidation: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
     private func debounce(key: String, delay: TimeInterval = windowProcessingDebounceInterval, operation: @escaping () async -> Void) {
@@ -212,6 +213,7 @@ class WindowManipulationObservers {
             dockObserver.currentClickedAppPID = nil
         }
 
+        refreshStageManagerPreviews(for: app)
         let appAX = AXUIElementCreateApplication(app.processIdentifier)
         axObserverWorkQueue.asyncAfter(deadline: .now() + 0.3) {
             if let focusedWindow = try? appAX.focusedWindow() {
@@ -280,11 +282,27 @@ class WindowManipulationObservers {
         }
     }
 
+    private func refreshStageManagerPreviews(for app: NSRunningApplication) {
+        guard Defaults[.stageManagerOptimization], app.isActive, WindowUtil.shouldCaptureWindowImages() else { return }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            stageManagerRefreshTask?.cancel()
+            stageManagerRefreshTask = Task {
+                try? await Task.sleep(nanoseconds: UInt64(windowProcessingDebounceInterval * 1_000_000_000))
+                guard Defaults[.stageManagerOptimization], app.isActive, !Task.isCancelled else { return }
+                await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false)
+            }
+        }
+    }
+
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         DebugLogger.log("processAXNotification", details: "Notification: \(notificationName), App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
 
         switch notificationName {
         case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
+            if notificationName != kAXFocusedUIElementChangedNotification {
+                refreshStageManagerPreviews(for: app)
+            }
             let appAX = AXUIElementCreateApplication(app.processIdentifier)
             let focusedWindowID = (try? appAX.focusedWindow()).flatMap { try? $0.cgWindowId() }
             Task { @MainActor [weak self] in

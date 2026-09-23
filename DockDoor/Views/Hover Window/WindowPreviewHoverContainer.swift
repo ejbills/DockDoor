@@ -1124,7 +1124,7 @@ struct WindowPreviewHoverContainer: View {
                 // Check global and context-specific settings
                 let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
                 let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
-                guard enableLivePreview, livePreviewEnabledForContext else { return false }
+                guard enableLivePreview, livePreviewEnabledForContext, !stageManagerOptimization else { return false }
 
                 // Can't use live preview for minimized/hidden windows
                 guard !windowInfo.isMinimized, !windowInfo.isHidden else { return false }

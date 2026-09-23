@@ -329,8 +329,7 @@ enum WindowUtil {
         let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
         let windows = cachedWindows ?? desktopSpaceWindowCacheManager.readCache(pid: pid)
         let focusedID: CGWindowID? = if Defaults[.stageManagerOptimization],
-                                        let window = windows.first,
-                                        window.app.isActive,
+                                        let window = windows.first(where: { $0.ownerApp.isActive }),
                                         let focused = try? window.appAxElement.focusedWindow()
         {
             try? focused.cgWindowId()
@@ -537,10 +536,7 @@ extension WindowUtil {
         windowID: CGWindowID,
         pid: pid_t,
         title: String?,
-        frame: CGRect,
         axWindow: AXUIElement,
-        appElement: AXUIElement,
-        app: NSRunningApplication,
         cachePID: pid_t? = nil,
         forceRefresh: Bool = false
     ) async -> PreviewImageCapture? {
@@ -549,12 +545,13 @@ extension WindowUtil {
             return PreviewImageCapture(image: image, capturedAt: Date())
         }
 
-        let focused = app.isActive &&
-            (try? appElement.focusedWindow()).flatMap { try? $0.cgWindowId() } == windowID
         let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid)
-        if !focused, frame.width > 0, frame.height > 0,
+        // Stage Manager scales the server bounds while AX keeps the window's full size.
+        let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first
+        if let bounds = (entry?[kCGWindowBounds as String] as? NSDictionary).flatMap({ CGRect(dictionaryRepresentation: $0) }),
+           bounds.width > 0, bounds.height > 0,
            let size = try? axWindow.size(), size.width > 0, size.height > 0,
-           frame.width < size.width * 0.7, frame.height < size.height * 0.7
+           bounds.width < size.width * 0.7, bounds.height < size.height * 0.7
         {
             return cached
         }
@@ -672,58 +669,37 @@ extension WindowUtil {
     }
 
     private static func isFullyTransparent(_ image: CGImage) -> Bool {
-        let alphaOffset: Int
-        switch image.alphaInfo {
-        case .premultipliedFirst, .first: alphaOffset = 0
-        case .premultipliedLast, .last: alphaOffset = 3
-        default: return false
-        }
-        guard image.bitsPerPixel == 32,
-              let data = image.dataProvider?.data,
-              let bytes = CFDataGetBytePtr(data)
-        else { return false }
-        let length = CFDataGetLength(data)
-        let stepX = max(image.width / 16, 1)
-        let stepY = max(image.height / 16, 1)
-        var y = 0
-        while y < image.height {
-            var x = 0
-            while x < image.width {
-                let offset = y * image.bytesPerRow + x * 4 + alphaOffset
-                if offset < length, bytes[offset] != 0 { return false }
-                x += stepX
-            }
-            y += stepY
-        }
-        return true
+        guard let samples = alphaSamples(image, minimumAlpha: 0) else { return false }
+        return samples.sampled > 0 && samples.visible == 0
     }
 
     private static func isMostlyTransparent(_ image: CGImage) -> Bool {
-        let alphaOffset: Int
-        switch image.alphaInfo {
-        case .premultipliedFirst, .first: alphaOffset = 0
-        case .premultipliedLast, .last: alphaOffset = 3
-        default: return false
-        }
-        guard image.bitsPerPixel == 32,
-              let data = image.dataProvider?.data,
-              let bytes = CFDataGetBytePtr(data)
-        else { return false }
+        guard let samples = alphaSamples(image, minimumAlpha: 16) else { return false }
+        return samples.sampled > 0 && samples.visible * 20 < samples.sampled
+    }
 
-        let length = CFDataGetLength(data)
-        let stepX = max(image.width / 16, 1)
-        let stepY = max(image.height / 16, 1)
-        var visible = 0
-        var sampled = 0
-        for y in stride(from: 0, to: image.height, by: stepY) {
-            for x in stride(from: 0, to: image.width, by: stepX) {
-                let offset = y * image.bytesPerRow + x * 4 + alphaOffset
-                guard offset < length else { continue }
-                sampled += 1
-                if bytes[offset] > 16 { visible += 1 }
+    private static func alphaSamples(_ image: CGImage, minimumAlpha: UInt8) -> (visible: Int, sampled: Int)? {
+        let dimension = 16
+        var pixels = [UInt8](repeating: 0, count: dimension * dimension * 4)
+        return pixels.withUnsafeMutableBytes { buffer in
+            // Normalize the pixel layout before reading alpha, including default byte order and HDR images.
+            guard let context = CGContext(
+                data: buffer.baseAddress,
+                width: dimension,
+                height: dimension,
+                bitsPerComponent: 8,
+                bytesPerRow: dimension * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
+            ) else { return nil }
+            context.interpolationQuality = .none
+            context.draw(image, in: CGRect(x: 0, y: 0, width: dimension, height: dimension))
+            var visible = 0
+            for offset in stride(from: 3, to: buffer.count, by: 4) {
+                if buffer[offset] > minimumAlpha { visible += 1 }
             }
+            return (visible, dimension * dimension)
         }
-        return sampled > 0 && visible * 20 < sampled
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -1223,10 +1199,7 @@ extension WindowUtil {
                 windowID: window.id,
                 pid: pid,
                 title: window.windowName,
-                frame: window.frame,
                 axWindow: window.axElement,
-                appElement: window.appAxElement,
-                app: window.ownerApp,
                 forceRefresh: true
             )
             var updated = window
@@ -1368,10 +1341,7 @@ extension WindowUtil {
                 windowID: windowID,
                 pid: ownerPid,
                 title: window.title,
-                frame: window.frame,
                 axWindow: windowRef,
-                appElement: ownerAppElement,
-                app: ownerApp,
                 cachePID: displayPid
             ) {
                 windowInfo.image = capture.image
@@ -1406,10 +1376,7 @@ extension WindowUtil {
             windowID: info.id,
             pid: app.processIdentifier,
             title: info.windowName,
-            frame: info.frame,
-            axWindow: axWindow,
-            appElement: appAxElement,
-            app: app
+            axWindow: axWindow
         ) {
             info.image = capture.image
             info.imageCapturedTime = capture.capturedAt

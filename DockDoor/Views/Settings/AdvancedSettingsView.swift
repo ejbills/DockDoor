@@ -167,7 +167,7 @@ struct AdvancedSettingsView: View {
                         enableLivePreview = false
                     }
                 }
-                Text(String(localized: "Bring each app to the front once to capture windows already in the Stage Manager sidebar.", comment: "Stage Manager preview setup hint"))
+                Text(String(localized: "Bring each window to the front once to capture its preview before returning it to the Stage Manager sidebar.", comment: "Stage Manager preview setup hint"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

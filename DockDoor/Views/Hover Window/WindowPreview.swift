@@ -240,7 +240,7 @@ struct WindowPreview: View, Equatable {
                 VStack(spacing: 8) {
                     Image(systemName: "rectangle.on.rectangle")
                         .font(.title2)
-                    Text(String(localized: "Bring this app to the front once to show its preview.", comment: "Missing Stage Manager window screenshot hint"))
+                    Text(String(localized: "Bring this window to the front once to show its preview.", comment: "Missing Stage Manager window screenshot hint"))
                         .font(.caption)
                         .multilineTextAlignment(.center)
                 }
