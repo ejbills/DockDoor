@@ -1601,6 +1601,15 @@ enum SettingsSearchCatalog {
 
     private static let advancedItems: [SettingsSearchItem] = [
         SettingsSearchItem(
+            id: "advanced.stageManagerOptimization",
+            title: String(localized: "Optimize previews for Stage Manager"),
+            description: String(localized: "Bring each app to the front once to capture windows already in the Stage Manager sidebar."),
+            keywords: ["stage manager", "sidebar", "thumbnail", "preview"],
+            tab: "Advanced",
+            section: String(localized: "Stage Manager"),
+            icon: "rectangle.on.rectangle"
+        ),
+        SettingsSearchItem(
             id: "advanced.openDelay",
             title: String(localized: "Preview Window Open Delay"),
             keywords: ["delay", "open", "hover", "timer"],

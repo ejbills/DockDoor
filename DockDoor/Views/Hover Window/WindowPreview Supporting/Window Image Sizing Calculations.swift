@@ -12,6 +12,13 @@ extension WindowPreviewHoverContainer {
     static let dynamicSwitcherMinimumImageWidth: CGFloat = 50
     static let dynamicSwitcherMinimumCardWidth: CGFloat = 240
 
+    private static func needsStageManagerPlaceholder(_ window: WindowInfo) -> Bool {
+        Defaults[.stageManagerOptimization] &&
+            WindowUtil.shouldCaptureWindowImages() &&
+            !window.isWindowlessApp &&
+            window.image == nil
+    }
+
     static func calculateOverallMaxDimensions(
         windows: [WindowInfo],
         dockPosition: DockPosition,
@@ -128,7 +135,9 @@ extension WindowPreviewHoverContainer {
                             isHorizontal: true
                         ).height
                     }
-                    let rowHeight = min(maxDims.height, max(fittedHeights.max() ?? maxDims.height, 50))
+                    let hasPlaceholder = chunk.contains { $0 < windows.count && needsStageManagerPlaceholder(windows[$0]) }
+                    let minimumHeight = hasPlaceholder ? min(Defaults[.previewHeight], maxDims.height) : 50
+                    let rowHeight = min(maxDims.height, max(fittedHeights.max() ?? minimumHeight, minimumHeight))
 
                     for index in chunk {
                         guard index < windows.count else { continue }
@@ -140,8 +149,11 @@ extension WindowPreviewHoverContainer {
                                 maxDimensions: maxDims
                             )
                         } else {
-                            let compactRowHeight: CGFloat = 36
-                            let fallbackSize = CGSize(width: min(300, maxDims.width), height: compactRowHeight)
+                            let placeholder = needsStageManagerPlaceholder(windows[index])
+                            let fallbackSize = CGSize(
+                                width: min(placeholder ? Defaults[.previewWidth] : 300, maxDims.width),
+                                height: placeholder ? rowHeight : 36
+                            )
                             dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                         }
                     }
@@ -165,8 +177,11 @@ extension WindowPreviewHoverContainer {
                     }
                     dimensionsMap[index] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
                 } else {
-                    let compactRowHeight: CGFloat = 36
-                    let fallbackSize = CGSize(width: min(300, maxDims.width), height: compactRowHeight)
+                    let placeholder = needsStageManagerPlaceholder(window)
+                    let fallbackSize = CGSize(
+                        width: min(placeholder ? Defaults[.previewWidth] : 300, maxDims.width),
+                        height: placeholder ? min(Defaults[.previewHeight], maxDims.height) : 36
+                    )
                     dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                 }
             }

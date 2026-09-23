@@ -509,6 +509,7 @@ class PreviewStateCoordinator: ObservableObject {
             onHoverIndexChange: nil,
             onDragHoverIndexChange: nil,
             useLivePreview: false,
+            showStageManagerMissingPreviewTip: false,
             skeletonMode: true,
             appearance: PreviewAppearanceSettings.resolve(windowSwitcherActive: true, dockPosition: dockPosition),
             backgroundAppearance: BackgroundAppearance.resolve(),

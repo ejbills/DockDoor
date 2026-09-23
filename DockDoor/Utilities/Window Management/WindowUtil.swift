@@ -328,8 +328,18 @@ enum WindowUtil {
     static func freshCachedWindowIDs(for pid: pid_t, from cachedWindows: Set<WindowInfo>? = nil) -> Set<CGWindowID> {
         let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
         let windows = cachedWindows ?? desktopSpaceWindowCacheManager.readCache(pid: pid)
+        let focusedID: CGWindowID? = if Defaults[.stageManagerOptimization],
+                                       let window = windows.first,
+                                       window.app.isActive,
+                                       let focused = try? window.appAxElement.focusedWindow() {
+            try? focused.cgWindowId()
+        } else {
+            nil
+        }
         return Set(windows.compactMap { window -> CGWindowID? in
-            guard window.image != nil,
+            guard window.id != focusedID,
+                  let image = window.image,
+                  (!Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(image, axWindow: window.axElement)),
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -503,6 +513,71 @@ extension WindowUtil {
 // MARK: - Window Capture
 
 extension WindowUtil {
+    private static func isPlausibleStageManagerImage(_ image: CGImage, axWindow: AXUIElement) -> Bool {
+        guard image.width >= minUsableImageDimension,
+              image.height >= minUsableImageDimension,
+              !isMostlyTransparent(image)
+        else { return false }
+        guard let size = try? axWindow.size(), size.width > 0, size.height > 0 else { return true }
+
+        let scale = max(Defaults[.windowPreviewImageScale], 1)
+        let capturedWidth = CGFloat(image.width) * scale
+        let capturedHeight = CGFloat(image.height) * scale
+        let aspectDifference = abs(capturedWidth / capturedHeight - size.width / size.height) / (size.width / size.height)
+        return capturedWidth >= size.width * 0.45 &&
+            capturedHeight >= size.height * 0.45 &&
+            aspectDifference < 0.2
+    }
+
+    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> CGImage? {
+        guard let image = desktopSpaceWindowCacheManager.readCache(pid: pid).first(where: { $0.id == windowID })?.image,
+              isPlausibleStageManagerImage(image, axWindow: axWindow)
+        else { return nil }
+        return image
+    }
+
+    private static func capturePreviewImage(
+        windowID: CGWindowID,
+        pid: pid_t,
+        title: String?,
+        frame: CGRect,
+        axWindow: AXUIElement,
+        appElement: AXUIElement,
+        app: NSRunningApplication,
+        cachePID: pid_t? = nil,
+        forceRefresh: Bool = false
+    ) async -> CGImage? {
+        guard Defaults[.stageManagerOptimization] else {
+            return try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh)
+        }
+
+        let focused = app.isActive &&
+            (try? appElement.focusedWindow()).flatMap { try? $0.cgWindowId() } == windowID
+        let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid, axWindow: axWindow)
+        if !focused, let size = try? axWindow.size(), size.width > 0, size.height > 0,
+           frame.width < size.width * 0.7, frame.height < size.height * 0.7
+        {
+            return cached
+        }
+
+        let image = try? await captureWindowImage(
+            windowID: windowID,
+            pid: pid,
+            windowTitle: title,
+            forceRefresh: forceRefresh || focused
+        )
+        if let image, isPlausibleStageManagerImage(image, axWindow: axWindow) {
+            return image
+        }
+        if !forceRefresh, !focused,
+           let refreshed = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: true),
+           isPlausibleStageManagerImage(refreshed, axWindow: axWindow)
+        {
+            return refreshed
+        }
+        return cached
+    }
+
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
         guard let pid = window.owningApplication?.processID else {
             throw captureError
@@ -630,6 +705,34 @@ extension WindowUtil {
             y += stepY
         }
         return true
+    }
+
+    private static func isMostlyTransparent(_ image: CGImage) -> Bool {
+        let alphaOffset: Int
+        switch image.alphaInfo {
+        case .premultipliedFirst, .first: alphaOffset = 0
+        case .premultipliedLast, .last: alphaOffset = 3
+        default: return false
+        }
+        guard image.bitsPerPixel == 32,
+              let data = image.dataProvider?.data,
+              let bytes = CFDataGetBytePtr(data)
+        else { return false }
+
+        let length = CFDataGetLength(data)
+        let stepX = max(image.width / 16, 1)
+        let stepY = max(image.height / 16, 1)
+        var visible = 0
+        var sampled = 0
+        for y in stride(from: 0, to: image.height, by: stepY) {
+            for x in stride(from: 0, to: image.width, by: stepX) {
+                let offset = y * image.bytesPerRow + x * 4 + alphaOffset
+                guard offset < length else { continue }
+                sampled += 1
+                if bytes[offset] > 16 { visible += 1 }
+            }
+        }
+        return sampled > 0 && visible * 20 < sampled
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -1125,7 +1228,16 @@ extension WindowUtil {
 
         // Process valid windows with limited concurrency
         await LimitedConcurrency.forEachNonThrowing(validWindows, maxConcurrent: 4, timeout: 10) { window in
-            let image = try await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName, forceRefresh: true)
+            let image = await capturePreviewImage(
+                windowID: window.id,
+                pid: pid,
+                title: window.windowName,
+                frame: window.frame,
+                axWindow: window.axElement,
+                appElement: window.appAxElement,
+                app: window.ownerApp,
+                forceRefresh: true
+            )
             var updated = window
             updated.image = image
             updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
@@ -1260,7 +1372,16 @@ extension WindowUtil {
                 isHidden: hiddenState
             )
 
-            if let image = try? await captureWindowImage(window: window) {
+            if let image = await capturePreviewImage(
+                windowID: windowID,
+                pid: ownerPid,
+                title: window.title,
+                frame: window.frame,
+                axWindow: windowRef,
+                appElement: ownerAppElement,
+                app: ownerApp,
+                cachePID: displayPid
+            ) {
                 windowInfo.image = image
                 windowInfo.imageCapturedTime = Date()
             }
@@ -1289,7 +1410,15 @@ extension WindowUtil {
             restorePersistedOrder: restorePersistedOrder
         ) else { return }
 
-        if let image = try? await captureWindowImage(windowID: info.id, pid: app.processIdentifier, windowTitle: info.windowName) {
+        if let image = await capturePreviewImage(
+            windowID: info.id,
+            pid: app.processIdentifier,
+            title: info.windowName,
+            frame: info.frame,
+            axWindow: axWindow,
+            appElement: appAxElement,
+            app: app
+        ) {
             info.image = image
             info.imageCapturedTime = Date()
         }
@@ -1496,7 +1625,8 @@ extension WindowUtil {
                     true
                 }
 
-                if newImageIsTiny, matchingWindow.image != nil {
+                if newImageIsTiny, let cachedImage = matchingWindow.image,
+                   (!Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(cachedImage, axWindow: matchingWindow.axElement)) {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
                     matchingWindowCopy.image = windowInfo.image
