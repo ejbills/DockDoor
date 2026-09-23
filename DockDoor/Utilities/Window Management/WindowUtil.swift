@@ -340,7 +340,7 @@ enum WindowUtil {
         return Set(windows.compactMap { window -> CGWindowID? in
             guard window.id != focusedID,
                   let image = window.image,
-                  !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(image, axWindow: window.axElement),
+                  !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(image),
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -514,20 +514,10 @@ extension WindowUtil {
 // MARK: - Window Capture
 
 extension WindowUtil {
-    private static func isPlausibleStageManagerImage(_ image: CGImage, axWindow: AXUIElement) -> Bool {
-        guard image.width >= minUsableImageDimension,
-              image.height >= minUsableImageDimension,
-              !isMostlyTransparent(image)
-        else { return false }
-        guard let size = try? axWindow.size(), size.width > 0, size.height > 0 else { return true }
-
-        let scale = max(Defaults[.windowPreviewImageScale], 1)
-        let capturedWidth = CGFloat(image.width) * scale
-        let capturedHeight = CGFloat(image.height) * scale
-        let aspectDifference = abs(capturedWidth / capturedHeight - size.width / size.height) / (size.width / size.height)
-        return capturedWidth >= size.width * 0.45 &&
-            capturedHeight >= size.height * 0.45 &&
-            aspectDifference < 0.2
+    private static func isPlausibleStageManagerImage(_ image: CGImage) -> Bool {
+        image.width >= minUsableImageDimension &&
+            image.height >= minUsableImageDimension &&
+            !isMostlyTransparent(image)
     }
 
     private struct PreviewImageCapture {
@@ -535,10 +525,10 @@ extension WindowUtil {
         let capturedAt: Date
     }
 
-    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> PreviewImageCapture? {
+    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t) -> PreviewImageCapture? {
         guard let window = desktopSpaceWindowCacheManager.readCache(pid: pid).first(where: { $0.id == windowID }),
               let image = window.image,
-              isPlausibleStageManagerImage(image, axWindow: axWindow)
+              isPlausibleStageManagerImage(image)
         else { return nil }
         return PreviewImageCapture(image: image, capturedAt: window.imageCapturedTime)
     }
@@ -561,7 +551,7 @@ extension WindowUtil {
 
         let focused = app.isActive &&
             (try? appElement.focusedWindow()).flatMap { try? $0.cgWindowId() } == windowID
-        let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid, axWindow: axWindow)
+        let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid)
         if !focused, frame.width > 0, frame.height > 0,
            let size = try? axWindow.size(), size.width > 0, size.height > 0,
            frame.width < size.width * 0.7, frame.height < size.height * 0.7
@@ -574,7 +564,7 @@ extension WindowUtil {
             pid: pid,
             windowTitle: title,
             forceRefresh: true
-        ), isPlausibleStageManagerImage(image, axWindow: axWindow)
+        ), isPlausibleStageManagerImage(image)
         else { return cached }
         return PreviewImageCapture(image: image, capturedAt: Date())
     }
@@ -1628,7 +1618,7 @@ extension WindowUtil {
                 }
 
                 if newImageIsTiny, let cachedImage = matchingWindow.image,
-                   !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(cachedImage, axWindow: matchingWindow.axElement)
+                   !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(cachedImage)
                 {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
