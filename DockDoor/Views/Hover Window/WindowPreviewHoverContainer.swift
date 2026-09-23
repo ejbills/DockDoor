@@ -92,6 +92,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.enableLivePreview) var enableLivePreview
     @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
     @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+    @Default(.stageManagerOptimization) var stageManagerOptimization
 
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
@@ -1123,7 +1124,7 @@ struct WindowPreviewHoverContainer: View {
                 // Check global and context-specific settings
                 let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
                 let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
-                guard enableLivePreview, livePreviewEnabledForContext else { return false }
+                guard enableLivePreview, livePreviewEnabledForContext, !stageManagerOptimization else { return false }
 
                 // Can't use live preview for minimized/hidden windows
                 guard !windowInfo.isMinimized, !windowInfo.isHidden else { return false }
@@ -1146,7 +1147,15 @@ struct WindowPreviewHoverContainer: View {
             }()
 
             // Use compact mode if: container threshold triggered OR per-window fallback (no image and no live preview)
-            let useCompactForThisWindow = shouldUseCompactMode || (windowInfo.image == nil && !useLivePreview)
+            let showStageManagerMissingPreviewTip = stageManagerOptimization &&
+                hasScreenRecordingPermission &&
+                !disableImagePreview &&
+                !windowInfo.isWindowlessApp &&
+                windowInfo.image == nil &&
+                !useLivePreview &&
+                !mockPreviewActive
+            let useCompactForThisWindow = shouldUseCompactMode ||
+                (windowInfo.image == nil && !useLivePreview && !showStageManagerMissingPreviewTip)
 
             let isSelected = index == currIndex
 
@@ -1206,6 +1215,7 @@ struct WindowPreviewHoverContainer: View {
                     onHoverIndexChange: handleHoverIndexChange,
                     onDragHoverIndexChange: handleDragHoverIndexChange,
                     useLivePreview: useLivePreview,
+                    showStageManagerMissingPreviewTip: showStageManagerMissingPreviewTip,
                     appearance: appearance,
                     backgroundAppearance: backgroundAppearance,
                     focusedWindowID: previewStateCoordinator.focusedWindowID

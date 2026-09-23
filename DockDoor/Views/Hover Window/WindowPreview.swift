@@ -136,6 +136,7 @@ struct WindowPreview: View, Equatable {
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     let onDragHoverIndexChange: ((Int?) -> Void)?
     let useLivePreview: Bool
+    let showStageManagerMissingPreviewTip: Bool
     var skeletonMode: Bool = false
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
@@ -151,6 +152,7 @@ struct WindowPreview: View, Equatable {
 
     static func == (l: Self, r: Self) -> Bool {
         l.index == r.index && l.isSelected == r.isSelected && l.useLivePreview == r.useLivePreview
+            && l.showStageManagerMissingPreviewTip == r.showStageManagerMissingPreviewTip
             && l.skeletonMode == r.skeletonMode && l.dimensions == r.dimensions
             && l.uniformCardRadius == r.uniformCardRadius && l.showAppIconOnly == r.showAppIconOnly
             && l.windowSwitcherActive == r.windowSwitcherActive
@@ -221,7 +223,7 @@ struct WindowPreview: View, Equatable {
 
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
-        let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels
+        let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels && !showStageManagerMissingPreviewTip
         let quality = appearance.livePreviewQuality
         let frameRate = appearance.livePreviewFrameRate
 
@@ -234,6 +236,16 @@ struct WindowPreview: View, Equatable {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
+            } else if showStageManagerMissingPreviewTip {
+                VStack(spacing: 8) {
+                    Image(systemName: "rectangle.on.rectangle")
+                        .font(.title2)
+                    Text(String(localized: "Bring this window to the front once to show its preview.", comment: "Missing Stage Manager window screenshot hint"))
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
+                }
+                .foregroundColor(.secondary)
+                .padding()
             }
         }
         .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))

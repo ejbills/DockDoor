@@ -328,8 +328,18 @@ enum WindowUtil {
     static func freshCachedWindowIDs(for pid: pid_t, from cachedWindows: Set<WindowInfo>? = nil) -> Set<CGWindowID> {
         let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
         let windows = cachedWindows ?? desktopSpaceWindowCacheManager.readCache(pid: pid)
+        let focusedID: CGWindowID? = if Defaults[.stageManagerOptimization],
+                                        let window = windows.first(where: { $0.ownerApp.isActive }),
+                                        let focused = try? window.appAxElement.focusedWindow()
+        {
+            try? focused.cgWindowId()
+        } else {
+            nil
+        }
         return Set(windows.compactMap { window -> CGWindowID? in
-            guard window.image != nil,
+            guard window.id != focusedID,
+                  let image = window.image,
+                  !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(image),
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -503,6 +513,59 @@ extension WindowUtil {
 // MARK: - Window Capture
 
 extension WindowUtil {
+    private static func isPlausibleStageManagerImage(_ image: CGImage) -> Bool {
+        image.width >= minUsableImageDimension &&
+            image.height >= minUsableImageDimension &&
+            !isMostlyTransparent(image)
+    }
+
+    private struct PreviewImageCapture {
+        let image: CGImage
+        let capturedAt: Date
+    }
+
+    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t) -> PreviewImageCapture? {
+        guard let window = desktopSpaceWindowCacheManager.readCache(pid: pid).first(where: { $0.id == windowID }),
+              let image = window.image,
+              isPlausibleStageManagerImage(image)
+        else { return nil }
+        return PreviewImageCapture(image: image, capturedAt: window.imageCapturedTime)
+    }
+
+    private static func capturePreviewImage(
+        windowID: CGWindowID,
+        pid: pid_t,
+        title: String?,
+        axWindow: AXUIElement,
+        cachePID: pid_t? = nil,
+        forceRefresh: Bool = false
+    ) async -> PreviewImageCapture? {
+        guard Defaults[.stageManagerOptimization] else {
+            guard let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh) else { return nil }
+            return PreviewImageCapture(image: image, capturedAt: Date())
+        }
+
+        let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid)
+        // Stage Manager scales the server bounds while AX keeps the window's full size.
+        let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first
+        if let bounds = (entry?[kCGWindowBounds as String] as? NSDictionary).flatMap({ CGRect(dictionaryRepresentation: $0) }),
+           bounds.width > 0, bounds.height > 0,
+           let size = try? axWindow.size(), size.width > 0, size.height > 0,
+           bounds.width < size.width * 0.7, bounds.height < size.height * 0.7
+        {
+            return cached
+        }
+
+        guard let image = try? await captureWindowImage(
+            windowID: windowID,
+            pid: pid,
+            windowTitle: title,
+            forceRefresh: true
+        ), isPlausibleStageManagerImage(image)
+        else { return cached }
+        return PreviewImageCapture(image: image, capturedAt: Date())
+    }
+
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
         guard let pid = window.owningApplication?.processID else {
             throw captureError
@@ -606,30 +669,37 @@ extension WindowUtil {
     }
 
     private static func isFullyTransparent(_ image: CGImage) -> Bool {
-        let alphaOffset: Int
-        switch image.alphaInfo {
-        case .premultipliedFirst, .first: alphaOffset = 0
-        case .premultipliedLast, .last: alphaOffset = 3
-        default: return false
-        }
-        guard image.bitsPerPixel == 32,
-              let data = image.dataProvider?.data,
-              let bytes = CFDataGetBytePtr(data)
-        else { return false }
-        let length = CFDataGetLength(data)
-        let stepX = max(image.width / 16, 1)
-        let stepY = max(image.height / 16, 1)
-        var y = 0
-        while y < image.height {
-            var x = 0
-            while x < image.width {
-                let offset = y * image.bytesPerRow + x * 4 + alphaOffset
-                if offset < length, bytes[offset] != 0 { return false }
-                x += stepX
+        guard let samples = alphaSamples(image, minimumAlpha: 0) else { return false }
+        return samples.sampled > 0 && samples.visible == 0
+    }
+
+    private static func isMostlyTransparent(_ image: CGImage) -> Bool {
+        guard let samples = alphaSamples(image, minimumAlpha: 16) else { return false }
+        return samples.sampled > 0 && samples.visible * 20 < samples.sampled
+    }
+
+    private static func alphaSamples(_ image: CGImage, minimumAlpha: UInt8) -> (visible: Int, sampled: Int)? {
+        let dimension = 16
+        var pixels = [UInt8](repeating: 0, count: dimension * dimension * 4)
+        return pixels.withUnsafeMutableBytes { buffer in
+            // Normalize the pixel layout before reading alpha, including default byte order and HDR images.
+            guard let context = CGContext(
+                data: buffer.baseAddress,
+                width: dimension,
+                height: dimension,
+                bitsPerComponent: 8,
+                bytesPerRow: dimension * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
+            ) else { return nil }
+            context.interpolationQuality = .none
+            context.draw(image, in: CGRect(x: 0, y: 0, width: dimension, height: dimension))
+            var visible = 0
+            for offset in stride(from: 3, to: buffer.count, by: 4) {
+                if buffer[offset] > minimumAlpha { visible += 1 }
             }
-            y += stepY
+            return (visible, dimension * dimension)
         }
-        return true
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -1125,9 +1195,16 @@ extension WindowUtil {
 
         // Process valid windows with limited concurrency
         await LimitedConcurrency.forEachNonThrowing(validWindows, maxConcurrent: 4, timeout: 10) { window in
-            let image = try await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName, forceRefresh: true)
+            let capture = await capturePreviewImage(
+                windowID: window.id,
+                pid: pid,
+                title: window.windowName,
+                axWindow: window.axElement,
+                forceRefresh: true
+            )
             var updated = window
-            updated.image = image
+            updated.image = capture?.image
+            if let capture { updated.imageCapturedTime = capture.capturedAt }
             updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
             updateDesktopSpaceWindowCache(with: updated)
         }
@@ -1260,9 +1337,15 @@ extension WindowUtil {
                 isHidden: hiddenState
             )
 
-            if let image = try? await captureWindowImage(window: window) {
-                windowInfo.image = image
-                windowInfo.imageCapturedTime = Date()
+            if let capture = await capturePreviewImage(
+                windowID: windowID,
+                pid: ownerPid,
+                title: window.title,
+                axWindow: windowRef,
+                cachePID: displayPid
+            ) {
+                windowInfo.image = capture.image
+                windowInfo.imageCapturedTime = capture.capturedAt
             }
             updateDesktopSpaceWindowCache(with: windowInfo)
         }
@@ -1289,9 +1372,14 @@ extension WindowUtil {
             restorePersistedOrder: restorePersistedOrder
         ) else { return }
 
-        if let image = try? await captureWindowImage(windowID: info.id, pid: app.processIdentifier, windowTitle: info.windowName) {
-            info.image = image
-            info.imageCapturedTime = Date()
+        if let capture = await capturePreviewImage(
+            windowID: info.id,
+            pid: app.processIdentifier,
+            title: info.windowName,
+            axWindow: axWindow
+        ) {
+            info.image = capture.image
+            info.imageCapturedTime = capture.capturedAt
         }
 
         updateDesktopSpaceWindowCache(with: info)
@@ -1496,7 +1584,9 @@ extension WindowUtil {
                     true
                 }
 
-                if newImageIsTiny, matchingWindow.image != nil {
+                if newImageIsTiny, let cachedImage = matchingWindow.image,
+                   !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(cachedImage)
+                {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
                     matchingWindowCopy.image = windowInfo.image

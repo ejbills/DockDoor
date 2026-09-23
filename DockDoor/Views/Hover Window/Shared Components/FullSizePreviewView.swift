@@ -5,13 +5,14 @@ struct FullSizePreviewView: View {
     let windowInfo: WindowInfo
     let windowSize: CGSize
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.stageManagerOptimization) var stageManagerOptimization
     @Default(.enableLivePreview) var enableLivePreview
     @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
     @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
     @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
 
     var body: some View {
-        let useLivePreview = enableLivePreview && enableLivePreviewForDock && !windowInfo.isMinimized && !windowInfo.isHidden
+        let useLivePreview = enableLivePreview && enableLivePreviewForDock && !stageManagerOptimization && !windowInfo.isMinimized && !windowInfo.isHidden
 
         Group {
             if useLivePreview {
