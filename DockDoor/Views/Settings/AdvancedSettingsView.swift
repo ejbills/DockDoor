@@ -167,7 +167,7 @@ struct AdvancedSettingsView: View {
                         enableLivePreview = false
                     }
                 }
-                Text(String(localized: "Bring each window to the front once to capture its preview before returning it to the Stage Manager sidebar.", comment: "Stage Manager preview setup hint"))
+                Text(String(localized: "Prevents distorted previews when windows are in the Stage Manager sidebar. Bring each window to the front once to capture a normal preview.", comment: "Stage Manager preview setup hint"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

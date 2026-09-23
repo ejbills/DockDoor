@@ -1603,7 +1603,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "advanced.stageManagerOptimization",
             title: String(localized: "Optimize previews for Stage Manager"),
-            description: String(localized: "Bring each window to the front once to capture its preview before returning it to the Stage Manager sidebar."),
+            description: String(localized: "Prevents distorted previews when windows are in the Stage Manager sidebar. Bring each window to the front once to capture a normal preview."),
             keywords: ["stage manager", "sidebar", "thumbnail", "preview"],
             tab: "Advanced",
             section: String(localized: "Stage Manager"),
