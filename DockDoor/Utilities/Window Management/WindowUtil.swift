@@ -329,9 +329,10 @@ enum WindowUtil {
         let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
         let windows = cachedWindows ?? desktopSpaceWindowCacheManager.readCache(pid: pid)
         let focusedID: CGWindowID? = if Defaults[.stageManagerOptimization],
-                                       let window = windows.first,
-                                       window.app.isActive,
-                                       let focused = try? window.appAxElement.focusedWindow() {
+                                        let window = windows.first,
+                                        window.app.isActive,
+                                        let focused = try? window.appAxElement.focusedWindow()
+        {
             try? focused.cgWindowId()
         } else {
             nil
@@ -339,7 +340,7 @@ enum WindowUtil {
         return Set(windows.compactMap { window -> CGWindowID? in
             guard window.id != focusedID,
                   let image = window.image,
-                  (!Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(image, axWindow: window.axElement)),
+                  !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(image, axWindow: window.axElement),
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -529,11 +530,17 @@ extension WindowUtil {
             aspectDifference < 0.2
     }
 
-    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> CGImage? {
-        guard let image = desktopSpaceWindowCacheManager.readCache(pid: pid).first(where: { $0.id == windowID })?.image,
+    private struct PreviewImageCapture {
+        let image: CGImage
+        let capturedAt: Date
+    }
+
+    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> PreviewImageCapture? {
+        guard let window = desktopSpaceWindowCacheManager.readCache(pid: pid).first(where: { $0.id == windowID }),
+              let image = window.image,
               isPlausibleStageManagerImage(image, axWindow: axWindow)
         else { return nil }
-        return image
+        return PreviewImageCapture(image: image, capturedAt: window.imageCapturedTime)
     }
 
     private static func capturePreviewImage(
@@ -546,36 +553,30 @@ extension WindowUtil {
         app: NSRunningApplication,
         cachePID: pid_t? = nil,
         forceRefresh: Bool = false
-    ) async -> CGImage? {
+    ) async -> PreviewImageCapture? {
         guard Defaults[.stageManagerOptimization] else {
-            return try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh)
+            guard let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh) else { return nil }
+            return PreviewImageCapture(image: image, capturedAt: Date())
         }
 
         let focused = app.isActive &&
             (try? appElement.focusedWindow()).flatMap { try? $0.cgWindowId() } == windowID
         let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid, axWindow: axWindow)
-        if !focused, let size = try? axWindow.size(), size.width > 0, size.height > 0,
+        if !focused, frame.width > 0, frame.height > 0,
+           let size = try? axWindow.size(), size.width > 0, size.height > 0,
            frame.width < size.width * 0.7, frame.height < size.height * 0.7
         {
             return cached
         }
 
-        let image = try? await captureWindowImage(
+        guard let image = try? await captureWindowImage(
             windowID: windowID,
             pid: pid,
             windowTitle: title,
-            forceRefresh: forceRefresh || focused
-        )
-        if let image, isPlausibleStageManagerImage(image, axWindow: axWindow) {
-            return image
-        }
-        if !forceRefresh, !focused,
-           let refreshed = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: true),
-           isPlausibleStageManagerImage(refreshed, axWindow: axWindow)
-        {
-            return refreshed
-        }
-        return cached
+            forceRefresh: true
+        ), isPlausibleStageManagerImage(image, axWindow: axWindow)
+        else { return cached }
+        return PreviewImageCapture(image: image, capturedAt: Date())
     }
 
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
@@ -1228,7 +1229,7 @@ extension WindowUtil {
 
         // Process valid windows with limited concurrency
         await LimitedConcurrency.forEachNonThrowing(validWindows, maxConcurrent: 4, timeout: 10) { window in
-            let image = await capturePreviewImage(
+            let capture = await capturePreviewImage(
                 windowID: window.id,
                 pid: pid,
                 title: window.windowName,
@@ -1239,7 +1240,8 @@ extension WindowUtil {
                 forceRefresh: true
             )
             var updated = window
-            updated.image = image
+            updated.image = capture?.image
+            if let capture { updated.imageCapturedTime = capture.capturedAt }
             updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
             updateDesktopSpaceWindowCache(with: updated)
         }
@@ -1372,7 +1374,7 @@ extension WindowUtil {
                 isHidden: hiddenState
             )
 
-            if let image = await capturePreviewImage(
+            if let capture = await capturePreviewImage(
                 windowID: windowID,
                 pid: ownerPid,
                 title: window.title,
@@ -1382,8 +1384,8 @@ extension WindowUtil {
                 app: ownerApp,
                 cachePID: displayPid
             ) {
-                windowInfo.image = image
-                windowInfo.imageCapturedTime = Date()
+                windowInfo.image = capture.image
+                windowInfo.imageCapturedTime = capture.capturedAt
             }
             updateDesktopSpaceWindowCache(with: windowInfo)
         }
@@ -1410,7 +1412,7 @@ extension WindowUtil {
             restorePersistedOrder: restorePersistedOrder
         ) else { return }
 
-        if let image = await capturePreviewImage(
+        if let capture = await capturePreviewImage(
             windowID: info.id,
             pid: app.processIdentifier,
             title: info.windowName,
@@ -1419,8 +1421,8 @@ extension WindowUtil {
             appElement: appAxElement,
             app: app
         ) {
-            info.image = image
-            info.imageCapturedTime = Date()
+            info.image = capture.image
+            info.imageCapturedTime = capture.capturedAt
         }
 
         updateDesktopSpaceWindowCache(with: info)
@@ -1626,7 +1628,8 @@ extension WindowUtil {
                 }
 
                 if newImageIsTiny, let cachedImage = matchingWindow.image,
-                   (!Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(cachedImage, axWindow: matchingWindow.axElement)) {
+                   !Defaults[.stageManagerOptimization] || isPlausibleStageManagerImage(cachedImage, axWindow: matchingWindow.axElement)
+                {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
                     matchingWindowCopy.image = windowInfo.image
