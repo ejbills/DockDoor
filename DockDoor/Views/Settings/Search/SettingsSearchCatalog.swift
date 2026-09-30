@@ -2,7 +2,7 @@ import Foundation
 
 enum SettingsSearchCatalog {
     static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
-        + cmdTabItems + dockLockingItems + appearanceItems + gesturesItems + filtersItems
+        + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
         + widgetItems + advancedItems + supportItems
 
     // MARK: - General
@@ -801,24 +801,6 @@ enum SettingsSearchCatalog {
             section: String(localized: "Background"),
             icon: "rectangle.fill"
         ),
-        SettingsSearchItem(
-            id: "appearance.glassTuning",
-            title: String(localized: "Glass Tuning"),
-            description: String(localized: "Fine-tune opacity, blur, saturation, tint, and border for glass background style."),
-            keywords: ["glass", "opacity", "blur", "saturation", "tint", "border", "tuning", "variant"],
-            tab: "Appearance",
-            section: String(localized: "Background"),
-            icon: "slider.horizontal.3"
-        ),
-        SettingsSearchItem(
-            id: "appearance.glassVariant",
-            title: String(localized: "Glass Variant"),
-            description: String(localized: "Selects the liquid glass material variant used for the background."),
-            keywords: ["glass", "variant", "liquid", "material", "style", "look"],
-            tab: "Appearance",
-            section: String(localized: "Background"),
-            icon: "sparkles"
-        ),
         // Window Background
         SettingsSearchItem(
             id: "appearance.hoverHighlightColor",
@@ -1186,6 +1168,51 @@ enum SettingsSearchCatalog {
             icon: "rectangle.inset.filled"
         ),
     ]
+
+    private static let glassItems: [SettingsSearchItem] = {
+        if #available(macOS 26.0, *), LiquidGlass.usesModernPipeline {
+            return [
+                SettingsSearchItem(
+                    id: "appearance.glassOpacity",
+                    title: String(localized: "Opacity"),
+                    description: String(localized: "Adjusts how much of the screen shows through the Liquid Glass background."),
+                    keywords: ["glass", "opacity", "liquid", "clear", "opaque", "transparency"],
+                    tab: "Appearance",
+                    section: String(localized: "Background"),
+                    icon: "circle.lefthalf.filled"
+                ),
+                SettingsSearchItem(
+                    id: "appearance.glassRefraction",
+                    title: String(localized: "Refraction"),
+                    description: String(localized: "Bends the background at the edges and adds a bright rim. Turn off for softer frosted glass that is easier to read over busy backgrounds."),
+                    keywords: ["glass", "refraction", "liquid", "rim", "lens", "frosted"],
+                    tab: "Appearance",
+                    section: String(localized: "Background"),
+                    icon: "sparkles"
+                ),
+            ]
+        }
+        return [
+            SettingsSearchItem(
+                id: "appearance.glassTuning",
+                title: String(localized: "Glass Tuning"),
+                description: String(localized: "Fine-tune opacity, blur, saturation, tint, and border for glass background style."),
+                keywords: ["glass", "opacity", "blur", "saturation", "tint", "border", "tuning", "variant"],
+                tab: "Appearance",
+                section: String(localized: "Background"),
+                icon: "slider.horizontal.3"
+            ),
+            SettingsSearchItem(
+                id: "appearance.glassVariant",
+                title: String(localized: "Glass Variant"),
+                description: String(localized: "Selects the liquid glass material variant used for the background."),
+                keywords: ["glass", "variant", "liquid", "material", "style", "look"],
+                tab: "Appearance",
+                section: String(localized: "Background"),
+                icon: "sparkles"
+            ),
+        ]
+    }()
 
     // MARK: - Gestures & Keybinds
 

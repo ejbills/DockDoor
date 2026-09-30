@@ -185,6 +185,8 @@ extension Defaults.Keys {
     // MARK: - Glass Effect
 
     static let dockBackgroundStyle = Key<DockBackgroundStyle>("dockBackgroundStyle", default: .liquidGlass)
+    static let dockLiquidGlassFlavor = Key<DockLiquidGlassFlavor>("dockLiquidGlassFlavor", default: .cartouchePopover)
+    static let dockGlassRefraction = Key<Bool>("dockGlassRefraction", default: true)
     static let dockGlassOpacity = Key<CGFloat>("dockGlassOpacity", default: 0.95)
     static let dockGlassBlurRadius = Key<CGFloat>("dockGlassBlurRadius", default: 0)
     static let dockGlassSaturation = Key<CGFloat>("dockGlassSaturation", default: 1.8)
@@ -1350,4 +1352,24 @@ enum DockBackgroundStyle: String, CaseIterable, Defaults.Serializable {
     static var allAvailable: [DockBackgroundStyle] { allCases }
 
     static var preTahoe: [DockBackgroundStyle] { [.frostedMaterial, .clear] }
+}
+
+enum DockLiquidGlassFlavor: String, CaseIterable, Defaults.Serializable {
+    case dock
+    case controlCenter
+    case notificationCenter
+    case regular
+    case sidebar
+    case widgets
+    case appIcons
+    case avPlayer
+    case monogram
+    case loupe
+    case keyboard
+    case clearGlass
+    case siriSnippet
+    case camera
+    case cartouchePopover
+    case siri
+    case menu
 }

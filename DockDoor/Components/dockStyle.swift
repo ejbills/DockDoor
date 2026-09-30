@@ -53,7 +53,18 @@ struct DockStyleModifier: ViewModifier {
     /// stroke instead.
     @ViewBuilder
     private var glassBackground: some View {
-        if backgroundAppearance.usesSyntheticBlur {
+        if #available(macOS 26.0, *), backgroundAppearance.usesModernGlass,
+           let rim = LiquidGlass.borderGlass(activeAppearance: backgroundAppearance.glassRefraction)
+        {
+            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                .overlay {
+                    Color.clear
+                        .glassEffect(rim, in: shape)
+                        .opacity(0.5)
+                        .allowsHitTesting(false)
+                }
+                .opacity(backgroundOpacity)
+        } else if backgroundAppearance.usesSyntheticBlur {
             BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
                 .overlay {
                     shape.strokeBorder(
