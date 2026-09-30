@@ -66,6 +66,8 @@ final class DockObserver {
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
     private var subscribedDockList: AXUIElement?
+    private var accessibilityPromptShown = false
+    private var awaitingAccessibilityGrant = false
 
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
@@ -165,6 +167,12 @@ final class DockObserver {
     }
 
     private func performHealthCheck() {
+        if awaitingAccessibilityGrant, AXIsProcessTrusted() {
+            awaitingAccessibilityGrant = false
+            askUserToRestartApplication()
+            return
+        }
+
         guard let currentDockPID else {
             setupSelectedDockItemObserver()
             return
@@ -225,22 +233,25 @@ final class DockObserver {
         }
 
         let dockAppPID = dockApp.processIdentifier
-        currentDockPID = dockAppPID
-
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
         guard AXIsProcessTrusted() else {
+            // The health check retries setup every 5 seconds until trusted; show the prompt once per launch.
+            awaitingAccessibilityGrant = true
+            guard !accessibilityPromptShown else { return }
+            accessibilityPromptShown = true
             MessageUtil.showAlert(
                 title: "Accessibility Permissions Required",
                 message: "You need to enable accessibility permissions for DockDoor to function, click OK to open System Preferences. A restart is required after granting permissions.",
                 actions: [.ok, .cancel],
                 completion: { _ in
                     SystemPreferencesHelper.openAccessibilityPreferences()
-                    askUserToRestartApplication()
                 }
             )
             return
         }
+
+        currentDockPID = dockAppPID
 
         guard let children = try? dockAppElement.children(),
               let axList = children.first(where: { element in
@@ -375,6 +386,8 @@ final class DockObserver {
         if Defaults[.ignoreAppsWithSingleWindow], cachedWindows.count <= 1 {
             cachedWindows = []
         }
+
+        cachedWindows = WindowUtil.collapseNativeTabsIfNeeded(cachedWindows)
 
         // Filter cached windows by current space before showing preview
         if Defaults[.showWindowsFromCurrentSpaceOnly], !cachedWindows.isEmpty {

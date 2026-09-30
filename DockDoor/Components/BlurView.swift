@@ -4,6 +4,8 @@ import SwiftUI
 struct BackgroundAppearance: Equatable {
     let style: DockBackgroundStyle
     let material: DockBackgroundMaterial
+    let glassFlavor: DockLiquidGlassFlavor
+    let glassRefraction: Bool
     let glassOpacity: CGFloat
     let glassBlurRadius: CGFloat
     let glassSaturation: CGFloat
@@ -16,6 +18,7 @@ struct BackgroundAppearance: Equatable {
 
     static let observedKeys: [Defaults._AnyKey] = [
         .dockBackgroundStyle, .dockBackgroundMaterial,
+        .dockLiquidGlassFlavor, .dockGlassRefraction,
         .dockGlassOpacity, .dockGlassBlurRadius, .dockGlassSaturation, .dockGlassVariant,
         .dockBackgroundTintOpacity,
         .dockBackgroundBorderOpacity, .dockBackgroundBorderWidth,
@@ -27,12 +30,23 @@ struct BackgroundAppearance: Equatable {
     /// as the border, so `borderedBackground` should be skipped.
     static let syntheticBlurVariant = 20
 
-    var usesSyntheticBlur: Bool { style == .liquidGlass && glassVariant == Self.syntheticBlurVariant }
+    var usesSyntheticBlur: Bool { style == .liquidGlass && !usesModernGlassPipeline && glassVariant == Self.syntheticBlurVariant }
+
+    var usesModernGlass: Bool {
+        style == .liquidGlass && customBackgroundColor == nil && !useOpaqueBackground && usesModernGlassPipeline
+    }
+
+    private var usesModernGlassPipeline: Bool {
+        guard #available(macOS 26.0, *) else { return false }
+        return LiquidGlass.usesModernPipeline
+    }
 
     static func resolve() -> BackgroundAppearance {
         BackgroundAppearance(
             style: Defaults[.dockBackgroundStyle],
             material: Defaults[.dockBackgroundMaterial],
+            glassFlavor: Defaults[.dockLiquidGlassFlavor],
+            glassRefraction: Defaults[.dockGlassRefraction],
             glassOpacity: Defaults[.dockGlassOpacity],
             glassBlurRadius: Defaults[.dockGlassBlurRadius],
             glassSaturation: Defaults[.dockGlassSaturation],
@@ -46,11 +60,13 @@ struct BackgroundAppearance: Equatable {
     }
 }
 
-struct BlurView: View {
+struct BlurView<S: Shape>: View {
+    let shape: S
     let cornerRadius: CGFloat
     let appearance: BackgroundAppearance
 
-    init(cornerRadius: CGFloat = 0, appearance: BackgroundAppearance) {
+    init(shape: S, cornerRadius: CGFloat = 0, appearance: BackgroundAppearance) {
+        self.shape = shape
         self.cornerRadius = cornerRadius
         self.appearance = appearance
     }
@@ -69,7 +85,10 @@ struct BlurView: View {
     private var styledBackground: some View {
         switch appearance.style {
         case .liquidGlass:
-            if #available(macOS 26.0, *) {
+            if #available(macOS 26.0, *), let glass = LiquidGlass.glass(for: appearance.glassFlavor, activeAppearance: appearance.glassRefraction) {
+                Color.clear
+                    .glassEffect(glass, in: shape)
+            } else if #available(macOS 26.0, *) {
                 LiquidGlassRepresentable(
                     cornerRadius: cornerRadius,
                     glassOpacity: appearance.glassOpacity,
@@ -79,15 +98,19 @@ struct BlurView: View {
                     variant: appearance.glassVariant
                 )
             } else {
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(appearance.material.swiftUIMaterial)
+                shape.fill(appearance.material.swiftUIMaterial)
             }
         case .frostedMaterial:
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(appearance.material.swiftUIMaterial)
+            shape.fill(appearance.material.swiftUIMaterial)
         case .clear:
             Color.clear
         }
+    }
+}
+
+extension BlurView where S == RoundedRectangle {
+    init(cornerRadius: CGFloat = 0, appearance: BackgroundAppearance) {
+        self.init(shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous), cornerRadius: cornerRadius, appearance: appearance)
     }
 }
 
