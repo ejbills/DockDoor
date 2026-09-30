@@ -68,6 +68,14 @@ enum SettingsSearchCatalog {
             icon: "paintbrush"
         ),
         SettingsSearchItem(
+            id: "general.indicatorStyle",
+            title: String(localized: "Indicator Style"),
+            keywords: ["indicator", "style", "dots", "window", "count", "number"],
+            tab: "General",
+            section: String(localized: "Active App Indicator"),
+            icon: "number.circle"
+        ),
+        SettingsSearchItem(
             id: "general.indicatorAutoSize",
             title: String(localized: "Automatically set height and offset"),
             keywords: ["indicator", "auto", "height", "offset"],

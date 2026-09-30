@@ -26878,7 +26878,6 @@
       }
     },
     "Blur Radius" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -27260,7 +27259,6 @@
       }
     },
     "Border Opacity" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -27451,7 +27449,6 @@
       }
     },
     "Border Width" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -60967,7 +60964,6 @@
     },
     "Dots (running apps)" : {
       "comment" : "Active app indicator style option",
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -72596,7 +72592,6 @@
       }
     },
     "Fine-tune opacity, blur, saturation, tint, and border for glass background style." : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -78691,7 +78686,6 @@
       }
     },
     "Glass Tuning" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -78882,7 +78876,6 @@
       }
     },
     "Glass Variant" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -91074,7 +91067,6 @@
       }
     },
     "Indicator Style" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -97173,7 +97165,6 @@
     },
     "Line (active app)" : {
       "comment" : "Active app indicator style option",
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -144015,7 +144006,6 @@
       }
     },
     "Saturation" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -152967,7 +152957,6 @@
       }
     },
     "Selects the liquid glass material variant used for the background." : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -164389,7 +164378,6 @@
       }
     },
     "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none." : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -180401,7 +180389,6 @@
       }
     },
     "Tint Intensity" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -192599,7 +192586,6 @@
       }
     },
     "Variant" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

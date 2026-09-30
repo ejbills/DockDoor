@@ -280,6 +280,11 @@ class WindowManipulationObservers {
         }
     }
 
+    private func notifyRunningAppDotsIfNeeded() {
+        guard Defaults[.showActiveAppIndicator], Defaults[.activeAppIndicatorStyle] == .runningAppDots else { return }
+        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+    }
+
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         DebugLogger.log("processAXNotification", details: "Notification: \(notificationName), App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
 
@@ -306,6 +311,7 @@ class WindowManipulationObservers {
                 WindowUtil.quitAppOnLastWindowCloseIfNeeded(app: app)
             }
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
+            notifyRunningAppDotsIfNeeded()
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }
@@ -368,6 +374,7 @@ class WindowManipulationObservers {
                 await WindowUtil.cacheCreatedWindow(axWindow: element, app: app)
             }
             handleNewWindow(for: pid)
+            notifyRunningAppDotsIfNeeded()
         case kAXTitleChangedNotification:
             let windowID = try? element.cgWindowId()
             if let existing = WindowUtil.readCachedWindows(for: pid).first(where: { (windowID != nil && $0.id == windowID) || $0.axElement == element }) {
