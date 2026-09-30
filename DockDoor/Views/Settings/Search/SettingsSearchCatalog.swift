@@ -658,6 +658,15 @@ enum SettingsSearchCatalog {
             icon: "eye.trianglebadge.exclamationmark"
         ),
         SettingsSearchItem(
+            id: "appearance.spaceNumber",
+            title: String(localized: "Show Space number on previews"),
+            description: String(localized: "Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop."),
+            keywords: ["space", "desktop", "number", "badge", "mission control"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "rectangle.on.rectangle"
+        ),
+        SettingsSearchItem(
             id: "appearance.windowlessQuitButton",
             title: String(localized: "Show quit button for apps with no open windows"),
             description: String(localized: "Shows a quit-only control on previews for running apps with no open windows."),

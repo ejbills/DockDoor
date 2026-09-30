@@ -1184,7 +1184,8 @@ struct WindowPreviewHoverContainer: View {
                     onHoverIndexChange: handleHoverIndexChange,
                     appearance: appearance,
                     backgroundAppearance: backgroundAppearance,
-                    focusedWindowID: previewStateCoordinator.focusedWindowID
+                    focusedWindowID: previewStateCoordinator.focusedWindowID,
+                    spaceNumber: previewStateCoordinator.desktopNumber(for: windowInfo)
                 )
                 .equatable()
             } else {
@@ -1208,7 +1209,8 @@ struct WindowPreviewHoverContainer: View {
                     useLivePreview: useLivePreview,
                     appearance: appearance,
                     backgroundAppearance: backgroundAppearance,
-                    focusedWindowID: previewStateCoordinator.focusedWindowID
+                    focusedWindowID: previewStateCoordinator.focusedWindowID,
+                    spaceNumber: previewStateCoordinator.desktopNumber(for: windowInfo)
                 )
                 .equatable()
                 .gesture(

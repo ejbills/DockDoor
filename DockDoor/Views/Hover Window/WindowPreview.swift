@@ -140,6 +140,7 @@ struct WindowPreview: View, Equatable {
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
     let focusedWindowID: CGWindowID?
+    var spaceNumber: Int? = nil
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -157,6 +158,7 @@ struct WindowPreview: View, Equatable {
             && l.appearance == r.appearance && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
             && l.backgroundAppearance == r.backgroundAppearance
             && l.focusedWindowID == r.focusedWindowID
+            && l.spaceNumber == r.spaceNumber
     }
 
     private var isActiveWindow: Bool {
@@ -248,13 +250,35 @@ struct WindowPreview: View, Equatable {
         }
         .animation(appearance.showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
         .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
+        .opacity(isSelected ? 1.0 : appearance.unselectedContentOpacity)
+        .overlay(alignment: spaceBadgeAlignment) {
+            if let spaceNumber, !skeletonMode {
+                SpaceNumberBadge(
+                    number: spaceNumber,
+                    font: appearance.windowTitleFontSize.font,
+                    backgroundAppearance: backgroundAppearance
+                )
+                .padding(8)
+            }
+        }
         .dynamicWindowFrame(
             allowDynamicSizing: appearance.allowDynamicImageSizing,
             dimensions: dimensions,
             dockPosition: dockPosition,
             windowSwitcherActive: windowSwitcherActive
         )
-        .opacity(isSelected ? 1.0 : appearance.unselectedContentOpacity)
+    }
+
+    private var spaceBadgeAlignment: Alignment {
+        switch appearance.controlPosition {
+        case .topLeading, .topTrailing:
+            .bottomTrailing
+        case .diagonalTopRightBottomLeft, .diagonalBottomLeftTopRight,
+             .parallelTopRightBottomRight, .parallelBottomRightTopRight:
+            .topLeading
+        default:
+            .topTrailing
+        }
     }
 
     @ViewBuilder
