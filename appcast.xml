@@ -3,23 +3,13 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.40.1.0.3</title>
-            <pubDate>Sat, 05 Sep 2026 11:18:00 -0700</pubDate>
+            <title>1.40.2</title>
+            <pubDate>Wed, 30 Sep 2026 13:36:57 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.40.1.0.3</sparkle:version>
-            <sparkle:shortVersionString>1.40.1.0.3 beta</sparkle:shortVersionString>
+            <sparkle:version>1.40.2</sparkle:version>
+            <sparkle:shortVersionString>1.40.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.40.1.0.3/DockDoor.dmg" length="22151283" type="application/octet-stream" sparkle:edSignature="ZaW5q2kOlULfbgV8eaQqifsX7bFW9xeDM2SYhfkjxDNMnUt2ibHgYczF42nBk63CLwh719CENkG5zA2UqQs1Cg==" />
-        </item>
-    <item>
-            <title>1.40.1</title>
-            <pubDate>Thu, 03 Sep 2026 14:35:27 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.40.1</sparkle:version>
-            <sparkle:shortVersionString>1.40.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.40.1/DockDoor.dmg" length="22146131" type="application/octet-stream" sparkle:edSignature="Mn3NVX4arLKC2VnlB4C7n+f5BpNnn+b6DEFvI7mN/M1H1PYiCoZ1W6kPfyJHWF4WsN+Jj99SQ2RyTquUXEBCBA==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.40.2/DockDoor.dmg" length="22445107" type="application/octet-stream" sparkle:edSignature="9VId0TSdlGSNR8wfmgnJU1+0WrwB1ztEnt2a+5sY+JZKLZfprsDaJd4Fzce5Vh8uN/UqSLkVRsrDI9cTNRIVAw==" />
         </item>
     </channel>
 </rss>
