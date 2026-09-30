@@ -284,8 +284,8 @@ final class ActiveAppIndicatorCoordinator {
 
         isDockCurrentlyVisible = DockObserver.isDockVisible()
 
-        let isNewApp = previousApp?.bundleIdentifier != app.bundleIdentifier
-        updateIndicatorPosition(for: app, widenFromCenter: isNewApp)
+        let isNewAppInstance = previousApp?.processIdentifier != app.processIdentifier
+        updateIndicatorPosition(for: app, widenFromCenter: isNewAppInstance)
         scheduleDelayedUpdate()
     }
 
