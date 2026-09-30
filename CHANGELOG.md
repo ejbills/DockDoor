@@ -38,6 +38,59 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.2"></a>
+# [Release 1.40.2](https://github.com/ejbills/DockDoor/releases/tag/1.40.2) - 2026-09-30
+
+## ✨ New Features
+- Liquid Glass background gets a native glass look on macOS 27
+  - Real edge refraction and a bright rim
+  - Find it in Settings > Appearance > Background with the Liquid Glass style (the default style)
+  - New Opacity slider from "Clearer" to "More Opaque"
+  - New Refraction toggle, on by default; turn it off for softer frosted glass that is easier to read over busy backgrounds
+  - Replaces the older Glass Tuning options on macOS 27 and later
+  - macOS 26 keeps Glass Tuning unchanged
+  - Settings search finds Opacity and Refraction on macOS 27 and later
+- Show the Space number on window previews
+  - Turn on "Show Space number on previews" in Settings > Appearance > General Appearance
+  - Off by default, and only shown when you have more than one desktop
+  - Works in the standard and compact layouts
+  - The badge moves to a corner that doesn't overlap the window controls
+- Running app dots for the active app indicator
+  - Choose "Dots (running apps)" under Settings > General > Active App Indicator > Indicator Style
+  - Every running app gets a dot: bright for the frontmost app, dimmed for apps with open windows, black for apps with none
+  - Dots update as windows open and close and as you switch apps
+  - Indicator Height and Length are hidden for Dots; Position Offset and Shift still apply
+  - The default stays the line style
+
+## 🔧 Improvements & Stability
+- Small badges on previews use the same Liquid Glass look on macOS 27 and later
+- Updated translations for supported languages
+- Debug logs record more capture details to help diagnose blank or wrong previews
+
+## 🐛 Bug Fixes
+- Accessibility permission prompt no longer asks to restart too early
+  - OK now only opens System Settings
+  - DockDoor asks you to restart once it detects the permission has been granted
+  - If you grant access later, dock previews start working without reopening DockDoor
+- Clicks no longer stop working system-wide after permission changes
+  - When macOS refuses DockDoor's input access, DockDoor releases its keyboard and mouse monitoring so your clicks go through
+  - It restores monitoring when access returns
+- Invisible helper and phantom windows no longer appear in previews or the switcher
+- Full-size hover previews no longer stick on screen or appear late
+  - Pressing Escape also dismisses a full-size preview
+- Previews no longer turn into a cropped image when switching Spaces
+- Windows of quit or crashed apps no longer linger in the window switcher
+- Dock previews sit next to the hovered icon on a right-side Dock
+- Preview panels stay anchored to their icon and inside the visible screen when they resize
+- Newly opened dock previews show a current window list instead of stale windows
+- Native tabbed windows collapse correctly in dock previews, matching the switcher
+- Active app indicator sits correctly on macOS 27
+- DockDoor Pro icon displays correctly
+
+
+[Changes][1.40.2]
+
+
 <a id="1.40.1"></a>
 # [Release 1.40.1](https://github.com/ejbills/DockDoor/releases/tag/1.40.1) - 2026-09-03
 
@@ -2386,6 +2439,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.2]: https://github.com/ejbills/DockDoor/compare/1.40.1...1.40.2
 [1.40.1]: https://github.com/ejbills/DockDoor/compare/1.40.0...1.40.1
 [1.40.0]: https://github.com/ejbills/DockDoor/compare/1.39.5...1.40.0
 [1.39.5]: https://github.com/ejbills/DockDoor/compare/1.39.4...1.39.5
