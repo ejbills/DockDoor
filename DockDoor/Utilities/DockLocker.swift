@@ -399,6 +399,7 @@ final class DockLocker {
     // MARK: - Event Tap
 
     private func setupEventTap() {
+        guard DockObserver.canPostEvents else { return }
         let eventMask: CGEventMask =
             (1 << CGEventType.mouseMoved.rawValue)
 

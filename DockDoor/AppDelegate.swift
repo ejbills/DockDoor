@@ -266,13 +266,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard !Task.isCancelled else { return }
 
             await MainActor.run { [weak self] in
-                guard let self else { return }
-                dockObserver?.reset()
-                keybindHelper?.recover()
-                appClosureObserver?.reset()
-                dockLocker?.reset()
+                self?.recoverObserversAndTaps()
             }
         }
+    }
+
+    func recoverObserversAndTaps() {
+        dockObserver?.reset()
+        keybindHelper?.recover()
+        appClosureObserver?.reset()
+        dockLocker?.reset()
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {

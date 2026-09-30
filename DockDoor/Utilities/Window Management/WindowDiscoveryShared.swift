@@ -593,6 +593,10 @@ func shouldAcceptWindow(axWindow: AXUIElement,
 
     if app.isHidden || axIsFullscreen || axIsMinimized { return true }
 
+    if windowSpaces.isEmpty, SLSWindowIsOrderedIn(windowID) == false {
+        return false
+    }
+
     // Window on a different Space; a window whose only Spaces no longer exist is a ghost with a stale space ID
     if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {
         return !windowSpaces.isDisjoint(with: WindowSpaces.allManagedSpaceIDs())

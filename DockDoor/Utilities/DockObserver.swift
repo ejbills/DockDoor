@@ -65,6 +65,11 @@ final class DockObserver {
 
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
+    private static let postingCanarySubtype: Int16 = 0x0D0D
+    private(set) static var canPostEvents = true
+    private var postingCanaryMonitor: Any?
+    private var postingCanaryPending = false
+    private var postingCanaryMisses = 0
     private var subscribedDockList: AXUIElement?
     private var accessibilityPromptShown = false
     private var awaitingAccessibilityGrant = false
@@ -135,6 +140,11 @@ final class DockObserver {
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
+        postingCanaryMonitor = NSEvent.addLocalMonitorForEvents(matching: .applicationDefined) { [weak self] event in
+            guard event.subtype.rawValue == DockObserver.postingCanarySubtype else { return event }
+            self?.postingCanaryArrived()
+            return nil
+        }
         setupSelectedDockItemObserver()
         startHealthCheckTimer()
         enableDockClickDetection()
@@ -143,6 +153,9 @@ final class DockObserver {
     deinit {
         if DockObserver.activeInstance === self {
             DockObserver.activeInstance = nil
+        }
+        if let postingCanaryMonitor {
+            NSEvent.removeMonitor(postingCanaryMonitor)
         }
         healthCheckTimer?.invalidate()
         teardownObserver()
@@ -172,6 +185,25 @@ final class DockObserver {
             askUserToRestartApplication()
             return
         }
+
+        if postingCanaryPending {
+            postingCanaryMisses += 1
+            if postingCanaryMisses >= 2, DockObserver.canPostEvents {
+                updateCanPostEvents(false)
+            }
+        }
+        postingCanaryPending = true
+        NSEvent.otherEvent(
+            with: .applicationDefined,
+            location: .zero,
+            modifierFlags: [],
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            subtype: DockObserver.postingCanarySubtype,
+            data1: 0,
+            data2: 0
+        )?.cgEvent?.postToPid(getpid())
 
         guard let currentDockPID else {
             setupSelectedDockItemObserver()
@@ -216,6 +248,20 @@ final class DockObserver {
         } else {
             setupEventTap()
         }
+    }
+
+    private func postingCanaryArrived() {
+        postingCanaryPending = false
+        postingCanaryMisses = 0
+        if !DockObserver.canPostEvents {
+            updateCanPostEvents(true)
+        }
+    }
+
+    private func updateCanPostEvents(_ canPostEvents: Bool) {
+        DockObserver.canPostEvents = canPostEvents
+        DebugLogger.log("DockObserver", details: "Event posting \(canPostEvents ? "allowed" : "refused"), rebuilding event taps")
+        (NSApp.delegate as? AppDelegate)?.recoverObserversAndTaps()
     }
 
     private func teardownObserver() {
@@ -774,7 +820,7 @@ final class DockObserver {
     }
 
     private func setupEventTap() {
-        guard eventTap == nil else { return }
+        guard eventTap == nil, DockObserver.canPostEvents else { return }
         var eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
             (1 << CGEventType.rightMouseDown.rawValue) |
             (1 << CGEventType.otherMouseDown.rawValue)
