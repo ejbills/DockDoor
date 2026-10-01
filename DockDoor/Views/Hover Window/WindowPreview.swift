@@ -132,7 +132,7 @@ struct WindowTitlePresentation: Equatable {
     ) -> Self {
         let hasTitle = showWindowTitle && title != nil
         let isVisible = hasTitle && (visibility == .alwaysVisible || isHighlighted)
-        let reservesSpace = hasTitle && (visibility == .whenHoveringPreview || isVisible)
+        let reservesSpace = hasTitle
         return Self(isVisible: isVisible, reservesSpace: reservesSpace)
     }
 }
@@ -223,10 +223,10 @@ struct WindowPreview: View, Equatable {
     }
 
     @ViewBuilder
-    private func titleLabel(_ text: String) -> some View {
+    private func titleLabel(_ text: String, scrolls: Bool = true) -> some View {
         switch appearance.titleOverflowStyle {
         case .marquee:
-            MarqueeText(text: text, startDelay: 1)
+            MarqueeText(text: text, startDelay: 1, enableScrolling: scrolls)
         case .truncateTail:
             MarqueeText(text: text, truncationMode: .tail, enableScrolling: false)
         case .truncateMiddle:
@@ -339,7 +339,7 @@ struct WindowPreview: View, Equatable {
 
         let titleContent = Group {
             if titlePresentation.reservesSpace, let title = titleToShow {
-                titleLabel(title)
+                titleLabel(title, scrolls: titlePresentation.isVisible)
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
@@ -691,7 +691,7 @@ struct WindowPreview: View, Equatable {
 
         let titleContent = Group {
             if titlePresentation.reservesSpace, let title = titleToShow {
-                titleLabel(title)
+                titleLabel(title, scrolls: titlePresentation.isVisible)
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
