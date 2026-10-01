@@ -5,11 +5,12 @@ import SwiftUI
 struct SearchFieldView: View {
     let searchField: NSTextField
     @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
+    @Default(.previewCornerRadius) private var previewCornerRadius
     @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     var body: some View {
         ZStack {
-            let cornerRadius = CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier)
+            let cornerRadius = previewCornerRadius + (CardRadius.innerPadding * globalPaddingMultiplier)
             BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
 

@@ -3,6 +3,7 @@ import SwiftUI
 
 struct GeneralAppearanceSection: View {
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.titleOverflowStyle) var titleOverflowStyle
@@ -63,6 +64,18 @@ struct GeneralAppearanceSection: View {
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
+
+                    if uniformCardRadius {
+                        sliderSetting(
+                            title: "Corner Radius",
+                            value: $previewCornerRadius,
+                            range: 0 ... 40,
+                            step: 1,
+                            unit: "pt"
+                        )
+                        .padding(.leading, 20)
+                        .settingsSearchTarget("appearance.cornerRadius")
+                    }
                 }
 
                 VStack(alignment: .leading) {

@@ -26,6 +26,7 @@ struct PreviewAppearanceSettings: Equatable {
     let activeAppIndicatorColor: Color
     let showAnimations: Bool
     let globalPaddingMultiplier: CGFloat
+    let radii: CardRadius.Resolved
     let windowTitleFontSize: WindowTitleFontSize
     let switcherAppIconSize: CGFloat
     let trafficLightButtonScale: CGFloat
@@ -63,7 +64,7 @@ struct PreviewAppearanceSettings: Equatable {
         .dockLivePreviewFrameRate, .windowSwitcherLivePreviewFrameRate,
         .showMinimizedHiddenLabels, .selectionOpacity, .unselectedContentOpacity, .hoverHighlightColor,
         .allowDynamicImageSizing, .hidePreviewCardBackground, .tapEquivalentInterval, .previewHoverAction, .keepPreviewOnHoverActivation,
-        .showActiveWindowBorder, .activeAppIndicatorColor, .showAnimations, .globalPaddingMultiplier,
+        .showActiveWindowBorder, .activeAppIndicatorColor, .showAnimations, .globalPaddingMultiplier, .uniformCardRadius, .previewCornerRadius,
         .windowTitleFontSize, .switcherAppIconSize, .trafficLightButtonScale,
         .previewWidth, .compactModeTitleFormat, .compactModeItemSize, .compactModeHideTrafficLights,
         .showWindowlessAppQuitButton, .titleOverflowStyle,
@@ -105,6 +106,7 @@ struct PreviewAppearanceSettings: Equatable {
             activeAppIndicatorColor: Defaults[.activeAppIndicatorColor],
             showAnimations: Defaults[.showAnimations],
             globalPaddingMultiplier: Defaults[.globalPaddingMultiplier],
+            radii: .current(),
             windowTitleFontSize: Defaults[.windowTitleFontSize],
             switcherAppIconSize: Defaults[.switcherAppIconSize],
             trafficLightButtonScale: Defaults[.trafficLightButtonScale],
@@ -249,7 +251,7 @@ struct WindowPreview: View, Equatable {
             }
         }
         .animation(appearance.showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
-        .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: appearance.radii.image, style: .continuous))
         .opacity(isSelected ? 1.0 : appearance.unselectedContentOpacity)
         .overlay(alignment: spaceBadgeAlignment) {
             if let spaceNumber, !skeletonMode {
@@ -818,7 +820,7 @@ struct WindowPreview: View, Equatable {
                 view.frame(maxWidth: dimensions.maxDimensions.width > 0 ? dimensions.maxDimensions.width : nil)
             }
             .background {
-                let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : 8.0
+                let cornerRadius = appearance.radii.card
 
                 if !appearance.hidePreviewCardBackground {
                     BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
@@ -854,8 +856,7 @@ struct WindowPreview: View, Equatable {
         }
         .overlay {
             if isDraggingOver {
-                let dragRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : CardRadius.fallback
-                RoundedRectangle(cornerRadius: dragRadius)
+                RoundedRectangle(cornerRadius: appearance.radii.card)
                     .fill(Color(nsColor: .controlAccentColor).opacity(0.3))
                     .padding(-CardRadius.innerPadding)
                     .opacity(highlightOpacity)

@@ -145,7 +145,7 @@ struct WindowlessAppPreview: View, Equatable {
             }
 
             iconContent
-                .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: appearance.radii.image, style: .continuous))
                 .dynamicWindowFrame(
                     allowDynamicSizing: false,
                     dimensions: dimensions ?? WindowPreviewHoverContainer.WindowDimensions(size: .zero, maxDimensions: .zero),
@@ -169,7 +169,7 @@ struct WindowlessAppPreview: View, Equatable {
         }
         .frame(maxWidth: (dimensions?.maxDimensions.width ?? 0) > 0 ? dimensions!.maxDimensions.width : nil)
         .background {
-            let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : 8.0
+            let cornerRadius = appearance.radii.card
 
             if !appearance.hidePreviewCardBackground {
                 BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)

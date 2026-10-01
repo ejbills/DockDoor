@@ -640,6 +640,14 @@ enum SettingsSearchCatalog {
             icon: "rectangle.roundedtop"
         ),
         SettingsSearchItem(
+            id: "appearance.cornerRadius",
+            title: String(localized: "Corner Radius"),
+            keywords: ["rounded", "corners", "radius", "roundness"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "rectangle.roundedtop"
+        ),
+        SettingsSearchItem(
             id: "appearance.marquee",
             title: String(localized: "Long title overflow"),
             description: String(localized: "How to display window titles that are too long to fit."),

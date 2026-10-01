@@ -76,6 +76,7 @@ extension Defaults.Keys {
     static let livePreviewStreamKeepAlive = Key<Int>("livePreviewStreamKeepAlive", default: 0)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
+    static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 20)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)

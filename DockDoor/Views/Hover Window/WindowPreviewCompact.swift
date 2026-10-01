@@ -5,7 +5,6 @@ struct WindowPreviewCompact: View, Equatable {
     let windowInfo: WindowInfo
     let index: Int
     let dockPosition: DockPosition
-    let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
     let isSelected: Bool
     let windowSwitcherActive: Bool
@@ -25,7 +24,6 @@ struct WindowPreviewCompact: View, Equatable {
 
     static func == (l: Self, r: Self) -> Bool {
         l.index == r.index && l.isSelected == r.isSelected
-            && l.uniformCardRadius == r.uniformCardRadius
             && l.windowSwitcherActive == r.windowSwitcherActive
             && l.appearance == r.appearance
             && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
@@ -159,7 +157,7 @@ struct WindowPreviewCompact: View, Equatable {
         .frame(width: appearance.previewWidth, height: appearance.compactModeItemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
-            let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : CardRadius.fallback
+            let cornerRadius = appearance.radii.card
 
             if !appearance.hidePreviewCardBackground {
                 BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)

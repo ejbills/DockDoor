@@ -47053,6 +47053,9 @@
         }
       }
     },
+    "Corner Radius" : {
+
+    },
     "Creation order (fixed)" : {
       "comment" : "Window preview sort order option",
       "localizations" : {

@@ -2,18 +2,35 @@ import Defaults
 import SwiftUI
 
 enum CardRadius {
-    static let base: Double = 20
     static let innerPadding: Double = 6
     static let outerPadding: Double = 20
     static let fallback: Double = 8
 
-    static func outer(for padding: Double) -> Double {
-        Defaults[.uniformCardRadius] ? base + (padding * Defaults[.globalPaddingMultiplier]) : fallback
-    }
+    struct Resolved: Equatable {
+        let card: Double
+        let image: Double
+        let container: Double
 
-    static var inner: Double { outer(for: innerPadding) }
-    static var container: Double { outer(for: outerPadding) }
-    static var image: Double { max(fallback, inner - innerPadding) }
+        init(uniform: Bool, base: Double, paddingMultiplier: Double) {
+            guard uniform else {
+                card = CardRadius.fallback
+                image = CardRadius.fallback
+                container = CardRadius.fallback
+                return
+            }
+            card = base + CardRadius.innerPadding * paddingMultiplier
+            image = max(0, card - CardRadius.innerPadding)
+            container = base + CardRadius.outerPadding * paddingMultiplier
+        }
+
+        static func current() -> Resolved {
+            Resolved(
+                uniform: Defaults[.uniformCardRadius],
+                base: Defaults[.previewCornerRadius],
+                paddingMultiplier: Defaults[.globalPaddingMultiplier]
+            )
+        }
+    }
 
     static func switcherToolbarHorizontalPadding(uniformCardRadius: Bool) -> CGFloat {
         guard uniformCardRadius else { return 0 }
@@ -106,7 +123,7 @@ private func glassBorderGradient(opacity: CGFloat) -> LinearGradient {
 extension View {
     func dockStyle(
         backgroundAppearance: BackgroundAppearance,
-        cornerRadius: Double = CardRadius.container,
+        cornerRadius: Double = CardRadius.Resolved.current().container,
         highlightColor: Color? = nil,
         backgroundOpacity: CGFloat = 1.0,
         outerPadding: CGFloat = HoverContainerPadding.dockStyleOuter
