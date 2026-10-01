@@ -3,178 +3,50 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DockDoor Docs - AppleScript & Automation Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DockDoor Docs: AppleScript and automation</title>
     <meta name="description" content="DockDoor scripting documentation. Control DockDoor with AppleScript, automate window management, and integrate with third-party tools like Logitech Options+.">
+    <meta name="theme-color" content="#F4F5F7">
     <link rel="canonical" href="https://dockdoor.net/docs">
-    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png">
+    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-128x128@1x.png">
+    <link rel="apple-touch-icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@1x.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .docs-hero {
-            padding: 8rem 0 3rem;
-            text-align: center;
-        }
-        .docs-hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            margin-bottom: 0.75rem;
-        }
-        .docs-hero p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .docs-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 2rem 6rem;
-        }
-        .docs-section {
-            margin-bottom: 4rem;
-        }
-        .docs-section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-        .docs-section h3 {
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin: 2rem 0 0.75rem;
-            color: var(--text-primary);
-        }
-        .docs-section p, .docs-section li {
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 0.75rem;
-        }
-        .docs-section ul, .docs-section ol {
-            padding-left: 1.5rem;
-            margin-bottom: 1.25rem;
-        }
-        .docs-section li {
-            margin-bottom: 0.4rem;
-        }
-        .docs-callout {
-            background: var(--light-gray);
-            border-radius: var(--radius);
-            padding: 1.25rem 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .docs-callout p {
-            margin-bottom: 0;
-        }
-        .docs-callout strong {
-            color: var(--text-primary);
-        }
-        pre {
-            background: var(--dark);
-            color: #f0f0f0;
-            border-radius: var(--radius);
-            padding: 1.25rem 1.5rem;
-            overflow-x: auto;
-            margin: 1rem 0 1.5rem;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        code {
-            font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
-            font-size: 0.88em;
-        }
-        p code, li code {
-            background: var(--light-gray);
-            padding: 0.15em 0.4em;
-            border-radius: 5px;
-            color: var(--text-primary);
-        }
-        .command-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0 1.5rem;
-            font-size: 0.95rem;
-        }
-        .command-table th,
-        .command-table td {
-            text-align: left;
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e5e5ea;
-        }
-        .command-table th {
-            font-weight: 600;
-            color: var(--text-primary);
-            background: var(--light-gray);
-        }
-        .command-table td {
-            color: var(--text-secondary);
-        }
-        .command-table td code {
-            white-space: nowrap;
-        }
-        .docs-toc {
-            background: var(--light-gray);
-            border-radius: var(--radius);
-            padding: 1.5rem 2rem;
-            margin-bottom: 3rem;
-        }
-        .docs-toc h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin: 0 0 0.75rem;
-            color: var(--text-primary);
-        }
-        .docs-toc ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .docs-toc li {
-            margin-bottom: 0.4rem;
-        }
-        .docs-toc a {
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
-    </style>
 </head>
 
-<body>
-    <!-- Header -->
-    <header id="header">
-        <div class="container header-container">
-            <a href="index.html" class="logo">
-                <img src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png" alt="DockDoor Logo">
-                <span class="logo-text" data-text="DockDoor">DockDoor</span>
+<body class="page-docs">
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav-wrap">
+        <nav class="nav glass" aria-label="Main">
+            <a href="index.html" class="nav-brand" aria-label="DockDoor home">
+                <img src="/resources/web/icon-256.webp" alt="" width="28" height="28">
+                <span>DockDoor</span>
             </a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="index.html#privacy" class="nav-link">Privacy</a></li>
-                    <li><a href="index.html#features" class="nav-link">Features</a></li>
-                    <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
-                    <li><a href="docs.html" class="nav-link active">Docs</a></li>
-                    <li><a href="donate.html" class="nav-link">Donate</a></li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <a href="index.html#download" class="btn btn-primary">Download</a>
-                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">&#9776;</button>
-            </div>
-        </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#privacy">Privacy</a></li>
+                <li><a href="index.html#pro">DockDoor Pro</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="docs.html" aria-current="page">Docs</a></li>
+                <li><a href="donate.html">Donate</a></li>
+            </ul>
+            <a href="index.html#download" class="btn btn-ink btn-sm nav-cta">Download</a>
+            <button class="nav-menu" id="nav-menu" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span>
+            </button>
+        </nav>
     </header>
 
-    <!-- Hero -->
-    <section class="docs-hero">
-        <div class="container">
-            <h1>Documentation</h1>
-            <p>Control DockDoor with AppleScript, the CLI, and third-party automation tools.</p>
-        </div>
-    </section>
+    <main id="main">
+        <section class="page-hero">
+            <div class="wrap">
+                <h1>Documentation</h1>
+                <p>Control DockDoor with AppleScript, the command line, and third-party automation tools.</p>
+            </div>
+        </section>
 
     <!-- Content -->
     <div class="docs-content">
@@ -366,8 +238,38 @@ osascript -e 'tell application "DockDoor" to get help'</pre>
 
     </div>
 
-    <!-- Script -->
-    <script src="scripts.js"></script>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap footer-grid">
+            <div class="footer-brand">
+                <p class="footer-name"><img src="/resources/web/icon-256.webp" alt="" width="32" height="32"> DockDoor</p>
+                <p>Free and open source under GPL-3.0.<br>Made by <a href="https://github.com/ejbills">Ethan Bills</a> and contributors.</p>
+            </div>
+            <nav class="footer-cols" aria-label="Footer">
+                <div>
+                    <p class="footer-h">DockDoor</p>
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#download">Download</a>
+                    <a href="docs.html">Docs and AppleScript</a>
+                    <a href="https://github.com/ejbills/DockDoor/releases">Release notes</a>
+                </div>
+                <div>
+                    <p class="footer-h">Community</p>
+                    <a href="https://github.com/ejbills/DockDoor">GitHub</a>
+                    <a href="https://discord.gg/TZeRs73hFb">Discord</a>
+                    <a href="https://crowdin.com/project/dockdoor">Translate</a>
+                    <a href="donate.html">Donate</a>
+                </div>
+                <div>
+                    <p class="footer-h">Same developer</p>
+                    <a href="https://pro.dockdoor.net">DockDoor Pro</a>
+                </div>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="scripts.js" defer></script>
 </body>
 
 </html>

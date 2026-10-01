@@ -3,1035 +3,571 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DockDoor - Free Alt+Tab and Native Dock Previews for Mac | Download Now</title>
-    <meta name="description"
-        content="DockDoor Free adds Alt+Tab switching and live previews to the native macOS Dock. Privacy-first, open-source window management. Download instantly!">
-    <meta name="keywords"
-        content="free mac app, alt tab mac, window switcher macOS, dock previews, mac productivity app, option tab, macOS window management, free productivity software, mac utilities, window switcher free, alt tab for mac, dock window preview, mac workflow, productivity tools mac, dockdoor pro separate product, dock replacement mac">
-    <meta property="og:title" content="DockDoor - Free Alt+Tab and Native Dock Previews for Mac">
-    <meta property="og:description"
-        content="Transform your Mac workflow with DockDoor's free Alt+Tab switcher & dock previews. Privacy-first, open-source window management. Download instantly!">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DockDoor: Free window previews and Alt+Tab for the Mac Dock</title>
+    <meta name="description" content="DockDoor adds live window previews, Alt+Tab switching and keyboard window controls to the native macOS Dock. Free, open source, and nothing leaves your Mac.">
+    <meta name="keywords" content="free mac app, alt tab mac, window switcher macOS, dock previews, mac productivity app, option tab, macOS window management, window switcher free, alt tab for mac, dock window preview, mac utilities">
+    <meta name="theme-color" content="#F4F5F7">
+    <meta property="og:title" content="DockDoor: every window, one hover away">
+    <meta property="og:description" content="Live window previews, Alt+Tab switching and keyboard window controls for the native macOS Dock. Free and open source.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dockdoor.net">
-    <meta property="og:image" content="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png">
+    <meta property="og:image" content="https://dockdoor.net/resources/web/og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://dockdoor.net">
-    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png">
+    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-128x128@1x.png">
+    <link rel="apple-touch-icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@1x.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/resources/web/previews-poster.webp" as="image" type="image/webp">
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- Structured Data -->
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "DockDoor",
-        "description": "Free Alt+Tab window switcher and native Dock previews for macOS. Privacy-first, open-source window management app.",
+        "description": "Free window previews, Alt+Tab switching and keyboard window controls for the native macOS Dock. Open source and privacy-first.",
         "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "macOS",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "author": {
-            "@type": "Organization",
-            "name": "DockDoor"
-        },
+        "operatingSystem": "macOS 13 or later",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Ethan Bills" },
         "downloadUrl": "https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg",
-        "softwareVersion": "Latest",
-        "datePublished": "2024",
-        "keywords": "mac app, alt tab, window switcher, dock previews, productivity, macOS utilities",
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "5.0",
-            "ratingCount": "100+"
-        }
+        "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+        "url": "https://dockdoor.net"
     }
     </script>
 </head>
 
 <body>
-    <!-- Header -->
-    <header id="header">
-        <div class="container header-container">
-            <a href="#home" class="logo">
-                <img src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png" alt="DockDoor Logo">
-                <span class="logo-text" data-text="DockDoor">DockDoor</span>
+    <svg class="sprite" aria-hidden="true" focusable="false">
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 5.5A2.5 2.5 0 0 0 13.5 3H6.5A3.5 3.5 0 0 0 3 6.5v7A2.5 2.5 0 0 0 5.5 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-heart" viewBox="0 0 16 16"><path fill="currentColor" d="M8 14.2S1.5 10.3 1.5 5.9A3.4 3.4 0 0 1 8 4.3a3.4 3.4 0 0 1 6.5 1.6c0 4.4-6.5 8.3-6.5 8.3z"/></symbol>
+    </svg>
+
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav-wrap">
+        <nav class="nav glass" aria-label="Main">
+            <a href="#top" class="nav-brand" aria-label="DockDoor home">
+                <img src="/resources/web/icon-256.webp" alt="" width="28" height="28">
+                <span>DockDoor</span>
             </a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#pro" class="nav-link nav-link-pro">DockDoor Pro</a></li>
-                    <li><a href="#privacy" class="nav-link">Privacy</a></li>
-                    <li><a href="#features" class="nav-link">Features</a></li>
-                    <li><a href="#faq" class="nav-link">FAQ</a></li>
-                    <li><a href="docs.html" class="nav-link">Docs</a></li>
-                    <li><a href="donate.html" class="nav-link">Donate</a></li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <a href="#download" class="btn btn-primary">Download</a>
-                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">☰</button>
-            </div>
-        </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#privacy">Privacy</a></li>
+                <li><a href="#pro">DockDoor Pro</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="donate.html">Donate</a></li>
+            </ul>
+            <a href="#download" class="btn btn-ink btn-sm nav-cta">Download</a>
+            <button class="nav-menu" id="nav-menu" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span>
+            </button>
+        </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero section" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <div class="privacy-badge">
-                    <img src="./resources/svg/heroShield.svg" alt="Shield icon" width="16" height="16">
-                    <span>Privacy First • Community Funded</span>
-                </div>
-
-                <div class="privacy-highlights">
-                    <span class="privacy-highlight">Native Performance</span>
-                    <span class="privacy-highlight">Open Source</span>
-                </div>
-                
-                <h1 class="hero-title">Previews and switching for the Dock you already use</h1>
-                <h2 class="hero-subtitle">DockDoor Free enhances the native macOS Dock with live previews, Alt+Tab switching, and keyboard window controls. It does not replace your Dock or collect your data.</h2>
-
-                <div class="hero-actions">
-                    <a href="#download" class="btn btn-primary btn-large">Get It Now</a>
-                    <a href="#features" class="btn btn-outline">See Features</a>
-                </div>
-                
-                <p class="support-callout">🚀 Built by a solo developer.</p>
-                <div class="support-links">
-                    <a href="donate.html" class="btn btn-coffee double-span">Support development</a>
-                    <a href="https://discord.gg/TZeRs73hFb" class="btn btn-outline">Discord</a>
-                    <a href="https://github.com/ejbills/DockDoor" class="btn btn-outline">GitHub</a>
-                </div>
-
-                </div>
-
-            <div class="hero-visual">
-                <div class="hero-image-container">
-                    <img src="/resources/dockdoorHero.png" alt="DockDoor window management interface" class="hero-image">
+    <main id="main">
+        <section class="hero" id="top">
+            <div class="wrap hero-grid">
+                <h1 class="hero-title">Every window, one hover away.</h1>
+                <div class="hero-side">
+                    <p class="hero-lead">DockDoor adds live window previews to the Dock you already have, plus Alt+Tab switching and keyboard controls, all in Liquid Glass. Free, open source, and nothing leaves your Mac.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-ink btn-lg donation-prompt" href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg">Download for Mac</a>
+                        <button class="btn btn-quiet btn-lg copy-cmd" type="button" data-copy="brew install --cask dockdoor" aria-label="Copy the Homebrew install command">
+                            <code>brew install --cask dockdoor</code>
+                            <svg class="copy-icon" width="18" height="18" aria-hidden="true"><use href="#i-copy"/></svg>
+                        </button>
+                    </div>
+                    <p class="hero-fine">Free for macOS 13 Ventura and later, on Apple silicon and Intel.</p>
                 </div>
             </div>
+            <div class="hero-shot">
+                <figure class="screen">
+                    <video muted loop playsinline preload="none" poster="/resources/web/previews-poster.webp" width="2000" height="670" aria-label="Hovering Google Chrome in the Dock shows its four windows as live previews in Liquid Glass">
+                        <source src="/resources/web/previews.mp4" type="video/mp4">
+                    </video>
+                </figure>
+            </div>
+            <div class="wrap press-row">
+                <p class="press-label">Written up by</p>
+                <ul class="press-names">
+                    <li>Lifehacker</li>
+                    <li>Yahoo Tech</li>
+                    <li>GroovyPost</li>
+                    <li>AppAddict</li>
+                    <li>Mac Treasure</li>
+                    <li>Medium</li>
+                </ul>
+            </div>
+        </section>
 
-            <div class="from-dev-section">
-                <span class="from-dev-heading">From the same dev</span>
-                <div class="from-dev-cards">
-                    <a href="https://apps.apple.com/us/app/lookieloo-rock-your-notch/id6747730721?mt=12" class="from-dev-card" target="_blank">
-                        <img src="https://lookielooapp.org/resources/icon.png" alt="LookieLoo" class="from-dev-icon">
-                        <div class="from-dev-content">
-                            <span class="from-dev-title">LookieLoo</span>
-                            <span class="from-dev-description">Dynamic Island for Spotify on macOS</span>
+        <section class="chapter" id="features">
+            <div class="wrap">
+                <header class="chapter-head">
+                    <h2>Close, minimize and quit from the preview.</h2>
+                    <p class="chapter-lead">Click a thumbnail to bring that window forward. The buttons on each preview, or a middle-click, act on that window without leaving the app you're in.</p>
+                </header>
+
+                <figure class="screen">
+                    <video muted loop playsinline preload="none" poster="/resources/web/close-button-poster.webp" width="2000" height="596" aria-label="The pointer clicks the red close button on one window in a Dock preview, and that window closes">
+                        <source src="/resources/web/close-button.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Clicking the red button on a preview closes just that window.</figcaption>
+                </figure>
+
+                <ul class="facts">
+                    <li>
+                        <h3>Every Space, every display</h3>
+                        <p>Windows on other desktops and displays show up too, including minimized and hidden ones.</p>
+                    </li>
+                    <li>
+                        <h3>Grid, list or large</h3>
+                        <p>Show windows as thumbnails, a compact list of titles, or large previews. The list can turn on by itself when an app has lots of windows.</p>
+                    </li>
+                    <li>
+                        <h3>Close or minimize all</h3>
+                        <p>Buttons on each preview close or minimize every window of that app at once.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="chapter" id="switcher">
+            <div class="wrap">
+                <header class="chapter-head">
+                    <h2>Alt+Tab for every window.</h2>
+                    <p class="chapter-lead">Hold <kbd>⌥</kbd> and press <kbd>Tab</kbd> to see every open window, not just every app. Press <kbd>Tab</kbd> again to move through them and release to switch. Type to search, or change the shortcut in Settings.</p>
+                </header>
+
+                <figure class="screen">
+                    <video muted loop playsinline preload="none" poster="/resources/web/switcher-poster.webp" width="1900" height="664" aria-label="The DockDoor window switcher stepping through four windows">
+                        <source src="/resources/web/switcher.mp4" type="video/mp4">
+                    </video>
+                </figure>
+
+                <div class="keys-block">
+                    <h3>Switcher shortcuts</h3>
+                    <dl class="keys">
+                        <div class="key-row">
+                            <dt><kbd class="cap">⌥</kbd><kbd class="cap cap-wide">Tab</kbd></dt>
+                            <dd>Open the switcher</dd>
                         </div>
-                        <span class="from-dev-price">$4</span>
-                    </a>
+                        <div class="key-row">
+                            <dt><kbd class="cap cap-wide">⇧</kbd><kbd class="cap">←</kbd><kbd class="cap">→</kbd></dt>
+                            <dd>Move back and forth</dd>
+                        </div>
+                        <div class="key-row">
+                            <dt><kbd class="cap cap-wide">Return</kbd></dt>
+                            <dd>Switch to the window</dd>
+                        </div>
+                        <div class="key-row">
+                            <dt><kbd class="cap">⌘</kbd><kbd class="cap">W</kbd><kbd class="cap">M</kbd><kbd class="cap">Q</kbd></dt>
+                            <dd>Close, minimize or quit it</dd>
+                        </div>
+                    </dl>
                 </div>
-            </div>
-        </div>
-    </section>
 
-
-    <!-- DockDoor Pro Showcase -->
-    <section class="pro-section section" id="pro">
-        <div class="container">
-            <div class="pro-top">
-            <div class="pro-intro">
-                <span class="pro-kicker"><img src="/resources/dockdoorProIcon.png" alt="" class="pro-kicker-icon"> From the same developer</span>
-                <h2 class="section-title pro-title">Want the whole Dock, not just previews?</h2>
-                <p class="section-subtitle pro-subtitle">DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project.</p>
-                <div class="pro-cta">
-                    <div class="pro-cta-buttons">
-                        <a href="https://pro.dockdoor.net" class="btn btn-pro" target="_blank" rel="noopener">Get DockDoor Pro</a>
-                        <a href="#free-vs-pro" class="btn btn-pro-outline">Learn the difference</a>
-                    </div>
-                    <p class="pro-cta-line">$20 one-time, 3 Macs. No subscription. 14-day money-back guarantee.</p>
-                </div>
-            </div>
-
-            <a href="https://pro.dockdoor.net" class="pro-hero-media" target="_blank" rel="noopener" aria-label="Watch DockDoor Pro in action">
-                <video muted preload="none" loop playsinline poster="/resources/pro/scene-previews.webp">
-                    <source src="/resources/pro/hero-dock.mp4" type="video/mp4">
-                </video>
-            </a>
-            </div>
-
-            <div class="pro-grid">
-                <article class="pro-card">
-                    <video muted preload="none" loop playsinline poster="/resources/pro/scene-magnify.webp"><source src="/resources/pro/scene-magnify.mp4" type="video/mp4"></video>
-                    <h3>Spring magnification</h3>
-                    <p>Icons scale at your display's full refresh rate with tunable physics.</p>
-                </article>
-                <article class="pro-card">
-                    <video muted preload="none" loop playsinline poster="/resources/pro/scene-folder.webp"><source src="/resources/pro/scene-folder.mp4" type="video/mp4"></video>
-                    <h3>Folder fan-out</h3>
-                    <p>Pinned folders bloom into a list or grid without leaving the dock.</p>
-                </article>
-                <article class="pro-card">
-                    <video muted preload="none" loop playsinline poster="/resources/pro/scene-filetray.webp"><source src="/resources/pro/scene-filetray.mp4" type="video/mp4"></video>
-                    <h3>File tray</h3>
-                    <p>A drag-and-drop shelf with pinned folders and a built-in AirDrop zone.</p>
-                </article>
-                <article class="pro-card">
-                    <video muted preload="none" loop playsinline poster="/resources/pro/scene-glass.webp"><source src="/resources/pro/scene-glass.mp4" type="video/mp4"></video>
-                    <h3>Your dock, your look</h3>
-                    <p>Liquid Glass, frosted or clear materials. A different dock on every display.</p>
-                </article>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Press Reviews Section -->
-    <section class="press-section section">
-        <div class="container">
-            <h2 class="section-title">What people are saying.</h2>
-        </div>
-        <div class="press-carousel">
-            <div class="press-track">
-                <div class="press-item">
-                    <p class="press-quote">"This is a great way to jump to a particular window without having to hunt it down with the mouse."</p>
-                    <p class="press-attribution">— Lifehacker</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"I wish I had found this app much earlier, because it would have saved me a lot of frustration in figuring out which of the 10 open windows in Safari has the tab I'm looking for."</p>
-                    <p class="press-attribution">— Medium</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"I can see what's going on with the app much better, which helps my workflow."</p>
-                    <p class="press-attribution">— GroovyPost</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"If you want an alternative to AltTab that includes previews of your apps when you hover over their icon in the dock, try DockDoor."</p>
-                    <p class="press-attribution">— Yahoo</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"The app allows users to manage and interact with application windows on their desktops. It emphasizes ease of use and seamless integration with the macOS environment."</p>
-                    <p class="press-attribution">— Mac Treasure</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"In Windows, when you hover over an app on the taskbar, the operating system shows you the open windows for that app, a useful feature missing in macOS until now with the introduction of the free menu bar app DockDoor."</p>
-                    <p class="press-attribution">— AppAddict</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"It's free, open-source, and honestly, Apple should have bought this developer out by now."</p>
-                    <p class="press-attribution">— Medium</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <!-- Duplicate for seamless loop -->
-                <div class="press-item">
-                    <p class="press-quote">"This is a great way to jump to a particular window without having to hunt it down with the mouse."</p>
-                    <p class="press-attribution">— Lifehacker</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"I wish I had found this app much earlier, because it would have saved me a lot of frustration in figuring out which of the 10 open windows in Safari has the tab I'm looking for."</p>
-                    <p class="press-attribution">— Medium</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"I can see what's going on with the app much better, which helps my workflow."</p>
-                    <p class="press-attribution">— GroovyPost</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"If you want an alternative to AltTab that includes previews of your apps when you hover over their icon in the dock, try DockDoor."</p>
-                    <p class="press-attribution">— Yahoo</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"The app allows users to manage and interact with application windows on their desktops. It emphasizes ease of use and seamless integration with the macOS environment."</p>
-                    <p class="press-attribution">— Mac Treasure</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"In Windows, when you hover over an app on the taskbar, the operating system shows you the open windows for that app, a useful feature missing in macOS until now with the introduction of the free menu bar app DockDoor."</p>
-                    <p class="press-attribution">— AppAddict</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-                <div class="press-item">
-                    <p class="press-quote">"It's free, open-source, and honestly, Apple should have bought this developer out by now."</p>
-                    <p class="press-attribution">— Medium</p>
-                    <img class="press-icon" src="./resources/svg/reviewDoubleQuotes.svg" alt="Double quotes icon">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Privacy Section -->
-    <section class="privacy-section section" id="privacy">
-        <div class="container">
-            <div class="privacy-content">
-                <h2 class="privacy-headline">Privacy by Design</h2>
-                <p class="privacy-subheadline">Your data stays on your Mac. Always.</p>
-                
-                <div class="privacy-features">
-                    <div class="privacy-feature">
-                        <img src="./resources/svg/privacyFeature1.svg" alt="Feature 1" width="72" height="72">
-                        <h3 class="privacy-feature-title">100% Local</h3>
-                        <p class="privacy-feature-desc">No cloud, no servers, no external connections. Even debug logs stay on your Mac.</p>
-                    </div>
-                    <div class="privacy-feature">
-                        <img src="./resources/svg/privacyFeature2.svg" alt="Feature 2" width="72" height="72">
-                        <h3 class="privacy-feature-title">Zero Tracking</h3>
-                        <p class="privacy-feature-desc">We don't collect analytics, usage data, or personal information. Not even crash reports.</p>
-                    </div>
-                    <div class="privacy-feature">
-                        <img src="./resources/svg/privacyFeature3.svg" alt="Feature 3" width="72" height="72">
-                        <h3 class="privacy-feature-title">Open Source</h3>
-                        <p class="privacy-feature-desc">Full transparency. Review our code, contribute, help with translations, or build it yourself.</p>
+                <div class="split">
+                    <figure class="screen">
+                        <img src="/resources/web/cmd-tab.webp" alt="The macOS Command-Tab switcher with Google Chrome highlighted and DockDoor showing its four windows above it" width="2000" height="620" loading="lazy" decoding="async">
+                    </figure>
+                    <div class="split-copy">
+                        <h3>Command-Tab, with windows.</h3>
+                        <p>While you hold <kbd>⌘</kbd> and <kbd>Tab</kbd>, DockDoor shows the highlighted app's windows above the built-in app switcher, so you can pick a specific window.</p>
+                        <p class="where">Settings › Cmd+Tab</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <h2 class="section-title">Focused window tools.<br>Built around the native Dock.</h2>
-            <p class="section-subtitle">Keep the macOS Dock and add the window controls Apple left out.</p>
-        
-            <div class="special-features-grid">
-                <!-- Feature 1: Dock Previews -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Dock Previews</h3>
-                        <p class="special-feature-description">Hover over app icons in the native macOS Dock to see live previews of open windows. Click to switch or manage without changing focus.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline class="special-feature-video" poster="/resources/posters/dockpeek.webp">
-                            <source src="/resources/dockpeek.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
+        <section class="explorer-section" id="more">
+            <div class="wrap">
+                <header class="chapter-head">
+                    <h2>Folders, widgets and gestures.</h2>
+                    <p class="chapter-lead">Each of these is optional and can be turned on or off in Settings.</p>
+                </header>
 
-                <!-- Feature 2: Folder Pop -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Folder Pop</h3>
-                        <p class="special-feature-description">Hover over folders in the native Dock to preview their contents, sort the list, open items, and grant access only when DockDoor needs permission for that folder.</p>
+                <div class="explorer">
+                    <div class="explorer-side">
+                        <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
+                        <div class="explorer-list" role="tablist" aria-label="Features" aria-orientation="vertical">
+                            <p class="explorer-group">Previews</p>
+                            <button role="tab" id="t-folder" aria-controls="p-folder" aria-selected="true">Folder Pop</button>
+                            <button role="tab" id="t-list" aria-controls="p-list" aria-selected="false" tabindex="-1">Compact list</button>
+                            <button role="tab" id="t-large" aria-controls="p-large" aria-selected="false" tabindex="-1">Large previews</button>
+                            <p class="explorer-group">More</p>
+                            <button role="tab" id="t-widgets" aria-controls="p-widgets" aria-selected="false" tabindex="-1">Music controls</button>
+                            <button role="tab" id="t-gestures" aria-controls="p-gestures" aria-selected="false" tabindex="-1">Swipe to minimize</button>
+                            <button role="tab" id="t-clicks" aria-controls="p-clicks" aria-selected="false" tabindex="-1">Quick quit</button>
+                        </div>
                     </div>
-                    <div class="special-feature-media">
-                        <img src="/resources/folderPop.png" alt="Folder Pop showing a Dock folder preview panel" class="feature-image">
-                    </div>
-                </div>
-            
-                <!-- Feature 3: Alt+Tab Switching -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Alt+Tab Switching</h3>
-                        <p class="special-feature-description">Press Option+Tab for fast window switching with live previews, keyboard navigation, and configurable actions.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/alttab.webp">
-                            <source src="/resources/alttab.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                        
-                <!-- Feature 4: Cmd+Tab Enhancements -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Cmd+Tab Enhancements</h3>
-                        <p class="special-feature-description">Enhance the native macOS Command+Tab experience with richer previews and smoother navigation.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <img src="/resources/cmd-tab-enhancements.png" alt="Cmd+Tab enhancements preview" class="feature-image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Customization Section -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Make It Your Own</h2>
-            <p class="section-subtitle">Customize DockDoor to match your workflow preferences</p>
-
-            <div class="special-features-grid">
-                <!-- Dock Preview Variations -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Dock Preview Layouts</h3>
-                        <p class="special-feature-description">Personalize your dock preview experience with different layout options. Adjust spacing, sizing, and arrangement to suit your needs.</p>
-                    </div>
-                    <div class="customization-slideshow" id="dock-preview-slideshow">
-                        <div class="slideshow-track">
-                            <div class="slideshow-slide">
-                                <img src="/resources/variations/dockpreview1.png" alt="Dock preview layout 1">
+                    <div class="explorer-panels">
+                        <article class="explorer-panel" role="tabpanel" id="p-folder" aria-labelledby="t-folder">
+                            <div class="panel-media is-dark"><img src="/resources/web/folder-pop.webp" alt="A Projects folder in the Dock opened as a list of files sorted by date modified" width="1100" height="957" loading="lazy" decoding="async"></div>
+                            <div class="panel-copy">
+                                <h3>Folder Pop</h3>
+                                <p>Hover a folder in the Dock to see what's inside. Sort the list, open a file, or drag it straight into another app, without opening a Finder window.</p>
+                                <p class="where">Settings › Dock Previews</p>
                             </div>
-                            <div class="slideshow-slide">
-                                <img src="/resources/variations/dockpreview2.png" alt="Dock preview layout 2">
+                        </article>
+                        <article class="explorer-panel" role="tabpanel" id="p-list" aria-labelledby="t-list" hidden>
+                            <div class="panel-media is-dark"><img src="/resources/web/compact-list.webp" alt="Four Chrome windows shown as a compact list of titles above the Dock" width="1080" height="752" loading="lazy" decoding="async"></div>
+                            <div class="panel-copy">
+                                <h3>Compact list</h3>
+                                <p>Show an app's windows as a list of titles instead of thumbnails. Choose how many windows it takes to switch to the list, or use it all the time.</p>
+                                <p class="where">Settings › Appearance</p>
                             </div>
-                        </div>
-                        <div class="slideshow-controls">
-                            <button class="slideshow-control" data-direction="prev">←</button>
-                            <div class="slideshow-indicators">
-                                <span class="slideshow-indicator active"></span>
-                                <span class="slideshow-indicator"></span>
+                        </article>
+                        <article class="explorer-panel" role="tabpanel" id="p-large" aria-labelledby="t-large" hidden>
+                            <div class="panel-media is-dark"><img src="/resources/web/large-previews.webp" alt="Four large window previews in a two by two grid above the Dock" width="1600" height="1210" loading="lazy" decoding="async"></div>
+                            <div class="panel-copy">
+                                <h3>Large previews</h3>
+                                <p>Make thumbnails bigger to tell similar windows apart. A thumbnail can also open a full-size preview when you hover it.</p>
+                                <p class="where">Settings › Appearance</p>
                             </div>
-                            <button class="slideshow-control" data-direction="next">→</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Window Switcher Variations -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Window Switcher Layouts</h3>
-                        <p class="special-feature-description">Choose from different visual styles and layouts for your window switcher. Customize the appearance to match your workflow and visual preferences.</p>
-                    </div>
-                    <div class="customization-slideshow" id="window-switcher-slideshow">
-                        <div class="slideshow-track">
-                            <div class="slideshow-slide">
-                                <img src="/resources/variations/windowswitcher1.png" alt="Window switcher variation 1">
+                        </article>
+                        <article class="explorer-panel" role="tabpanel" id="p-widgets" aria-labelledby="t-widgets" hidden>
+                            <div class="panel-media is-dark"><video muted loop playsinline preload="none" poster="/resources/web/music-widget-poster.webp" width="704" height="564" aria-label="Hovering a browser that's playing music shows a player with artwork and controls, and the pointer pauses and resumes the track"><source src="/resources/web/music-widget.mp4" type="video/mp4"></video></div>
+                            <div class="panel-copy">
+                                <h3>Music controls</h3>
+                                <p>Hover an app that's playing audio, like Spotify, Apple Music or a browser tab, to get a player instead of thumbnails. Pin it to your desktop, with synced lyrics for Spotify and Apple Music.</p>
+                                <p class="where">Settings › Widgets</p>
                             </div>
-                            <div class="slideshow-slide">
-                                <img src="/resources/variations/windowswitcher2.png" alt="Window switcher variation 2">
+                        </article>
+                        <article class="explorer-panel" role="tabpanel" id="p-gestures" aria-labelledby="t-gestures" hidden>
+                            <div class="panel-media is-dark"><video muted loop playsinline preload="none" poster="/resources/web/swipe-minimize-poster.webp" width="744" height="594" aria-label="Two fingers swipe down on a window in a Dock preview and the window minimizes"><source src="/resources/web/swipe-minimize.mp4" type="video/mp4"></video></div>
+                            <div class="panel-copy">
+                                <h3>Swipe to minimize</h3>
+                                <p>Swipe two fingers toward the Dock on a preview to minimize that window, or away from it to maximize. You can also scroll on a Dock icon to show or hide an app, and shake a preview to minimize everything else.</p>
+                                <p class="where">Settings › Gestures &amp; Keybinds</p>
                             </div>
-                        </div>
-                        <div class="slideshow-controls">
-                            <button class="slideshow-control" data-direction="prev">←</button>
-                            <div class="slideshow-indicators">
-                                <span class="slideshow-indicator active"></span>
-                                <span class="slideshow-indicator"></span>
+                        </article>
+                        <article class="explorer-panel" role="tabpanel" id="p-clicks" aria-labelledby="t-clicks" hidden>
+                            <div class="panel-media is-dark"><video muted loop playsinline preload="none" poster="/resources/web/quick-quit-poster.webp" width="744" height="594" aria-label="Holding Command and right-clicking an app's Dock icon quits the app"><source src="/resources/web/quick-quit.mp4" type="video/mp4"></video></div>
+                            <div class="panel-copy">
+                                <h3>Quick quit</h3>
+                                <p>Hold <kbd>⌘</kbd> and right-click a Dock icon to quit the app, or add <kbd>⌥</kbd> to force quit it. You can also click the app you're in to minimize its windows, and lock the Dock to one display.</p>
+                                <p class="where">Settings › Dock Previews</p>
                             </div>
-                            <button class="slideshow-control" data-direction="next">→</button>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="chapter chapter-yours" id="customize">
+            <div class="wrap">
+                <header class="chapter-head">
+                    <h2>Change how it looks.</h2>
+                    <p class="chapter-lead">Choose Liquid Glass (macOS 26 and later), frosted or clear, and set the preview size, spacing, corners and where the window controls sit.</p>
+                </header>
+
+                <div class="looks" id="looks">
+                    <div class="segmented" role="tablist" aria-label="Layouts">
+                        <button role="tab" aria-selected="true" aria-controls="looks-dock" id="looks-t-dock">Dock previews</button>
+                        <button role="tab" aria-selected="false" aria-controls="looks-switcher" id="looks-t-switcher" tabindex="-1">Window switcher</button>
+                        <span class="segmented-thumb" aria-hidden="true"></span>
+                    </div>
+                    <div class="looks-pair" role="tabpanel" id="looks-dock" aria-labelledby="looks-t-dock">
+                        <figure><div class="screen"><img src="/resources/web/layout-default.webp" alt="Dock preview with a title and controls above each thumbnail" width="1600" height="512" loading="lazy" decoding="async"></div><figcaption>Controls above the window</figcaption></figure>
+                        <figure><div class="screen"><img src="/resources/web/layout-embedded.webp" alt="Dock preview with the title and controls floating on each thumbnail" width="1600" height="512" loading="lazy" decoding="async"></div><figcaption>Controls on the window</figcaption></figure>
+                    </div>
+                    <div class="looks-pair" role="tabpanel" id="looks-switcher" aria-labelledby="looks-t-switcher" hidden>
+                        <figure><div class="screen"><img src="/resources/web/switcher.webp" alt="Window switcher with the app name, title and controls above each window" width="1800" height="468" loading="lazy" decoding="async"></div><figcaption>Controls above the window</figcaption></figure>
+                        <figure><div class="screen"><img src="/resources/web/switcher-embedded.webp" alt="Window switcher with the controls floating on each window" width="1600" height="416" loading="lazy" decoding="async"></div><figcaption>Controls on the window</figcaption></figure>
+                    </div>
+                </div>
+
+                <div class="yours-split">
+                    <dl class="panes">
+                        <div><dt>Dock Previews</dt><dd>Hover delay, what shows up, and what a click does.</dd></div>
+                        <div><dt>Window Switcher</dt><dd>Shortcut, sort order, layout and search.</dd></div>
+                        <div><dt>Cmd+Tab</dt><dd>Window previews on top of the built-in app switcher.</dd></div>
+                        <div><dt>Appearance</dt><dd>Liquid Glass, frosted or clear, plus sizes and spacing.</dd></div>
+                        <div><dt>Gestures &amp; Keybinds</dt><dd>Swipes, scrolls, middle-click and custom shortcuts.</dd></div>
+                        <div><dt>Filters &amp; Widgets</dt><dd>Hide apps or windows, plus music and calendar widgets.</dd></div>
+                    </dl>
+                    <figure class="settings-shot">
+                        <img src="/resources/web/settings-appearance.webp" alt="DockDoor's Appearance settings with Liquid Glass, Frosted and Clear styles, opacity and refraction" width="1200" height="1020" loading="lazy" decoding="async">
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section class="privacy" id="privacy">
+            <div class="wrap privacy-inner">
+                <svg class="privacy-art" viewBox="0 0 420 300" role="img" aria-labelledby="privacy-art-title">
+                    <title id="privacy-art-title">The DockDoor icon in the center, with analytics, tracking, cloud upload, crash reporting, ad and location trackers around it, none of them connected</title>
+                    <defs><clipPath id="pv-icon-clip"><rect x="166" y="106" width="88" height="88" rx="20"/></clipPath></defs>
+                    <circle class="pv-ring" cx="210" cy="150" r="66"/>
+                    <circle class="pv-ring pv-ring-2" cx="210" cy="150" r="90"/>
+                    <path class="pv-link" d="M95.8 106.1L144.7 124.9"/><path class="pv-cut" d="M142.3 119.4L147.1 130.3M139.2 127.3L150.1 122.4"/><g transform="translate(69.7 96.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-6 6V1M0 6V-6M6 6V-2"/></g></g><path class="pv-link" d="M210.0 70.0L210.0 80.0"/><path class="pv-cut" d="M214.2 75.8L205.8 84.2M205.8 75.8L214.2 84.2"/><g transform="translate(210.0 42.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-8 0c2.2-3.6 5-5.4 8-5.4S5.8-3.6 8 0c-2.2 3.6-5 5.4-8 5.4S-5.8 3.6-8 0z"/><circle r="2.3"/></g></g><path class="pv-link" d="M324.2 106.1L275.3 124.9"/><path class="pv-cut" d="M280.8 127.3L269.9 122.4M277.7 119.4L272.9 130.3"/><g transform="translate(350.3 96.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-5.5 4.5h10a3.6 3.6 0 0 0 .4-7.2A5.2 5.2 0 0 0-4.8-3.4a4 4 0 0 0-.7 7.9z"/></g></g><path class="pv-link" d="M324.2 193.9L275.3 175.1"/><path class="pv-cut" d="M277.7 180.6L272.9 169.7M280.8 172.7L269.9 177.6"/><g transform="translate(350.3 204.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><ellipse rx="3.6" ry="5"/><path d="M0-5v10M-3.6-1h-3.4M3.6-1h3.4M-3.4 3l-3 2M3.4 3l3 2M-2.6-4.6l-2-2.4M2.6-4.6l2-2.4"/></g></g><path class="pv-link" d="M210.0 230.0L210.0 220.0"/><path class="pv-cut" d="M205.8 224.2L214.2 215.8M214.2 224.2L205.8 215.8"/><g transform="translate(210.0 258.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-7-2.5v5h3l7 4v-13l-7 4z"/><path d="M5.5-2.5a3.5 3.5 0 0 1 0 5"/></g></g><path class="pv-link" d="M95.8 193.9L144.7 175.1"/><path class="pv-cut" d="M139.2 172.7L150.1 177.6M142.3 180.6L147.1 169.7"/><g transform="translate(69.7 204.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M0 7s5.5-5.2 5.5-9.3a5.5 5.5 0 0 0-11 0C-5.5 1.8 0 7 0 7z"/><circle cy="-2.3" r="1.9"/></g></g>
+                    <rect class="pv-icon-shadow" x="166" y="110" width="88" height="88" rx="20"/>
+                    <image href="/resources/web/icon-256.webp" x="166" y="106" width="88" height="88" clip-path="url(#pv-icon-clip)"/>
+                </svg>
+                <div class="privacy-text">
+                    <h2>Nothing leaves your Mac.</h2>
+                    <div class="privacy-copy">
+                    <p class="privacy-big">DockDoor has no servers to send anything to. There are no analytics, no usage tracking and no crash reporters. Debug logs are written locally and go nowhere unless you export them yourself.</p>
+                    <p>The whole app is open source under GPL-3.0. You can read the code, build it yourself, or help translate it.</p>
+                    <p class="privacy-links">
+                        <a href="https://github.com/ejbills/DockDoor" class="text-link">Read the source on GitHub</a>
+                        <a href="https://crowdin.com/project/dockdoor" class="text-link">Help translate on Crowdin</a>
+                    </p>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quotes" aria-labelledby="quotes-title">
+            <div class="wrap">
+                <h2 class="visually-hidden" id="quotes-title">What people say</h2>
+                <figure class="quote-lead">
+                    <blockquote>“It's free, open-source, and honestly, Apple should have bought this developer out by now.”</blockquote>
+                    <figcaption>A review on Medium</figcaption>
+                </figure>
+                <div class="quote-grid">
+                    <figure>
+                        <blockquote>“In Windows, when you hover over an app on the taskbar, the operating system shows you the open windows for that app, a useful feature missing in macOS until now.”</blockquote>
+                        <figcaption>AppAddict</figcaption>
+                    </figure>
+                    <figure>
+                        <blockquote>“This is a great way to jump to a particular window without having to hunt it down with the mouse.”</blockquote>
+                        <figcaption>Lifehacker</figcaption>
+                    </figure>
+                    <figure>
+                        <blockquote>“I wish I had found this app much earlier, because it would have saved me a lot of frustration in figuring out which of the 10 open windows in Safari has the tab I'm looking for.”</blockquote>
+                        <figcaption>A review on Medium</figcaption>
+                    </figure>
+                    <figure>
+                        <blockquote>“If you want an alternative to AltTab that includes previews of your apps when you hover over their icon in the dock, try DockDoor.”</blockquote>
+                        <figcaption>Yahoo Tech</figcaption>
+                    </figure>
+                    <figure>
+                        <blockquote>“I can see what's going on with the app much better, which helps my workflow.”</blockquote>
+                        <figcaption>GroovyPost</figcaption>
+                    </figure>
+                    <figure>
+                        <blockquote>“It emphasizes ease of use and seamless integration with the macOS environment.”</blockquote>
+                        <figcaption>Mac Treasure</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section class="pro" id="pro">
+            <div class="wrap pro-top">
+                <div class="pro-copy">
+                    <p class="pro-from"><img src="/resources/web/pro-icon-128.webp" alt="" width="40" height="40"> DockDoor Pro, a separate app from the same developer</p>
+                    <h2>Want the whole Dock, not just previews?</h2>
+                    <p class="pro-lead">DockDoor Pro replaces the macOS Dock with its own: spring magnification, folders that fan out, a file tray with AirDrop, widgets, profiles and a different Dock on every display. If you use Pro, you don't need DockDoor Free.</p>
+                    <p class="pro-note">DockDoor Free has no paywall and never will. Buying Pro is the best way to keep it that way.</p>
+                    <div class="pro-actions">
+                        <a href="https://pro.dockdoor.net" class="btn btn-pro btn-lg" target="_blank" rel="noopener">Get DockDoor Pro</a>
+                        <p class="pro-price">$20 once, for 3 Macs. No subscription.<br>14-day money-back guarantee.</p>
+                    </div>
+                </div>
+                <a href="https://pro.dockdoor.net" class="pro-hero" target="_blank" rel="noopener" aria-label="DockDoor Pro website">
+                    <img src="/resources/pro/scene-previews.webp" alt="DockDoor Pro's own Dock with a window preview above it" width="2000" height="800" loading="lazy" decoding="async">
+                </a>
+            </div>
+        </section>
+
+        <section class="download" id="download">
+            <div class="wrap download-inner">
+                <span class="app-icon"><img class="download-icon" src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@2x.png" alt="DockDoor app icon" width="160" height="160" loading="lazy" decoding="async"></span>
+                <h2>Get DockDoor.</h2>
+                <p class="download-lead">Free for macOS 13 Ventura and later. Notarized by Apple, and it keeps itself up to date.</p>
+                <div class="hero-actions download-actions">
+                    <a class="btn btn-ink btn-lg donation-prompt" href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg">Download for Mac</a>
+                    <button class="btn btn-quiet btn-lg copy-cmd" type="button" data-copy="brew install --cask dockdoor" aria-label="Copy the Homebrew install command">
+                        <code>brew install --cask dockdoor</code>
+                        <svg class="copy-icon" width="18" height="18" aria-hidden="true"><use href="#i-copy"/></svg>
+                    </button>
+                </div>
+                <p class="download-safe">Only download DockDoor from dockdoor.net or <a href="https://github.com/ejbills/DockDoor/releases">GitHub</a>.</p>
+            </div>
+        </section>
+
+        <section class="support" id="support">
+            <div class="wrap support-grid">
+                <div class="support-copy">
+                    <h2>Independent, and paid for by the people who use it.</h2>
+                    <p>DockDoor is written almost entirely by one developer, with fixes, features and translations from the open-source community. There are no investors and no ads. Donations pay for keeping it free and working on each new macOS.</p>
+                    <div class="support-actions">
+                        <a href="https://github.com/sponsors/ejbills" class="btn btn-ink" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-heart"/></svg> Sponsor on GitHub</a>
+                        <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-quiet" target="_blank" rel="noopener">Buy me a coffee</a>
+                    </div>
+                </div>
+                <ul class="help-list">
+                    <li><a href="https://github.com/ejbills/DockDoor"><b>Star it on GitHub</b><span>Helps other people find it</span></a></li>
+                    <li><a href="https://github.com/ejbills/DockDoor/issues"><b>Report a bug</b><span>Or ask for a feature</span></a></li>
+                    <li><a href="https://crowdin.com/project/dockdoor"><b>Translate it</b><span>Over 30 languages so far</span></a></li>
+                    <li><a href="https://discord.gg/TZeRs73hFb"><b>Join the Discord</b><span>Help, previews and feedback</span></a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="faq" id="faq">
+            <div class="wrap faq-grid">
+                <div class="faq-head">
+                    <h2>Questions</h2>
+                    <p>Can't find an answer? Ask on <a href="https://discord.gg/TZeRs73hFb" class="text-link">Discord</a> or <a href="https://github.com/ejbills/DockDoor/issues" class="text-link">GitHub</a>.</p>
+                </div>
+                <div class="faq-list">
+                    <details name="faq">
+                        <summary>Where should I download DockDoor from?</summary>
+                        <div class="faq-a">
+                            <p>Only from these places:</p>
+                            <ul>
+                                <li>DockDoor Free: <a href="https://dockdoor.net">dockdoor.net</a> or <a href="https://github.com/ejbills/DockDoor">github.com/ejbills/DockDoor</a> (Homebrew installs from GitHub too)</li>
+                                <li>DockDoor Pro: <a href="https://pro.dockdoor.net">pro.dockdoor.net</a></li>
+                            </ul>
+                            <p>DockDoor needs Accessibility and Screen Recording permission to work. An app with that much access from an untrusted source is a real risk: a modified copy could record your screen, log your keystrokes or send your data somewhere. Re-uploaded and cracked copies of DockDoor with malware in them have already turned up on other sites. There's no legitimate free version of DockDoor Pro.</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Settings Section -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Extensive Settings</h2>
-            <p class="section-subtitle">Customize every aspect of DockDoor to fit your needs</p>
-
-            <div class="settings-grid">
-                <div class="settings-card">
-                    <h3 class="settings-title">Dock Previews</h3>
-                    <p class="settings-description">Fine-tune dock hover behavior, preview thresholds, and per-feature toggles for dock interactions.</p>
-                </div>
-
-                <div class="settings-card">
-                    <h3 class="settings-title">Window Switcher</h3>
-                    <p class="settings-description">Configure Alt+Tab behavior, sorting, layout direction, and compact mode thresholds.</p>
-                </div>
-
-                <div class="settings-card">
-                    <h3 class="settings-title">Cmd+Tab</h3>
-                    <p class="settings-description">Replace the native Cmd+Tab with DockDoor's enhanced overlay, with its own appearance and behavior settings.</p>
-                </div>
-
-                <div class="settings-card">
-                    <h3 class="settings-title">Appearance</h3>
-                    <p class="settings-description">Customize the look and feel of previews, colors, window sizing, and visual effects.</p>
-                </div>
-
-                <div class="settings-card">
-                    <h3 class="settings-title">Gestures & Keybinds</h3>
-                    <p class="settings-description">Configure trackpad gestures, keyboard shortcuts, and window positioning actions.</p>
-                </div>
-
-                <div class="settings-card">
-                    <h3 class="settings-title">Filters & Widgets</h3>
-                    <p class="settings-description">Choose which apps show in previews, and configure media controls and calendar widgets on dock hover.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mouse Controls Section -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Intuitive Controls</h2>
-            <p class="section-subtitle">Window controls exactly where you need them</p>
-        
-            <div class="special-feature-item">
-                <div class="special-feature-content">
-                    <h3 class="special-feature-title">Mouse Controls</h3>
-                    <p class="special-feature-description">DockDoor adds intuitive window controls to each preview. Close, minimize, or maximize windows with just one click, without having to switch focus.</p>
-                </div>
-                <div class="feature-visual">
-                    <img src="/resources/dockPeekCommented.png" alt="Window controls in dock previews" class="feature-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Keyboard Controls Section -->
-    <section class="features-section">
-        <div class="container">
-            <div class="keyboard-content">
-                <h2 class="section-title">Full Keyboard Control</h2>
-                <p class="section-subtitle">Navigate and control windows entirely with your keyboard</p>
-                
-                <div class="keyboard-shortcuts">
-                    <div class="shortcut-group">
-                        <h3 class="shortcut-title">Navigate</h3>
-                        <div class="shortcut-keys">
-                            <kbd class="key">Tab</kbd>
-                            <kbd class="key">Shift</kbd>
-                            <kbd class="key">↑↓←→</kbd>
+                    </details>
+                    <details name="faq">
+                        <summary>Is DockDoor really free?</summary>
+                        <div class="faq-a">
+                            <p>Yes. Every feature is free, with no trial, no subscription and no paywall. It's funded by donations and by people who buy DockDoor Pro, a separate app.</p>
                         </div>
-                        <p class="shortcut-desc">Tab forward, Shift backward, or use arrow keys to navigate through windows</p>
-                    </div>
-                    
-                    <div class="shortcut-group">
-                        <h3 class="shortcut-title">Actions</h3>
-                        <div class="shortcut-keys">
-                            <kbd class="key key-action">Return</kbd>
-                            <kbd class="key key-close">⌘ W</kbd>
-                            <kbd class="key key-quit">⌘ Q</kbd>
-                            <kbd class="key key-minimize">⌘ M</kbd>
+                    </details>
+                    <details name="faq">
+                        <summary>Is DockDoor Pro part of DockDoor Free?</summary>
+                        <div class="faq-a">
+                            <p>No, they're separate apps. DockDoor Free adds previews, Alt+Tab, gestures and keyboard controls to the built-in macOS Dock. DockDoor Pro replaces the Dock with its own, which has previews, profiles, widgets, pinned content and much more customization.</p>
+                            <p>If Pro is replacing your Dock you usually don't need Free as well. Pro is a $20 one-time purchase at <a href="https://pro.dockdoor.net">pro.dockdoor.net</a>.</p>
                         </div>
-                        <p class="shortcut-desc"><span class="action-select">Select</span>, <span class="action-close">close</span>, <span class="action-quit">quit</span>, or <span class="action-minimize">minimize</span> windows</p>
-                    </div>
-                    
-                    <div class="shortcut-group">
-                        <h3 class="shortcut-title">Quick Start</h3>
-                        <div class="shortcut-keys">
-                            <kbd class="key">Option + Tab</kbd>
+                    </details>
+                    <details name="faq">
+                        <summary>Which Macs does it run on?</summary>
+                        <div class="faq-a">
+                            <p>Any Mac on macOS 13 Ventura or later, Apple silicon or Intel. Liquid Glass styling is available on macOS 26 and later.</p>
                         </div>
-                        <p class="shortcut-desc">Open Window Switcher and navigate without touching your mouse</p>
-                    </div>
-                </div>
-                
-                <div class="keyboard-workflow">
-                    <h3 class="workflow-title">How it works</h3>
-                    <div class="workflow-steps">
-                        <div class="workflow-step">
-                            <span class="step-number">1</span>
-                            <span class="step-text">Press <strong>Option+Tab</strong> or hover over dock icons</span>
+                    </details>
+                    <details name="faq">
+                        <summary>Will it slow my Mac down?</summary>
+                        <div class="faq-a">
+                            <p>It shouldn't. DockDoor is a native app that runs from the menu bar and only captures window thumbnails when a preview or the switcher needs them.</p>
                         </div>
-                        <div class="workflow-step">
-                            <span class="step-number">2</span>
-                            <span class="step-text">Navigate with <strong>Tab</strong>, <strong>Shift</strong>, or arrow keys</span>
+                    </details>
+                    <details name="faq">
+                        <summary>How do I change the shortcuts?</summary>
+                        <div class="faq-a">
+                            <p>Open DockDoor's settings and go to <b>Gestures &amp; Keybinds</b>. From there you can:</p>
+                            <ol>
+                                <li>Change the window switcher's modifier (Control, Option or Command) and trigger key, plus set an alternate shortcut.</li>
+                                <li>Set up to three Command-key actions, like close, minimize or quit, for the switcher.</li>
+                                <li>Pick what trackpad swipes do on previews and in the switcher.</li>
+                                <li>Choose what middle-click does on a preview.</li>
+                            </ol>
                         </div>
-                        <div class="workflow-step">
-                            <span class="step-number">3</span>
-                            <span class="step-text">Press <strong>Return</strong> to select or use shortcuts</span>
+                    </details>
+                    <details name="faq">
+                        <summary>Does it work with every app?</summary>
+                        <div class="faq-a">
+                            <p>Almost every standard Mac app works. A few apps built with unusual UI frameworks may show fewer windows or skip some actions.</p>
                         </div>
-                    </div>
+                    </details>
+                    <details name="faq">
+                        <summary>How do I get the old, slimmer previews back?</summary>
+                        <div class="faq-a">
+                            <ol>
+                                <li>Open DockDoor's settings and go to <b>Dock Previews</b>.</li>
+                                <li>Turn on <b>Allow dynamic image sizing</b> so previews resize to fit each window.</li>
+                                <li>Turn on <b>Embed controls in preview frames</b> for the classic toolbar style.</li>
+                                <li>Optionally, turn off <b>Dock styling on traffic light buttons</b> for a plainer look.</li>
+                            </ol>
+                            <p>These only change Dock previews. The window switcher stays the same.</p>
+                        </div>
+                    </details>
+                    <details name="faq">
+                        <summary>How do I send a debug log?</summary>
+                        <div class="faq-a">
+                            <ol>
+                                <li>Open DockDoor's settings and go to <b>Support</b>.</li>
+                                <li>Turn on <b>Debug Logging</b> under Updates.</li>
+                                <li>Do whatever causes the problem.</li>
+                                <li>Click <b>Export Logs</b> and attach the file to your GitHub issue or Discord message.</li>
+                            </ol>
+                            <p>Logs stay on your Mac. Nothing is sent unless you share the file yourself.</p>
+                        </div>
+                    </details>
+                    <details name="faq">
+                        <summary>How can I help?</summary>
+                        <div class="faq-a">
+                            <p>Report bugs or send code on <a href="https://github.com/ejbills/DockDoor">GitHub</a>, translate it on <a href="https://crowdin.com/project/dockdoor">Crowdin</a>, or <a href="donate.html">support development</a>.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
+        </section>
+
+        <section class="community" aria-labelledby="community-title">
+            <div class="wrap community-inner">
+                <h2 id="community-title">Contributors</h2>
+                <a href="https://github.com/ejbills/DockDoor/graphs/contributors" class="contributors" target="_blank" rel="noopener">
+                    <img src="https://contrib.rocks/image?repo=ejbills/DockDoor&amp;columns=12" alt="Avatars of DockDoor's contributors on GitHub" loading="lazy" decoding="async">
+                </a>
+                <p><a href="https://github.com/ejbills/DockDoor" class="text-link">Contribute on GitHub</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap footer-grid">
+            <div class="footer-brand">
+                <p class="footer-name"><img src="/resources/web/icon-256.webp" alt="" width="32" height="32"> DockDoor</p>
+                <p>Free and open source under GPL-3.0.<br>Made by <a href="https://github.com/ejbills">Ethan Bills</a> and contributors.</p>
+            </div>
+            <nav class="footer-cols" aria-label="Footer">
+                <div>
+                    <p class="footer-h">DockDoor</p>
+                    <a href="#features">Features</a>
+                    <a href="#download">Download</a>
+                    <a href="docs.html">Docs and AppleScript</a>
+                    <a href="https://github.com/ejbills/DockDoor/releases">Release notes</a>
+                </div>
+                <div>
+                    <p class="footer-h">Community</p>
+                    <a href="https://github.com/ejbills/DockDoor">GitHub</a>
+                    <a href="https://discord.gg/TZeRs73hFb">Discord</a>
+                    <a href="https://crowdin.com/project/dockdoor">Translate</a>
+                    <a href="donate.html">Donate</a>
+                </div>
+                <div>
+                    <p class="footer-h">Same developer</p>
+                    <a href="https://pro.dockdoor.net">DockDoor Pro</a>
+                </div>
+            </nav>
         </div>
-    </section>
+    </footer>
 
-    <!-- Special Features Grid -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Power Features</h2>
-            <p class="section-subtitle">Enhance your workflow with these productivity tools</p>
-
-            <div class="special-features-grid">
-                <!-- Media Controls Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Media Controls & Lyrics</h3>
-                        <p class="special-feature-description">Pin music widgets to your screen with synchronized lyrics for Spotify and Apple Music. Transform your media experience with real-time lyric synchronization.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/lyrics.webp">
-                            <source src="/resources/lyrics.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Calendar Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Calendar Integration</h3>
-                        <p class="special-feature-description">Hover over the Calendar app to see all your events for the day. Never miss an appointment with instant calendar previews right from your dock.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <img src="/resources/calendar.png" alt="Calendar demonstration" class="large-preview-image">
-                    </div>
-                </div>
-
-                <!-- Compact List View Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Compact List View</h3>
-                        <p class="special-feature-description">Switch to a space-efficient list view when you have many windows open. Set thresholds to automatically enable compact mode, or use it all the time. Configure in Settings → Appearance.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <img src="/resources/listView.png" alt="Compact list view showing windows in a vertical list" class="portrait-image">
-                    </div>
-                </div>
-
-                <!-- Trackpad Gestures Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Trackpad Gestures</h3>
-                        <p class="special-feature-description">Use two-finger swipes on window previews to control windows. Swipe toward the dock to minimize, swipe away to maximize. Gesture directions adapt to your dock position. Configure actions in Settings → Gestures & Keybinds.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/gestureControl.webp">
-                            <source src="/resources/gestureControl.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                        <img src="/resources/settings/gestureOptions.png" alt="Trackpad gesture configuration options" class="gesture-options-image">
-                    </div>
-                </div>
-
-                <!-- Dock Locking Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Dock Locking</h3>
-                        <p class="special-feature-description">Pin the Dock to a single monitor in multi-display setups. Stops the Dock from jumping when your cursor reaches the bottom of another screen. Works best with "Displays have separate Spaces" enabled. Configure in Settings → Dock Locking.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <img src="/resources/dockLocking.png" alt="Dock Locking settings showing screen picker and bypass modifier options" class="large-preview-image">
-                    </div>
-                </div>
-
-                <!-- Enhanced Previews Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Enhanced Previews</h3>
-                        <p class="special-feature-description">Get a better view of your windows with large preview option. Perfect for dealing with multiple similar windows or for users with larger displays.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <img src="/resources/largePreviewDemo.png" alt="Large preview demonstration" class="large-preview-image">
-                    </div>
-                </div>
-
-                <!-- CMD Right Click Quit Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Quick Quit from Dock</h3>
-                        <p class="special-feature-description">Quit applications instantly with ⌘ + Right Click on any dock icon. For stubborn apps, use ⌘ + ⌥ + Right Click to force quit. No menus, no waiting—just fast, direct control.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/cmdClick.webp">
-                            <source src="/resources/cmdClick.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Middle Click Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Middle-Click to Close Windows</h3>
-                        <p class="special-feature-description">Quickly close windows without switching focus by
-                            middle-clicking on their preview. Perfect for cleaning up your workspace while staying in your
-                            current application.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/middleClick.webp">
-                            <source src="/resources/middleClick.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Window Dragging Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Window Dragging</h3>
-                        <p class="special-feature-description">Drag and drop windows between applications directly from dock
-                            previews. Effortlessly organize your workspace without the need to switch contexts.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/windowDrag.webp">
-                            <source src="/resources/windowDrag.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Aero Shake Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Aero Shake</h3>
-                        <p class="special-feature-description">Shake a window preview to instantly minimize or close all other windows. Configure this in Settings → Gestures & Keybinds under the Dock Preview Gestures section.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/aeroShake.webp">
-                            <source src="/resources/aeroShake.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Minimize All Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Close or Minimize All Windows</h3>
-                        <p class="special-feature-description">Clear your workspace instantly with one click. Hover over an
-                            app icon to access options to close or minimize all windows for that application.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/minimizeAll.webp">
-                            <source src="/resources/minimizeAll.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Click to Minimize Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Click Dock Icon to Minimize</h3>
-                        <p class="special-feature-description">Click any dock icon to instantly hide all windows for that application. Enable this in Settings → Dock Previews, then toggle "Hide all app windows on dock icon click."</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline class="align-left" poster="/resources/posters/clickToMinimize.webp">
-                            <source src="/resources/clickToMinimize.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Scroll to Show/Hide Feature -->
-                <div class="special-feature-item">
-                    <div class="special-feature-content">
-                        <h3 class="special-feature-title">Scroll to Show/Hide Apps</h3>
-                        <p class="special-feature-description">Scroll up on any dock icon to bring the app to the front, or scroll down to hide all its windows. Works with trackpad, Magic Mouse, or any scroll wheel. Enable this in Settings → Gestures & Keybinds under the Dock Icon Scroll Gesture section.</p>
-                    </div>
-                    <div class="special-feature-media">
-                        <video muted preload="none" loop playsinline poster="/resources/posters/scrollToHide.webp">
-                            <source src="/resources/scrollToHide.mp4" type="video/mp4">
-                            Your browser does not support video playback.
-                        </video>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Support Section -->
-    <section class="support-section section">
-        <div class="container">
-            <div class="support-content">
-                <h2 class="support-headline">Support Independent Development</h2>
-                <p class="support-subheadline">DockDoor is built by a solo developer and kept 100% free.<br>Every contribution directly funds development and keeps the project alive.</p>
-
-                <div class="support-actions">
-                    <div class="support-primary">
-                        <h3 class="support-title">Help Keep DockDoor Free & Growing</h3>
-                        <p class="support-description">Your support funds new features, bug fixes, and ongoing maintenance. No subscriptions, no ads, no data selling. Just community support.</p>
-                        <a href="donate.html" class="btn btn-coffee btn-large">Support Development</a>
-                        <p class="support-line">Even $3 makes a huge difference</p>
-                    </div>
-                </div>
-
-                <div class="support-alternatives">
-                    <h3 class="alternatives-title">Other ways to help</h3>
-                    <div class="alternatives-grid">
-                        <a href="https://github.com/ejbills/DockDoor" class="alternative-link">
-                            <span class="alternative-title">⭐ Star on GitHub</span>
-                            <span class="alternative-desc">Help others discover DockDoor</span>
-                        </a>
-                        <a href="https://github.com/ejbills/DockDoor/issues" class="alternative-link">
-                            <span class="alternative-title">🐛 Report Issues</span>
-                            <span class="alternative-desc">Help us improve the app</span>
-                        </a>
-                        <a href="https://crowdin.com/project/dockdoor" class="alternative-link">
-                            <span class="alternative-title">🌍 Help Translate</span>
-                            <span class="alternative-desc">Make DockDoor global</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Download Section -->
-    <section class="download-section section" id="download">
-        <div class="container">
-            <div class="download-content">
-                <h2 class="download-headline">Download DockDoor</h2>
-                <p class="download-subheadline">Free for macOS 13 Ventura and later</p>
-
-                <div class="download-actions">
-                    <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"
-                        class="btn btn-primary btn-large download-btn donation-prompt">Download for Mac</a>
-                    <a href="https://formulae.brew.sh/cask/dockdoor"
-                        class="btn btn-outline btn-large download-btn donation-prompt">Install via Homebrew</a>
-                </div>
-
-                <div class="download-requirements">
-                    <span class="download-requirement">Requires macOS 13.0 or later</span>
-                    <span class="download-requirement">Notarized by Apple</span>
-                    <span class="download-requirement">Apple Silicon & Intel support</span>
-                </div>
-                
-                <div class="product-hunt-embed">
-                    <a href="https://www.producthunt.com/products/dockdoor/reviews?utm_source=badge-product_rating&utm_medium=badge&utm_source=badge-dockdoor" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/product_rating.svg?product_id=1063815&theme=light" alt="DockDoor - &#0032;Window&#0032;peeking&#0032;and&#0032;alt&#0045;tab&#0032;functionality&#0032;for&#0032;macOS&#0032; | Product Hunt" /></a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Donation Modal -->
-    <div id="donation-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">&times;</button>
-            <div class="modal-header">
-                <h2 class="modal-title">Love DockDoor?</h2>
-            </div>
-            <p class="modal-text">DockDoor is built by a solo developer and kept 100% free. If you find it useful, consider supporting development. Even $3 helps keep this project alive!</p>
+    <div class="modal" id="donation-modal" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <img src="/resources/web/icon-256.webp" alt="" width="64" height="64" class="modal-icon">
+            <h2 id="modal-title">Your download is ready.</h2>
+            <p>DockDoor is an independent, open-source project that stays free because people chip in. If it earns a spot on your Mac, even $3 helps.</p>
             <div class="modal-actions">
-                <a href="donate.html" class="btn btn-primary">Support Development</a>
-                <a href="#" id="proceed-to-download" class="btn btn-secondary">Continue to Download</a>
+                <a href="#" class="btn btn-ink" id="proceed-to-download">Download DockDoor</a>
+                <a href="donate.html" class="btn btn-quiet">Support development</a>
             </div>
+            <button class="modal-close" type="button" data-close aria-label="Close">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
         </div>
     </div>
-    
-    <!-- Toast Container for Donation Request -->
-    <div class="toast-container">
-        <!-- Toast will be dynamically added here by JavaScript -->
-    </div>
 
-    <section class="product-split-section section" id="free-vs-pro">
-        <div class="container">
-            <div class="product-split-disclosure">
-                <div class="product-split-summary">
-                    <span class="section-kicker">DockDoor Free vs Pro</span>
-                    <span class="section-title product-split-title">Two separate apps. Two different jobs.</span>
-                    <span class="section-subtitle product-split-subtitle">DockDoor Free enhances the Dock that ships with macOS. DockDoor Pro is a separate app for users who want to replace the Dock entirely.</span>
-                </div>
-                <div class="product-split-grid">
-                    <article class="product-split-card">
-                        <span class="product-split-label">DockDoor Free</span>
-                        <h3>Enhances the native Dock.</h3>
-                        <p>Adds live Dock previews, Alt+Tab switching, keyboard controls, gestures, and preview actions while keeping the built-in macOS Dock in place.</p>
-                    </article>
-                    <article class="product-split-card product-split-card-pro">
-                        <span class="product-split-label">DockDoor Pro</span>
-                        <h3>Replaces the Dock.</h3>
-                        <p>Runs as its own full Dock with its own icon previews, profiles, widgets, pinned folders and files, marketplace widgets, deep customization, and advanced window workflows.</p>
-                        <a href="https://pro.dockdoor.net" class="btn btn-pro" target="_blank" rel="noopener">Explore DockDoor Pro</a>
-                    </article>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="toast glass" id="copy-toast" role="status" aria-live="polite"></div>
 
-    <!-- FAQ Section -->
-    <section class="faq-section section" id="faq">
-        <div class="container">
-            <h2 class="faq-headline">Questions</h2>
-            <p class="faq-subheadline">Everything you need to know about DockDoor.</p>
-
-            <div class="faq-grid">
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>Where should I download DockDoor from?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>The only official sources are:</p>
-                        <ul>
-                            <li><strong>DockDoor Free</strong> — <strong><a href="https://dockdoor.net">dockdoor.net</a></strong> or <strong><a href="https://github.com/ejbills/DockDoor">github.com/ejbills/DockDoor</a></strong></li>
-                            <li><strong>DockDoor Pro</strong> — <strong><a href="https://pro.dockdoor.net">pro.dockdoor.net</a></strong></li>
-                        </ul>
-                        <p>Any other site offering DockDoor or DockDoor Pro downloads, cracks, torrents, or "free" versions is not affiliated with us and should not be trusted.</p>
-                        <div class="faq-why">
-                            <h4>Why?</h4>
-                            <p>DockDoor requires Accessibility and Screen Recording permissions to function. Installing an app with that level of system access from an untrusted source is a serious security risk — a modified version could silently record your screen, log your keystrokes, or exfiltrate personal data. We have already found re-uploaded and cracked versions of DockDoor on various sites containing malware and unauthorized modifications. There is no legitimate free version of DockDoor Pro. Protect yourself by only using the official sources listed above.</p>
-                        </div>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>Is DockDoor Pro part of DockDoor Free?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p><strong>DockDoor Free</strong> is a lightweight enhancement for the built-in macOS Dock. It adds window previews, Alt+Tab switching, gestures, and keyboard controls on top of the system Dock. It does not replace anything.</p>
-                        <p><strong>DockDoor Pro</strong> is a separate paid product from the same developer. It replaces the Dock entirely, with previews from its own Dock icons, profiles, pinned content, widgets, customization, file staging, Quick Actions, advanced keybinds, Alt+Tab-style navigation, and deeper window controls.</p>
-                        <p>You usually do not need DockDoor Free if DockDoor Pro is replacing your Dock. DockDoor Free is for people who want to keep the built-in macOS Dock and add lightweight preview enhancements.</p>
-                        <p>Available at <strong><a href="https://pro.dockdoor.net">pro.dockdoor.net</a></strong> — $20 lifetime license. Feedback is managed via our <a href="https://discord.gg/TZeRs73hFb">Discord community</a>.</p>
-                    </div>
-                </details>
-                
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>Is DockDoor free?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Yes. DockDoor is completely free and open-source with no hidden costs or subscriptions.</p>
-                        <div class="faq-why">
-                            <h4>Why?</h4>
-                            <p>Because too many software companies price gouge users, subscriptions are terrible, and we believe great tools should be accessible to everyone.</p>
-                        </div>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>What are the system requirements?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>macOS 13.0 Ventura or later. DockDoor runs natively on both Apple Silicon (M1, M2, M3) and Intel Macs.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>Does it affect performance?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>No. DockDoor is designed to be lightweight with minimal impact on system performance and battery life.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>How do I customize shortcuts?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Open DockDoor settings and go to the <strong>Gestures & Keybinds</strong> tab. Here you can customize:</p>
-                        <div class="faq-steps">
-                            <div class="faq-step">
-                                <span class="step-number">1</span>
-                                <span class="step-text"><strong>Window Switcher Shortcut</strong> — Change the modifier key (Control, Option, or Command) and trigger key</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">2</span>
-                                <span class="step-text"><strong>Cmd+Key Shortcuts</strong> — Configure up to 3 custom Cmd+key actions (close, minimize, quit, etc.) for quick window control</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">3</span>
-                                <span class="step-text"><strong>Trackpad Gestures</strong> — Set swipe actions for dock previews and window switcher</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">4</span>
-                                <span class="step-text"><strong>Mouse Actions</strong> — Configure middle-click behavior on window previews</span>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>Which apps are supported?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Most standard macOS applications work perfectly. Some apps with custom UI frameworks may have limited functionality.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>How do I get the old slim window appearance back?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>You can restore the dynamic sizing behavior for dock previews:</p>
-                        <div class="faq-steps">
-                            <div class="faq-step">
-                                <span class="step-number">1</span>
-                                <span class="step-text">Open DockDoor settings</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">2</span>
-                                <span class="step-text">Navigate to the Dock Previews tab</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">3</span>
-                                <span class="step-text">Enable "Allow dynamic image sizing" to make windows resize dynamically</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">4</span>
-                                <span class="step-text">Check "Embed controls in preview frames" for the classic toolbar style</span>
-                            </div>
-                            <div class="faq-step optional">
-                                <span class="step-number">5</span>
-                                <span class="step-text">Optional: Disable "Dock styling on traffic light buttons" for minimal appearance</span>
-                            </div>
-                        </div>
-                        <p class="faq-note">These settings only affect dock previews. Window switcher behavior remains unchanged.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>How do I troubleshoot issues with debug logging?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>DockDoor includes an optional debug logging feature to help diagnose performance issues:</p>
-                        <div class="faq-steps">
-                            <div class="faq-step">
-                                <span class="step-number">1</span>
-                                <span class="step-text">Open DockDoor settings → Support tab</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">2</span>
-                                <span class="step-text">Enable "Debug Logging" under the Updates section</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">3</span>
-                                <span class="step-text">Reproduce your issue while debug mode is enabled</span>
-                            </div>
-                            <div class="faq-step">
-                                <span class="step-number">4</span>
-                                <span class="step-text">Click "Export Logs" to save the debug file to share with support</span>
-                            </div>
-                        </div>
-                        <p class="faq-note">Debug logs are stored locally on your Mac and never sent anywhere automatically. You control when and if logs are shared.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item" name="faq-dockdoor">
-                    <summary class="faq-question">
-                        <p>How can I contribute?</p>
-                        <i>↓</i>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Report issues on GitHub, contribute code, help with translations, or support development financially.</p>
-                    </div>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <section class="community-section">
-        <div class="container community-container">
-            <h3 class="community-headline">Built by the Community</h3>
-            <p class="community-subheadline">
-                DockDoor is an open-source project made possible by these wonderful contributors.
-            </p>
-            
-            <a href="https://github.com/ejbills/DockDoor/graphs/contributors" target="_blank" rel="noopener noreferrer" class="contributors-link">
-                <img src="https://contrib.rocks/image?repo=ejbills/DockDoor&columns=7" alt="DockDoor Contributors" class="contributors-img" loading="lazy">
-            </a>
-            
-            <div class="community-actions">
-                <span class="community-subtext">Want to join them?</span>
-                <a href="https://github.com/ejbills/DockDoor" target="_blank" class="link-highlight">Contribute Code</a>
-                <span class="divider">|</span>
-                <a href="donate.html" class="link-highlight">Support Development</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Script -->
-    <script src="scripts.js"></script>
+    <script src="scripts.js" defer></script>
 </body>
 
 </html>

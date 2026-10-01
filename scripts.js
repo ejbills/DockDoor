@@ -1,144 +1,67 @@
-// DockDoor Website JavaScript
+(() => {
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+    const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
-    
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-        });
-    });
-    
-    // Slideshow functionality for customization sections
-    function setupSlideshow(slideshowId) {
-        const slideshow = document.getElementById(slideshowId);
-        if (!slideshow) return;
-        
-        const track = slideshow.querySelector('.slideshow-track');
-        const slides = slideshow.querySelectorAll('.slideshow-slide');
-        const indicators = slideshow.querySelectorAll('.slideshow-indicator');
-        const prevBtn = slideshow.querySelector('[data-direction="prev"]');
-        const nextBtn = slideshow.querySelector('[data-direction="next"]');
-        
-        let currentIndex = 0;
-        const slideCount = slides.length;
-        
-        // Initialize
-        updateSlidePosition();
-        updateIndicators();
-        
-        // Previous slide button
-        prevBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-            updateSlidePosition();
-            updateIndicators();
-        });
-        
-        // Next slide button
-        nextBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % slideCount;
-            updateSlidePosition();
-            updateIndicators();
-        });
-        
-        // Indicator buttons
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                currentIndex = index;
-                updateSlidePosition();
-                updateIndicators();
-            });
-        });
-        
-        // Auto advance
-        let interval = setInterval(() => {
-            currentIndex = (currentIndex + 1) % slideCount;
-            updateSlidePosition();
-            updateIndicators();
-        }, 4000);
-        
-        // Pause on hover
-        slideshow.addEventListener('mouseenter', () => {
-            clearInterval(interval);
-        });
-        
-        // Resume on mouse leave
-        slideshow.addEventListener('mouseleave', () => {
-            interval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % slideCount;
-                updateSlidePosition();
-                updateIndicators();
-            }, 4000);
-        });
-        
-        // Update slide position
-        function updateSlidePosition() {
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-        
-        // Update indicators
-        function updateIndicators() {
-            indicators.forEach((indicator, index) => {
-                if (index === currentIndex) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
-                }
-            });
-        }
+    let toastTimer;
+    function toast(text) {
+        const el = $('#copy-toast');
+        if (!el) return;
+        el.textContent = text;
+        el.classList.add('is-shown');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('is-shown'), 2200);
     }
-    
-    // Set up all slideshows
-    setupSlideshow('window-switcher-slideshow');
-    setupSlideshow('dock-preview-slideshow');
-    
-    // Video playback controls
-    //
-    // Safari on iOS and macOS hands <video> loading to AVFoundation, which
-    // streams the file with HTTP Range requests. The CDN in front of the site
-    // can answer those in a way Safari rejects (200 instead of 206, weak ETags),
-    // so the element stays black while other browsers play the same file.
-    // To sidestep that, each clip is fetched lazily with one plain GET and
-    // attached as a blob: URL, so the media stack never issues a Range request.
-    // The markup uses preload="none" without autoplay so the browser does not
-    // start a competing native load; the <source> stays as a fallback.
-    function handleVideoPlayback() {
-        const videos = Array.from(document.querySelectorAll('video'));
-        const pending = new WeakMap();
-        const canUseBlob = typeof window.fetch === 'function' &&
-            typeof window.URL === 'function' && typeof URL.createObjectURL === 'function';
 
-        function sourceUrl(video) {
+    function initNav() {
+        const btn = $('#nav-menu');
+        const links = $('#nav-links');
+        if (!btn || !links) return;
+        const set = (open) => {
+            btn.setAttribute('aria-expanded', String(open));
+            btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+            links.classList.toggle('is-open', open);
+        };
+        btn.addEventListener('click', () => set(!links.classList.contains('is-open')));
+        links.addEventListener('click', (e) => {
+            if (e.target.closest('a')) set(false);
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') set(false);
+        });
+        document.addEventListener('pointerdown', (e) => {
+            if (!e.target.closest('.nav')) set(false);
+        });
+    }
+
+    // Safari hands <video> loading to AVFoundation, which streams with Range
+    // requests the CDN answers in a way Safari rejects, so clips stay black.
+    // Each clip is fetched once with a plain GET and attached as a blob: URL.
+    function initVideos() {
+        const videos = $$('video');
+        const pending = new WeakMap();
+        const canUseBlob = typeof fetch === 'function' && typeof URL.createObjectURL === 'function';
+
+        const sourceUrl = (video) => {
             const source = video.querySelector('source[src]');
             return source ? source.getAttribute('src') : video.getAttribute('src');
-        }
+        };
 
         function ensureLoaded(video) {
             let load = pending.get(video);
             if (load) return load;
-
             const url = sourceUrl(video);
             if (canUseBlob && url && !video.src) {
                 load = fetch(url)
-                    .then(response => {
-                        if (!response.ok) throw new Error('HTTP ' + response.status);
-                        return response.blob();
+                    .then((r) => {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.blob();
                     })
-                    .then(blob => {
+                    .then((blob) => {
                         video.src = URL.createObjectURL(blob);
                     })
-                    .catch(() => {
-                        // Fall back to the native <source> load.
-                        video.load();
-                    });
+                    .catch(() => video.load());
             } else {
                 load = Promise.resolve();
             }
@@ -146,405 +69,180 @@ document.addEventListener('DOMContentLoaded', function() {
             return load;
         }
 
-        function playVideo(video) {
+        function play(video) {
             video.muted = true;
             ensureLoaded(video).then(() => {
                 if (video.dataset.paused === 'true') return;
                 const attempt = video.play();
-                if (attempt && typeof attempt.catch === 'function') {
+                if (attempt && attempt.catch) {
                     attempt.catch(() => {
                         video.addEventListener('canplay', () => {
-                            if (video.dataset.paused !== 'true') {
-                                video.play().catch(() => {});
-                            }
+                            if (video.dataset.paused !== 'true') video.play().catch(() => {});
                         }, { once: true });
                     });
                 }
             });
         }
 
-        function pauseVideo(video) {
-            video.dataset.paused = 'true';
-            video.pause();
+        if (!('IntersectionObserver' in window)) {
+            videos.forEach(play);
+            return;
         }
 
-        if ('IntersectionObserver' in window) {
-            // Start fetching a little before the clip scrolls into view.
-            const preloadObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        ensureLoaded(entry.target);
-                        preloadObserver.unobserve(entry.target);
-                    }
-                });
-            }, { rootMargin: '400px 0px' });
-
-            const videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.dataset.paused = 'false';
-                        playVideo(entry.target);
-                    } else {
-                        pauseVideo(entry.target);
-                    }
-                });
-            }, { threshold: 0.5 });
-
-            videos.forEach(video => {
-                preloadObserver.observe(video);
-                videoObserver.observe(video);
-            });
-        } else {
-            // Fallback for browsers that don't support IntersectionObserver
-            videos.forEach(video => {
-                playVideo(video);
-            });
-        }
-    }
-
-    // Initialize video playback
-    handleVideoPlayback();
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80, // Adjust for header height
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Animation for elements when scrolling into view
-    function animateOnScroll() {
-        const elements = document.querySelectorAll('.feature-media-container, .special-feature-card, .customization-card, .settings-card, .large-preview-container, .comments-container, .download-card');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        const preload = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    observer.unobserve(entry.target);
+                    ensureLoaded(entry.target);
+                    preload.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
-        
-        elements.forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(element);
-        });
-    }
-    
-    // Initialize animations on scroll
-    if ('IntersectionObserver' in window) {
-        animateOnScroll();
-    }
+        }, { rootMargin: '400px 0px' });
 
-    // Donation Modal Logic
-    const donationModal = document.getElementById('donation-modal');
-    const donationLinks = document.querySelectorAll('.donation-prompt');
-    const closeModalBtn = donationModal.querySelector('.modal-close');
-    const proceedToDownloadBtn = document.getElementById('proceed-to-download');
-    let downloadUrl = '';
-
-    const openModal = () => {
-        donationModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    };
-
-    const closeModal = () => {
-        donationModal.classList.remove('active');
-        document.body.style.overflow = '';
-
-        // Show donation toast after closing modal if no other toast is visible
-        if (!document.querySelector('.toast.show')) {
-            createToast();
-        }
-    };
-
-    donationLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            downloadUrl = this.href;
-            openModal();
-        });
-    });
-
-    closeModalBtn.addEventListener('click', closeModal);
-
-    proceedToDownloadBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        closeModal();
-        window.location.href = downloadUrl;
-    });
-
-    donationModal.addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && donationModal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
-    // Toast notification for donations when clicking download buttons
-    function createToast() {
-        const toastContainer = document.querySelector('.toast-container');
-        
-        // Create toast HTML
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `
-            <div class="toast-content">
-                <div class="toast-title">
-                    <img src="./resources/svg/toastBell.svg" alt="Bell icon" width="20" height="20">
-                    Support DockDoor Development
-                </div>
-                <div class="toast-message">
-                    DockDoor is free, but your support helps us continue development. Consider making a small donation to keep this project going.
-                </div>
-                <div class="toast-actions">
-                    <a href="donate.html" class="btn btn-primary toast-btn">Donate</a>
-                    <button class="btn btn-secondary toast-btn not-now">Not Now</button>
-                </div>
-            </div>
-        `;
-        
-        // Add to container
-        toastContainer.appendChild(toast);
-        
-        // Show the toast after a small delay
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 100);
-        
-        // Handle "Not Now" button click
-        const notNowBtn = toast.querySelector('.not-now');
-        notNowBtn.addEventListener('click', () => {
-            hideToast(toast);
-        });
-        
-        // Auto hide after 10 seconds
-        setTimeout(() => {
-            hideToast(toast);
-        }, 10000);
-    }
-    
-    function hideToast(toast) {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 500);
-    }
-    
-    // Add click event listeners to download buttons
-    const downloadButtons = document.querySelectorAll('.download-btn');
-    downloadButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            // Don't prevent default - we want the download to happen
-        });
-    });
-    
-    // LookieLoo section animations
-    function animateLookielooSection() {
-        const lookielooFeatures = document.querySelectorAll('.lookieloo-feature');
-        const lookielooShowcase = document.querySelector('.lookieloo-showcase');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        const visible = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const video = entry.target;
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    observer.unobserve(entry.target);
+                    video.dataset.paused = 'false';
+                    if (!reduceMotion) play(video);
+                    else ensureLoaded(video);
+                } else {
+                    video.dataset.paused = 'true';
+                    video.pause();
                 }
             });
-        }, { threshold: 0.1 });
-        
-        // Animate features with staggered delay
-        lookielooFeatures.forEach((feature, index) => {
-            feature.style.opacity = '0';
-            feature.style.transform = 'translateY(30px)';
-            feature.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
-            observer.observe(feature);
-        });
-        
-        // Animate showcase
-        if (lookielooShowcase) {
-            lookielooShowcase.style.opacity = '0';
-            lookielooShowcase.style.transform = 'translateY(30px)';
-            lookielooShowcase.style.transition = 'opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s';
-            observer.observe(lookielooShowcase);
-        }
-    }
-    
-    // Initialize LookieLoo animations
-    if ('IntersectionObserver' in window) {
-        animateLookielooSection();
-    }
-    
-    // Privacy Policy Modal Logic
-    const privacyModal = document.getElementById('privacy-modal');
-    const privacyPolicyLink = document.querySelector('.privacy-policy-link');
-    const privacyCloseButtons = document.querySelectorAll('.privacy-modal-close');
+        }, { threshold: 0.35 });
 
-    if (privacyPolicyLink && privacyModal) {
-        privacyPolicyLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            privacyModal.classList.add('active');
+        videos.forEach((video) => {
+            preload.observe(video);
+            visible.observe(video);
         });
+    }
 
-        privacyCloseButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                privacyModal.classList.remove('active');
+    function initCopy() {
+        $$('.copy-cmd').forEach((btn) => {
+            const icon = btn.querySelector('use');
+            btn.addEventListener('click', async () => {
+                const text = btn.dataset.copy;
+                try {
+                    await navigator.clipboard.writeText(text);
+                } catch {
+                    const area = document.createElement('textarea');
+                    area.value = text;
+                    area.style.position = 'fixed';
+                    area.style.opacity = '0';
+                    document.body.appendChild(area);
+                    area.select();
+                    document.execCommand('copy');
+                    area.remove();
+                }
+                btn.classList.add('is-copied');
+                if (icon) icon.setAttribute('href', '#i-check');
+                toast('Copied. Paste it into Terminal to install.');
+                setTimeout(() => {
+                    btn.classList.remove('is-copied');
+                    if (icon) icon.setAttribute('href', '#i-copy');
+                }, 1800);
+            });
+        });
+    }
+
+    function initDonation() {
+        const modal = $('#donation-modal');
+        const proceed = $('#proceed-to-download');
+        if (!modal || !proceed) return;
+        let url = '';
+        let opener = null;
+
+        const close = () => {
+            modal.hidden = true;
+            document.documentElement.style.overflow = '';
+            if (opener) opener.focus({ preventScroll: true });
+        };
+
+        $$('.donation-prompt').forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                url = link.href;
+                opener = link;
+                modal.hidden = false;
+                document.documentElement.style.overflow = 'hidden';
+                proceed.focus({ preventScroll: true });
             });
         });
 
-        // Close modal when clicking outside
-        privacyModal.addEventListener('click', (e) => {
-            if (e.target === privacyModal) {
-                privacyModal.classList.remove('active');
-            }
-        });
-    }
-
-    // Press carousel infinite scroll
-    const pressCarousel = document.querySelector('.press-carousel');
-    const pressTrack = document.querySelector('.press-track');
-
-    if (pressCarousel && pressTrack) {
-        let scrollTimeout;
-        let isUserScrolling = false;
-        let animationFrame;
-        let scrollPosition = 0;
-        const scrollSpeed = 0.4; // pixels per frame
-        let halfWidth = 0;
-
-        // Calculate the width of half the track (original content)
-        const calculateHalfWidth = () => {
-            const items = pressTrack.querySelectorAll('.press-item');
-            const itemCount = items.length / 2; // Divided by 2 because we have duplicates
-            let width = 0;
-
-            for (let i = 0; i < itemCount; i++) {
-                width += items[i].offsetWidth;
-            }
-
-            // Add gaps between items
-            const gap = parseFloat(getComputedStyle(pressTrack).gap) || 64; // 4rem = 64px fallback
-            width += gap * itemCount; // Total gaps including after last item
-
-            return width;
-        };
-
-        // Wait for images/content to load, then calculate
-        setTimeout(() => {
-            halfWidth = calculateHalfWidth();
-        }, 100);
-
-        // Mouse drag to scroll functionality
-        let isDown = false;
-        let startX, startScrollLeft;
-
-        pressCarousel.addEventListener('mousedown', (e) => {
-            isDown = true;
-            isUserScrolling = true;
-            startX = e.pageX - pressCarousel.offsetLeft;
-            startScrollLeft = pressCarousel.scrollLeft;
-            pressCarousel.style.cursor = 'grabbing';
-        });
-
-        const stopDragging = () => {
-            isDown = false;
-            pressCarousel.style.cursor = 'grab';
-        };
-
-        pressCarousel.addEventListener('mouseup', stopDragging);
-        pressCarousel.addEventListener('mouseleave', stopDragging);
-
-        pressCarousel.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
+        proceed.addEventListener('click', (e) => {
             e.preventDefault();
-            const x = e.pageX - pressCarousel.offsetLeft;
-            const walk = (x - startX) * 2;
-            
-            pressCarousel.scrollLeft = startScrollLeft - walk;
-            
-            scrollPosition = pressCarousel.scrollLeft; 
+            close();
+            if (url) window.location.href = url;
         });
 
-        const animate = () => {
-            if (!isUserScrolling && halfWidth > 0) {
-                scrollPosition += scrollSpeed;
-
-                // Reset when we've scrolled past the first set of items
-                if (scrollPosition >= halfWidth) {
-                    scrollPosition = scrollPosition - halfWidth;
-                }
-
-                pressCarousel.scrollLeft = scrollPosition;
-            }
-            animationFrame = requestAnimationFrame(animate);
-        };
-
-        // Start animation
-        animationFrame = requestAnimationFrame(animate);
-
-        // Handle user scrolling
-        let userScrollTimeout;
-        pressCarousel.addEventListener('scroll', () => {
-            // Only update if this is a user-initiated scroll
-            if (!isUserScrolling && Math.abs(pressCarousel.scrollLeft - scrollPosition) > 2) {
-                isUserScrolling = true;
-                scrollPosition = pressCarousel.scrollLeft;
-            }
-
-            clearTimeout(userScrollTimeout);
-            userScrollTimeout = setTimeout(() => {
-                if (isUserScrolling) {
-                    scrollPosition = pressCarousel.scrollLeft;
-                }
-            }, 50);
-        });
-
-        // Pause on hover
-        pressCarousel.addEventListener('mouseenter', () => {
-            isUserScrolling = true;
-        });
-
-        pressCarousel.addEventListener('mouseleave', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                isUserScrolling = false;
-                scrollPosition = pressCarousel.scrollLeft;
-            }, 500);
-        });
-
-        // Recalculate on window resize
-        window.addEventListener('resize', () => {
-            halfWidth = calculateHalfWidth();
-        });
-
-        // Clean up on page unload
-        window.addEventListener('beforeunload', () => {
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
+        $$('[data-close]', modal).forEach((el) => el.addEventListener('click', close));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.hidden) close();
         });
     }
 
-});
+    function tabs({ list, tabSel, onSelect, vertical }) {
+        const items = $$(tabSel, list);
+        const select = (tab, focus) => {
+            items.forEach((t) => {
+                const on = t === tab;
+                t.setAttribute('aria-selected', String(on));
+                t.tabIndex = on ? 0 : -1;
+                const panel = document.getElementById(t.getAttribute('aria-controls'));
+                if (panel) panel.hidden = !on;
+            });
+            if (focus) tab.focus();
+            if (onSelect) onSelect(tab, items.indexOf(tab));
+        };
+        items.forEach((tab) => {
+            tab.addEventListener('click', () => select(tab, false));
+            tab.addEventListener('keydown', (e) => {
+                const i = items.indexOf(tab);
+                const back = e.key === 'ArrowLeft' || (vertical && e.key === 'ArrowUp');
+                const fwd = e.key === 'ArrowRight' || (vertical && e.key === 'ArrowDown');
+                if (!back && !fwd && e.key !== 'Home' && e.key !== 'End') return;
+                e.preventDefault();
+                let next = i;
+                if (back) next = (i - 1 + items.length) % items.length;
+                if (fwd) next = (i + 1) % items.length;
+                if (e.key === 'Home') next = 0;
+                if (e.key === 'End') next = items.length - 1;
+                select(items[next], true);
+            });
+        });
+    }
+
+    function initExplorer() {
+        const list = $('.explorer-list');
+        if (!list) return;
+        tabs({
+            list,
+            tabSel: '[role="tab"]',
+            vertical: true,
+            onSelect: (tab) => {
+                if (list.scrollWidth > list.clientWidth) {
+                    const l = tab.offsetLeft - 8;
+                    list.scrollTo({ left: l, behavior: reduceMotion ? 'auto' : 'smooth' });
+                }
+            },
+        });
+    }
+
+    function initLooks() {
+        const seg = $('#looks .segmented');
+        if (!seg) return;
+        tabs({
+            list: seg,
+            tabSel: '[role="tab"]',
+            onSelect: (_, i) => seg.setAttribute('data-index', String(i)),
+        });
+    }
+
+    initNav();
+    initVideos();
+    initCopy();
+    initDonation();
+    initExplorer();
+    initLooks();
+})();

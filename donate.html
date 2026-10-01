@@ -3,140 +3,95 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support DockDoor - Donate | GitHub Sponsors</title>
-    <meta name="description"
-        content="Support DockDoor's development through GitHub Sponsors. Help keep this free, privacy-first Mac app alive and growing.">
-    <meta property="og:title" content="Support DockDoor - Donate">
-    <meta property="og:description"
-        content="Support DockDoor's development through GitHub Sponsors. Help keep this free, privacy-first Mac app alive and growing.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Support DockDoor: donate with GitHub Sponsors</title>
+    <meta name="description" content="Support DockDoor's development through GitHub Sponsors. Help keep this free, privacy-first Mac app alive and growing.">
+    <meta name="theme-color" content="#F4F5F7">
+    <meta property="og:title" content="Support DockDoor">
+    <meta property="og:description" content="Support DockDoor's development through GitHub Sponsors. Help keep this free, privacy-first Mac app alive and growing.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dockdoor.net/donate">
-    <meta property="og:image" content="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png">
+    <meta property="og:image" content="https://dockdoor.net/resources/web/og.jpg">
     <link rel="canonical" href="https://dockdoor.net/donate">
-    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png">
+    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-128x128@1x.png">
+    <link rel="apple-touch-icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@1x.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        header {
-            position: fixed;
-            width: 100%;
-        }
-
-        .donate-hero {
-            min-height: 100dvh;
-            display: grid;
-            place-items: center;
-            background: var(--light);
-        }
-
-        .donate-content {
-            text-align: center;
-            max-width: 580px;
-        }
-
-        .donate-headline {
-            font-size: 4rem;
-            font-weight: 700;
-            line-height: 1.05;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            letter-spacing: -0.03em;
-        }
-
-        .donate-subheadline {
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-        }
-
-        .donate-options {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-block: 3rem;
-        }
-
-        .donate-note {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-        }
-
-        @media (max-width: 768px) {
-            .donate-headline {
-                font-size: 2.75rem;
-            }
-
-            .donate-subheadline {
-                font-size: 1.1rem;
-                margin-bottom: 3rem;
-            }
-        }
-    </style>
 </head>
 
-<body>
-    <!-- Header -->
-    <header id="header">
-        <div class="container header-container">
-            <a href="index.html" class="logo">
-                <img src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png" alt="DockDoor Logo">
-                <span class="logo-text" data-text="DockDoor">DockDoor</span>
+<body class="page-donate">
+    <svg class="sprite" aria-hidden="true" focusable="false">
+        <symbol id="i-heart" viewBox="0 0 16 16"><path fill="currentColor" d="M8 14.2S1.5 10.3 1.5 5.9A3.4 3.4 0 0 1 8 4.3a3.4 3.4 0 0 1 6.5 1.6c0 4.4-6.5 8.3-6.5 8.3z"/></symbol>
+    </svg>
+
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav-wrap">
+        <nav class="nav glass" aria-label="Main">
+            <a href="index.html" class="nav-brand" aria-label="DockDoor home">
+                <img src="/resources/web/icon-256.webp" alt="" width="28" height="28">
+                <span>DockDoor</span>
             </a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="index.html#privacy" class="nav-link">Privacy</a></li>
-                    <li><a href="index.html#features" class="nav-link">Features</a></li>
-                    <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
-                    <li><a href="donate.html" class="nav-link active">Donate</a></li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <a href="index.html#download" class="btn btn-primary">Download</a>
-                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">☰</button>
-            </div>
-        </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#privacy">Privacy</a></li>
+                <li><a href="index.html#pro">DockDoor Pro</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="donate.html" aria-current="page">Donate</a></li>
+            </ul>
+            <a href="index.html#download" class="btn btn-ink btn-sm nav-cta">Download</a>
+            <button class="nav-menu" id="nav-menu" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span>
+            </button>
+        </nav>
     </header>
 
-    <!-- Donate Hero Section -->
-    <section class="donate-hero">
-        <div class="container">
-            <div class="donate-content">
-                <h1 class="donate-headline">Support DockDoor</h1>
-                <p class="donate-subheadline">
-                    Choose your preferred way to support development
-                </p>
-
-                <div class="donate-options">
-                    <a href="https://github.com/sponsors/ejbills" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer" style="gap: 0.75rem;">
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                        </svg>
-                        GitHub Sponsors
-                    </a>
-
-                    <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-secondary btn-large" target="_blank" rel="noopener noreferrer" style="gap: 0.75rem;">
-                        ☕ Buy Me a Coffee
-                    </a>
-                </div>
-
-                <p class="donate-note">
-                    Built by a solo developer with no venture funding. Every contribution helps keep it free, open-source, and privacy-focused.
-                </p>
+    <main id="main" class="donate">
+        <div class="wrap donate-inner">
+            <span class="app-icon"><img class="download-icon" src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@2x.png" alt="DockDoor app icon" width="160" height="160"></span>
+            <h1>Support DockDoor</h1>
+            <p class="donate-lead">DockDoor is an independent, open-source project with no investors and no ads. Donations pay for the time it takes to keep it free, private and working on every new macOS.</p>
+            <div class="donate-actions">
+                <a href="https://github.com/sponsors/ejbills" class="btn btn-ink btn-lg" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#i-heart"/></svg> Sponsor on GitHub</a>
+                <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-quiet btn-lg" target="_blank" rel="noopener noreferrer">Buy me a coffee</a>
             </div>
+            <p class="donate-note">Want more than previews? Buying <a href="https://pro.dockdoor.net">DockDoor Pro</a> also funds DockDoor Free.</p>
         </div>
-    </section>
+    </main>
 
-    <!-- Script -->
-    <script src="scripts.js"></script>
+    <footer class="footer">
+        <div class="wrap footer-grid">
+            <div class="footer-brand">
+                <p class="footer-name"><img src="/resources/web/icon-256.webp" alt="" width="32" height="32"> DockDoor</p>
+                <p>Free and open source under GPL-3.0.<br>Made by <a href="https://github.com/ejbills">Ethan Bills</a> and contributors.</p>
+            </div>
+            <nav class="footer-cols" aria-label="Footer">
+                <div>
+                    <p class="footer-h">DockDoor</p>
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#download">Download</a>
+                    <a href="docs.html">Docs and AppleScript</a>
+                    <a href="https://github.com/ejbills/DockDoor/releases">Release notes</a>
+                </div>
+                <div>
+                    <p class="footer-h">Community</p>
+                    <a href="https://github.com/ejbills/DockDoor">GitHub</a>
+                    <a href="https://discord.gg/TZeRs73hFb">Discord</a>
+                    <a href="https://crowdin.com/project/dockdoor">Translate</a>
+                    <a href="donate.html">Donate</a>
+                </div>
+                <div>
+                    <p class="footer-h">Same developer</p>
+                    <a href="https://pro.dockdoor.net">DockDoor Pro</a>
+                </div>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="scripts.js" defer></script>
 </body>
 
 </html>
