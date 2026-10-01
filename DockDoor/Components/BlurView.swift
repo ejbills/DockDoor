@@ -222,9 +222,10 @@ class LiquidGlassContainerView: NSView {
     /// radius is also forwarded to the glass view so the shader renders edge
     /// refraction along the curve.
     func updateCornerRadius() {
-        layer?.cornerRadius = cornerRadius
+        let radius = min(cornerRadius, min(bounds.width, bounds.height) / 2)
+        layer?.cornerRadius = radius
         if isSyntheticVariant {
-            glass?.cornerRadius = cornerRadius
+            glass?.cornerRadius = radius
         }
     }
 
@@ -352,6 +353,7 @@ class LiquidGlassContainerView: NSView {
 
     override func layout() {
         super.layout()
+        updateCornerRadius()
         if let containerLayer = layer {
             blurUnderlayLayer?.frame = containerLayer.bounds
         }
