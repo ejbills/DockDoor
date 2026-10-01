@@ -1716,12 +1716,7 @@ kbd {
     }
 
     .hero-shot {
-        padding-inline: 0;
-    }
-
-    .hero-shot .screen {
-        border-radius: 0;
-        box-shadow: none;
+        padding-inline: var(--gutter);
     }
 
     .facts,

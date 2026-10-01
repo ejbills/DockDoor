@@ -4,17 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DockDoor: Free window previews and Alt+Tab for the Mac Dock</title>
-    <meta name="description" content="DockDoor adds live window previews, Alt+Tab switching and keyboard window controls to the native macOS Dock. Free, open source, and nothing leaves your Mac.">
-    <meta name="keywords" content="free mac app, alt tab mac, window switcher macOS, dock previews, mac productivity app, option tab, macOS window management, window switcher free, alt tab for mac, dock window preview, mac utilities">
+    <title>DockDoor: Free Window Previews and Alt+Tab for the Mac Dock</title>
+    <meta name="description" content="An easy, free way to see every open window on your Mac. Hover an app in the Dock for live window previews, plus Windows-style Alt+Tab. Open source.">
+    <meta name="keywords" content="window previews mac dock, see all open windows mac, dock hover preview, windows taskbar preview mac, alt tab for mac, option tab window switcher, mac window switcher, dock window preview, hyperdock alternative, alttab alternative, dockdoor pro, free mac app">
     <meta name="theme-color" content="#F4F5F7">
-    <meta property="og:title" content="DockDoor: every window, one hover away">
-    <meta property="og:description" content="Live window previews, Alt+Tab switching and keyboard window controls for the native macOS Dock. Free and open source.">
+    <meta property="og:site_name" content="DockDoor">
+    <meta property="og:title" content="DockDoor: free window previews for the Mac Dock">
+    <meta property="og:description" content="An easy, free way to see every open window on your Mac. Hover an app in the Dock for live window previews, plus Windows-style Alt+Tab. Open source.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dockdoor.net">
+    <meta property="og:url" content="https://dockdoor.net/">
     <meta property="og:image" content="https://dockdoor.net/resources/web/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DockDoor showing an app's open windows as live previews above the Mac Dock">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://dockdoor.net">
+    <meta name="twitter:title" content="DockDoor: free window previews for the Mac Dock">
+    <meta name="twitter:description" content="An easy, free way to see every open window on your Mac. Hover an app in the Dock for live window previews, plus Windows-style Alt+Tab. Open source.">
+    <meta name="twitter:image" content="https://dockdoor.net/resources/web/og.jpg">
+    <link rel="canonical" href="https://dockdoor.net/">
     <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-128x128@1x.png">
     <link rel="apple-touch-icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@1x.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,19 +31,69 @@
     <link rel="stylesheet" href="styles.css">
 
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "DockDoor",
-        "description": "Free window previews, Alt+Tab switching and keyboard window controls for the native macOS Dock. Open source and privacy-first.",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "macOS 13 or later",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "author": { "@type": "Person", "name": "Ethan Bills" },
-        "downloadUrl": "https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg",
-        "license": "https://www.gnu.org/licenses/gpl-3.0.html",
-        "url": "https://dockdoor.net"
-    }
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "https://dockdoor.net/#website",
+            "name": "DockDoor",
+            "alternateName": [
+                "DockDoor Free",
+                "dockdoor.net"
+            ],
+            "url": "https://dockdoor.net/"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "@id": "https://dockdoor.net/#app",
+            "name": "DockDoor",
+            "alternateName": "DockDoor Free",
+            "description": "Free, open-source Mac app that shows live window previews when you hover an app in the Dock, and adds Windows-style Alt+Tab window switching and keyboard window controls.",
+            "url": "https://dockdoor.net/",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "macOS 13 Ventura or later",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "isAccessibleForFree": true,
+            "downloadUrl": "https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg",
+            "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+            "image": "https://dockdoor.net/resources/web/icon-320.webp",
+            "screenshot": "https://dockdoor.net/resources/web/og.jpg",
+            "author": {
+                "@type": "Person",
+                "name": "Ethan Bills",
+                "url": "https://github.com/ejbills"
+            },
+            "sameAs": [
+                "https://github.com/ejbills/DockDoor",
+                "https://formulae.brew.sh/cask/dockdoor"
+            ]
+        },
+        {
+            "@type": "SoftwareApplication",
+            "@id": "https://pro.dockdoor.net/#app",
+            "name": "DockDoor Pro",
+            "description": "A separate paid Mac app from the developer of DockDoor that replaces the macOS Dock, with spring magnification, folders that fan out, a file tray with AirDrop, widgets, profiles and window previews.",
+            "url": "https://pro.dockdoor.net/",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "macOS",
+            "offers": {
+                "@type": "Offer",
+                "price": "20",
+                "priceCurrency": "USD"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "Ethan Bills",
+                "url": "https://github.com/ejbills"
+            }
+        }
+    ]
+}
     </script>
 </head>
 
@@ -52,7 +109,7 @@
     <header class="nav-wrap">
         <nav class="nav glass" aria-label="Main">
             <a href="#top" class="nav-brand" aria-label="DockDoor home">
-                <img src="/resources/web/icon-256.webp" alt="" width="28" height="28">
+                <img src="/resources/web/icon-128.webp" alt="" width="28" height="28">
                 <span>DockDoor</span>
             </a>
             <ul class="nav-links" id="nav-links">
@@ -60,8 +117,8 @@
                 <li><a href="#privacy">Privacy</a></li>
                 <li><a href="#pro">DockDoor Pro</a></li>
                 <li><a href="#faq">FAQ</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="donate.html">Donate</a></li>
+                <li><a href="/docs">Docs</a></li>
+                <li><a href="/donate">Donate</a></li>
             </ul>
             <a href="#download" class="btn btn-ink btn-sm nav-cta">Download</a>
             <button class="nav-menu" id="nav-menu" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
@@ -75,7 +132,7 @@
             <div class="wrap hero-grid">
                 <h1 class="hero-title">Every window, one hover away.</h1>
                 <div class="hero-side">
-                    <p class="hero-lead">DockDoor adds live window previews to the Dock you already have, plus Alt+Tab switching and keyboard controls, all in Liquid Glass. Free, open source, and nothing leaves your Mac.</p>
+                    <p class="hero-lead">Point at any app in the Dock to see all of its open windows, like the taskbar on Windows. DockDoor also adds Alt+Tab window switching and keyboard controls, in Liquid Glass. Free, open source, and nothing leaves your Mac.</p>
                     <div class="hero-actions">
                         <a class="btn btn-ink btn-lg donation-prompt" href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg">Download for Mac</a>
                         <button class="btn btn-quiet btn-lg copy-cmd" type="button" data-copy="brew install --cask dockdoor" aria-label="Copy the Homebrew install command">
@@ -309,7 +366,7 @@
                     <circle class="pv-ring pv-ring-2" cx="210" cy="150" r="90"/>
                     <path class="pv-link" d="M95.8 106.1L144.7 124.9"/><path class="pv-cut" d="M142.3 119.4L147.1 130.3M139.2 127.3L150.1 122.4"/><g transform="translate(69.7 96.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-6 6V1M0 6V-6M6 6V-2"/></g></g><path class="pv-link" d="M210.0 70.0L210.0 80.0"/><path class="pv-cut" d="M214.2 75.8L205.8 84.2M205.8 75.8L214.2 84.2"/><g transform="translate(210.0 42.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-8 0c2.2-3.6 5-5.4 8-5.4S5.8-3.6 8 0c-2.2 3.6-5 5.4-8 5.4S-5.8 3.6-8 0z"/><circle r="2.3"/></g></g><path class="pv-link" d="M324.2 106.1L275.3 124.9"/><path class="pv-cut" d="M280.8 127.3L269.9 122.4M277.7 119.4L272.9 130.3"/><g transform="translate(350.3 96.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-5.5 4.5h10a3.6 3.6 0 0 0 .4-7.2A5.2 5.2 0 0 0-4.8-3.4a4 4 0 0 0-.7 7.9z"/></g></g><path class="pv-link" d="M324.2 193.9L275.3 175.1"/><path class="pv-cut" d="M277.7 180.6L272.9 169.7M280.8 172.7L269.9 177.6"/><g transform="translate(350.3 204.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><ellipse rx="3.6" ry="5"/><path d="M0-5v10M-3.6-1h-3.4M3.6-1h3.4M-3.4 3l-3 2M3.4 3l3 2M-2.6-4.6l-2-2.4M2.6-4.6l2-2.4"/></g></g><path class="pv-link" d="M210.0 230.0L210.0 220.0"/><path class="pv-cut" d="M205.8 224.2L214.2 215.8M214.2 224.2L205.8 215.8"/><g transform="translate(210.0 258.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M-7-2.5v5h3l7 4v-13l-7 4z"/><path d="M5.5-2.5a3.5 3.5 0 0 1 0 5"/></g></g><path class="pv-link" d="M95.8 193.9L144.7 175.1"/><path class="pv-cut" d="M139.2 172.7L150.1 177.6M142.3 180.6L147.1 169.7"/><g transform="translate(69.7 204.0)"><circle class="pv-node" r="23"/><g class="pv-glyph"><path d="M0 7s5.5-5.2 5.5-9.3a5.5 5.5 0 0 0-11 0C-5.5 1.8 0 7 0 7z"/><circle cy="-2.3" r="1.9"/></g></g>
                     <rect class="pv-icon-shadow" x="166" y="110" width="88" height="88" rx="20"/>
-                    <image href="/resources/web/icon-256.webp" x="166" y="106" width="88" height="88" clip-path="url(#pv-icon-clip)"/>
+                    <image href="/resources/web/icon-128.webp" x="166" y="106" width="88" height="88" clip-path="url(#pv-icon-clip)"/>
                 </svg>
                 <div class="privacy-text">
                     <h2>Nothing leaves your Mac.</h2>
@@ -381,7 +438,7 @@
 
         <section class="download" id="download">
             <div class="wrap download-inner">
-                <span class="app-icon"><img class="download-icon" src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@2x.png" alt="DockDoor app icon" width="160" height="160" loading="lazy" decoding="async"></span>
+                <span class="app-icon"><img class="download-icon" src="/resources/web/icon-320.webp" alt="DockDoor app icon" width="160" height="160" loading="lazy" decoding="async"></span>
                 <h2>Get DockDoor.</h2>
                 <p class="download-lead">Free for macOS 13 Ventura and later. Notarized by Apple, and it keeps itself up to date.</p>
                 <div class="hero-actions download-actions">
@@ -421,6 +478,24 @@
                     <p>Can't find an answer? Ask on <a href="https://discord.gg/TZeRs73hFb" class="text-link">Discord</a> or <a href="https://github.com/ejbills/DockDoor/issues" class="text-link">GitHub</a>.</p>
                 </div>
                 <div class="faq-list">
+                    <details name="faq">
+                        <summary>How do I see all the open windows of an app on my Mac?</summary>
+                        <div class="faq-a">
+                            <p>macOS doesn't show window previews in the Dock on its own. With DockDoor installed, point at an app's icon in the Dock and all of its open windows appear as small pictures. Click the one you want to bring it to the front.</p>
+                        </div>
+                    </details>
+                    <details name="faq">
+                        <summary>Is there an Alt+Tab for Mac like on Windows?</summary>
+                        <div class="faq-a">
+                            <p>Command-Tab on a Mac switches between apps, not windows. DockDoor adds Option-Tab, which shows every open window so you can pick the exact one, like Alt+Tab on Windows. You can change the shortcut in Settings.</p>
+                        </div>
+                    </details>
+                    <details name="faq">
+                        <summary>Is DockDoor easy to set up?</summary>
+                        <div class="faq-a">
+                            <p>Yes. Download it, drag it to your Applications folder and open it. macOS asks you to allow Accessibility and Screen Recording, which DockDoor needs to find your windows and show their previews. After that, point at any app in the Dock.</p>
+                        </div>
+                    </details>
                     <details name="faq">
                         <summary>Where should I download DockDoor from?</summary>
                         <div class="faq-a">
@@ -502,7 +577,7 @@
                     <details name="faq">
                         <summary>How can I help?</summary>
                         <div class="faq-a">
-                            <p>Report bugs or send code on <a href="https://github.com/ejbills/DockDoor">GitHub</a>, translate it on <a href="https://crowdin.com/project/dockdoor">Crowdin</a>, or <a href="donate.html">support development</a>.</p>
+                            <p>Report bugs or send code on <a href="https://github.com/ejbills/DockDoor">GitHub</a>, translate it on <a href="https://crowdin.com/project/dockdoor">Crowdin</a>, or <a href="/donate">support development</a>.</p>
                         </div>
                     </details>
                 </div>
@@ -523,7 +598,7 @@
     <footer class="footer">
         <div class="wrap footer-grid">
             <div class="footer-brand">
-                <p class="footer-name"><img src="/resources/web/icon-256.webp" alt="" width="32" height="32"> DockDoor</p>
+                <p class="footer-name"><img src="/resources/web/icon-128.webp" alt="" width="32" height="32"> DockDoor</p>
                 <p>Free and open source under GPL-3.0.<br>Made by <a href="https://github.com/ejbills">Ethan Bills</a> and contributors.</p>
             </div>
             <nav class="footer-cols" aria-label="Footer">
@@ -531,7 +606,7 @@
                     <p class="footer-h">DockDoor</p>
                     <a href="#features">Features</a>
                     <a href="#download">Download</a>
-                    <a href="docs.html">Docs and AppleScript</a>
+                    <a href="/docs">Docs and AppleScript</a>
                     <a href="https://github.com/ejbills/DockDoor/releases">Release notes</a>
                 </div>
                 <div>
@@ -539,7 +614,7 @@
                     <a href="https://github.com/ejbills/DockDoor">GitHub</a>
                     <a href="https://discord.gg/TZeRs73hFb">Discord</a>
                     <a href="https://crowdin.com/project/dockdoor">Translate</a>
-                    <a href="donate.html">Donate</a>
+                    <a href="/donate">Donate</a>
                 </div>
                 <div>
                     <p class="footer-h">Same developer</p>
@@ -552,12 +627,12 @@
     <div class="modal" id="donation-modal" hidden>
         <div class="modal-backdrop" data-close></div>
         <div class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <img src="/resources/web/icon-256.webp" alt="" width="64" height="64" class="modal-icon">
+            <img src="/resources/web/icon-128.webp" alt="" width="64" height="64" class="modal-icon">
             <h2 id="modal-title">Your download is ready.</h2>
             <p>DockDoor is an independent, open-source project that stays free because people chip in. If it earns a spot on your Mac, even $3 helps.</p>
             <div class="modal-actions">
                 <a href="#" class="btn btn-ink" id="proceed-to-download">Download DockDoor</a>
-                <a href="donate.html" class="btn btn-quiet">Support development</a>
+                <a href="/donate" class="btn btn-quiet">Support development</a>
             </div>
             <button class="modal-close" type="button" data-close aria-label="Close">
                 <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>

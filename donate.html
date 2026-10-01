@@ -4,14 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Support DockDoor: donate with GitHub Sponsors</title>
-    <meta name="description" content="Support DockDoor's development through GitHub Sponsors. Help keep this free, privacy-first Mac app alive and growing.">
+    <title>Support DockDoor: Donate to a Free, Open-Source Mac App</title>
+    <meta name="description" content="Support DockDoor, the free window preview and Alt+Tab app for the Mac Dock, through GitHub Sponsors or Buy Me a Coffee.">
     <meta name="theme-color" content="#F4F5F7">
-    <meta property="og:title" content="Support DockDoor">
-    <meta property="og:description" content="Support DockDoor's development through GitHub Sponsors. Help keep this free, privacy-first Mac app alive and growing.">
+    <meta property="og:site_name" content="DockDoor">
+    <meta property="og:title" content="Support DockDoor: Donate to a Free, Open-Source Mac App">
+    <meta property="og:description" content="Support DockDoor, the free window preview and Alt+Tab app for the Mac Dock, through GitHub Sponsors or Buy Me a Coffee.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dockdoor.net/donate">
     <meta property="og:image" content="https://dockdoor.net/resources/web/og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://dockdoor.net/donate">
     <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-128x128@1x.png">
     <link rel="apple-touch-icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@1x.png">
@@ -19,6 +21,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "DockDoor",
+            "item": "https://dockdoor.net/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Support DockDoor",
+            "item": "https://dockdoor.net/donate"
+        }
+    ]
+}
+    </script>
 </head>
 
 <body class="page-donate">
@@ -30,19 +52,19 @@
 
     <header class="nav-wrap">
         <nav class="nav glass" aria-label="Main">
-            <a href="index.html" class="nav-brand" aria-label="DockDoor home">
-                <img src="/resources/web/icon-256.webp" alt="" width="28" height="28">
+            <a href="/" class="nav-brand" aria-label="DockDoor home">
+                <img src="/resources/web/icon-128.webp" alt="" width="28" height="28">
                 <span>DockDoor</span>
             </a>
             <ul class="nav-links" id="nav-links">
-                <li><a href="index.html#features">Features</a></li>
-                <li><a href="index.html#privacy">Privacy</a></li>
-                <li><a href="index.html#pro">DockDoor Pro</a></li>
-                <li><a href="index.html#faq">FAQ</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="donate.html" aria-current="page">Donate</a></li>
+                <li><a href="/#features">Features</a></li>
+                <li><a href="/#privacy">Privacy</a></li>
+                <li><a href="/#pro">DockDoor Pro</a></li>
+                <li><a href="/#faq">FAQ</a></li>
+                <li><a href="/docs">Docs</a></li>
+                <li><a href="/donate" aria-current="page">Donate</a></li>
             </ul>
-            <a href="index.html#download" class="btn btn-ink btn-sm nav-cta">Download</a>
+            <a href="/#download" class="btn btn-ink btn-sm nav-cta">Download</a>
             <button class="nav-menu" id="nav-menu" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
                 <span></span><span></span>
             </button>
@@ -51,7 +73,7 @@
 
     <main id="main" class="donate">
         <div class="wrap donate-inner">
-            <span class="app-icon"><img class="download-icon" src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@2x.png" alt="DockDoor app icon" width="160" height="160"></span>
+            <span class="app-icon"><img class="download-icon" src="/resources/web/icon-320.webp" alt="DockDoor app icon" width="160" height="160"></span>
             <h1>Support DockDoor</h1>
             <p class="donate-lead">DockDoor is an independent, open-source project with no investors and no ads. Donations pay for the time it takes to keep it free, private and working on every new macOS.</p>
             <div class="donate-actions">
@@ -65,15 +87,15 @@
     <footer class="footer">
         <div class="wrap footer-grid">
             <div class="footer-brand">
-                <p class="footer-name"><img src="/resources/web/icon-256.webp" alt="" width="32" height="32"> DockDoor</p>
+                <p class="footer-name"><img src="/resources/web/icon-128.webp" alt="" width="32" height="32"> DockDoor</p>
                 <p>Free and open source under GPL-3.0.<br>Made by <a href="https://github.com/ejbills">Ethan Bills</a> and contributors.</p>
             </div>
             <nav class="footer-cols" aria-label="Footer">
                 <div>
                     <p class="footer-h">DockDoor</p>
-                    <a href="index.html#features">Features</a>
-                    <a href="index.html#download">Download</a>
-                    <a href="docs.html">Docs and AppleScript</a>
+                    <a href="/#features">Features</a>
+                    <a href="/#download">Download</a>
+                    <a href="/docs">Docs and AppleScript</a>
                     <a href="https://github.com/ejbills/DockDoor/releases">Release notes</a>
                 </div>
                 <div>
@@ -81,7 +103,7 @@
                     <a href="https://github.com/ejbills/DockDoor">GitHub</a>
                     <a href="https://discord.gg/TZeRs73hFb">Discord</a>
                     <a href="https://crowdin.com/project/dockdoor">Translate</a>
-                    <a href="donate.html">Donate</a>
+                    <a href="/donate">Donate</a>
                 </div>
                 <div>
                     <p class="footer-h">Same developer</p>
