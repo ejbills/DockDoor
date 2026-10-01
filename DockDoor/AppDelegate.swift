@@ -143,8 +143,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if reopenEventIsFromSystemContextDaemon() {
+            DebugLogger.log("Reopen", details: "Ignoring reopen event from system context daemon")
+            return false
+        }
         openSettingsWindow(nil)
         return false
+    }
+
+    private func reopenEventIsFromSystemContextDaemon() -> Bool {
+        guard let event = NSAppleEventManager.shared().currentAppleEvent,
+              let pid = event.attributeDescriptor(forKeyword: AEKeyword(keySenderPIDAttr))?.int32Value,
+              pid > 0
+        else { return false }
+        var buffer = [CChar](repeating: 0, count: Int(MAXPATHLEN))
+        guard proc_pidpath(pid, &buffer, UInt32(buffer.count)) > 0 else { return false }
+        return String(cString: buffer).hasSuffix("/intelligencecontextd")
     }
 
     func applicationWillTerminate(_ notification: Notification) {
