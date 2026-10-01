@@ -1,33 +1,38 @@
 import Cocoa
 import Defaults
 
+struct RunningDockItem {
+    let app: NSRunningApplication
+    let element: AXUIElement
+    let frame: CGRect
+}
+
 /// Handles dock item detection and indicator positioning calculations.
 enum ActiveAppIndicatorDockDetection {
+    static func dockList() -> AXUIElement? {
+        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
+              let children = try? AXUIElementCreateApplication(dockApp.processIdentifier).children()
+        else { return nil }
+        return children.first { (try? $0.role()) == kAXListRole }
+    }
+
+    static func isDockShown(listFrame: CGRect?) -> Bool {
+        guard let listFrame else { return false }
+        let screens = NSScreen.screens
+        guard let index = DockLockerGeometry.screenIndexHoldingDock(
+            dockRect: listFrame,
+            screenFrames: screens.map(\.cgFrame),
+            dockPosition: DockUtils.getDockPosition()
+        ) else { return false }
+        return screens[index].cgFrame.contains(CGPoint(x: listFrame.midX, y: listFrame.midY))
+    }
+
     /// Finds the dock item frame for a given running application.
     /// - Parameter app: The running application to find in the dock.
     /// - Returns: The frame of the dock item, or nil if not found.
     static func getDockItemFrame(for app: NSRunningApplication) -> CGRect? {
-        guard let bundleIdentifier = app.bundleIdentifier else { return nil }
-
-        // Get the Dock application
-        guard
-            let dockApp = NSRunningApplication.runningApplications(
-                withBundleIdentifier: "com.apple.dock"
-            ).first
-        else {
-            return nil
-        }
-
-        let dockElement = AXUIElementCreateApplication(
-            dockApp.processIdentifier
-        )
-
-        // Navigate to the dock's list of items
-        guard let children = try? dockElement.children(),
-              let axList = children.first(where: { element in
-                  (try? element.role()) == kAXListRole
-              }),
-              let dockItems = try? axList.children()
+        guard let bundleIdentifier = app.bundleIdentifier,
+              let dockItems = try? dockList()?.children()
         else {
             return nil
         }
@@ -44,27 +49,31 @@ enum ActiveAppIndicatorDockDetection {
                 let itemBundle = Bundle(url: itemURL),
                 itemBundle.bundleIdentifier == bundleIdentifier
             {
-                return getFrameForDockItem(item)
+                return frame(of: item)
             }
 
             // Check by running app if bundle ID check failed
             if let itemTitle = try? item.title(),
                itemTitle == app.localizedName
             {
-                return getFrameForDockItem(item)
+                return frame(of: item)
             }
         }
 
         return nil
     }
 
-    /// Gets the frame for a dock item from accessibility.
-    private static func getFrameForDockItem(_ item: AXUIElement) -> CGRect? {
-        guard let position = try? item.position(),
-              let size = try? item.size()
+    /// Gets the frame for a dock element from accessibility.
+    static func frame(of element: AXUIElement) -> CGRect? {
+        guard let position = try? element.position(),
+              let size = try? element.size()
         else { return nil }
 
         return CGRect(origin: position, size: size)
+    }
+
+    static func appKitFrame(of element: AXUIElement) -> CGRect? {
+        frame(of: element).map(appKitFrame(fromAccessibilityFrame:))
     }
 
     private static func appKitFrame(fromAccessibilityFrame frame: CGRect) -> CGRect {
@@ -154,26 +163,13 @@ enum ActiveAppIndicatorDockDetection {
         return (dotSize, autoSize.height, offset)
     }
 
-    static func getRunningAppDockItems() -> [(app: NSRunningApplication, frame: CGRect)] {
-        guard
-            let dockApp = NSRunningApplication.runningApplications(
-                withBundleIdentifier: "com.apple.dock"
-            ).first
-        else {
-            return []
-        }
-
-        let dockElement = AXUIElementCreateApplication(dockApp.processIdentifier)
-
-        guard let children = try? dockElement.children(),
-              let axList = children.first(where: { (try? $0.role()) == kAXListRole }),
-              let dockItems = try? axList.children()
-        else {
+    static func getRunningAppDockItems() -> [RunningDockItem] {
+        guard let dockItems = try? dockList()?.children() else {
             return []
         }
 
         let runningApps = NSWorkspace.shared.runningApplications
-        var results: [(app: NSRunningApplication, frame: CGRect)] = []
+        var results: [RunningDockItem] = []
 
         for item in dockItems {
             guard let subrole = try? item.subrole(),
@@ -191,8 +187,8 @@ enum ActiveAppIndicatorDockDetection {
                 matched = runningApps.first { $0.localizedName == itemTitle }
             }
 
-            guard let matched, let frame = getFrameForDockItem(item) else { continue }
-            results.append((matched, appKitFrame(fromAccessibilityFrame: frame)))
+            guard let matched, let frame = appKitFrame(of: item) else { continue }
+            results.append(RunningDockItem(app: matched, element: item, frame: frame))
         }
 
         return results

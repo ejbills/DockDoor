@@ -5,6 +5,14 @@ import SwiftUI
 /// Manages the active app indicator that shows a line next to the currently active app in the dock.
 /// Supports bottom, left, and right dock positions.
 final class ActiveAppIndicatorCoordinator {
+    private struct TrackedDot {
+        let pid: pid_t
+        let element: AXUIElement
+        var frame: CGRect
+        let hasWindows: Bool
+        let isFrontmost: Bool
+    }
+
     static var shared: ActiveAppIndicatorCoordinator?
 
     private var indicatorWindow: ActiveAppIndicatorWindow?
@@ -14,11 +22,23 @@ final class ActiveAppIndicatorCoordinator {
 
     private var dockLayoutObserver: AXObserver?
     private var observedDockList: AXUIElement?
+    private var lastDockListFrame: CGRect?
+
+    private var hiddenDockMouseMonitor: Any?
+    private var dockListCheckPending = false
+    private var dockHidesInCurrentSpace = false
 
     private var currentActiveApp: NSRunningApplication?
+    private var trackedDots: [TrackedDot] = []
 
     private var delayedUpdateTimer: Timer?
     private let delayedUpdateInterval: TimeInterval = 0.6
+
+    private var layoutTrackingTimer: Timer?
+    private var layoutTrackingDeadline: CFTimeInterval = 0
+    private static let layoutTrackingDuration: CFTimeInterval = 0.6
+    private static let layoutTrackingSettle: CFTimeInterval = 0.15
+    private static let layoutTrackingInterval: TimeInterval = 1.0 / 60
 
     private static let animationDuration: TimeInterval = 0.25
 
@@ -26,6 +46,10 @@ final class ActiveAppIndicatorCoordinator {
     private var lastKnownDockPosition: DockPosition
     private var lastKnownDockSize: CGFloat
     private var isDockCurrentlyVisible: Bool = true
+
+    private var showsRunningAppDots: Bool {
+        Defaults[.activeAppIndicatorStyle] == .runningAppDots
+    }
 
     init() {
         lastKnownDockPosition = DockUtils.getDockPosition()
@@ -103,11 +127,12 @@ final class ActiveAppIndicatorCoordinator {
         }
 
         var observer: AXObserver?
-        guard AXObserverCreate(dockPID, { _, _, _, refcon in
+        guard AXObserverCreate(dockPID, { _, _, notification, refcon in
             guard let refcon else { return }
             let coordinator = Unmanaged<ActiveAppIndicatorCoordinator>.fromOpaque(refcon).takeUnretainedValue()
+            let itemsChanged = (notification as String) != kAXSelectedChildrenChangedNotification
             DispatchQueue.main.async {
-                coordinator.handleDockLayoutChanged()
+                coordinator.handleDockLayoutChanged(itemsChanged: itemsChanged)
             }
         }, &observer) == .success, let observer else {
             return
@@ -124,21 +149,46 @@ final class ActiveAppIndicatorCoordinator {
         observedDockList = dockList
     }
 
-    private func handleDockLayoutChanged() {
-        hideIndicatorIfDockChangedScreens()
-        scheduleDelayedUpdate()
-    }
-
-    func handleSpaceChanged() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.updateDockVisibilityState()
+    private func handleDockLayoutChanged(itemsChanged: Bool) {
+        let listMoved = followDockList()
+        if itemsChanged || listMoved {
+            trackDockLayout(refreshingDots: itemsChanged)
+        }
+        if !showsRunningAppDots {
+            hideIndicatorIfDockChangedScreens()
+            scheduleDelayedUpdate()
+        } else if !itemsChanged, !listMoved {
+            scheduleDelayedUpdate()
         }
     }
 
-    private func updateDockVisibilityState() {
-        let isVisible = DockObserver.isDockVisible()
+    func handleSpaceChanged() {
+        dockHidesInCurrentSpace = false
+        trackDockLayout(refreshingDots: false)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            updateDockVisibilityState(listFrame: currentDockListFrame())
+        }
+    }
 
-        guard isVisible != isDockCurrentlyVisible else { return }
+    private func currentDockListFrame() -> CGRect? {
+        if let observedDockList, let frame = ActiveAppIndicatorDockDetection.frame(of: observedDockList) {
+            return frame
+        }
+        return ActiveAppIndicatorDockDetection.dockList().flatMap(ActiveAppIndicatorDockDetection.frame(of:))
+    }
+
+    @discardableResult
+    private func updateDockVisibilityState(listFrame: CGRect?) -> Bool {
+        lastDockListFrame = listFrame
+        let autoHide = CoreDockGetAutoHideEnabled()
+        let isVisible = !autoHide && ActiveAppIndicatorDockDetection.isDockShown(listFrame: listFrame)
+        if !autoHide, !isVisible {
+            dockHidesInCurrentSpace = true
+        }
+        updateHiddenDockMouseMonitor(enabled: dockHidesInCurrentSpace && !autoHide)
+
+        guard isVisible != isDockCurrentlyVisible else { return false }
         isDockCurrentlyVisible = isVisible
 
         if isVisible {
@@ -147,6 +197,64 @@ final class ActiveAppIndicatorCoordinator {
             }
         } else {
             animateHideIndicator()
+        }
+        return true
+    }
+
+    @discardableResult
+    private func followDockList() -> Bool {
+        let listFrame = currentDockListFrame()
+        guard listFrame != lastDockListFrame else { return false }
+        let visibilityChanged = updateDockVisibilityState(listFrame: listFrame)
+        if !visibilityChanged, isDockCurrentlyVisible, showsRunningAppDots {
+            repositionTrackedDots()
+        }
+        return true
+    }
+
+    private func updateHiddenDockMouseMonitor(enabled: Bool) {
+        if enabled, hiddenDockMouseMonitor == nil {
+            hiddenDockMouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged]) { [weak self] _ in
+                self?.scheduleDockListCheck()
+            }
+        } else if !enabled, let monitor = hiddenDockMouseMonitor {
+            NSEvent.removeMonitor(monitor)
+            hiddenDockMouseMonitor = nil
+        }
+    }
+
+    private func scheduleDockListCheck() {
+        guard !dockListCheckPending else { return }
+        dockListCheckPending = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            guard let self else { return }
+            dockListCheckPending = false
+            if followDockList() {
+                trackDockLayout(refreshingDots: false)
+            }
+        }
+    }
+
+    private func trackDockLayout(refreshingDots: Bool = true) {
+        layoutTrackingDeadline = max(layoutTrackingDeadline, CACurrentMediaTime() + Self.layoutTrackingDuration)
+        if refreshingDots, showsRunningAppDots {
+            updateRunningAppDots()
+        }
+        guard layoutTrackingTimer == nil else { return }
+        layoutTrackingTimer = Timer.scheduledTimer(withTimeInterval: Self.layoutTrackingInterval, repeats: true) { [weak self] timer in
+            guard let self else {
+                timer.invalidate()
+                return
+            }
+            if followDockList() {
+                layoutTrackingDeadline = max(layoutTrackingDeadline, CACurrentMediaTime() + Self.layoutTrackingSettle)
+            }
+            guard CACurrentMediaTime() >= layoutTrackingDeadline else { return }
+            timer.invalidate()
+            layoutTrackingTimer = nil
+            if showsRunningAppDots {
+                updateRunningAppDots()
+            }
         }
     }
 
@@ -164,7 +272,9 @@ final class ActiveAppIndicatorCoordinator {
         }
         dockLayoutObserver = nil
         observedDockList = nil
+        updateHiddenDockMouseMonitor(enabled: false)
         delayedUpdateTimer?.invalidate()
+        layoutTrackingTimer?.invalidate()
         positionSettingsObserver?.invalidate()
         hideIndicator()
     }
@@ -184,12 +294,21 @@ final class ActiveAppIndicatorCoordinator {
             scheduleDelayedUpdate()
         }
 
-        updateDockVisibilityState()
+        updateDockVisibilityState(listFrame: currentDockListFrame())
+        trackDockLayout()
     }
 
     // MARK: - Dock Item Change Notifications
 
     func notifyDockItemsChanged() {
+        if showsRunningAppDots {
+            trackDockLayout()
+        } else {
+            scheduleDelayedUpdate()
+        }
+    }
+
+    func notifyWindowsChanged() {
         scheduleDelayedUpdate()
     }
 
@@ -280,7 +399,7 @@ final class ActiveAppIndicatorCoordinator {
         currentActiveApp = app
 
         guard app.bundleIdentifier != "com.apple.dock" else {
-            if Defaults[.activeAppIndicatorStyle] == .runningAppDots {
+            if showsRunningAppDots {
                 updateRunningAppDots()
             } else {
                 animateHideIndicator()
@@ -288,11 +407,15 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        isDockCurrentlyVisible = DockObserver.isDockVisible()
-
-        let isNewApp = previousApp?.bundleIdentifier != app.bundleIdentifier
-        updateIndicatorPosition(for: app, widenFromCenter: isNewApp)
-        scheduleDelayedUpdate()
+        let visibilityChanged = updateDockVisibilityState(listFrame: currentDockListFrame())
+        if !showsRunningAppDots {
+            if !visibilityChanged {
+                let isNewApp = previousApp?.bundleIdentifier != app.bundleIdentifier
+                updateIndicatorPosition(for: app, widenFromCenter: isNewApp)
+            }
+            scheduleDelayedUpdate()
+        }
+        trackDockLayout(refreshingDots: !visibilityChanged)
     }
 
     private func updateIndicatorPosition(for app: NSRunningApplication, widenFromCenter: Bool = false) {
@@ -305,7 +428,7 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        if Defaults[.activeAppIndicatorStyle] == .runningAppDots {
+        if showsRunningAppDots {
             updateRunningAppDots()
             return
         }
@@ -359,22 +482,45 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func updateRunningAppDots() {
-        guard let indicatorWindow, isDockCurrentlyVisible else {
+        guard isDockCurrentlyVisible else {
             indicatorWindow?.orderOut(self)
             return
         }
 
-        let dockPosition = DockUtils.getDockPosition()
-        guard ActiveAppIndicatorPositioning.isSupported(dockPosition) else {
-            indicatorWindow.orderOut(self)
-            return
+        let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
+        let windowedPIDs = Self.pidsWithVisibleWindows()
+        trackedDots = ActiveAppIndicatorDockDetection.getRunningAppDockItems().map { item in
+            let pid = item.app.processIdentifier
+            return TrackedDot(
+                pid: pid,
+                element: item.element,
+                frame: item.frame,
+                hasWindows: windowedPIDs.contains(pid) || !WindowUtil.readCachedWindows(for: pid).isEmpty,
+                isFrontmost: pid == frontmostPID
+            )
         }
+        layoutTrackedDots()
+    }
 
-        let items = ActiveAppIndicatorDockDetection.getRunningAppDockItems()
-        guard let firstItem = items.first,
+    private func repositionTrackedDots() {
+        trackedDots = trackedDots.compactMap { dot in
+            guard let frame = ActiveAppIndicatorDockDetection.appKitFrame(of: dot.element) else { return nil }
+            var dot = dot
+            dot.frame = frame
+            return dot
+        }
+        layoutTrackedDots()
+    }
+
+    private func layoutTrackedDots() {
+        guard let indicatorWindow else { return }
+
+        let dockPosition = DockUtils.getDockPosition()
+        guard ActiveAppIndicatorPositioning.isSupported(dockPosition),
+              let firstDot = trackedDots.first,
               let screen = CGPoint(
-                  x: firstItem.frame.midX,
-                  y: firstItem.frame.midY
+                  x: firstDot.frame.midX,
+                  y: firstDot.frame.midY
               ).screen()
         else {
             indicatorWindow.orderOut(self)
@@ -386,7 +532,7 @@ final class ActiveAppIndicatorCoordinator {
             dockPosition: dockPosition
         )
         guard let centerLine = ActiveAppIndicatorPositioning.calculateIndicatorFrame(
-            for: firstItem.frame,
+            for: firstDot.frame,
             dockPosition: dockPosition,
             indicatorThickness: metrics.thickness,
             indicatorOffset: metrics.offset,
@@ -396,37 +542,41 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
         let dotSize = metrics.dotSize
-        let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
-        let windowedPIDs = Self.pidsWithVisibleWindows()
 
         let shift = Defaults[.activeAppIndicatorShift]
-        let dotCenters = items.map { item in
+        let dotCenters = trackedDots.map { dot in
             dockPosition == .bottom
-                ? CGPoint(x: item.frame.midX + shift, y: centerLine.midY)
-                : CGPoint(x: centerLine.midX + shift, y: item.frame.midY)
+                ? CGPoint(x: dot.frame.midX + shift, y: centerLine.midY)
+                : CGPoint(x: centerLine.midX + shift, y: dot.frame.midY)
         }
-        let panelFrame = dotCenters
-            .map { CGRect(x: $0.x - dotSize / 2, y: $0.y - dotSize / 2, width: dotSize, height: dotSize) }
-            .reduce(CGRect.null) { $0.union($1) }
-            .integral
+        let panelFrame = (dockPosition == .bottom
+            ? CGRect(x: screen.frame.minX, y: centerLine.midY - dotSize / 2, width: screen.frame.width, height: dotSize)
+            : CGRect(x: centerLine.midX + shift - dotSize / 2, y: screen.frame.minY, width: dotSize, height: screen.frame.height)
+        ).integral
 
-        let dots: [DockAppDot] = zip(items, dotCenters).map { item, center in
-            let pid = item.app.processIdentifier
-            let hasWindows = windowedPIDs.contains(pid)
-                || !WindowUtil.readCachedWindows(for: pid).isEmpty
-            return DockAppDot(
-                id: pid,
+        let dots: [DockAppDot] = zip(trackedDots, dotCenters).map { dot, center in
+            DockAppDot(
+                id: dot.pid,
                 center: CGPoint(x: center.x - panelFrame.minX, y: panelFrame.maxY - center.y),
                 size: dotSize,
-                hasWindows: hasWindows,
-                isFrontmost: pid == frontmostPID
+                hasWindows: dot.hasWindows,
+                isFrontmost: dot.isFrontmost
             )
         }
 
+        let wasShowing = indicatorWindow.isVisible && indicatorWindow.frame.intersects(screen.frame)
         indicatorWindow.updateDots(dots)
-        indicatorWindow.setFrame(panelFrame, display: true)
-        indicatorWindow.alphaValue = 1
+        if indicatorWindow.frame != panelFrame {
+            indicatorWindow.setFrame(panelFrame, display: true)
+        }
+        guard !wasShowing else { return }
+
+        indicatorWindow.alphaValue = 0
         indicatorWindow.orderFront(self)
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = Self.animationDuration
+            indicatorWindow.animator().alphaValue = 1
+        }
     }
 
     private static func pidsWithVisibleWindows() -> Set<pid_t> {
@@ -452,7 +602,7 @@ final class ActiveAppIndicatorCoordinator {
     private func animateHideIndicator() {
         guard let indicatorWindow, indicatorWindow.isVisible else { return }
 
-        guard Defaults[.activeAppIndicatorStyle] == .bar else {
+        guard !showsRunningAppDots else {
             indicatorWindow.orderOut(nil)
             return
         }

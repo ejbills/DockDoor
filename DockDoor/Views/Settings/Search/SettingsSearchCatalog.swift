@@ -76,6 +76,14 @@ enum SettingsSearchCatalog {
             icon: "number.circle"
         ),
         SettingsSearchItem(
+            id: "general.indicatorHighlightFrontmost",
+            title: String(localized: "Highlight the frontmost app"),
+            keywords: ["indicator", "dots", "frontmost", "dim", "gray", "contrast", "two colors"],
+            tab: "General",
+            section: String(localized: "Active App Indicator"),
+            icon: "circle.lefthalf.filled"
+        ),
+        SettingsSearchItem(
             id: "general.indicatorAutoSize",
             title: String(localized: "Automatically set height and offset"),
             keywords: ["indicator", "auto", "height", "offset"],

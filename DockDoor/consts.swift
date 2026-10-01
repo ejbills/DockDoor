@@ -291,6 +291,7 @@ extension Defaults.Keys {
     static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
     static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
     static let activeAppIndicatorStyle = Key<ActiveAppIndicatorStyle>("activeAppIndicatorStyle", default: .bar)
+    static let activeAppIndicatorHighlightFrontmost = Key<Bool>("activeAppIndicatorHighlightFrontmost", default: true)
 
     // MARK: - Trackpad Gestures
 

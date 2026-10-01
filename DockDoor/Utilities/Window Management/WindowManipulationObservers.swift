@@ -237,19 +237,19 @@ class WindowManipulationObservers {
         let pid = app.processIdentifier
         guard pid != ProcessInfo.processInfo.processIdentifier else { return }
 
-        DebugLogger.measure("createObserverForApp", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))") {
-            var observer: AXObserver?
-            let result = AXObserverCreate(pid, axObserverCallback, &observer)
-            guard result == .success, let observer else { return }
+        var observer: AXObserver?
+        guard AXObserverCreate(pid, axObserverCallback, &observer) == .success, let observer else { return }
+        CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
+        observers[pid] = observer
 
-            let appElement = AXUIElementCreateApplication(pid)
-            for notification in observedAXNotifications {
-                AXObserverAddNotification(observer, appElement, notification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        let details = "App: \(app.localizedName ?? "Unknown") (PID: \(pid))"
+        DispatchQueue.global(qos: .userInitiated).async {
+            DebugLogger.measure("createObserverForApp", details: details) {
+                let appElement = AXUIElementCreateApplication(pid)
+                for notification in observedAXNotifications {
+                    AXObserverAddNotification(observer, appElement, notification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+                }
             }
-
-            CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
-
-            observers[pid] = observer
         }
     }
 
@@ -282,7 +282,7 @@ class WindowManipulationObservers {
 
     private func notifyRunningAppDotsIfNeeded() {
         guard Defaults[.showActiveAppIndicator], Defaults[.activeAppIndicatorStyle] == .runningAppDots else { return }
-        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+        ActiveAppIndicatorCoordinator.shared?.notifyWindowsChanged()
     }
 
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
@@ -336,7 +336,7 @@ class WindowManipulationObservers {
                 }
             }
             if Defaults[.showActiveAppIndicator] {
-                ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+                ActiveAppIndicatorCoordinator.shared?.notifyWindowsChanged()
             }
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in

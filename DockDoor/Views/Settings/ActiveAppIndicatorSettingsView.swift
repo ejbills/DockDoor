@@ -13,6 +13,7 @@ struct ActiveAppIndicatorSettingsView: View {
     @Default(.activeAppIndicatorLength) var activeAppIndicatorLength
     @Default(.activeAppIndicatorShift) var activeAppIndicatorShift
     @Default(.activeAppIndicatorStyle) var activeAppIndicatorStyle
+    @Default(.activeAppIndicatorHighlightFrontmost) var activeAppIndicatorHighlightFrontmost
 
     @State private var currentDockSize: CGFloat = 0
 
@@ -60,11 +61,23 @@ struct ActiveAppIndicatorSettingsView: View {
                     .padding(.leading, 20)
 
                     if activeAppIndicatorStyle == .runningAppDots {
-                        Text(
-                            "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
-                        )
+                        Group {
+                            if activeAppIndicatorHighlightFrontmost {
+                                Text(
+                                    "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
+                                )
+                            } else {
+                                Text("Shows a dot under every running application: bright for apps with open windows, black for apps with none.")
+                            }
+                        }
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                        Toggle(isOn: $activeAppIndicatorHighlightFrontmost) {
+                            Text("Highlight the frontmost app")
+                        }
+                        .settingsSearchTarget("general.indicatorHighlightFrontmost")
                         .padding(.leading, 20)
                     }
 

@@ -86106,6 +86106,9 @@
         }
       }
     },
+    "Highlight the frontmost app" : {
+
+    },
     "Highlight the second window instead of the first when opening." : {
       "localizations" : {
         "af" : {
@@ -165323,6 +165326,9 @@
           }
         }
       }
+    },
+    "Shows a dot under every running application: bright for apps with open windows, black for apps with none." : {
+
     },
     "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none." : {
       "localizations" : {
