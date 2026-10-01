@@ -1084,10 +1084,11 @@ kbd {
 }
 
 .pro-clip {
-    margin-top: 18px;
+    width: 100%;
+    margin-top: 14px;
     overflow: hidden;
     border: 1px solid rgba(255, 248, 236, 0.14);
-    border-radius: 14px;
+    border-radius: 12px;
     background: #10140c;
 }
 
@@ -1157,9 +1158,20 @@ kbd {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px 14px;
-    margin-top: 14px;
+    margin-top: auto;
+    padding-top: 14px;
     font-size: 13.5px;
     color: var(--p-mute);
+}
+
+.btn-ghost-dark {
+    background: rgba(255, 248, 236, 0.08);
+    color: var(--p-ink);
+    box-shadow: inset 0 0 0 1px rgba(255, 248, 236, 0.14);
+}
+
+.btn-ghost-dark:hover {
+    background: rgba(255, 248, 236, 0.14);
 }
 
 .btn-pro {
@@ -1796,6 +1808,30 @@ kbd {
     .pro {
         margin-inline: 6px;
         border-radius: 28px;
+    }
+
+    .pro-row {
+        gap: 12px;
+    }
+
+    .pro-intro {
+        padding: 0 2px 8px;
+    }
+
+    .pro h2 {
+        font-size: 1.75rem;
+    }
+
+    .pro-app {
+        padding: 18px;
+    }
+
+    .pro-app h3 {
+        font-size: 1.15rem;
+    }
+
+    .pro-app h3 + p {
+        font-size: 15px;
     }
 
     .download-actions .btn {
