@@ -3,6 +3,74 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.40.3b1</title>
+            <pubDate>Thu, 01 Oct 2026 14:38:33 -0700</pubDate>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.40.3b1</sparkle:version>
+            <sparkle:shortVersionString>1.40.3b1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;BETA RELEASE WARNING&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This is an unstable pre-release version intended for testing purposes only.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;✨ New Features&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Adjustable corner roundness for previews&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Use the new Corner Radius slider in Settings &amp;gt; Appearance &amp;gt; General Appearance, from 0 to 40 pt (default 20)&lt;/li&gt;
+  &lt;li&gt;The slider appears when &amp;quot;uniform card radius&amp;quot; is turned on&lt;/li&gt;
+  &lt;li&gt;Search for it in settings with &amp;quot;rounded&amp;quot;, &amp;quot;corners&amp;quot;, &amp;quot;radius&amp;quot;, or &amp;quot;roundness&amp;quot;&lt;/li&gt;
+  &lt;li&gt;Applies to preview cards, compact rows, windowless-app cards, the outer container, and the search bar&lt;/li&gt;
+  &lt;li&gt;Also applies to the calendar and media widgets, pinned widgets, and the drag-over highlight&lt;/li&gt;
+  &lt;li&gt;Preview images can now go fully square, with no minimum rounding&lt;/li&gt;
+  &lt;li&gt;The Settings preview and any open previews update as you move the slider&lt;/li&gt;
+  &lt;li&gt;The search bar&amp;#x27;s roundness and background update live when you change corner radius, padding, or uniform card radius&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Two-color running app dots option&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Turn off &amp;quot;Highlight the frontmost app&amp;quot; in Settings &amp;gt; General &amp;gt; Active App Indicator, with the style set to &amp;quot;Running app dots&amp;quot;&lt;/li&gt;
+  &lt;li&gt;Off gives bright dots for apps with open windows and black dots for apps with none&lt;/li&gt;
+  &lt;li&gt;On (default) keeps three states: bright for the frontmost app, dimmed for apps with windows, and black for apps with none&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+&lt;h3&gt;🔧 Improvements &amp;amp; Stability&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Running app dots follow the Dock live&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Dots keep up with magnification, adding or removing icons, Dock resizing or moving, and switching Spaces&lt;/li&gt;
+  &lt;li&gt;Dots fade in smoothly&lt;/li&gt;
+  &lt;li&gt;Color changes no longer make the row jump&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Less stutter when launching apps&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Opening an app no longer briefly freezes DockDoor&lt;/li&gt;
+  &lt;li&gt;Dots update more smoothly as windows open and close&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+&lt;h3&gt;🐛 Bug Fixes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Running app dots appear when the Dock is summoned over a full-screen app&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Dots show when you reveal an auto-hidden Dock and disappear when it hides again&lt;/li&gt;
+  &lt;li&gt;Find the option in Settings &amp;gt; General &amp;gt; Active App Indicator, style &amp;quot;Running app dots&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Liquid Glass backgrounds on short elements render as clean pills&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Fixes distortion on the search bar and compact rows when the corner radius is large&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Search bar hint shows your current search shortcut&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;The &amp;quot;Press &amp;lt;key&amp;gt; to search windows…&amp;quot; text no longer shows an old key after you change it in Settings&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Siri no longer opens DockDoor Settings&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Clicking the app icon or relaunching DockDoor still opens Settings&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+</description>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.40.3b1/DockDoor.dmg" length="22466483" type="application/octet-stream" sparkle:edSignature="FPR3dIdIq5X9kDCXlBFAGikYQ3WRApxEKdQRoP+IobDZ80Qt5HISol8FjMLRHYiXmssLFV2Xj44ABmYYAoh7AQ==" />
+        </item>
+    <item>
             <title>1.40.2</title>
             <pubDate>Wed, 30 Sep 2026 13:36:57 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
