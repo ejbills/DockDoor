@@ -66,6 +66,10 @@ final class DockObserver {
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
     private static let postingCanarySubtype: Int16 = 0x0D0D
+    private static let postingCanaryInputWindow: TimeInterval = 10
+    private static let hardwareInputTypes: [CGEventType] = [
+        .mouseMoved, .leftMouseDown, .leftMouseDragged, .rightMouseDown, .otherMouseDown, .scrollWheel, .keyDown, .flagsChanged,
+    ]
     private(set) static var canPostEvents = true
     private var postingCanaryMonitor: Any?
     private var postingCanaryPending = false
@@ -177,24 +181,9 @@ final class DockObserver {
             return
         }
 
-        if postingCanaryPending {
-            postingCanaryMisses += 1
-            if postingCanaryMisses >= 2, DockObserver.canPostEvents {
-                updateCanPostEvents(false)
-            }
+        if DockObserver.secondsSinceHardwareInput < DockObserver.postingCanaryInputWindow {
+            sendPostingCanary()
         }
-        postingCanaryPending = true
-        NSEvent.otherEvent(
-            with: .applicationDefined,
-            location: .zero,
-            modifierFlags: [],
-            timestamp: 0,
-            windowNumber: 0,
-            context: nil,
-            subtype: DockObserver.postingCanarySubtype,
-            data1: 0,
-            data2: 0
-        )?.cgEvent?.postToPid(getpid())
 
         guard let currentDockPID else {
             setupSelectedDockItemObserver()
@@ -239,6 +228,31 @@ final class DockObserver {
         } else {
             setupEventTap()
         }
+    }
+
+    private static var secondsSinceHardwareInput: TimeInterval {
+        hardwareInputTypes.map { CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: $0) }.min() ?? .infinity
+    }
+
+    private func sendPostingCanary() {
+        if postingCanaryPending {
+            postingCanaryMisses += 1
+            if postingCanaryMisses >= 2, DockObserver.canPostEvents {
+                updateCanPostEvents(false)
+            }
+        }
+        postingCanaryPending = true
+        NSEvent.otherEvent(
+            with: .applicationDefined,
+            location: .zero,
+            modifierFlags: [],
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            subtype: DockObserver.postingCanarySubtype,
+            data1: 0,
+            data2: 0
+        )?.cgEvent?.postToPid(getpid())
     }
 
     private func postingCanaryArrived() {
