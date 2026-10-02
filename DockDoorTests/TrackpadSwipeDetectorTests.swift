@@ -100,10 +100,45 @@ struct TrackpadSwipeDetectorTests {
     @Test func movingWhileOpenCyclesSelection() {
         var detector = TrackpadSwipeDetector()
         open(&detector)
-        #expect(detector.handle(fingers(3, x: 0.27), fingers: 3, horizontal: true) == nil)
-        #expect(detector.handle(fingers(3, x: 0.3), fingers: 3, horizontal: true) == .cycleForward)
-        #expect(detector.handle(fingers(3, x: 0.35), fingers: 3, horizontal: true) == .cycleForward)
-        #expect(detector.handle(fingers(3, x: 0.3), fingers: 3, horizontal: true) == .cycleBackward)
+        #expect(detector.handle(fingers(3, x: 0.3), fingers: 3, horizontal: true) == nil)
+        #expect(detector.handle(fingers(3, x: 0.38), fingers: 3, horizontal: true) == nil)
+        #expect(detector.handle(fingers(3, x: 0.4), fingers: 3, horizontal: true) == .cycleForward)
+        #expect(detector.handle(fingers(3, x: 0.45), fingers: 3, horizontal: true) == .cycleForward)
+        #expect(detector.handle(fingers(3, x: 0.4), fingers: 3, horizontal: true) == .cycleBackward)
+    }
+
+    @Test func firstCycleRequiresMoreTravelThanLaterCycles() {
+        var detector = TrackpadSwipeDetector()
+        open(&detector)
+        // 0.1 beyond the open point: enough for two cycles under the old constant spacing.
+        #expect(detector.handle(fingers(3, x: 0.35), fingers: 3, horizontal: true) == nil)
+        #expect(detector.handle(fingers(3, x: 0.4), fingers: 3, horizontal: true) == .cycleForward)
+        // After the first cycle the distance shrinks back to `cycleDistance`.
+        #expect(detector.handle(fingers(3, x: 0.45), fingers: 3, horizontal: true) == .cycleForward)
+    }
+
+    @Test func diagonalSwipeDoesNotOpen() {
+        var detector = TrackpadSwipeDetector()
+        _ = detector.handle(fingers(3, x: 0.2, y: 0.2), fingers: 3, horizontal: true)
+        // 45 degrees: as much travel across the axis as along it.
+        #expect(detector.handle(fingers(3, x: 0.26, y: 0.26), fingers: 3, horizontal: true) == nil)
+        #expect(!detector.isSwitching)
+    }
+
+    @Test func moderatelyDiagonalSwipeOpensOnceItStraightensOut() {
+        var detector = TrackpadSwipeDetector()
+        _ = detector.handle(fingers(3, x: 0.2, y: 0.2), fingers: 3, horizontal: true)
+        _ = detector.handle(fingers(3, x: 0.26, y: 0.26), fingers: 3, horizontal: true)
+        // Continuing straight along the axis makes the original travel dominant again.
+        #expect(detector.handle(fingers(3, x: 0.4, y: 0.26), fingers: 3, horizontal: true) == .open)
+    }
+
+    @Test func verticalSwipeCyclesAlongItsAxis() {
+        var detector = TrackpadSwipeDetector()
+        _ = detector.handle(fingers(3, x: 0.2, y: 0.2), fingers: 3, horizontal: false)
+        #expect(detector.handle(fingers(3, x: 0.2, y: 0.26), fingers: 3, horizontal: false) == .open)
+        #expect(detector.handle(fingers(3, x: 0.25, y: 0.42), fingers: 3, horizontal: false) == .cycleForward)
+        #expect(detector.handle(fingers(3, x: 0.25, y: 0.37), fingers: 3, horizontal: false) == .cycleBackward)
     }
 
     @Test func liftingFingersReleases() {

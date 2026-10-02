@@ -16,13 +16,18 @@ enum TrackpadSwipeEvent: Equatable {
 /// Positions are fractions of the trackpad surface (`NSTouch.normalizedPosition`).
 struct TrackpadSwipeDetector {
     static let openDistance: CGFloat = 0.03
+    /// Travel required after opening before the first cycle, so a normal-length swipe
+    /// does not blow past the intended window. Later cycles use `cycleDistance`.
+    static let firstCycleDistance: CGFloat = 0.15
     static let cycleDistance: CGFloat = 0.04
     static let maxOffAxisDistance: CGFloat = 0.1
+    static let axisDominanceRatio: CGFloat = 1.5
 
     private var startPositions: [Int: CGPoint] = [:]
     /// Set when this finger-down session was used for something else (extra fingers, off-axis travel).
     /// Cleared once at most one finger is left on the trackpad.
     private var isSpent = false
+    private var hasCycled = false
     private(set) var isSwitching = false
 
     /// `touches` must be every finger currently on the trackpad.
@@ -35,10 +40,12 @@ struct TrackpadSwipeDetector {
                 return .release
             }
             guard let deltas = travel(touches) else { return nil }
-            let averageX = deltas.map(\.x).reduce(0, +) / CGFloat(deltas.count)
-            guard abs(averageX) >= Self.cycleDistance else { return nil }
+            let averageAlong = deltas.map { horizontal ? $0.x : $0.y }.reduce(0, +) / CGFloat(deltas.count)
+            let threshold = hasCycled ? Self.cycleDistance : Self.firstCycleDistance
+            guard abs(averageAlong) >= threshold else { return nil }
+            hasCycled = true
             rebase(touches)
-            return averageX > 0 ? .cycleForward : .cycleBackward
+            return averageAlong > 0 ? .cycleForward : .cycleBackward
         }
 
         if touches.count <= 1 {
@@ -69,8 +76,10 @@ struct TrackpadSwipeDetector {
         let allPositive = alongAxis.allSatisfy { $0 >= Self.openDistance }
         let allNegative = alongAxis.allSatisfy { $0 <= -Self.openDistance }
         guard allPositive || allNegative else { return nil }
+        guard zip(alongAxis.map(abs), acrossAxis).allSatisfy({ $0 > $1 * Self.axisDominanceRatio }) else { return nil }
 
         isSwitching = true
+        hasCycled = false
         rebase(touches)
         return .open
     }
@@ -109,6 +118,12 @@ final class TrackpadSwipeTrigger {
         removeEventTap()
     }
 
+    func reset() {
+        removeEventTap()
+        detector = TrackpadSwipeDetector()
+        setupEventTap()
+    }
+
     private static let eventCallback: CGEventTapCallBack = { _, type, event, refcon in
         guard let refcon else { return Unmanaged.passUnretained(event) }
         let trigger = Unmanaged<TrackpadSwipeTrigger>.fromOpaque(refcon).takeUnretainedValue()
@@ -122,7 +137,7 @@ final class TrackpadSwipeTrigger {
     }
 
     private func setupEventTap() {
-        // Listen-only, so the WindowServer never waits on us while fingers are on the trackpad.
+        guard eventTap == nil else { return }
         guard let tap = CGEvent.tapCreate(
             tap: .cghidEventTap,
             place: .headInsertEventTap,
@@ -160,16 +175,14 @@ final class TrackpadSwipeTrigger {
     private func handle(_ cgEvent: CGEvent) {
         guard let nsEvent = NSEvent(cgEvent: cgEvent) else { return }
         let touches = nsEvent.allTouches().filter { $0.type == .indirect }
-        // macOS sends empty gesture events between real ones; they carry nothing to act on.
         guard !touches.isEmpty else { return }
 
-        let down = touches.filter { NSTouch.Phase.touching.contains($0.phase) }
-        // A single finger is just pointing, so skip reading positions for it.
+        let down = touches.filter { NSTouch.Phase.touching.contains($0.phase) && !$0.isResting }
         let swipeTouches = down.count > 1
             ? down.map { SwipeTouch(id: $0.identity.hash, position: $0.normalizedPosition) }
             : []
 
-        let fingers = Defaults[.trackpadSwitcherSwipeFingers]
+        let fingers = min(max(Defaults[.trackpadSwitcherSwipeFingers], 3), 4)
         let horizontal = Defaults[.trackpadSwitcherSwipeDirection] == .horizontal
         guard let event = detector.handle(swipeTouches, fingers: fingers, horizontal: horizontal) else { return }
 
