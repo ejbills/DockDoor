@@ -38,6 +38,17 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.4"></a>
+# [Release 1.40.4](https://github.com/ejbills/DockDoor/releases/tag/1.40.4) - 2026-10-02
+
+## 🐛 Bug Fixes
+- Stuck dock and preview clicks now recover on their own
+  - Fixes clicks on the dock or DockDoor previews that stop responding after macOS temporarily blocks DockDoor from sending input
+
+
+[Changes][1.40.4]
+
+
 <a id="1.40.3"></a>
 # [Release 1.40.3](https://github.com/ejbills/DockDoor/releases/tag/1.40.3) - 2026-10-02
 
@@ -2465,6 +2476,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.4]: https://github.com/ejbills/DockDoor/compare/1.40.3...1.40.4
 [1.40.3]: https://github.com/ejbills/DockDoor/compare/1.40.2...1.40.3
 [1.40.2]: https://github.com/ejbills/DockDoor/compare/1.40.1...1.40.2
 [1.40.1]: https://github.com/ejbills/DockDoor/compare/1.40.0...1.40.1
