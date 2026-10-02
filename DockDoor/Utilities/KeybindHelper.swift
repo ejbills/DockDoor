@@ -22,6 +22,8 @@ private class WindowSwitchingCoordinator {
     private var currentSessionId = UUID()
     /// When true, initialization should complete but immediately select the window instead of showing UI
     private var shouldSelectImmediately = false
+    /// True while the current switcher session was opened by a trackpad swipe rather than the keyboard.
+    var trackpadOpenedCurrentSession = false
 
     private static var lastUpdateAllWindowsTime: Date?
     private static let updateAllWindowsThrottleInterval: TimeInterval = 5.0
@@ -403,10 +405,8 @@ class KeybindHelper {
         self.previewCoordinator = previewCoordinator
         setupEventTap()
         startMonitoring()
-        if Defaults[.enableWindowSwitcher], Defaults[.enableTrackpadSwitcherSwipe] {
-            trackpadSwipeTrigger = TrackpadSwipeTrigger { [weak self] event in
-                self?.handleTrackpadSwipe(event)
-            }
+        trackpadSwipeTrigger = TrackpadSwipeTrigger { [weak self] event in
+            self?.handleTrackpadSwipe(event)
         }
     }
 
@@ -415,6 +415,7 @@ class KeybindHelper {
         resetState()
         setupEventTap()
         startMonitoring()
+        trackpadSwipeTrigger?.reset()
     }
 
     func recover() {
@@ -977,19 +978,27 @@ class KeybindHelper {
 
     @MainActor
     private func handleTrackpadSwipe(_ event: TrackpadSwipeEvent) {
-        switch event {
-        case .open, .cycleForward, .cycleBackward:
-            Task { @MainActor in
+        // Every event takes the same number of main-actor hops, so a fast open-release
+        // pair cannot overtake each other when the main actor is busy.
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            switch event {
+            case .open, .cycleForward, .cycleBackward:
+                guard Defaults[.enableWindowSwitcher], Defaults[.enableTrackpadSwitcherSwipe] else { return }
+                if event == .open {
+                    guard !WindowUtil.shouldIgnoreKeybindForFrontmostApp() else { return }
+                    windowSwitchingCoordinator.trackpadOpenedCurrentSession = true
+                }
                 await windowSwitchingCoordinator.handleWindowSwitching(
                     previewCoordinator: previewCoordinator,
                     isModifierPressed: event == .open,
                     isShiftPressed: event == .cycleBackward
                 )
+            case .release:
+                guard windowSwitchingCoordinator.trackpadOpenedCurrentSession else { return }
+                guard !Defaults[.preventSwitcherHide], !previewCoordinator.isSearchWindowFocused else { return }
+                selectOnSwitcherRelease()
             }
-        case .release:
-            // Same rules as releasing the keyboard modifier: stay open if the user asked the switcher not to hide.
-            guard !Defaults[.preventSwitcherHide], !previewCoordinator.isSearchWindowFocused else { return }
-            selectOnSwitcherRelease()
         }
     }
 
@@ -1266,6 +1275,7 @@ class KeybindHelper {
         isShiftPressed: Bool? = nil
     ) {
         guard Defaults[.enableWindowSwitcher] else { return }
+        windowSwitchingCoordinator.trackpadOpenedCurrentSession = false
         hasProcessedModifierRelease = false
         currentInvocationMode = mode
         let modifierPressedForActivation = isModifierPressed ?? isSwitcherModifierKeyPressed
