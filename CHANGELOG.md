@@ -38,6 +38,32 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.3"></a>
+# [Release 1.40.3](https://github.com/ejbills/DockDoor/releases/tag/1.40.3) - 2026-10-02
+
+## ✨ New Features
+- Adjustable corner radius for previews
+  - Use the Corner Radius slider in Settings > Appearance > General Appearance, from 0 to 40 pt (default 20 pt)
+- Two-color running app dots
+  - Turn "Highlight the frontmost app" on or off in Settings > General > Active App Indicator, available when the style is "Running app dots"
+
+## 🔧 Improvements & Stability
+- Running app dots follow the Dock as it animates
+- Running app dots fade in smoothly
+- Search bar corners fixed
+
+## 🐛 Bug Fixes
+- Mac can dim and sleep normally again
+- Running app dots show when the Dock is summoned over a full-screen app
+- Running app dots stay accurate across Spaces and multiple displays
+- Settings no longer opens by itself when Siri or Apple Intelligence runs in the background
+- Liquid Glass corners no longer look distorted on the search bar or small cards with a large corner radius
+- Search bar hint shows your current search shortcut after you change it
+
+
+[Changes][1.40.3]
+
+
 <a id="1.40.2"></a>
 # [Release 1.40.2](https://github.com/ejbills/DockDoor/releases/tag/1.40.2) - 2026-09-30
 
@@ -2439,6 +2465,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.3]: https://github.com/ejbills/DockDoor/compare/1.40.2...1.40.3
 [1.40.2]: https://github.com/ejbills/DockDoor/compare/1.40.1...1.40.2
 [1.40.1]: https://github.com/ejbills/DockDoor/compare/1.40.0...1.40.1
 [1.40.0]: https://github.com/ejbills/DockDoor/compare/1.39.5...1.40.0
