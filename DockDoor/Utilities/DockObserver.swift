@@ -2,6 +2,7 @@ import ApplicationServices
 import Carbon.HIToolbox.Events
 import Cocoa
 import Defaults
+import IOKit
 
 struct ApplicationInfo: Sendable {
     let processIdentifier: pid_t
@@ -66,14 +67,11 @@ final class DockObserver {
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
     private static let postingCanarySubtype: Int16 = 0x0D0D
-    private static let postingCanaryInputWindow: TimeInterval = 10
-    private static let hardwareInputTypes: [CGEventType] = [
-        .mouseMoved, .leftMouseDown, .leftMouseDragged, .rightMouseDown, .otherMouseDown, .scrollWheel, .keyDown, .flagsChanged,
-    ]
     private(set) static var canPostEvents = true
     private var postingCanaryMonitor: Any?
     private var postingCanaryPending = false
     private var postingCanaryMisses = 0
+    private var lastPostingCanaryUptime: TimeInterval = 0
     private var subscribedDockList: AXUIElement?
     private var accessibilityPromptShown = false
     private var awaitingAccessibilityGrant = false
@@ -181,7 +179,7 @@ final class DockObserver {
             return
         }
 
-        if DockObserver.secondsSinceHardwareInput < DockObserver.postingCanaryInputWindow {
+        if hasInputSinceLastPostingCanary {
             sendPostingCanary()
         }
 
@@ -230,8 +228,17 @@ final class DockObserver {
         }
     }
 
-    private static var secondsSinceHardwareInput: TimeInterval {
-        hardwareInputTypes.map { CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: $0) }.min() ?? .infinity
+    private var hasInputSinceLastPostingCanary: Bool {
+        guard let idle = DockObserver.hidIdleSeconds else { return true }
+        return idle + 0.5 < ProcessInfo.processInfo.systemUptime - lastPostingCanaryUptime
+    }
+
+    private static var hidIdleSeconds: TimeInterval? {
+        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOHIDSystem"))
+        guard service != IO_OBJECT_NULL else { return nil }
+        defer { IOObjectRelease(service) }
+        let idle = IORegistryEntryCreateCFProperty(service, "HIDIdleTime" as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue() as? NSNumber
+        return idle.map { $0.doubleValue / 1_000_000_000 }
     }
 
     private func sendPostingCanary() {
@@ -253,6 +260,7 @@ final class DockObserver {
             data1: 0,
             data2: 0
         )?.cgEvent?.postToPid(getpid())
+        lastPostingCanaryUptime = ProcessInfo.processInfo.systemUptime
     }
 
     private func postingCanaryArrived() {
