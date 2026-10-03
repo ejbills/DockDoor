@@ -435,47 +435,59 @@ extension WindowInfo {
         WindowUtil.moveWindowToCurrentManagedSpace(self, mouseLocation: mouseLocation)
     }
 
+    // AXRaise and AXMain wait for the target app, which can take hundreds of ms when it is busy
+    private static let axRaiseQueue = DispatchQueue(label: "com.ethanbills.DockDoor.axRaise", qos: .userInteractive)
+
     func bringToFront() {
         guard !isWindowlessApp else {
             app.activate(options: [.activateIgnoringOtherApps])
             return
         }
-        let maxRetries = 3
-        var retryCount = 0
 
-        func attemptActivation() -> Bool {
-            do {
-                var psn = ProcessSerialNumber()
-                _ = GetProcessForPID(ownerApp.processIdentifier, &psn)
-                _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
+        var psn = ProcessSerialNumber()
+        _ = GetProcessForPID(ownerApp.processIdentifier, &psn)
+        _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
+        WindowUtil.makeKeyWindow(&psn, windowID: id)
 
-                WindowUtil.makeKeyWindow(&psn, windowID: id)
+        let window = self
+        WindowInfo.axRaiseQueue.async {
+            let maxRetries = 3
+            var retryCount = 0
 
-                try axElement.performAction(kAXRaiseAction)
-                try axElement.setAttribute(kAXMainWindowAttribute, true)
+            func attemptActivation() -> Bool {
+                do {
+                    var psn = ProcessSerialNumber()
+                    _ = GetProcessForPID(window.ownerApp.processIdentifier, &psn)
+                    _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(window.id), SLPSMode.userGenerated.rawValue)
 
-                return true
-            } catch {
-                print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
-                if error is AxError {
-                    WindowUtil.removeWindowFromDesktopSpaceCache(with: id, in: app.processIdentifier)
+                    WindowUtil.makeKeyWindow(&psn, windowID: window.id)
+
+                    try window.axElement.performAction(kAXRaiseAction)
+                    try window.axElement.setAttribute(kAXMainWindowAttribute, true)
+
+                    return true
+                } catch {
+                    print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
+                    if error is AxError {
+                        WindowUtil.removeWindowFromDesktopSpaceCache(with: window.id, in: window.app.processIdentifier)
+                    }
+                    return false
                 }
-                return false
             }
-        }
 
-        while retryCount < maxRetries {
-            if attemptActivation() {
-                WindowUtil.updateTimestampOptimistically(for: self)
-                return
+            while retryCount < maxRetries {
+                if attemptActivation() {
+                    WindowUtil.updateTimestampOptimistically(for: window)
+                    return
+                }
+                retryCount += 1
+                if retryCount < maxRetries {
+                    usleep(50000)
+                }
             }
-            retryCount += 1
-            if retryCount < maxRetries {
-                usleep(50000)
-            }
-        }
 
-        print("Failed to bring window to front after \(maxRetries) attempts")
+            print("Failed to bring window to front after \(maxRetries) attempts")
+        }
     }
 
     func warpMouseToCenterIfNeeded() {
