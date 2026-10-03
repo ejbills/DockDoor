@@ -31,12 +31,17 @@ struct WindowInfo: Identifiable, Hashable {
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, ownerApp: NSRunningApplication? = nil, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, ownerApp: NSRunningApplication? = nil, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool, readsAXTitle: Bool = true) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
         self.ownerApp = ownerApp ?? app
-        windowName = (try? axElement.title()) ?? windowProvider.title
+        // Synchronous AX read: blocks until the app answers or the messaging timeout ends
+        if readsAXTitle, !AXResponsiveness.isUnresponsive(app.processIdentifier) {
+            windowName = (try? axElement.title()) ?? windowProvider.title
+        } else {
+            windowName = windowProvider.title
+        }
         frame = windowProvider.frame
         self.image = image
         self.axElement = axElement
@@ -109,7 +114,8 @@ extension WindowInfo {
             closeButton: nil,
             lastAccessedTime: .distantPast,
             isMinimized: false,
-            isHidden: false
+            isHidden: false,
+            readsAXTitle: false
         )
         info.isWindowlessApp = true
         return info
