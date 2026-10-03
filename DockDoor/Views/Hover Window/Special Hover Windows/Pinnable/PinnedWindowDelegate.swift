@@ -25,6 +25,7 @@ extension SharedPreviewWindowCoordinator {
     }
 
     /// Create a pinned window for a specific view type
+    @available(macOS 15.0, *)
     @MainActor
     func createPinnedWindow(appName: String, bundleIdentifier: String, type: PinnableViewType, isEmbedded: Bool = false, preservePosition: CGPoint? = nil) {
         let key = "\(bundleIdentifier)-\(type.rawValue)"
@@ -49,7 +50,6 @@ extension SharedPreviewWindowCoordinator {
         window.collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
         window.hidesOnDeactivate = false
         window.becomesKeyOnlyIfNeeded = true
-        window.isMovableByWindowBackground = true
         window.animationBehavior = .none
 
         let contentView = switch type {
@@ -120,6 +120,7 @@ extension SharedPreviewWindowCoordinator {
     }
 
     /// Toggle between full and compact mode for a pinned window
+    @available(macOS 15.0, *)
     @MainActor
     func togglePinnedWindowMode(key: String) {
         guard let entry = pinnedWindows[key] else { return }

@@ -3,7 +3,7 @@ import Foundation
 enum SettingsSearchCatalog {
     static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
         + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
-        + widgetItems + advancedItems + supportItems
+        + widgetItems + pinningItems + advancedItems + supportItems
 
     // MARK: - General
 
@@ -1580,15 +1580,6 @@ enum SettingsSearchCatalog {
             icon: "rectangle.expand.vertical"
         ),
         SettingsSearchItem(
-            id: "widgets.pinning",
-            title: String(localized: "Allow pinning controls to screen"),
-            description: String(localized: "Right-click a media or calendar widget to pin it."),
-            keywords: ["pin", "stick", "float", "always"],
-            tab: "Widgets",
-            section: String(localized: "Display"),
-            icon: "pin"
-        ),
-        SettingsSearchItem(
             id: "widgets.scrollBehavior",
             title: String(localized: "Behavior:"),
             description: String(localized: "Controls what happens when you scroll on the media widget preview."),
@@ -1656,6 +1647,21 @@ enum SettingsSearchCatalog {
             icon: "eye"
         ),
     ]
+
+    private static let pinningItems: [SettingsSearchItem] = {
+        guard #available(macOS 15.0, *) else { return [] }
+        return [
+            SettingsSearchItem(
+                id: "widgets.pinning",
+                title: String(localized: "Allow pinning controls to screen"),
+                description: String(localized: "Right-click a media or calendar widget to pin it."),
+                keywords: ["pin", "stick", "float", "always"],
+                tab: "Widgets",
+                section: String(localized: "Display"),
+                icon: "pin"
+            ),
+        ]
+    }()
 
     // MARK: - Advanced
 
