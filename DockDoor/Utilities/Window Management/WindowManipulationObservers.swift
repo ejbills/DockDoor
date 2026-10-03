@@ -258,14 +258,14 @@ class WindowManipulationObservers {
     }
 
     func removeObserver(for pid: pid_t) {
-        guard let observer = observers[pid] else { return }
+        guard let observer = observers.removeValue(forKey: pid) else { return }
 
-        let appElement = AXUIElementCreateApplication(pid)
-        for notification in observedAXNotifications {
-            AXObserverRemoveNotification(observer, appElement, notification as CFString)
+        DispatchQueue.global(qos: .utility).async {
+            let appElement = AXUIElementCreateApplication(pid)
+            for notification in observedAXNotifications {
+                AXObserverRemoveNotification(observer, appElement, notification as CFString)
+            }
         }
-
-        observers.removeValue(forKey: pid)
     }
 
     func handleNewWindow(for pid: pid_t) {
