@@ -88,7 +88,6 @@ class PreviewStateCoordinator: ObservableObject {
         window.spaceID.flatMap { desktopNumbers[$0] }
     }
 
-    // Read from WindowServer (front-to-back): asking a busy app over AX blocks the main thread
     private static func currentFocusedWindowID(in windows: [WindowInfo]) -> CGWindowID? {
         guard let activeApp = windows.first(where: { $0.app.isActive })?.app else { return nil }
         let candidateIDs = Set(windows.filter { $0.app.processIdentifier == activeApp.processIdentifier }.map(\.id))

@@ -36,7 +36,6 @@ struct WindowInfo: Identifiable, Hashable {
         self.windowProvider = windowProvider
         self.app = app
         self.ownerApp = ownerApp ?? app
-        // Synchronous AX read: blocks until the app answers or the messaging timeout ends
         if readsAXTitle, !AXResponsiveness.isUnresponsive(app.processIdentifier) {
             windowName = (try? axElement.title()) ?? windowProvider.title
         } else {
@@ -435,7 +434,6 @@ extension WindowInfo {
         WindowUtil.moveWindowToCurrentManagedSpace(self, mouseLocation: mouseLocation)
     }
 
-    // AXRaise and AXMain wait for the target app, which can take hundreds of ms when it is busy
     private static let axRaiseQueue = DispatchQueue(label: "com.ethanbills.DockDoor.axRaise", qos: .userInteractive)
 
     func bringToFront() {
@@ -456,11 +454,12 @@ extension WindowInfo {
 
             func attemptActivation() -> Bool {
                 do {
-                    var psn = ProcessSerialNumber()
-                    _ = GetProcessForPID(window.ownerApp.processIdentifier, &psn)
-                    _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(window.id), SLPSMode.userGenerated.rawValue)
-
-                    WindowUtil.makeKeyWindow(&psn, windowID: window.id)
+                    if retryCount > 0 {
+                        var psn = ProcessSerialNumber()
+                        _ = GetProcessForPID(window.ownerApp.processIdentifier, &psn)
+                        _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(window.id), SLPSMode.userGenerated.rawValue)
+                        WindowUtil.makeKeyWindow(&psn, windowID: window.id)
+                    }
 
                     try window.axElement.performAction(kAXRaiseAction)
                     try window.axElement.setAttribute(kAXMainWindowAttribute, true)
