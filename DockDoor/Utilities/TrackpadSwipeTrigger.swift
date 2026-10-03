@@ -13,24 +13,18 @@ enum TrackpadSwipeEvent: Equatable {
     case release
 }
 
-/// Positions are fractions of the trackpad surface (`NSTouch.normalizedPosition`).
 struct TrackpadSwipeDetector {
     static let openDistance: CGFloat = 0.03
-    /// Travel required after opening before the first cycle, so a normal-length swipe
-    /// does not blow past the intended window. Later cycles use `cycleDistance`.
     static let firstCycleDistance: CGFloat = 0.15
     static let cycleDistance: CGFloat = 0.04
     static let maxOffAxisDistance: CGFloat = 0.1
     static let axisDominanceRatio: CGFloat = 1.5
 
     private var startPositions: [Int: CGPoint] = [:]
-    /// Set when this finger-down session was used for something else (extra fingers, off-axis travel).
-    /// Cleared once at most one finger is left on the trackpad.
     private var isSpent = false
     private var hasCycled = false
     private(set) var isSwitching = false
 
-    /// `touches` must be every finger currently on the trackpad.
     mutating func handle(_ touches: [SwipeTouch], fingers: Int, horizontal: Bool) -> TrackpadSwipeEvent? {
         if isSwitching {
             if touches.count < fingers {
@@ -72,7 +66,6 @@ struct TrackpadSwipeDetector {
             isSpent = true
             return nil
         }
-        // Every finger has to travel the same way, so pinches and spreads don't count.
         let allPositive = alongAxis.allSatisfy { $0 >= Self.openDistance }
         let allNegative = alongAxis.allSatisfy { $0 <= -Self.openDistance }
         guard allPositive || allNegative else { return nil }
@@ -84,7 +77,6 @@ struct TrackpadSwipeDetector {
         return .open
     }
 
-    /// Per-finger travel since the gesture started, or nil when a finger is new and the measurement restarts.
     private mutating func travel(_ touches: [SwipeTouch]) -> [CGPoint]? {
         let deltas = touches.compactMap { touch -> CGPoint? in
             guard let start = startPositions[touch.id] else { return nil }
@@ -102,10 +94,10 @@ struct TrackpadSwipeDetector {
     }
 }
 
-/// Listens to trackpad touches and reports swipes that should drive the window switcher.
 final class TrackpadSwipeTrigger {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
+    private var unmanagedSelf: Unmanaged<TrackpadSwipeTrigger>?
     private var detector = TrackpadSwipeDetector()
     private let onSwipe: @MainActor (TrackpadSwipeEvent) -> Void
 
@@ -114,13 +106,8 @@ final class TrackpadSwipeTrigger {
         setupEventTap()
     }
 
-    deinit {
-        removeEventTap()
-    }
-
     func reset() {
         removeEventTap()
-        detector = TrackpadSwipeDetector()
         setupEventTap()
     }
 
@@ -138,20 +125,23 @@ final class TrackpadSwipeTrigger {
 
     private func setupEventTap() {
         guard eventTap == nil else { return }
+        let retainedSelf = Unmanaged.passRetained(self)
         guard let tap = CGEvent.tapCreate(
             tap: .cghidEventTap,
             place: .headInsertEventTap,
             options: .listenOnly,
             eventsOfInterest: NSEvent.EventTypeMask.gesture.rawValue,
             callback: TrackpadSwipeTrigger.eventCallback,
-            userInfo: Unmanaged.passUnretained(self).toOpaque()
+            userInfo: retainedSelf.toOpaque()
         ) else {
+            retainedSelf.release()
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
                 self?.setupEventTap()
             }
             return
         }
 
+        unmanagedSelf = retainedSelf
         eventTap = tap
         let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
         runLoopSource = source
@@ -163,11 +153,9 @@ final class TrackpadSwipeTrigger {
 
     private func removeEventTap() {
         guard let eventTap else { return }
-        CGEvent.tapEnable(tap: eventTap, enable: false)
-        if let runLoopSource {
-            EventTapThread.shared.remove(runLoopSource)
-        }
-        CFMachPortInvalidate(eventTap)
+        let retainedSelf = unmanagedSelf
+        EventTapThread.shared.remove(eventTap, source: runLoopSource) { retainedSelf?.release() }
+        unmanagedSelf = nil
         self.eventTap = nil
         runLoopSource = nil
     }
