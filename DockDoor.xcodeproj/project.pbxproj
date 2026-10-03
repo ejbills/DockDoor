@@ -107,6 +107,7 @@
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1F60E42D238A9700808E05 /* CGSize.swift */; };
 		BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */; };
+		8CEC79C870424F568497244E /* LauncherShortcutResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD29B399A3A1419CB7571988 /* LauncherShortcutResolver.swift */; };
 		BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */; };
 		BB2106782E834F46002F87D6 /* KeyHintRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106772E834F46002F87D6 /* KeyHintRow.swift */; };
 		BB21067D2E83565A002F87D6 /* KeyboardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */; };
@@ -350,6 +351,7 @@
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB1F60E42D238A9700808E05 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDiscoveryShared.swift; sourceTree = "<group>"; };
+		BD29B399A3A1419CB7571988 /* LauncherShortcutResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherShortcutResolver.swift; sourceTree = "<group>"; };
 		BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabFocusFullOverlayView.swift; sourceTree = "<group>"; };
 		BB2106772E834F46002F87D6 /* KeyHintRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyHintRow.swift; sourceTree = "<group>"; };
 		BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLabel.swift; sourceTree = "<group>"; };
@@ -936,6 +938,7 @@
 			children = (
 				341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */,
 				BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */,
+				BD29B399A3A1419CB7571988 /* LauncherShortcutResolver.swift */,
 				BB49747C2E81CE5100308326 /* WindowSeeder.swift */,
 				BB49747D2F01AB0100308326 /* WindowOrderPersistence.swift */,
 				BBB023AC2EDCCB9100317CF4 /* WindowInfo.swift */,
@@ -1247,6 +1250,7 @@
 				341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
 				BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */,
+				8CEC79C870424F568497244E /* LauncherShortcutResolver.swift in Sources */,
 				BB638F042E0217030010077D /* MediaControlButtonRow.swift in Sources */,
 				BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */,
 				BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */,

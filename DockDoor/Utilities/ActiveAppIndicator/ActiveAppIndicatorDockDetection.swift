@@ -31,7 +31,8 @@ enum ActiveAppIndicatorDockDetection {
     /// - Parameter app: The running application to find in the dock.
     /// - Returns: The frame of the dock item, or nil if not found.
     static func getDockItemFrame(for app: NSRunningApplication) -> CGRect? {
-        guard let bundleIdentifier = app.bundleIdentifier,
+        let shortcutBundleIdentifier = LauncherShortcutResolver.owningShortcutBundleIdentifier(of: app)
+        guard let bundleIdentifier = shortcutBundleIdentifier ?? app.bundleIdentifier,
               let dockItems = try? dockList()?.children()
         else {
             return nil
@@ -53,7 +54,8 @@ enum ActiveAppIndicatorDockDetection {
             }
 
             // Check by running app if bundle ID check failed
-            if let itemTitle = try? item.title(),
+            if shortcutBundleIdentifier == nil,
+               let itemTitle = try? item.title(),
                itemTitle == app.localizedName
             {
                 return frame(of: item)
@@ -181,7 +183,7 @@ enum ActiveAppIndicatorDockDetection {
             if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
                let bundleIdentifier = Bundle(url: itemURL)?.bundleIdentifier
             {
-                matched = runningApps.first { $0.bundleIdentifier == bundleIdentifier }
+                matched = LauncherShortcutResolver.runningApplications(forBundleAt: itemURL, bundleIdentifier: bundleIdentifier).first
             }
             if matched == nil, let itemTitle = try? item.title() {
                 matched = runningApps.first { $0.localizedName == itemTitle }

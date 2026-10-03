@@ -416,19 +416,9 @@ final class DockObserver {
         )
 
         // Build list of apps to fetch windows from
-        var appsToFetchWindowsFrom: [NSRunningApplication] = []
-        if Defaults[.groupAppInstancesInDock],
-           let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
-        {
-            let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
-            if !potentialApps.isEmpty {
-                appsToFetchWindowsFrom = potentialApps
-            } else {
-                appsToFetchWindowsFrom = [currentApp]
-            }
-        } else {
-            appsToFetchWindowsFrom = [currentApp]
-        }
+        let appsToFetchWindowsFrom: [NSRunningApplication] = Defaults[.groupAppInstancesInDock]
+            ? LauncherShortcutResolver.siblingInstances(of: currentApp)
+            : [currentApp]
 
         guard !appsToFetchWindowsFrom.isEmpty else { return }
 
@@ -718,7 +708,7 @@ final class DockObserver {
                 }
             }
 
-            let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+            let runningApps = LauncherShortcutResolver.runningApplications(forBundleAt: appURL, bundleIdentifier: bundleIdentifier)
 
             // For multiple instances, find the correct one based on dock position
             if runningApps.count > 1 {
