@@ -146,15 +146,19 @@ final class TrackpadSwipeTrigger {
         let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
         runLoopSource = source
         if let source {
-            EventTapThread.shared.add(source)
+            CFRunLoopAddSource(CFRunLoopGetMain(), source, .commonModes)
             CGEvent.tapEnable(tap: tap, enable: true)
         }
     }
 
     private func removeEventTap() {
         guard let eventTap else { return }
-        let retainedSelf = unmanagedSelf
-        EventTapThread.shared.remove(eventTap, source: runLoopSource) { retainedSelf?.release() }
+        CGEvent.tapEnable(tap: eventTap, enable: false)
+        if let runLoopSource {
+            CFRunLoopRemoveSource(CFRunLoopGetMain(), runLoopSource, .commonModes)
+        }
+        CFMachPortInvalidate(eventTap)
+        unmanagedSelf?.release()
         unmanagedSelf = nil
         self.eventTap = nil
         runLoopSource = nil
