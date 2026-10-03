@@ -505,13 +505,9 @@ class KeybindHelper {
 
     private func removeEventTap() {
         if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            if let runLoopSource {
-                EventTapThread.shared.remove(runLoopSource)
-            }
-            CFMachPortInvalidate(eventTap)
+            let userInfo = unmanagedEventTapUserInfo
+            EventTapThread.shared.remove(eventTap, source: runLoopSource) { userInfo?.release() }
         }
-        unmanagedEventTapUserInfo?.release()
         unmanagedEventTapUserInfo = nil
         eventTap = nil
         runLoopSource = nil

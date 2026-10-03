@@ -801,11 +801,7 @@ final class DockObserver {
 
     private func removeEventTap() {
         if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            if let eventTapRunLoopSource {
-                EventTapThread.shared.remove(eventTapRunLoopSource)
-            }
-            CFMachPortInvalidate(eventTap)
+            EventTapThread.shared.remove(eventTap, source: eventTapRunLoopSource)
         }
         eventTap = nil
         eventTapRunLoopSource = nil
