@@ -25,6 +25,7 @@ struct BaseHoverContainer<Content: View>: View {
     let preventDockStyling: Bool
     let isWidget: Bool
     let backgroundAppearance: BackgroundAppearance
+    let cornerRadius: Double
 
     init(bestGuessMonitor: NSScreen,
          mockPreviewActive: Bool = false,
@@ -32,7 +33,8 @@ struct BaseHoverContainer<Content: View>: View {
          highlightColor: Color? = nil,
          preventDockStyling: Bool = false,
          isWidget: Bool = false,
-         backgroundAppearance: BackgroundAppearance)
+         backgroundAppearance: BackgroundAppearance,
+         cornerRadius: Double = CardRadius.Resolved.current().container)
     {
         self.bestGuessMonitor = bestGuessMonitor
         self.mockPreviewActive = mockPreviewActive
@@ -41,6 +43,7 @@ struct BaseHoverContainer<Content: View>: View {
         self.preventDockStyling = preventDockStyling
         self.isWidget = isWidget
         self.backgroundAppearance = backgroundAppearance
+        self.cornerRadius = cornerRadius
     }
 
     private var shouldHideBackground: Bool {
@@ -52,6 +55,7 @@ struct BaseHoverContainer<Content: View>: View {
             .if(!preventDockStyling) { view in
                 view.dockStyle(
                     backgroundAppearance: backgroundAppearance,
+                    cornerRadius: cornerRadius,
                     highlightColor: highlightColor,
                     backgroundOpacity: shouldHideBackground ? 0 : dockPreviewBackgroundOpacity
                 )

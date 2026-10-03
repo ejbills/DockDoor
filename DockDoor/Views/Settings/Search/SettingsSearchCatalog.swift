@@ -3,7 +3,7 @@ import Foundation
 enum SettingsSearchCatalog {
     static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
         + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
-        + widgetItems + advancedItems + supportItems
+        + widgetItems + pinningItems + advancedItems + supportItems
 
     // MARK: - General
 
@@ -74,6 +74,14 @@ enum SettingsSearchCatalog {
             tab: "General",
             section: String(localized: "Active App Indicator"),
             icon: "number.circle"
+        ),
+        SettingsSearchItem(
+            id: "general.indicatorHighlightFrontmost",
+            title: String(localized: "Highlight the frontmost app"),
+            keywords: ["indicator", "dots", "frontmost", "dim", "gray", "contrast", "two colors"],
+            tab: "General",
+            section: String(localized: "Active App Indicator"),
+            icon: "circle.lefthalf.filled"
         ),
         SettingsSearchItem(
             id: "general.indicatorAutoSize",
@@ -640,6 +648,14 @@ enum SettingsSearchCatalog {
             icon: "rectangle.roundedtop"
         ),
         SettingsSearchItem(
+            id: "appearance.cornerRadius",
+            title: String(localized: "Corner Radius"),
+            keywords: ["rounded", "corners", "radius", "roundness"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "rectangle.roundedtop"
+        ),
+        SettingsSearchItem(
             id: "appearance.marquee",
             title: String(localized: "Long title overflow"),
             description: String(localized: "How to display window titles that are too long to fit."),
@@ -656,6 +672,15 @@ enum SettingsSearchCatalog {
             tab: "Appearance",
             section: String(localized: "General Appearance"),
             icon: "eye.trianglebadge.exclamationmark"
+        ),
+        SettingsSearchItem(
+            id: "appearance.spaceNumber",
+            title: String(localized: "Show Space number on previews"),
+            description: String(localized: "Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop."),
+            keywords: ["space", "desktop", "number", "badge", "mission control"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "rectangle.on.rectangle"
         ),
         SettingsSearchItem(
             id: "appearance.windowlessQuitButton",
@@ -1581,15 +1606,6 @@ enum SettingsSearchCatalog {
             icon: "rectangle.expand.vertical"
         ),
         SettingsSearchItem(
-            id: "widgets.pinning",
-            title: String(localized: "Allow pinning controls to screen"),
-            description: String(localized: "Right-click a media or calendar widget to pin it."),
-            keywords: ["pin", "stick", "float", "always"],
-            tab: "Widgets",
-            section: String(localized: "Display"),
-            icon: "pin"
-        ),
-        SettingsSearchItem(
             id: "widgets.scrollBehavior",
             title: String(localized: "Behavior:"),
             description: String(localized: "Controls what happens when you scroll on the media widget preview."),
@@ -1657,6 +1673,21 @@ enum SettingsSearchCatalog {
             icon: "eye"
         ),
     ]
+
+    private static let pinningItems: [SettingsSearchItem] = {
+        guard #available(macOS 15.0, *) else { return [] }
+        return [
+            SettingsSearchItem(
+                id: "widgets.pinning",
+                title: String(localized: "Allow pinning controls to screen"),
+                description: String(localized: "Right-click a media or calendar widget to pin it."),
+                keywords: ["pin", "stick", "float", "always"],
+                tab: "Widgets",
+                section: String(localized: "Display"),
+                icon: "pin"
+            ),
+        ]
+    }()
 
     // MARK: - Advanced
 

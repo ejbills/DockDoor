@@ -270,12 +270,17 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
     }
 
+    private var radii: CardRadius.Resolved {
+        (appearanceOverride ?? cachedAppearance)?.radii ?? .current()
+    }
+
     var body: some View {
         BaseHoverContainer(
             bestGuessMonitor: bestGuessMonitor,
             mockPreviewActive: mockPreviewActive,
             content: { windowGridContent() },
-            backgroundAppearance: backgroundAppearance
+            backgroundAppearance: backgroundAppearance,
+            cornerRadius: radii.container
         )
         .contentShape(Rectangle())
         .onTapGesture {
@@ -372,7 +377,7 @@ struct WindowPreviewHoverContainer: View {
                     CmdTabFocusFullOverlayView()
                         .transition(.opacity)
                         .allowsHitTesting(false)
-                        .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: radii.container, style: .continuous))
                 }
             }
         }
@@ -1173,7 +1178,6 @@ struct WindowPreviewHoverContainer: View {
                     windowInfo: windowInfo,
                     index: index,
                     dockPosition: dockPosition,
-                    uniformCardRadius: uniformCardRadius,
                     handleWindowAction: { action in
                         handleWindowAction(action, at: index)
                     },
@@ -1184,7 +1188,8 @@ struct WindowPreviewHoverContainer: View {
                     onHoverIndexChange: handleHoverIndexChange,
                     appearance: appearance,
                     backgroundAppearance: backgroundAppearance,
-                    focusedWindowID: previewStateCoordinator.focusedWindowID
+                    focusedWindowID: previewStateCoordinator.focusedWindowID,
+                    spaceNumber: previewStateCoordinator.desktopNumber(for: windowInfo)
                 )
                 .equatable()
             } else {
@@ -1208,7 +1213,8 @@ struct WindowPreviewHoverContainer: View {
                     useLivePreview: useLivePreview,
                     appearance: appearance,
                     backgroundAppearance: backgroundAppearance,
-                    focusedWindowID: previewStateCoordinator.focusedWindowID
+                    focusedWindowID: previewStateCoordinator.focusedWindowID,
+                    spaceNumber: previewStateCoordinator.desktopNumber(for: windowInfo)
                 )
                 .equatable()
                 .gesture(

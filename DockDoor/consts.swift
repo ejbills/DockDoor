@@ -76,6 +76,7 @@ extension Defaults.Keys {
     static let livePreviewStreamKeepAlive = Key<Int>("livePreviewStreamKeepAlive", default: 0)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
+    static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 20)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
@@ -211,6 +212,7 @@ extension Defaults.Keys {
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
     static let trafficLightButtonScale = Key<CGFloat>("trafficLightButtonScale", default: 1.0)
     static let showMinimizedHiddenLabels = Key<Bool>("showMinimizedHiddenLabels", default: true)
+    static let showSpaceNumber = Key<Bool>("showSpaceNumber", default: false)
 
     // MARK: - Window Switcher Appearance Settings
 
@@ -289,6 +291,7 @@ extension Defaults.Keys {
     static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
     static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
     static let activeAppIndicatorStyle = Key<ActiveAppIndicatorStyle>("activeAppIndicatorStyle", default: .bar)
+    static let activeAppIndicatorHighlightFrontmost = Key<Bool>("activeAppIndicatorHighlightFrontmost", default: true)
 
     // MARK: - Trackpad Gestures
 

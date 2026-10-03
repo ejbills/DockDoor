@@ -474,7 +474,7 @@ class KeybindHelper {
     }
 
     private func setupEventTap() {
-        guard eventTap == nil else { return }
+        guard eventTap == nil, DockObserver.canPostEvents else { return }
 
         let eventMask = (1 << CGEventType.keyDown.rawValue) |
             (1 << CGEventType.keyUp.rawValue) |
@@ -512,13 +512,9 @@ class KeybindHelper {
 
     private func removeEventTap() {
         if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            if let runLoopSource {
-                EventTapThread.shared.remove(runLoopSource)
-            }
-            CFMachPortInvalidate(eventTap)
+            let userInfo = unmanagedEventTapUserInfo
+            EventTapThread.shared.remove(eventTap, source: runLoopSource) { userInfo?.release() }
         }
-        unmanagedEventTapUserInfo?.release()
         unmanagedEventTapUserInfo = nil
         eventTap = nil
         runLoopSource = nil

@@ -511,6 +511,20 @@ enum WindowSpaces {
         })
     }
 
+    static func desktopNumbers() -> [Int: Int] {
+        guard let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: AnyObject]] else {
+            return [:]
+        }
+
+        let desktopIDs = displays
+            .flatMap { $0["Spaces"] as? [[String: AnyObject]] ?? [] }
+            .filter { ($0["type"] as? NSNumber)?.intValue == 0 }
+            .compactMap { spaceID(from: $0).map { Int($0) } }
+        guard desktopIDs.count > 1 else { return [:] }
+
+        return Dictionary(desktopIDs.enumerated().map { ($1, $0 + 1) }, uniquingKeysWith: { first, _ in first })
+    }
+
     private static func displayIdentifiers(for screen: NSScreen) -> Set<String> {
         guard let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
             return []
@@ -592,6 +606,10 @@ func shouldAcceptWindow(axWindow: AXUIElement,
     if isOnscreen || scBacked { return true }
 
     if app.isHidden || axIsFullscreen || axIsMinimized { return true }
+
+    if windowSpaces.isEmpty, SLSWindowIsOrderedIn(windowID) == false {
+        return false
+    }
 
     // Window on a different Space; a window whose only Spaces no longer exist is a ghost with a stale space ID
     if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {

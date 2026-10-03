@@ -52,6 +52,7 @@ final class ActiveAppIndicatorWindow: NSPanel {
     }
 
     func updateDots(_ dots: [DockAppDot]) {
+        guard model.dots != dots else { return }
         model.dots = dots
     }
 }
@@ -61,6 +62,7 @@ struct ActiveAppIndicatorView: View {
     @ObservedObject var model: ActiveAppIndicatorModel
     @Default(.activeAppIndicatorColor) var indicatorColor
     @Default(.activeAppIndicatorStyle) var indicatorStyle
+    @Default(.activeAppIndicatorHighlightFrontmost) var highlightFrontmost
 
     var body: some View {
         switch indicatorStyle {
@@ -75,7 +77,6 @@ struct ActiveAppIndicatorView: View {
                         .position(dot.center)
                 }
             }
-            .animation(.easeInOut(duration: 0.2), value: model.dots)
         }
     }
 
@@ -84,13 +85,14 @@ struct ActiveAppIndicatorView: View {
             .fill(dotColor(for: dot))
             .overlay(Circle().strokeBorder(Color.white.opacity(0.25), lineWidth: 0.5))
             .frame(width: dot.size, height: dot.size)
+            .animation(.easeInOut(duration: 0.2), value: [dot.isFrontmost, dot.hasWindows])
     }
 
     private func dotColor(for dot: DockAppDot) -> Color {
-        if dot.isFrontmost {
+        if highlightFrontmost, dot.isFrontmost {
             indicatorColor
         } else if dot.hasWindows {
-            dimmedIndicatorColor
+            highlightFrontmost ? dimmedIndicatorColor : indicatorColor
         } else {
             .black
         }
