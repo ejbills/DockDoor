@@ -4,14 +4,13 @@ import SwiftUI
 
 struct SearchFieldView: View {
     let searchField: NSTextField
-    @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
     @State private var backgroundAppearance: BackgroundAppearance = .resolve()
+    @State private var radii: CardRadius.Resolved = .current()
 
     var body: some View {
         ZStack {
-            let cornerRadius = CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier)
-            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            BlurView(cornerRadius: radii.card, appearance: backgroundAppearance)
+                .clipShape(RoundedRectangle(cornerRadius: radii.card, style: .continuous))
 
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
@@ -25,9 +24,12 @@ struct SearchFieldView: View {
         }
         .frame(height: 40)
         .task {
-            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+            let keys: [Defaults._AnyKey] = BackgroundAppearance.observedKeys + [.uniformCardRadius, .previewCornerRadius, .globalPaddingMultiplier]
+            for await _ in Defaults.updates(keys, initial: true) {
                 let updated = BackgroundAppearance.resolve()
                 if updated != backgroundAppearance { backgroundAppearance = updated }
+                let updatedRadii = CardRadius.Resolved.current()
+                if updatedRadii != radii { radii = updatedRadii }
             }
         }
     }
@@ -74,7 +76,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
 
     private func setupSearchField() {
         searchField = NSTextField()
-        searchField.placeholderString = "Press \(KeyboardLabel.localizedKey(for: Defaults[.searchTriggerKey])) to search windows…"
+        updatePlaceholder()
         searchField.isBordered = false
         searchField.drawsBackground = false
         searchField.backgroundColor = .clear
@@ -88,6 +90,10 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
         hostingView.frame = contentView!.bounds
         hostingView.autoresizingMask = [.width, .height]
         contentView = hostingView
+    }
+
+    private func updatePlaceholder() {
+        searchField.placeholderString = "Press \(KeyboardLabel.localizedKey(for: Defaults[.searchTriggerKey])) to search windows…"
     }
 
     func controlTextDidChange(_ obj: Notification) {
@@ -106,6 +112,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             return
         }
 
+        updatePlaceholder()
         setFrame(targetFrame(relativeTo: frame, on: window.screen), display: false)
         orderFront(nil)
     }

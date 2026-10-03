@@ -24,7 +24,7 @@ struct MediaControlsEmbeddedView: View {
                 maxWidth: idealWidth,
                 alignment: .center
             )
-            .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: CardRadius.inner, outerPadding: 0)
+            .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: CardRadius.Resolved.current().card, outerPadding: 0)
             .if(isMediaApp(bundleIdentifier)) { view in
                 view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo, handlesSpacebar: !isPinnedMode)
             }

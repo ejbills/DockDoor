@@ -2,8 +2,8 @@ import Foundation
 
 enum SettingsSearchCatalog {
     static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
-        + cmdTabItems + dockLockingItems + appearanceItems + gesturesItems + filtersItems
-        + widgetItems + advancedItems + supportItems
+        + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
+        + widgetItems + pinningItems + advancedItems + supportItems
 
     // MARK: - General
 
@@ -66,6 +66,22 @@ enum SettingsSearchCatalog {
             tab: "General",
             section: String(localized: "Active App Indicator"),
             icon: "paintbrush"
+        ),
+        SettingsSearchItem(
+            id: "general.indicatorStyle",
+            title: String(localized: "Indicator Style"),
+            keywords: ["indicator", "style", "dots", "window", "count", "number"],
+            tab: "General",
+            section: String(localized: "Active App Indicator"),
+            icon: "number.circle"
+        ),
+        SettingsSearchItem(
+            id: "general.indicatorHighlightFrontmost",
+            title: String(localized: "Highlight the frontmost app"),
+            keywords: ["indicator", "dots", "frontmost", "dim", "gray", "contrast", "two colors"],
+            tab: "General",
+            section: String(localized: "Active App Indicator"),
+            icon: "circle.lefthalf.filled"
         ),
         SettingsSearchItem(
             id: "general.indicatorAutoSize",
@@ -632,6 +648,14 @@ enum SettingsSearchCatalog {
             icon: "rectangle.roundedtop"
         ),
         SettingsSearchItem(
+            id: "appearance.cornerRadius",
+            title: String(localized: "Corner Radius"),
+            keywords: ["rounded", "corners", "radius", "roundness"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "rectangle.roundedtop"
+        ),
+        SettingsSearchItem(
             id: "appearance.marquee",
             title: String(localized: "Long title overflow"),
             description: String(localized: "How to display window titles that are too long to fit."),
@@ -648,6 +672,15 @@ enum SettingsSearchCatalog {
             tab: "Appearance",
             section: String(localized: "General Appearance"),
             icon: "eye.trianglebadge.exclamationmark"
+        ),
+        SettingsSearchItem(
+            id: "appearance.spaceNumber",
+            title: String(localized: "Show Space number on previews"),
+            description: String(localized: "Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop."),
+            keywords: ["space", "desktop", "number", "badge", "mission control"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "rectangle.on.rectangle"
         ),
         SettingsSearchItem(
             id: "appearance.windowlessQuitButton",
@@ -800,24 +833,6 @@ enum SettingsSearchCatalog {
             tab: "Appearance",
             section: String(localized: "Background"),
             icon: "rectangle.fill"
-        ),
-        SettingsSearchItem(
-            id: "appearance.glassTuning",
-            title: String(localized: "Glass Tuning"),
-            description: String(localized: "Fine-tune opacity, blur, saturation, tint, and border for glass background style."),
-            keywords: ["glass", "opacity", "blur", "saturation", "tint", "border", "tuning", "variant"],
-            tab: "Appearance",
-            section: String(localized: "Background"),
-            icon: "slider.horizontal.3"
-        ),
-        SettingsSearchItem(
-            id: "appearance.glassVariant",
-            title: String(localized: "Glass Variant"),
-            description: String(localized: "Selects the liquid glass material variant used for the background."),
-            keywords: ["glass", "variant", "liquid", "material", "style", "look"],
-            tab: "Appearance",
-            section: String(localized: "Background"),
-            icon: "sparkles"
         ),
         // Window Background
         SettingsSearchItem(
@@ -1187,6 +1202,51 @@ enum SettingsSearchCatalog {
         ),
     ]
 
+    private static let glassItems: [SettingsSearchItem] = {
+        if #available(macOS 26.0, *), LiquidGlass.usesModernPipeline {
+            return [
+                SettingsSearchItem(
+                    id: "appearance.glassOpacity",
+                    title: String(localized: "Opacity"),
+                    description: String(localized: "Adjusts how much of the screen shows through the Liquid Glass background."),
+                    keywords: ["glass", "opacity", "liquid", "clear", "opaque", "transparency"],
+                    tab: "Appearance",
+                    section: String(localized: "Background"),
+                    icon: "circle.lefthalf.filled"
+                ),
+                SettingsSearchItem(
+                    id: "appearance.glassRefraction",
+                    title: String(localized: "Refraction"),
+                    description: String(localized: "Bends the background at the edges and adds a bright rim. Turn off for softer frosted glass that is easier to read over busy backgrounds."),
+                    keywords: ["glass", "refraction", "liquid", "rim", "lens", "frosted"],
+                    tab: "Appearance",
+                    section: String(localized: "Background"),
+                    icon: "sparkles"
+                ),
+            ]
+        }
+        return [
+            SettingsSearchItem(
+                id: "appearance.glassTuning",
+                title: String(localized: "Glass Tuning"),
+                description: String(localized: "Fine-tune opacity, blur, saturation, tint, and border for glass background style."),
+                keywords: ["glass", "opacity", "blur", "saturation", "tint", "border", "tuning", "variant"],
+                tab: "Appearance",
+                section: String(localized: "Background"),
+                icon: "slider.horizontal.3"
+            ),
+            SettingsSearchItem(
+                id: "appearance.glassVariant",
+                title: String(localized: "Glass Variant"),
+                description: String(localized: "Selects the liquid glass material variant used for the background."),
+                keywords: ["glass", "variant", "liquid", "material", "style", "look"],
+                tab: "Appearance",
+                section: String(localized: "Background"),
+                icon: "sparkles"
+            ),
+        ]
+    }()
+
     // MARK: - Gestures & Keybinds
 
     private static let gesturesItems: [SettingsSearchItem] = [
@@ -1430,6 +1490,32 @@ enum SettingsSearchCatalog {
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "app.badge.checkmark"
         ),
+        // Trackpad Swipe for Window Switcher
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipe",
+            title: String(localized: "Open window switcher with a trackpad swipe"),
+            description: String(localized: "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."),
+            keywords: ["trackpad", "swipe", "three finger", "four finger", "gesture", "switcher", "alt tab"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "hand.draw"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeFingers",
+            title: String(localized: "Fingers:"),
+            keywords: ["trackpad", "fingers", "three", "four", "swipe"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "hand.raised"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeDirection",
+            title: String(localized: "Direction:"),
+            keywords: ["trackpad", "direction", "horizontal", "vertical", "swipe"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "arrow.left.and.right"
+        ),
     ]
 
     // MARK: - Filters
@@ -1520,15 +1606,6 @@ enum SettingsSearchCatalog {
             icon: "rectangle.expand.vertical"
         ),
         SettingsSearchItem(
-            id: "widgets.pinning",
-            title: String(localized: "Allow pinning controls to screen"),
-            description: String(localized: "Right-click a media or calendar widget to pin it."),
-            keywords: ["pin", "stick", "float", "always"],
-            tab: "Widgets",
-            section: String(localized: "Display"),
-            icon: "pin"
-        ),
-        SettingsSearchItem(
             id: "widgets.scrollBehavior",
             title: String(localized: "Behavior:"),
             description: String(localized: "Controls what happens when you scroll on the media widget preview."),
@@ -1596,6 +1673,21 @@ enum SettingsSearchCatalog {
             icon: "eye"
         ),
     ]
+
+    private static let pinningItems: [SettingsSearchItem] = {
+        guard #available(macOS 15.0, *) else { return [] }
+        return [
+            SettingsSearchItem(
+                id: "widgets.pinning",
+                title: String(localized: "Allow pinning controls to screen"),
+                description: String(localized: "Right-click a media or calendar widget to pin it."),
+                keywords: ["pin", "stick", "float", "always"],
+                tab: "Widgets",
+                section: String(localized: "Display"),
+                icon: "pin"
+            ),
+        ]
+    }()
 
     // MARK: - Advanced
 
