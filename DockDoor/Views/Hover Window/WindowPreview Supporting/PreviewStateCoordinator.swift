@@ -89,10 +89,19 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     private static func currentFocusedWindowID(in windows: [WindowInfo]) -> CGWindowID? {
-        guard let activeAppWindow = windows.first(where: { $0.app.isActive }),
-              let focusedWindow = try? activeAppWindow.appAxElement.focusedWindow()
+        guard let activeApp = windows.first(where: { $0.app.isActive })?.app else { return nil }
+        let candidateIDs = Set(windows.filter { $0.app.processIdentifier == activeApp.processIdentifier }.map(\.id))
+        guard !candidateIDs.isEmpty,
+              let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]]
         else { return nil }
-        return try? focusedWindow.cgWindowId()
+        for entry in list {
+            guard (entry[kCGWindowLayer as String] as? Int) == 0,
+                  let id = entry[kCGWindowNumber as String] as? CGWindowID,
+                  candidateIDs.contains(id)
+            else { continue }
+            return id
+        }
+        return nil
     }
 
     var hasActiveSearch: Bool {
