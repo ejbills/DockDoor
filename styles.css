@@ -1878,7 +1878,7 @@ kbd {
     }
 }
 
-/* Docs and donate pages */
+/* Docs, donate and works-with pages */
 
 .nav-links a[aria-current="page"] {
     background: rgba(22, 24, 29, 0.07);
@@ -2109,6 +2109,82 @@ kbd {
     color: var(--ink-2);
 }
 
+.partners {
+    padding-bottom: var(--section);
+}
+
+.partner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 20px 28px;
+    max-width: 860px;
+    padding: clamp(24px, 3.4vw, 40px);
+    border-radius: 28px;
+    background: var(--white);
+    box-shadow: 0 0 0 1px var(--line), 0 24px 48px -32px rgba(22, 20, 50, 0.3);
+}
+
+.partner-icon {
+    width: clamp(72px, 8vw, 96px);
+    filter: drop-shadow(0 10px 14px rgba(30, 50, 90, 0.22));
+}
+
+.partner-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+}
+
+.partner h2 {
+    font-size: clamp(1.7rem, 1.2rem + 1.6vw, 2.3rem);
+    line-height: 1.1;
+    letter-spacing: -0.028em;
+}
+
+.partner-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(18, 129, 58, 0.1);
+    font-size: 13px;
+    font-weight: 600;
+    color: #12813A;
+}
+
+.partner-by {
+    margin-top: 4px;
+    font-size: 14.5px;
+    color: var(--ink-3);
+}
+
+.partner-by a {
+    font-weight: 600;
+    color: var(--ink-2);
+}
+
+.partner-body > p:not(.partner-by) {
+    margin-top: 16px;
+    color: var(--ink-2);
+}
+
+.partner-body > .partner-fit {
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: var(--paper);
+}
+
+.partner-fit b {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.partner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+}
+
 @media (max-width: 700px) {
     .command-table {
         font-size: 14px;
@@ -2124,7 +2200,12 @@ kbd {
         overflow-wrap: anywhere;
     }
 
-    .donate-actions .btn {
+    .donate-actions .btn,
+    .partner-actions .btn {
         flex: 1 1 100%;
+    }
+
+    .partner {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Support DockDoor: Donate to a Free, Open-Source Mac App</title>
-    <meta name="description" content="Support DockDoor, the free window preview and Alt+Tab app for the Mac Dock, through GitHub Sponsors or Buy Me a Coffee.">
+    <title>Works with DockDoor: Compatible Mac Apps</title>
+    <meta name="description" content="Mac apps tested to work with DockDoor and DockDoor Pro, like Parall, which runs multiple independent instances of the same app, each previewed on its own.">
     <meta name="theme-color" content="#F4F5F7">
     <meta property="og:site_name" content="DockDoor">
-    <meta property="og:title" content="Support DockDoor: Donate to a Free, Open-Source Mac App">
-    <meta property="og:description" content="Support DockDoor, the free window preview and Alt+Tab app for the Mac Dock, through GitHub Sponsors or Buy Me a Coffee.">
+    <meta property="og:title" content="Works with DockDoor: Compatible Mac Apps">
+    <meta property="og:description" content="Mac apps tested to work with DockDoor and DockDoor Pro, like Parall, which runs multiple independent instances of the same app, each previewed on its own.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dockdoor.net/donate">
+    <meta property="og:url" content="https://dockdoor.net/works-with">
     <meta property="og:image" content="https://dockdoor.net/resources/web/og.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://dockdoor.net/donate">
+    <link rel="canonical" href="https://dockdoor.net/works-with">
     <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-128x128@1x.png">
     <link rel="apple-touch-icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-256x256@1x.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,19 +35,15 @@
         {
             "@type": "ListItem",
             "position": 2,
-            "name": "Support DockDoor",
-            "item": "https://dockdoor.net/donate"
+            "name": "Works with DockDoor",
+            "item": "https://dockdoor.net/works-with"
         }
     ]
 }
     </script>
 </head>
 
-<body class="page-donate">
-    <svg class="sprite" aria-hidden="true" focusable="false">
-        <symbol id="i-heart" viewBox="0 0 16 16"><path fill="currentColor" d="M8 14.2S1.5 10.3 1.5 5.9A3.4 3.4 0 0 1 8 4.3a3.4 3.4 0 0 1 6.5 1.6c0 4.4-6.5 8.3-6.5 8.3z"/></symbol>
-    </svg>
-
+<body class="page-works-with">
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="nav-wrap">
@@ -61,7 +57,7 @@
                 <li><a href="/#privacy">Privacy</a></li>
                 <li><a href="/#faq">FAQ</a></li>
                 <li><a href="/docs">Docs</a></li>
-                <li><a href="/donate" aria-current="page">Donate</a></li>
+                <li><a href="/donate">Donate</a></li>
                 <li><a href="/#pro">DockDoor Pro</a></li>
             </ul>
             <a href="/#download" class="btn btn-ink btn-sm nav-cta">Download</a>
@@ -71,17 +67,34 @@
         </nav>
     </header>
 
-    <main id="main" class="donate">
-        <div class="wrap donate-inner">
-            <span class="app-icon"><img class="download-icon" src="/resources/web/icon-320.webp" alt="DockDoor app icon" width="160" height="160"></span>
-            <h1>Support DockDoor</h1>
-            <p class="donate-lead">DockDoor is an independent, open-source project with no investors and no ads. Donations pay for the time it takes to keep it free, private and working on every new macOS.</p>
-            <div class="donate-actions">
-                <a href="https://github.com/sponsors/ejbills" class="btn btn-ink btn-lg" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#i-heart"/></svg> Sponsor on GitHub</a>
-                <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-quiet btn-lg" target="_blank" rel="noopener noreferrer">Buy me a coffee</a>
+    <main id="main">
+        <section class="page-hero">
+            <div class="wrap">
+                <h1>Works with DockDoor</h1>
+                <p>Mac apps that work with DockDoor and DockDoor Pro, tested together with their developers.</p>
             </div>
-            <p class="donate-note">Want more than previews? Buying <a href="https://pro.dockdoor.net">DockDoor Pro</a> also funds DockDoor Free.</p>
-        </div>
+        </section>
+
+        <section class="partners">
+            <div class="wrap">
+                <article class="partner" id="parall">
+                    <img class="partner-icon" src="/resources/web/parall-icon.webp" alt="Parall app icon" width="96" height="96">
+                    <div class="partner-body">
+                        <div class="partner-head">
+                            <h2>Parall</h2>
+                            <span class="partner-tag">Developer-supported</span>
+                        </div>
+                        <p class="partner-by">By <a href="https://rvrs.ing/apps">Ighor July</a>, on the Mac App Store</p>
+                        <p>Parall runs multiple independent instances of the same Mac app, each with its own name and Dock icon and, where the app allows it, its own accounts, profiles and data. It can also turn websites into apps in your Dock.</p>
+                        <p class="partner-fit"><b>With DockDoor:</b> apps opened through Parall are recognized, so hovering an instance in the Dock shows only that instance's windows. This works in DockDoor and DockDoor Pro.</p>
+                        <div class="partner-actions">
+                            <a href="https://parall.app" class="btn btn-ink" target="_blank" rel="noopener">Get Parall</a>
+                            <a href="https://parall.app/compatibility/" class="btn btn-quiet" target="_blank" rel="noopener">Compatibility list</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
