@@ -38,6 +38,42 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.5"></a>
+# [Release 1.40.5](https://github.com/ejbills/DockDoor/releases/tag/1.40.5) - 2026-10-04
+
+## ✨ New Features
+- Open the window switcher with a trackpad swipe
+  - Swipe with 3 or 4 fingers, move left or right to change the selection, then lift your fingers to switch to the highlighted window
+  - Turn it on in Settings > Gestures & Keybinds > Trackpad Swipe for Window Switcher (off by default, requires the Window Switcher)
+- Add a shadow beneath preview panels
+  - Turn on "Show shadow beneath previews" in Settings > Appearance > Background (off by default)
+
+## 🔧 Improvements & Stability
+- Smoother dock preview slide-in
+- Window switcher closes as soon as you pick a window
+- Window tracking stays responsive with slow or hung apps
+- Parall shortcut instances stay separate
+  - Apps launched from Parall shortcuts keep their windows apart from the original app
+  - The active-app indicator, Cmd+Tab replacement, and "group app instances" recognize each shortcut tile
+- Scrolling over lyrics scrolls the lyrics
+  - Scroll over the lyrics area in the media widget without changing the volume or seeking
+
+## 🐛 Bug Fixes
+- Window switcher no longer freezes when an app is slow to respond
+- DockDoor no longer freezes after waking from sleep when an app is hung
+- Dock previews work for Parall shortcut tiles
+- Preview cards no longer jump in size when window titles are set to show on hover
+- Pinned media and calendar widgets can be dragged on macOS 27
+  - Dragging widget no longer available for < macOS 14
+- Fixed a crash after DockDoor restarts its keyboard, mouse, or Dock-lock monitoring
+  - Could happen after changing certain settings or recovering from a system event
+- Lyrics refresh on every track change
+- Embedded media and calendar widgets no longer get clipped by large card corner radii
+
+
+[Changes][1.40.5]
+
+
 <a id="1.40.4"></a>
 # [Release 1.40.4](https://github.com/ejbills/DockDoor/releases/tag/1.40.4) - 2026-10-02
 
@@ -2476,6 +2512,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.5]: https://github.com/ejbills/DockDoor/compare/1.40.4...1.40.5
 [1.40.4]: https://github.com/ejbills/DockDoor/compare/1.40.3...1.40.4
 [1.40.3]: https://github.com/ejbills/DockDoor/compare/1.40.2...1.40.3
 [1.40.2]: https://github.com/ejbills/DockDoor/compare/1.40.1...1.40.2
