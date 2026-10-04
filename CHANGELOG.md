@@ -42,7 +42,7 @@
 # [Release 1.40.5](https://github.com/ejbills/DockDoor/releases/tag/1.40.5) - 2026-10-04
 
 ## ✨ New Features
-- Open the window switcher with a trackpad swipe
+- Open the window switcher with a trackpad swipe (thanks [@anandghegde](https://github.com/anandghegde))
   - Swipe with 3 or 4 fingers, move left or right to change the selection, then lift your fingers to switch to the highlighted window
   - Turn it on in Settings > Gestures & Keybinds > Trackpad Swipe for Window Switcher (off by default, requires the Window Switcher)
 - Add a shadow beneath preview panels
