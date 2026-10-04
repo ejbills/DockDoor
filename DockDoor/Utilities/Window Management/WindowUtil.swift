@@ -569,7 +569,7 @@ extension WindowUtil {
               let size = try? axWindow.size(),
               bounds.width.isFinite, bounds.height.isFinite, size.width.isFinite, size.height.isFinite,
               bounds.width > 0, bounds.height > 0, size.width > 0, size.height > 0,
-              !(bounds.width < size.width * 0.7 && bounds.height < size.height * 0.7)
+              bounds.width >= size.width * 0.9, bounds.height >= size.height * 0.9
         else { return nil }
         if (try? axWindow.cgWindowId()).map({ $0 == 0 }) ?? true {
             guard mapAXToCG(attributes: WindowCandidateAttributes(axWindow: axWindow), candidates: [entry], excluding: []) == windowID else { return nil }
