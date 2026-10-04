@@ -297,8 +297,10 @@ class WindowManipulationObservers {
             stageManagerRefreshTask?.cancel()
             stageManagerRefreshTask = Task {
                 try? await Task.sleep(nanoseconds: UInt64(windowProcessingDebounceInterval * 1_000_000_000))
-                guard Defaults[.stageManagerOptimization], app.isActive, !Task.isCancelled else { return }
-                await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false)
+                guard app.isActive, !Task.isCancelled else { return }
+                let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
+                guard stageManagerProtection else { return }
+                await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false, stageManagerProtection: stageManagerProtection)
             }
         }
     }

@@ -117,6 +117,7 @@ extension DockObserver {
             return
         }
 
+        let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
         let resolvedApp = selectedItem.app
         let appName = resolvedApp?.localizedName ?? selectedItem.title ?? "Unknown"
         let bundleId = resolvedApp?.bundleIdentifier ?? selectedItem.bundleId
@@ -175,7 +176,8 @@ extension DockObserver {
                 bundleIdentifier: bundleId,
                 bypassDockMouseValidation: true,
                 dockPositionOverride: .cmdTab,
-                initialIndex: initialIndex
+                initialIndex: initialIndex,
+                stageManagerProtection: stageManagerProtection
             )
         }
 
@@ -187,7 +189,7 @@ extension DockObserver {
                 guard let self else { return }
 
                 do {
-                    var windows = try await WindowUtil.getActiveWindows(of: app, context: .cmdTab)
+                    var windows = try await WindowUtil.getActiveWindows(of: app, context: .cmdTab, stageManagerProtection: stageManagerProtection)
 
                     if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
                         windows = WindowUtil.filterWindowsByCurrentSpace(windows)
@@ -205,13 +207,15 @@ extension DockObserver {
 
                     await MainActor.run { [weak self] in
                         guard let self else { return }
+                        guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return }
                         guard let screen = screenOrigin.screen() else { return }
 
                         let didMerge = previewCoordinator.mergeWindowsIfNeeded(
                             appPID,
                             windows: freshWindows,
                             dockPosition: .cmdTab,
-                            bestGuessMonitor: screen
+                            bestGuessMonitor: screen,
+                            stageManagerProtection: stageManagerProtection
                         )
                         DebugLogger.log("WindowRefresh", details: "Cmd+Tab final merge, PID: \(appPID), windows: \(freshWindows.count), merged: \(didMerge)")
                     }

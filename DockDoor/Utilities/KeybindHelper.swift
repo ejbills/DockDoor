@@ -40,6 +40,8 @@ private class WindowSwitchingCoordinator {
 
         let coordinator = previewCoordinator.windowSwitcherCoordinator
 
+        coordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionEnabled())
+
         if coordinator.isKeybindSessionActive {
             coordinator.hasMovedSinceOpen = false
             coordinator.initialHoverLocation = nil
@@ -205,8 +207,9 @@ private class WindowSwitchingCoordinator {
         WindowSwitchingCoordinator.lastUpdateAllWindowsTime = Date()
 
         windowRefreshTask?.cancel()
+        let stageManagerProtection = previewCoordinator.windowSwitcherCoordinator.stageManagerProtectionEnabled
         windowRefreshTask = Task.detached(priority: priority) { [weak self, weak previewCoordinator, mode, dockPosition, targetScreen, sessionId] in
-            await WindowUtil.updateAllWindowsInCurrentSpace()
+            await WindowUtil.updateAllWindowsInCurrentSpace(stageManagerProtection: stageManagerProtection)
             guard !Task.isCancelled else { return }
 
             await MainActor.run { [weak self, weak previewCoordinator] in
@@ -214,7 +217,10 @@ private class WindowSwitchingCoordinator {
                 guard sessionId == currentSessionId else { return }
 
                 let coordinator = previewCoordinator.windowSwitcherCoordinator
-                guard coordinator.isKeybindSessionActive else { return }
+                guard coordinator.isKeybindSessionActive,
+                      WindowUtil.isCurrentStageManagerProtection(stageManagerProtection),
+                      coordinator.stageManagerProtectionEnabled == stageManagerProtection
+                else { return }
 
                 let freshWindows = buildSwitcherWindows(mode: mode)
                 guard !freshWindows.isEmpty else { return }
@@ -293,7 +299,8 @@ private class WindowSwitchingCoordinator {
                         previewCoordinator.hideWindow()
                     }
                 },
-                initialIndex: coordinator.currIndex
+                initialIndex: coordinator.currIndex,
+                stageManagerProtection: coordinator.stageManagerProtectionEnabled
             )
         }
 

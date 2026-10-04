@@ -425,7 +425,7 @@ func findCGEntry(for windowID: CGWindowID, in candidates: [[String: AnyObject]])
 
 let AXMinWindowSize: CGSize = .init(width: 100, height: 100)
 
-func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObject]]) -> Bool {
+func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObject]], sizeOverride: CGSize? = nil) -> Bool {
     guard let match = candidates.first(where: { desc -> Bool in
         let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
         return wid == id
@@ -435,7 +435,8 @@ func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObje
     let rw = CGFloat((bounds?["Width"] as? NSNumber)?.doubleValue ?? 0)
     let rh = CGFloat((bounds?["Height"] as? NSNumber)?.doubleValue ?? 0)
     let alpha = CGFloat((match[kCGWindowAlpha as String] as? NSNumber)?.doubleValue ?? 1.0)
-    if !WindowCandidateDiscriminator.hasUsableSize(CGSize(width: rw, height: rh)) { return false }
+    guard rw > 0, rh > 0 else { return false }
+    if !WindowCandidateDiscriminator.hasUsableSize(sizeOverride ?? CGSize(width: rw, height: rh)) { return false }
     if alpha <= 0.01 { return false }
     return true
 }

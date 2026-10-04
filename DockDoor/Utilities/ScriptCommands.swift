@@ -117,7 +117,8 @@ enum DockDoorCommands {
 
         Task { @MainActor in
             guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else { return }
-            guard let windows = try? await WindowUtil.getActiveWindows(of: app, context: .dockPreview) else { return }
+            let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
+            guard let windows = try? await WindowUtil.getActiveWindows(of: app, context: .dockPreview, stageManagerProtection: stageManagerProtection) else { return }
 
             let mouseLocation = position ?? NSEvent.mouseLocation
             let screen = NSScreen.screenFromQuartzPoint(mouseLocation)
@@ -133,7 +134,8 @@ enum DockDoorCommands {
                 bundleIdentifier: app.bundleIdentifier,
                 bypassDockMouseValidation: true,
                 dockPositionOverride: .cli,
-                dockItemFrameOverride: dockItemFrame
+                dockItemFrameOverride: dockItemFrame,
+                stageManagerProtection: stageManagerProtection
             )
         }
     }

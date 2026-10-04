@@ -1703,7 +1703,7 @@ enum SettingsSearchCatalog {
     private static let advancedItems: [SettingsSearchItem] = [
         SettingsSearchItem(
             id: "advanced.stageManagerOptimization",
-            title: String(localized: "Optimize previews for Stage Manager"),
+            title: String(localized: "Prevent distorted previews for Stage Manager"),
             description: String(localized: "Prevents distorted previews when windows are in the Stage Manager sidebar. Bring each window to the front once to capture a normal preview."),
             keywords: ["stage manager", "sidebar", "thumbnail", "preview"],
             tab: "Advanced",

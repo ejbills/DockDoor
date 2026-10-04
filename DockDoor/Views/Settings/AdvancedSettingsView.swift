@@ -49,9 +49,6 @@ struct AdvancedSettingsView: View {
             }
         }
         .onAppear {
-            if stageManagerOptimization, enableLivePreview {
-                enableLivePreview = false
-            }
             if livePreviewStreamKeepAlive > 0 {
                 lastKeepAliveDuration = livePreviewStreamKeepAlive
                 keepAliveDurationText = "\(livePreviewStreamKeepAlive)"
@@ -159,14 +156,9 @@ struct AdvancedSettingsView: View {
         SettingsGroup(header: LocalizedStringKey(String(localized: "Stage Manager", comment: "Advanced settings section"))) {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $stageManagerOptimization) {
-                    Text(String(localized: "Optimize previews for Stage Manager", comment: "Setting to avoid Stage Manager sidebar thumbnails"))
+                    Text(String(localized: "Prevent distorted previews for Stage Manager", comment: "Setting to avoid Stage Manager sidebar thumbnails"))
                 }
                 .settingsSearchTarget("advanced.stageManagerOptimization")
-                .onChange(of: stageManagerOptimization) { enabled in
-                    if enabled, enableLivePreview {
-                        enableLivePreview = false
-                    }
-                }
                 Text(String(localized: "Prevents distorted previews when windows are in the Stage Manager sidebar. Bring each window to the front once to capture a normal preview.", comment: "Stage Manager preview setup hint"))
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -182,7 +174,6 @@ struct AdvancedSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
                     .settingsSearchTarget("advanced.livePreview")
-                    .disabled(stageManagerOptimization)
                     .onChange(of: enableLivePreview) { newValue in
                         if !newValue {
                             Task { await LiveCaptureManager.shared.stopAllStreams() }
@@ -194,7 +185,7 @@ struct AdvancedSettingsView: View {
                     .padding(.leading, 20)
 
                 if stageManagerOptimization {
-                    Text(String(localized: "Live preview is unavailable while Stage Manager optimization is on.", comment: "Reason the live preview toggle is disabled"))
+                    Text(String(localized: "Live preview pauses while Stage Manager is on and distorted preview protection is enabled.", comment: "Explanation of when live previews pause"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)

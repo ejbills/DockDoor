@@ -40,6 +40,7 @@ class PreviewStateCoordinator: ObservableObject {
     var hasMovedSinceOpen: Bool = false
     var initialHoverLocation: CGPoint?
     var fullWindowPreviewActive: Bool = false
+    @Published private(set) var stageManagerProtectionEnabled = false
     @Published var windows: [WindowInfo] = [] {
         didSet { invalidateFilterCache() }
     }
@@ -128,6 +129,23 @@ class PreviewStateCoordinator: ObservableObject {
 
     var onFrameRefreshNeeded: (() -> Void)?
     private var lastKnownBestGuessMonitor: NSScreen?
+    private var lastKnownDockPosition: DockPosition?
+
+    @MainActor
+    func setStageManagerProtection(_ enabled: Bool) {
+        guard stageManagerProtectionEnabled != enabled else { return }
+        stageManagerProtectionEnabled = enabled
+        if enabled {
+            Task { @MainActor [weak self] in
+                guard self?.stageManagerProtectionEnabled == true else { return }
+                await LiveCaptureManager.shared.stopAllStreams()
+            }
+        }
+        if let monitor = lastKnownBestGuessMonitor, let dockPosition = lastKnownDockPosition, !windows.isEmpty {
+            recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
+            onFrameRefreshNeeded?()
+        }
+    }
 
     enum WindowState {
         case windowSwitcher
@@ -360,6 +378,8 @@ class PreviewStateCoordinator: ObservableObject {
 
     @MainActor
     func recomputeAndPublishDimensions(dockPosition: DockPosition, bestGuessMonitor: NSScreen, isMockPreviewActive: Bool = false) {
+        lastKnownDockPosition = dockPosition
+        lastKnownBestGuessMonitor = bestGuessMonitor
         let panelSize = getWindowSize()
 
         let newOverallMaxDimension = WindowPreviewHoverContainer.calculateOverallMaxDimensions(
@@ -388,7 +408,8 @@ class PreviewStateCoordinator: ObservableObject {
             dockPosition: dockPosition,
             isWindowSwitcherActive: windowSwitcherActive,
             effectiveMaxColumns: cols,
-            effectiveMaxRows: rows
+            effectiveMaxRows: rows,
+            stageManagerProtection: stageManagerProtectionEnabled
         )
 
         dimensionState = DimensionState(

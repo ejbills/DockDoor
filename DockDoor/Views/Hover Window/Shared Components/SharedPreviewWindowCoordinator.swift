@@ -26,7 +26,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var fullPreviewWindow: NSPanel?
     private var activeFullPreviewHoverID: UUID?
     private var pendingShowWorkItem: DispatchWorkItem?
-    private var pendingShow: (id: UUID, pid: pid_t?, freshWindows: [WindowInfo]?)?
+    private var pendingShow: (id: UUID, pid: pid_t?, stageManagerProtection: Bool, freshWindows: [WindowInfo]?)?
 
     var windowSize: CGSize = getWindowSize()
 
@@ -221,12 +221,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     /// Merges fresh windows if currently displaying the expected app.
     @MainActor
     @discardableResult
-    func mergeWindowsIfNeeded(_ pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
-        if !windowSwitcherCoordinator.windowSwitcherActive, currentlyDisplayedPID != pid, let pid, pendingShow?.pid == pid {
+    func mergeWindowsIfNeeded(_ pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, stageManagerProtection: Bool) -> Bool {
+        guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return false }
+        if let pid, pendingShow?.pid == pid, pendingShow?.stageManagerProtection == stageManagerProtection {
             pendingShow?.freshWindows = windows
             return true
         }
-        guard windowSwitcherCoordinator.windowSwitcherActive || currentlyDisplayedPID == pid else { return false }
+        guard windowSwitcherCoordinator.stageManagerProtectionEnabled == stageManagerProtection,
+              windowSwitcherCoordinator.windowSwitcherActive || currentlyDisplayedPID == pid
+        else { return false }
         windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
         return true
     }
@@ -476,7 +479,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         let flippedIconRect = CGRect(origin: adjustedPosition, size: windowSize)
 
-        let previewView = FullSizePreviewView(windowInfo: windowInfo, windowSize: windowSize)
+        let previewView = FullSizePreviewView(windowInfo: windowInfo, windowSize: windowSize, previewStateCoordinator: windowSwitcherCoordinator)
         let hostingView = NSHostingView(rootView: previewView)
 
         if let oldFullPreviewContent = fullPreviewWindow?.contentView {
@@ -671,8 +674,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         dockPositionOverride: DockPosition? = nil,
         initialIndex: Int? = nil,
         dockItemFrameOverride: CGRect? = nil,
-        renderStartTime: CFAbsoluteTime? = nil
+        renderStartTime: CFAbsoluteTime? = nil,
+        stageManagerProtection: Bool,
+        hasFreshWindows: Bool
     ) {
+        guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return }
+        windowSwitcherCoordinator.setStageManagerProtection(stageManagerProtection)
         let elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
         DebugLogger.log("PreviewRender", details: "performDisplay start (+\(String(format: "%.1f", elapsed))ms)")
 
@@ -748,9 +755,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             if newPID != currentlyDisplayedPID {
                 anchoredDockItem = nil
             } else if anchoredDockItem?.element == dockItemElement, isVisible {
-                // Same dock item element is already displayed and anchored.
-                // Skip re-display to prevent position bouncing from duplicate AX notifications
-                // (e.g. dock auto-hide at 0s). Window list updates arrive via mergeWindowsIfShowing.
+                if hasFreshWindows {
+                    windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(), bestGuessMonitor: screen)
+                }
                 return
             }
             currentlyDisplayedPID = newPID
@@ -828,6 +835,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     func cycleWindows(goBackwards: Bool) {
+        windowSwitcherCoordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionEnabled())
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
@@ -865,6 +873,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     func navigateWithArrowKey(direction: ArrowDirection) {
+        windowSwitcherCoordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionEnabled())
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
@@ -1026,8 +1035,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil,
                     bypassDockMouseValidation: Bool = false,
                     dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
-                    dockItemFrameOverride: CGRect? = nil, fullPreviewHoverID: UUID? = nil)
+                    dockItemFrameOverride: CGRect? = nil, fullPreviewHoverID: UUID? = nil,
+                    stageManagerProtection: Bool? = nil)
     {
+        let stageManagerProtection = stageManagerProtection ?? WindowUtil.stageManagerProtectionEnabled()
+        guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return }
         let renderStartTime = CFAbsoluteTimeGetCurrent()
         DebugLogger.log("PreviewRender", details: "showWindow called: \(windows.count) windows for \(appName)")
 
@@ -1040,7 +1052,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         pendingShowWorkItem?.cancel()
         let pendingShowID = UUID()
-        pendingShow = (pendingShowID, windows.first?.app.processIdentifier, nil)
+        pendingShow = (pendingShowID, centeredHoverWindowState == nil ? windows.first?.app.processIdentifier : nil, stageManagerProtection, nil)
         let workItem = DispatchWorkItem { [weak self, renderStartTime] in
             guard let self else { return }
 
@@ -1080,11 +1092,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     return
                 }
                 var windowsToShow = windows
+                var hasFreshWindows = false
                 if pendingShow?.id == pendingShowID {
+                    hasFreshWindows = pendingShow?.freshWindows != nil
                     windowsToShow = pendingShow?.freshWindows ?? windows
                     pendingShow = nil
                 }
-                performDisplay(appName: appName, windows: windowsToShow, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
+                performDisplay(appName: appName, windows: windowsToShow, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime, stageManagerProtection: stageManagerProtection, hasFreshWindows: hasFreshWindows)
             }
         }
         pendingShowWorkItem = workItem

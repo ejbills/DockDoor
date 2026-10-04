@@ -133,15 +133,17 @@ final class LiveCaptureManager {
         await capture.requestStop()
     }
 
-    func remove(windowID: CGWindowID) {
+    func remove(windowID: CGWindowID, capture: WindowLiveCapture) {
+        guard captures[windowID] === capture else { return }
         captures.removeValue(forKey: windowID)
     }
 
     func stopAllStreams() async {
-        for capture in captures.values {
+        let capturesToStop = Array(captures.values)
+        captures.removeAll()
+        for capture in capturesToStop {
             await capture.stopAndCleanup()
         }
-        captures.removeAll()
     }
 }
 
@@ -155,6 +157,7 @@ final class WindowLiveCapture: ObservableObject {
     private var stream: SCStream?
     private var streamOutput: StreamOutput?
     private var stopGeneration = 0
+    private var captureGeneration = 0
     private(set) var lastFrame: CGImage?
 
     init(windowID: CGWindowID, quality: LivePreviewQuality, frameRate: LivePreviewFrameRate) {
@@ -167,14 +170,17 @@ final class WindowLiveCapture: ObservableObject {
         stopGeneration += 1
         guard stream == nil else { return }
         guard WindowUtil.shouldCaptureWindowImages() else { return }
+        captureGeneration += 1
+        let generationAtStart = captureGeneration
 
         guard let content = await WindowUtil.getShareableContent(onScreenWindowsOnly: false),
               let scWindow = content.windows.first(where: { $0.windowID == windowID })
         else { return }
-        await startStream(for: scWindow)
+        guard captureGeneration == generationAtStart, !Task.isCancelled else { return }
+        await startStream(for: scWindow, generationAtStart: generationAtStart)
     }
 
-    private func startStream(for window: SCWindow) async {
+    private func startStream(for window: SCWindow, generationAtStart: Int) async {
         let filter = SCContentFilter(desktopIndependentWindow: window)
 
         let config = SCStreamConfiguration()
@@ -234,13 +240,18 @@ final class WindowLiveCapture: ObservableObject {
 
             let output = StreamOutput { [weak self] image in
                 Task { @MainActor in
-                    self?.lastFrame = image
-                    self?.capturedImage = image
+                    guard let self, self.captureGeneration == generationAtStart else { return }
+                    self.lastFrame = image
+                    self.capturedImage = image
                 }
             }
 
             try newStream.addStreamOutput(output, type: .screen, sampleHandlerQueue: .global(qos: .userInteractive))
             try await newStream.startCapture()
+            guard captureGeneration == generationAtStart, !Task.isCancelled else {
+                try? await newStream.stopCapture()
+                return
+            }
 
             stream = newStream
             streamOutput = output
@@ -272,24 +283,30 @@ final class WindowLiveCapture: ObservableObject {
     }
 
     func stopCapture() async {
+        captureGeneration += 1
+        stopGeneration += 1
         guard let stream else { return }
-        try? await stream.stopCapture()
         self.stream = nil
         streamOutput = nil
         capturedImage = nil
+        try? await stream.stopCapture()
     }
 
     func stopAndCleanup() async {
-        guard let stream else { return }
+        captureGeneration += 1
+        stopGeneration += 1
+        let streamToStop = stream
         streamOutput = nil
-        self.stream = nil
+        stream = nil
         capturedImage = nil
         lastFrame = nil
-        try? await stream.stopCapture()
-        LiveCaptureManager.shared.remove(windowID: windowID)
+        LiveCaptureManager.shared.remove(windowID: windowID, capture: self)
+        try? await streamToStop?.stopCapture()
     }
 
     func forceStopNonBlocking() {
+        captureGeneration += 1
+        stopGeneration += 1
         guard let stream else { return }
         let streamToStop = stream
         self.stream = nil

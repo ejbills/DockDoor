@@ -377,6 +377,7 @@ final class DockObserver {
         }
 
         guard Defaults[.enableDockPreviews] else { return }
+        let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
 
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             if canShowSpecialPreview(forNotRunningBundleIdentifier: bundleIdentifier) {
@@ -395,7 +396,8 @@ final class DockObserver {
                     dockItemElement: dockItemElement,
                     overrideDelay: overrideDelay,
                     onWindowTap: { [weak self] in self?.hideWindowAndResetLastApp() },
-                    bundleIdentifier: bundleIdentifier
+                    bundleIdentifier: bundleIdentifier,
+                    stageManagerProtection: stageManagerProtection
                 )
             }
             return
@@ -475,7 +477,8 @@ final class DockObserver {
                 onWindowTap: { [weak self] in
                     self?.hideWindowAndResetLastApp()
                 },
-                bundleIdentifier: currentAppInfo.bundleIdentifier
+                bundleIdentifier: currentAppInfo.bundleIdentifier,
+                stageManagerProtection: stageManagerProtection
             )
             previousStatus = .success(currentApp)
         }
@@ -487,7 +490,7 @@ final class DockObserver {
                 var windows: [WindowInfo] = []
                 for appInstance in appsToFetchWindowsFrom {
                     try await windows.append(contentsOf: DebugLogger.measureAsync("getActiveWindows (\(refreshLogContext))", details: "PID: \(appInstance.processIdentifier)") {
-                        try await WindowUtil.getActiveWindows(of: appInstance)
+                        try await WindowUtil.getActiveWindows(of: appInstance, stageManagerProtection: stageManagerProtection)
                     })
                 }
 
@@ -507,6 +510,7 @@ final class DockObserver {
 
                 await MainActor.run { [weak self] in
                     guard let self else { return }
+                    guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return }
 
                     let currentAppStatus = getDockItemAppStatusUnderMouse()
                     guard case let .success(stillHoveredApp) = currentAppStatus.status,
@@ -526,7 +530,8 @@ final class DockObserver {
                         currentAppPID,
                         windows: freshWindows,
                         dockPosition: dockPosition,
-                        bestGuessMonitor: monitor
+                        bestGuessMonitor: monitor,
+                        stageManagerProtection: stageManagerProtection
                     )
                     DebugLogger.log("WindowRefresh", details: "\(refreshLogContext) final merge, PID: \(currentAppPID), windows: \(freshWindows.count), merged: \(didMerge)")
                 }
@@ -1140,8 +1145,9 @@ final class DockObserver {
                 return
             }
 
+            let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
             do {
-                let windows = try await WindowUtil.getActiveWindows(of: app)
+                let windows = try await WindowUtil.getActiveWindows(of: app, stageManagerProtection: stageManagerProtection)
                 let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
@@ -1155,7 +1161,8 @@ final class DockObserver {
                     onWindowTap: { [weak self] in
                         self?.hideWindowAndResetLastApp()
                     },
-                    bundleIdentifier: app.bundleIdentifier
+                    bundleIdentifier: app.bundleIdentifier,
+                    stageManagerProtection: stageManagerProtection
                 )
             } catch {
                 // If we can't get windows, still show the preview for special apps if enabled
@@ -1173,7 +1180,8 @@ final class DockObserver {
                         onWindowTap: { [weak self] in
                             self?.hideWindowAndResetLastApp()
                         },
-                        bundleIdentifier: app.bundleIdentifier
+                        bundleIdentifier: app.bundleIdentifier,
+                        stageManagerProtection: stageManagerProtection
                     )
                 }
             }
