@@ -40,7 +40,7 @@ private class WindowSwitchingCoordinator {
 
         let coordinator = previewCoordinator.windowSwitcherCoordinator
 
-        coordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionEnabled())
+        coordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionSnapshot())
 
         if coordinator.isKeybindSessionActive {
             coordinator.hasMovedSinceOpen = false
@@ -207,7 +207,7 @@ private class WindowSwitchingCoordinator {
         WindowSwitchingCoordinator.lastUpdateAllWindowsTime = Date()
 
         windowRefreshTask?.cancel()
-        let stageManagerProtection = previewCoordinator.windowSwitcherCoordinator.stageManagerProtectionEnabled
+        let stageManagerProtection = previewCoordinator.windowSwitcherCoordinator.stageManagerProtection
         windowRefreshTask = Task.detached(priority: priority) { [weak self, weak previewCoordinator, mode, dockPosition, targetScreen, sessionId] in
             await WindowUtil.updateAllWindowsInCurrentSpace(stageManagerProtection: stageManagerProtection)
             guard !Task.isCancelled else { return }
@@ -219,7 +219,7 @@ private class WindowSwitchingCoordinator {
                 let coordinator = previewCoordinator.windowSwitcherCoordinator
                 guard coordinator.isKeybindSessionActive,
                       WindowUtil.isCurrentStageManagerProtection(stageManagerProtection),
-                      coordinator.stageManagerProtectionEnabled == stageManagerProtection
+                      coordinator.stageManagerProtection == stageManagerProtection
                 else { return }
 
                 let freshWindows = buildSwitcherWindows(mode: mode)
@@ -300,7 +300,7 @@ private class WindowSwitchingCoordinator {
                     }
                 },
                 initialIndex: coordinator.currIndex,
-                stageManagerProtection: coordinator.stageManagerProtectionEnabled
+                stageManagerProtection: coordinator.stageManagerProtection
             )
         }
 

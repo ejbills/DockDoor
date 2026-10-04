@@ -377,7 +377,7 @@ final class DockObserver {
         }
 
         guard Defaults[.enableDockPreviews] else { return }
-        let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
+        let stageManagerProtection = WindowUtil.stageManagerProtectionSnapshot()
 
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             if canShowSpecialPreview(forNotRunningBundleIdentifier: bundleIdentifier) {
@@ -1145,7 +1145,7 @@ final class DockObserver {
                 return
             }
 
-            let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
+            let stageManagerProtection = WindowUtil.stageManagerProtectionSnapshot()
             do {
                 let windows = try await WindowUtil.getActiveWindows(of: app, stageManagerProtection: stageManagerProtection)
                 let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)

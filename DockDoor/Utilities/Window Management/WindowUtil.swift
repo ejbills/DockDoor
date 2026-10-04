@@ -271,6 +271,11 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     }
 }
 
+struct StageManagerProtection: Equatable {
+    let enabled: Bool
+    let generation: UInt64
+}
+
 enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
     private static let operationTimeout: UInt64 = 10_000_000_000
@@ -327,40 +332,40 @@ enum WindowUtil {
     private static let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
 
     private static let stageManagerStateLock = NSLock()
-    private static var lastStageManagerProtection = false
+    private static var lastStageManagerProtection = StageManagerProtection(enabled: false, generation: 0)
 
-    static func stageManagerProtectionEnabled() -> Bool {
+    static func stageManagerProtectionSnapshot() -> StageManagerProtection {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
         let enabled = Defaults[.stageManagerOptimization] &&
             (windowManagerDefaults?.object(forKey: "GloballyEnabled") as? Bool ?? false)
-        lastStageManagerProtection = enabled
-        DebugLogger.log("StageManager", details: "protection enabled: \(enabled)")
-        return enabled
+        if enabled != lastStageManagerProtection.enabled {
+            lastStageManagerProtection = StageManagerProtection(enabled: enabled, generation: lastStageManagerProtection.generation &+ 1)
+        }
+        return lastStageManagerProtection
     }
 
-    static func isCurrentStageManagerProtection(_ enabled: Bool) -> Bool {
+    static func isCurrentStageManagerProtection(_ snapshot: StageManagerProtection) -> Bool {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
-        return lastStageManagerProtection == enabled
+        return lastStageManagerProtection == snapshot
     }
 
     /// Returns window IDs that are cached with fresh images (within cache lifespan)
-    static func freshCachedWindowIDs(for pid: pid_t, from cachedWindows: Set<WindowInfo>? = nil, stageManagerProtection: Bool) -> Set<CGWindowID> {
+    static func freshCachedWindowIDs(for pid: pid_t, from cachedWindows: Set<WindowInfo>? = nil, stageManagerProtection: StageManagerProtection) -> Set<CGWindowID> {
         let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
         let windows = cachedWindows ?? desktopSpaceWindowCacheManager.readCache(pid: pid)
-        let focusedID: CGWindowID? = if stageManagerProtection,
-                                        let window = windows.first(where: { $0.ownerApp.isActive }),
-                                        let focused = try? window.appAxElement.focusedWindow()
+        let focusedWindow: AXUIElement? = if stageManagerProtection.enabled,
+                                             let window = windows.first(where: { $0.ownerApp.isActive })
         {
-            try? focused.cgWindowId()
+            try? window.appAxElement.focusedWindow()
         } else {
             nil
         }
         return Set(windows.compactMap { window -> CGWindowID? in
-            guard window.id != focusedID,
+            guard window.axElement != focusedWindow,
                   let image = window.image,
-                  !stageManagerProtection || isPlausibleStageManagerImage(image),
+                  !stageManagerProtection.enabled || (window.stageManagerImageApproved && isPlausibleStageManagerImage(image)),
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -543,14 +548,31 @@ extension WindowUtil {
     private struct PreviewImageCapture {
         let image: CGImage
         let capturedAt: Date
+        let approved: Bool
     }
 
-    private static func cachedStageManagerImage(windowID: CGWindowID, pid: pid_t) -> PreviewImageCapture? {
-        guard let window = desktopSpaceWindowCacheManager.readCache(pid: pid).first(where: { $0.id == windowID }),
-              let image = window.image,
-              isPlausibleStageManagerImage(image)
+    private static func stageManagerAXIdentityMatches(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> Bool {
+        var axPID: pid_t = 0
+        guard AXUIElementGetPid(axWindow, &axPID) == .success, axPID == pid else { return false }
+        if let axID = try? axWindow.cgWindowId(), axID != 0 { return axID == windowID }
+        return true
+    }
+
+    private static func stageManagerCaptureGeometry(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> CGSize? {
+        guard !Task.isCancelled, isValidElement(axWindow),
+              stageManagerAXIdentityMatches(windowID: windowID, pid: pid, axWindow: axWindow),
+              let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first,
+              (entry[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value == pid,
+              let bounds = (entry[kCGWindowBounds as String] as? NSDictionary).flatMap({ CGRect(dictionaryRepresentation: $0) }),
+              let size = try? axWindow.size(),
+              bounds.width.isFinite, bounds.height.isFinite, size.width.isFinite, size.height.isFinite,
+              bounds.width > 0, bounds.height > 0, size.width > 0, size.height > 0,
+              !(bounds.width < size.width * 0.7 && bounds.height < size.height * 0.7)
         else { return nil }
-        return PreviewImageCapture(image: image, capturedAt: window.imageCapturedTime)
+        if (try? axWindow.cgWindowId()).map({ $0 == 0 }) ?? true {
+            guard mapAXToCG(attributes: WindowCandidateAttributes(axWindow: axWindow), candidates: [entry], excluding: []) == windowID else { return nil }
+        }
+        return size
     }
 
     private static func capturePreviewImage(
@@ -559,33 +581,33 @@ extension WindowUtil {
         title: String?,
         axWindow: AXUIElement,
         cachePID: pid_t? = nil,
-        stageManagerProtection: Bool,
+        stageManagerProtection: StageManagerProtection,
         forceRefresh: Bool = false
     ) async -> PreviewImageCapture? {
-        guard stageManagerProtection else {
+        guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled else { return nil }
+        guard stageManagerProtection.enabled else {
             guard let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh) else { return nil }
-            return PreviewImageCapture(image: image, capturedAt: Date())
+            return PreviewImageCapture(image: image, capturedAt: Date(), approved: false)
         }
-
-        let cached = cachedStageManagerImage(windowID: windowID, pid: cachePID ?? pid)
-        // Stage Manager scales the server bounds while AX keeps the window's full size.
-        let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first
-        if let bounds = (entry?[kCGWindowBounds as String] as? NSDictionary).flatMap({ CGRect(dictionaryRepresentation: $0) }),
-           bounds.width > 0, bounds.height > 0,
-           let size = try? axWindow.size(), size.width > 0, size.height > 0,
-           bounds.width < size.width * 0.7, bounds.height < size.height * 0.7
+        guard let app = NSRunningApplication(processIdentifier: pid) else { return nil }
+        let sizeBefore = stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow)
+        if let sizeBefore,
+           let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: true),
+           stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow) == sizeBefore,
+           isPlausibleStageManagerImage(image), !Task.isCancelled
         {
-            return cached
+            let capturedAt = Date()
+            guard isCurrentStageManagerProtection(stageManagerProtection) else { return nil }
+            return PreviewImageCapture(image: image, capturedAt: capturedAt, approved: true)
         }
-
-        guard let image = try? await captureWindowImage(
-            windowID: windowID,
-            pid: pid,
-            windowTitle: title,
-            forceRefresh: true
-        ), isPlausibleStageManagerImage(image)
-        else { return cached }
-        return PreviewImageCapture(image: image, capturedAt: Date())
+        guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled,
+              isValidElement(axWindow), stageManagerAXIdentityMatches(windowID: windowID, pid: pid, axWindow: axWindow) else { return nil }
+        if let window = desktopSpaceWindowCacheManager.readCache(pid: cachePID ?? pid).first(where: {
+            $0.id == windowID && $0.axElement == axWindow && $0.ownerApp.processIdentifier == pid && $0.ownerApp.launchDate == app.launchDate
+        }), window.stageManagerImageApproved, let image = window.image, isPlausibleStageManagerImage(image) {
+            return PreviewImageCapture(image: image, capturedAt: window.imageCapturedTime, approved: true)
+        }
+        return nil
     }
 
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
@@ -984,8 +1006,8 @@ extension WindowUtil {
         return windows.filter { keptIDs.contains($0.id) }
     }
 
-    static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false, stageManagerProtection: Bool? = nil) async throws -> [WindowInfo] {
-        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionEnabled()
+    static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false, stageManagerProtection: StageManagerProtection? = nil) async throws -> [WindowInfo] {
+        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionSnapshot()
         if isAppFiltered(app) {
             purgeAppCache(with: app.processIdentifier)
             return []
@@ -1014,7 +1036,7 @@ extension WindowUtil {
         }
     }
 
-    private static func getActiveWindowsUpdatingCache(of app: NSRunningApplication, context: WindowFetchContext, ignoreSingleWindowFilter: Bool, stageManagerProtection: Bool) async throws -> [WindowInfo] {
+    private static func getActiveWindowsUpdatingCache(of app: NSRunningApplication, context: WindowFetchContext, ignoreSingleWindowFilter: Bool, stageManagerProtection: StageManagerProtection) async throws -> [WindowInfo] {
         var sckWindowIDs = Set<CGWindowID>()
 
         // Skip SCK if user has disabled image previews (compact mode only) or screen recording permission not granted
@@ -1055,7 +1077,7 @@ extension WindowUtil {
         return []
     }
 
-    private static func discoverNonSCKWindowsViaAX(app: NSRunningApplication, sckWindowIDs: Set<CGWindowID>, stageManagerProtection: Bool) async {
+    private static func discoverNonSCKWindowsViaAX(app: NSRunningApplication, sckWindowIDs: Set<CGWindowID>, stageManagerProtection: StageManagerProtection) async {
         _ = await discoverWindowsViaAX(app: app, excludeWindowIDs: sckWindowIDs, stageManagerProtection: stageManagerProtection)
     }
 
@@ -1063,9 +1085,9 @@ extension WindowUtil {
         app: NSRunningApplication,
         excludeWindowIDs: Set<CGWindowID> = [],
         restorePersistedOrder: Bool = true,
-        stageManagerProtection: Bool? = nil
+        stageManagerProtection: StageManagerProtection? = nil
     ) async -> Int {
-        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionEnabled()
+        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionSnapshot()
         let pid = app.processIdentifier
 
         if let bundleId = app.bundleIdentifier, filteredBundleIdentifiers.contains(bundleId) {
@@ -1110,8 +1132,8 @@ extension WindowUtil {
         return axWindows.count
     }
 
-    static func updateNewWindowsForApp(_ app: NSRunningApplication, restorePersistedOrder: Bool = true, stageManagerProtection: Bool? = nil) async {
-        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionEnabled()
+    static func updateNewWindowsForApp(_ app: NSRunningApplication, restorePersistedOrder: Bool = true, stageManagerProtection: StageManagerProtection? = nil) async {
+        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionSnapshot()
         WindowManipulationObservers.ensureObserver(for: app)
         if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
@@ -1136,12 +1158,12 @@ extension WindowUtil {
     // MARK: - AX Fallback Discovery
 
     /// Discovers and caches windows via AX + CGS when SCK misses them (e.g., certain Adobe apps)
-    private static func discoverNewWindowsViaAXFallback(app: NSRunningApplication, stageManagerProtection: Bool) async {
+    private static func discoverNewWindowsViaAXFallback(app: NSRunningApplication, stageManagerProtection: StageManagerProtection) async {
         _ = await discoverWindowsViaAX(app: app, stageManagerProtection: stageManagerProtection)
     }
 
-    static func updateAllWindowsInCurrentSpace(stageManagerProtection: Bool? = nil) async {
-        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionEnabled()
+    static func updateAllWindowsInCurrentSpace(stageManagerProtection: StageManagerProtection? = nil) async {
+        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionSnapshot()
         var processedPIDs = Set<pid_t>()
 
         if shouldCaptureWindowImages() {
@@ -1206,7 +1228,7 @@ extension WindowUtil {
     }
 
     /// Refresh images for windows discovered via AX fallback (no SCWindow available)
-    private static func refreshAXFallbackWindowImages(for pid: pid_t, stageManagerProtection: Bool) async {
+    private static func refreshAXFallbackWindowImages(for pid: pid_t, stageManagerProtection: StageManagerProtection) async {
         let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
         guard !windows.isEmpty else { return }
         guard shouldCaptureWindowImages() else { return }
@@ -1221,7 +1243,7 @@ extension WindowUtil {
             // Skip windows with fresh cache
             if freshCachedIDs.contains(window.id) { continue }
             if !isValidElement(window.axElement) {
-                desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
+                removeWindowFromDesktopSpaceCache(with: window.id, in: pid)
             } else {
                 validWindows.append(window)
             }
@@ -1231,14 +1253,16 @@ extension WindowUtil {
         await LimitedConcurrency.forEachNonThrowing(validWindows, maxConcurrent: 4, timeout: 10) { window in
             let capture = await capturePreviewImage(
                 windowID: window.id,
-                pid: pid,
+                pid: window.ownerApp.processIdentifier,
                 title: window.windowName,
                 axWindow: window.axElement,
+                cachePID: pid,
                 stageManagerProtection: stageManagerProtection,
                 forceRefresh: true
             )
             var updated = window
             updated.image = capture?.image
+            updated.stageManagerImageApproved = capture?.approved ?? false
             if let capture { updated.imageCapturedTime = capture.capturedAt }
             updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
             updateDesktopSpaceWindowCache(with: updated, stageManagerProtection: stageManagerProtection)
@@ -1251,9 +1275,9 @@ extension WindowUtil {
         ownerApp: NSRunningApplication? = nil,
         skipWindowIDs: Set<CGWindowID> = [],
         restorePersistedOrder: Bool = true,
-        stageManagerProtection: Bool? = nil
+        stageManagerProtection: StageManagerProtection? = nil
     ) async throws {
-        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionEnabled()
+        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionSnapshot()
         let windowID = window.windowID
         guard let ownerApp = ownerApp ?? WindowOwnerResolver.ownerApp(for: window) else {
             return
@@ -1330,7 +1354,7 @@ extension WindowUtil {
             windowRef = matched
         }
 
-        let windowSize = stageManagerProtection ? ((try? windowRef.size()) ?? window.frame.size) : window.frame.size
+        let windowSize = stageManagerProtection.enabled ? ((try? windowRef.size()) ?? window.frame.size) : window.frame.size
         guard Defaults[.disableMinWindowSizeFilter] || (windowSize.width >= AXMinWindowSize.width && windowSize.height >= AXMinWindowSize.height) else { return }
 
         let closeButton = try? windowRef.closeButton()
@@ -1381,6 +1405,7 @@ extension WindowUtil {
                 cachePID: displayPid,
                 stageManagerProtection: stageManagerProtection
             ) {
+                windowInfo.stageManagerImageApproved = capture.approved
                 windowInfo.image = capture.image
                 windowInfo.imageCapturedTime = capture.capturedAt
             }
@@ -1397,9 +1422,9 @@ extension WindowUtil {
         existingCachedIDs: Set<CGWindowID> = [],
         cgCandidates: [[String: AnyObject]]? = nil,
         restorePersistedOrder: Bool = true,
-        stageManagerProtection: Bool? = nil
+        stageManagerProtection: StageManagerProtection? = nil
     ) async throws {
-        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionEnabled()
+        let stageManagerProtection = stageManagerProtection ?? stageManagerProtectionSnapshot()
         guard var info = buildAXWindowInfo(
             axWindow: axWindow,
             appAxElement: appAxElement,
@@ -1419,6 +1444,7 @@ extension WindowUtil {
             axWindow: axWindow,
             stageManagerProtection: stageManagerProtection
         ) {
+            info.stageManagerImageApproved = capture.approved
             info.image = capture.image
             info.imageCapturedTime = capture.capturedAt
         }
@@ -1450,14 +1476,14 @@ extension WindowUtil {
         }
 
         let appAxElement = AXUIElementCreateApplication(pid)
-        let stageManagerProtection = stageManagerProtectionEnabled()
+        let stageManagerProtection = stageManagerProtectionSnapshot()
         for delay in createdWindowRetryDelays {
             if delay > 0 {
                 try? await Task.sleep(nanoseconds: delay)
             }
             if desktopSpaceWindowCacheManager.readCache(pid: pid).contains(where: { $0.id == cgID }) { return }
             let cgCandidates = getCGWindowCandidates(for: pid)
-            guard isValidCGWindowCandidate(cgID, in: cgCandidates, sizeOverride: stageManagerProtection ? (try? axWindow.size()) : nil) else { continue }
+            guard isValidCGWindowCandidate(cgID, in: cgCandidates, sizeOverride: stageManagerProtection.enabled ? (try? axWindow.size()) : nil) else { continue }
             try? await captureAndCacheAXWindowInfo(
                 axWindow: axWindow,
                 appAxElement: appAxElement,
@@ -1479,7 +1505,7 @@ extension WindowUtil {
         existingCachedIDs: Set<CGWindowID> = [],
         cgCandidates: [[String: AnyObject]]? = nil,
         restorePersistedOrder: Bool = true,
-        stageManagerProtection: Bool
+        stageManagerProtection: StageManagerProtection
     ) -> WindowInfo? {
         let pid = app.processIdentifier
 
@@ -1534,7 +1560,7 @@ extension WindowUtil {
             }
         }
 
-        guard isValidCGWindowCandidate(cgID, in: cgCandidates, sizeOverride: stageManagerProtection ? attributes.size : nil) else {
+        guard isValidCGWindowCandidate(cgID, in: cgCandidates, sizeOverride: stageManagerProtection.enabled ? attributes.size : nil) else {
             return nil
         }
         guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else {
@@ -1603,7 +1629,7 @@ extension WindowUtil {
         return Set(windowsByID.values)
     }
 
-    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo, stageManagerProtection: Bool? = nil) {
+    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo, stageManagerProtection: StageManagerProtection? = nil) {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
         // A previous capture batch must not overwrite previews after the mode changes.
@@ -1633,10 +1659,11 @@ extension WindowUtil {
                 }
 
                 if newImageIsTiny, let cachedImage = matchingWindow.image,
-                   stageManagerProtection != true || isPlausibleStageManagerImage(cachedImage)
+                   stageManagerProtection?.enabled != true || (matchingWindow.stageManagerImageApproved && isPlausibleStageManagerImage(cachedImage))
                 {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
+                    matchingWindowCopy.stageManagerImageApproved = windowInfo.stageManagerImageApproved
                     matchingWindowCopy.image = windowInfo.image
                     matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
                 }
@@ -1661,7 +1688,7 @@ extension WindowUtil {
         }
     }
 
-    static func purifyAppCache(with pid: pid_t, removeAll: Bool, stageManagerProtection: Bool) async -> Set<WindowInfo>? {
+    static func purifyAppCache(with pid: pid_t, removeAll: Bool, stageManagerProtection: StageManagerProtection) async -> Set<WindowInfo>? {
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
             return nil
@@ -1689,7 +1716,7 @@ extension WindowUtil {
 
                 if !shouldRemove {
                     if let cgEntry = findCGEntry(for: window.id, in: cgCandidates) {
-                        let hasValidCGWindow = isValidCGWindowCandidate(window.id, in: cgCandidates, sizeOverride: stageManagerProtection ? (try? window.axElement.size()) : nil)
+                        let hasValidCGWindow = isValidCGWindowCandidate(window.id, in: cgCandidates, sizeOverride: stageManagerProtection.enabled ? (try? window.axElement.size()) : nil)
                         if !hasValidCGWindow, !window.isMinimized, !window.isHidden {
                             shouldRemove = true
                         } else if hasValidCGWindow {
@@ -1717,7 +1744,7 @@ extension WindowUtil {
         }
     }
 
-    private static func applyPurifiedWindowCache(pid: pid_t, removedIDs: Set<CGWindowID>, stageManagerProtection: Bool) -> Set<WindowInfo> {
+    private static func applyPurifiedWindowCache(pid: pid_t, removedIDs: Set<CGWindowID>, stageManagerProtection: StageManagerProtection) -> Set<WindowInfo> {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
         guard lastStageManagerProtection == stageManagerProtection else {
@@ -1734,6 +1761,9 @@ extension WindowUtil {
     }
 
     static func purgeAllCaches() {
+        stageManagerStateLock.lock()
+        defer { stageManagerStateLock.unlock() }
+        lastStageManagerProtection = StageManagerProtection(enabled: lastStageManagerProtection.enabled, generation: lastStageManagerProtection.generation &+ 1)
         desktopSpaceWindowCacheManager.purgeAll()
     }
 

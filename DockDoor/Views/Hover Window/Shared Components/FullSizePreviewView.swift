@@ -18,7 +18,9 @@ struct FullSizePreviewView: View {
             if useLivePreview {
                 LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image, quality: dockLivePreviewQuality, frameRate: dockLivePreviewFrameRate)
                     .aspectRatio(windowSize, contentMode: .fit)
-            } else if let image = windowInfo.image {
+            } else if let image = windowInfo.image,
+                      !previewStateCoordinator.stageManagerProtectionEnabled || windowInfo.stageManagerImageApproved
+            {
                 Image(decorative: image, scale: 1.0)
                     .resizable()
                     .aspectRatio(windowSize, contentMode: .fit)

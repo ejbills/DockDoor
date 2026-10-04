@@ -26,7 +26,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var fullPreviewWindow: NSPanel?
     private var activeFullPreviewHoverID: UUID?
     private var pendingShowWorkItem: DispatchWorkItem?
-    private var pendingShow: (id: UUID, pid: pid_t?, stageManagerProtection: Bool, freshWindows: [WindowInfo]?)?
+    private var pendingShow: (id: UUID, pid: pid_t?, stageManagerProtection: StageManagerProtection, freshWindows: [WindowInfo]?)?
 
     var windowSize: CGSize = getWindowSize()
 
@@ -221,13 +221,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     /// Merges fresh windows if currently displaying the expected app.
     @MainActor
     @discardableResult
-    func mergeWindowsIfNeeded(_ pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, stageManagerProtection: Bool) -> Bool {
+    func mergeWindowsIfNeeded(_ pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, stageManagerProtection: StageManagerProtection) -> Bool {
         guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return false }
         if let pid, pendingShow?.pid == pid, pendingShow?.stageManagerProtection == stageManagerProtection {
             pendingShow?.freshWindows = windows
             return true
         }
-        guard windowSwitcherCoordinator.stageManagerProtectionEnabled == stageManagerProtection,
+        guard windowSwitcherCoordinator.stageManagerProtection == stageManagerProtection,
               windowSwitcherCoordinator.windowSwitcherActive || currentlyDisplayedPID == pid
         else { return false }
         windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
@@ -675,7 +675,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         initialIndex: Int? = nil,
         dockItemFrameOverride: CGRect? = nil,
         renderStartTime: CFAbsoluteTime? = nil,
-        stageManagerProtection: Bool,
+        stageManagerProtection: StageManagerProtection,
         hasFreshWindows: Bool
     ) {
         guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return }
@@ -835,7 +835,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     func cycleWindows(goBackwards: Bool) {
-        windowSwitcherCoordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionEnabled())
+        windowSwitcherCoordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionSnapshot())
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
@@ -873,7 +873,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     func navigateWithArrowKey(direction: ArrowDirection) {
-        windowSwitcherCoordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionEnabled())
+        windowSwitcherCoordinator.setStageManagerProtection(WindowUtil.stageManagerProtectionSnapshot())
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
@@ -1036,9 +1036,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     bypassDockMouseValidation: Bool = false,
                     dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
                     dockItemFrameOverride: CGRect? = nil, fullPreviewHoverID: UUID? = nil,
-                    stageManagerProtection: Bool? = nil)
+                    stageManagerProtection: StageManagerProtection? = nil)
     {
-        let stageManagerProtection = stageManagerProtection ?? WindowUtil.stageManagerProtectionEnabled()
+        let stageManagerProtection = stageManagerProtection ?? WindowUtil.stageManagerProtectionSnapshot()
         guard WindowUtil.isCurrentStageManagerProtection(stageManagerProtection) else { return }
         let renderStartTime = CFAbsoluteTimeGetCurrent()
         DebugLogger.log("PreviewRender", details: "showWindow called: \(windows.count) windows for \(appName)")

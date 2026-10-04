@@ -298,8 +298,21 @@ class WindowManipulationObservers {
             stageManagerRefreshTask = Task {
                 try? await Task.sleep(nanoseconds: UInt64(windowProcessingDebounceInterval * 1_000_000_000))
                 guard app.isActive, !Task.isCancelled else { return }
-                let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
-                guard stageManagerProtection else { return }
+                let stageManagerProtection = WindowUtil.stageManagerProtectionSnapshot()
+                guard stageManagerProtection.enabled else { return }
+                let appElement = AXUIElementCreateApplication(app.processIdentifier)
+                let focusedWindow = try? appElement.focusedWindow()
+                let startedAt = Date()
+                await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false, stageManagerProtection: stageManagerProtection)
+                guard let focusedWindow else { return }
+                let captured = WindowUtil.readCachedWindows(for: app.processIdentifier).contains {
+                    $0.axElement == focusedWindow && $0.stageManagerImageApproved && $0.image != nil && $0.imageCapturedTime >= startedAt
+                }
+                guard !captured else { return }
+                try? await Task.sleep(nanoseconds: 350_000_000)
+                guard app.isActive, !Task.isCancelled, WindowUtil.shouldCaptureWindowImages(),
+                      WindowUtil.isCurrentStageManagerProtection(stageManagerProtection),
+                      (try? appElement.focusedWindow()) == focusedWindow else { return }
                 await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false, stageManagerProtection: stageManagerProtection)
             }
         }

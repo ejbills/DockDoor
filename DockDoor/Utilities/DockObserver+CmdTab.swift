@@ -117,7 +117,7 @@ extension DockObserver {
             return
         }
 
-        let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
+        let stageManagerProtection = WindowUtil.stageManagerProtectionSnapshot()
         let resolvedApp = selectedItem.app
         let appName = resolvedApp?.localizedName ?? selectedItem.title ?? "Unknown"
         let bundleId = resolvedApp?.bundleIdentifier ?? selectedItem.bundleId

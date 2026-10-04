@@ -41,6 +41,7 @@ class PreviewStateCoordinator: ObservableObject {
     var initialHoverLocation: CGPoint?
     var fullWindowPreviewActive: Bool = false
     @Published private(set) var stageManagerProtectionEnabled = false
+    private(set) var stageManagerProtection = StageManagerProtection(enabled: false, generation: 0)
     @Published var windows: [WindowInfo] = [] {
         didSet { invalidateFilterCache() }
     }
@@ -132,9 +133,12 @@ class PreviewStateCoordinator: ObservableObject {
     private var lastKnownDockPosition: DockPosition?
 
     @MainActor
-    func setStageManagerProtection(_ enabled: Bool) {
+    func setStageManagerProtection(_ snapshot: StageManagerProtection) {
+        stageManagerProtection = snapshot
+        let enabled = snapshot.enabled
         guard stageManagerProtectionEnabled != enabled else { return }
         stageManagerProtectionEnabled = enabled
+        windows = windows.map(sanitizedWindow)
         if enabled {
             Task { @MainActor [weak self] in
                 guard self?.stageManagerProtectionEnabled == true else { return }
@@ -192,10 +196,17 @@ class PreviewStateCoordinator: ObservableObject {
         }
     }
 
+    private func sanitizedWindow(_ window: WindowInfo) -> WindowInfo {
+        guard stageManagerProtectionEnabled, !window.stageManagerImageApproved else { return window }
+        var window = window
+        window.image = nil
+        return window
+    }
+
     @MainActor
     func setWindows(_ newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, isMockPreviewActive: Bool = false) {
-        windows = newWindows
-        refreshFocusedWindowID(from: newWindows)
+        windows = newWindows.map(sanitizedWindow)
+        refreshFocusedWindowID(from: windows)
         refreshDesktopNumbers()
         lastKnownBestGuessMonitor = bestGuessMonitor
 
@@ -210,6 +221,7 @@ class PreviewStateCoordinator: ObservableObject {
     /// Preserves window order and selected index where possible.
     @MainActor
     func mergeWindows(_ freshWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) {
+        let freshWindows = freshWindows.map(sanitizedWindow)
         guard !windows.isEmpty else {
             setWindows(freshWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
             return
@@ -263,7 +275,7 @@ class PreviewStateCoordinator: ObservableObject {
     @MainActor
     func updateWindow(at index: Int, with newInfo: WindowInfo) {
         guard index >= 0, index < windows.count else { return }
-        windows[index] = newInfo
+        windows[index] = sanitizedWindow(newInfo)
     }
 
     @MainActor
@@ -273,7 +285,8 @@ class PreviewStateCoordinator: ObservableObject {
         if !updated.isEmpty {
             var merged = windows
             var changed = false
-            for fresh in updated {
+            for rawWindow in updated {
+                let fresh = sanitizedWindow(rawWindow)
                 guard let index = merged.firstIndex(where: { $0.id == fresh.id && $0.app.processIdentifier == fresh.app.processIdentifier }),
                       merged[index].viewSnapshot != fresh.viewSnapshot || merged[index] != fresh
                 else { continue }
@@ -339,11 +352,11 @@ class PreviewStateCoordinator: ObservableObject {
         let gated: [WindowInfo]
         if isKeybindSessionActive {
             // The switcher shows every app, so cache discoveries from any PID belong here.
-            gated = newWindowsToAdd
+            gated = newWindowsToAdd.map(sanitizedWindow)
         } else {
             // Dock previews are single-app: gate by the displayed PID to avoid cross-app injection.
             guard let currentPid = windows.first?.app.processIdentifier else { return }
-            gated = newWindowsToAdd.filter { $0.app.processIdentifier == currentPid }
+            gated = newWindowsToAdd.map(sanitizedWindow).filter { $0.app.processIdentifier == currentPid }
         }
 
         var windowsWereAdded = false

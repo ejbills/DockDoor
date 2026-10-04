@@ -117,7 +117,7 @@ enum DockDoorCommands {
 
         Task { @MainActor in
             guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else { return }
-            let stageManagerProtection = WindowUtil.stageManagerProtectionEnabled()
+            let stageManagerProtection = WindowUtil.stageManagerProtectionSnapshot()
             guard let windows = try? await WindowUtil.getActiveWindows(of: app, context: .dockPreview, stageManagerProtection: stageManagerProtection) else { return }
 
             let mouseLocation = position ?? NSEvent.mouseLocation

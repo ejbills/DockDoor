@@ -16,6 +16,7 @@ struct WindowInfo: Identifiable, Hashable {
     let ownerApp: NSRunningApplication
     var windowName: String?
     var frame: CGRect
+    var stageManagerImageApproved = false
     var image: CGImage?
     var axElement: AXUIElement
     var appAxElement: AXUIElement
