@@ -103,7 +103,6 @@ Plus:
 - **Gestures:** swipe two fingers on a preview to minimize or maximize a window, scroll on a Dock icon to show or hide an app, or shake a preview to minimize everything else.
 - **Quick quit:** hold <kbd>⌘</kbd> and right-click a Dock icon to quit the app, or add <kbd>⌥</kbd> to force quit.
 - **Calendar:** hover Calendar to see the rest of today's events.
-- **Dock Locking:** with more than one display, keep the Dock on the screen you choose.
 - **AppleScript and CLI:** control previews, the switcher and windows from scripts. See the [docs](https://dockdoor.net/docs).
 
 ### Make it look like yours
