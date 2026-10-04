@@ -387,8 +387,8 @@ extension WindowUtil {
             return // Skip update
         }
 
+        let windowID = try? element.cgWindowId()
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
-            let windowID = try? element.cgWindowId()
             if let index = windowSet.firstIndex(where: { cachedWindow in
                 if cachedWindow.axElement == element {
                     return true
@@ -630,6 +630,10 @@ extension WindowUtil {
             y += stepY
         }
         return true
+    }
+
+    static func cachedWindowElements(for pid: pid_t) -> [AXUIElement] {
+        desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.axElement)
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
