@@ -697,7 +697,9 @@ extension WindowUtil {
         let boundsAspect = bounds.width / bounds.height
         guard abs(imageAspect - boundsAspect) / boundsAspect > 0.02 else { return false }
         let spaces = Set(windowID.cgsSpaces().map { Int($0) })
-        return !spaces.isEmpty && spaces.isDisjoint(with: currentActiveSpaceIDs())
+        let activeSpaces = currentActiveSpaceIDs()
+        guard !spaces.isEmpty, !activeSpaces.isEmpty else { return false }
+        return spaces.isDisjoint(with: activeSpaces)
     }
 
     private static func logCapture(windowID: CGWindowID, pid: pid_t, title: String?, image: CGImage?, transparent: Bool, clipped: Bool, entry: [String: AnyObject]?, quality: CGSWindowCaptureOptions) {
