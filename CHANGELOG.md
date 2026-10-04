@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.6"></a>
+# [Release 1.40.6](https://github.com/ejbills/DockDoor/releases/tag/1.40.6) - 2026-10-04
+
+## 🐛 Bug Fixes
+- Parall shortcut icons show the right window previews
+
+
+[Changes][1.40.6]
+
+
 <a id="1.40.5"></a>
 # [Release 1.40.5](https://github.com/ejbills/DockDoor/releases/tag/1.40.5) - 2026-10-04
 
@@ -2512,6 +2522,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.6]: https://github.com/ejbills/DockDoor/compare/1.40.5...1.40.6
 [1.40.5]: https://github.com/ejbills/DockDoor/compare/1.40.4...1.40.5
 [1.40.4]: https://github.com/ejbills/DockDoor/compare/1.40.3...1.40.4
 [1.40.3]: https://github.com/ejbills/DockDoor/compare/1.40.2...1.40.3
