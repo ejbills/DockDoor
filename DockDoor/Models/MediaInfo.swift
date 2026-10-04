@@ -162,6 +162,7 @@ final class MediaInfo: ObservableObject {
     private var lyricsTimer: Timer?
     private var currentFetchTask: Task<[LyricLine], Error>?
     private var lastFetchedTrack: String = "" // Track to prevent duplicate fetches
+    private var lyricsRequested = false
 
     // MARK: - Timing Synchronization
 
@@ -252,6 +253,7 @@ final class MediaInfo: ObservableObject {
 
         if trackChanged {
             artwork = mr.artwork
+            refetchLyricsIfRequested()
         } else if let incoming = mr.artwork, artwork == nil {
             artwork = incoming
         }
@@ -286,6 +288,7 @@ final class MediaInfo: ObservableObject {
             stopPeriodicUpdates()
             mrDataSubscription = nil
             isUsingMediaRemote = false
+            lyricsRequested = false
         }
     }
 
@@ -340,6 +343,7 @@ final class MediaInfo: ObservableObject {
     // MARK: - Lyrics Methods
 
     func fetchLyrics() async {
+        lyricsRequested = true
         let trackKey = "\(title)-\(artist)"
 
         guard !title.isEmpty, !artist.isEmpty else {
@@ -385,9 +389,9 @@ final class MediaInfo: ObservableObject {
         }
     }
 
-    func fetchLyricsIfNeeded(lyricsMode: Bool) async {
-        guard lyricsMode else { return }
-        await fetchLyrics()
+    private func refetchLyricsIfRequested() {
+        guard lyricsRequested else { return }
+        Task { await fetchLyrics() }
     }
 
     private func fetchLyricsFromNetwork() async throws -> [LyricLine] {
@@ -698,6 +702,10 @@ final class MediaInfo: ObservableObject {
         // Parse time values with locale-aware parsing
         let newCurrentTime = parseTimeValue(components[4])
         duration = parseTimeValue(components[5])
+
+        if trackChanged {
+            refetchLyricsIfRequested()
+        }
 
         // Skip updating currentTime while user is seeking (faux scrub)
         guard !isSeeking else { return }

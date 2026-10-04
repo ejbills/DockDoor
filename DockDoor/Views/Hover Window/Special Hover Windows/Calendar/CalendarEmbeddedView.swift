@@ -12,6 +12,7 @@ struct CalendarEmbeddedView: View {
     var body: some View {
         let currentEventAuth = calendarInfo.eventAuthStatus
         let isLoadingCalendar = currentEventAuth == .notDetermined
+        let cardRadius = CardRadius.Resolved.current().card
 
         VStack(alignment: .leading, spacing: 8) {
             if isLoadingCalendar {
@@ -44,8 +45,8 @@ struct CalendarEmbeddedView: View {
                 }
             }
         }
-        .padding(12)
+        .padding(CardRadius.widgetContentPadding(12, cardRadius: cardRadius))
         .frame(minWidth: idealWidth ?? 200, alignment: .center)
-        .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: CardRadius.Resolved.current().card, outerPadding: 0)
+        .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: cardRadius, outerPadding: 0)
     }
 }

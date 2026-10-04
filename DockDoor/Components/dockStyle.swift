@@ -32,6 +32,10 @@ enum CardRadius {
         }
     }
 
+    static func widgetContentPadding(_ base: CGFloat, cardRadius: Double) -> CGFloat {
+        max(base, CGFloat(cardRadius) * 0.3 + 4.5)
+    }
+
     static func switcherToolbarHorizontalPadding(uniformCardRadius: Bool) -> CGFloat {
         guard uniformCardRadius else { return 0 }
         return CGFloat(innerPadding / 2)
