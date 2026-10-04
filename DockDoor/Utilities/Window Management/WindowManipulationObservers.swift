@@ -213,6 +213,7 @@ class WindowManipulationObservers {
             dockObserver.currentClickedAppPID = nil
         }
 
+        Self.ensureObserver(for: app)
         refreshStageManagerPreviews(for: app)
         let appAX = AXUIElementCreateApplication(app.processIdentifier)
         axObserverWorkQueue.asyncAfter(deadline: .now() + 0.3) {
@@ -229,7 +230,8 @@ class WindowManipulationObservers {
         DispatchQueue.main.async {
             guard let instance = activeWindowManipulationObserversInstance,
                   instance.observers[app.processIdentifier] == nil,
-                  !app.isTerminated
+                  !app.isTerminated,
+                  !AXResponsiveness.isUnresponsive(app.processIdentifier)
             else { return }
             instance.createObserverForApp(app)
         }
@@ -239,19 +241,25 @@ class WindowManipulationObservers {
         let pid = app.processIdentifier
         guard pid != ProcessInfo.processInfo.processIdentifier else { return }
 
-        DebugLogger.measure("createObserverForApp", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))") {
-            var observer: AXObserver?
-            let result = AXObserverCreate(pid, axObserverCallback, &observer)
-            guard result == .success, let observer else { return }
+        var observer: AXObserver?
+        guard AXObserverCreate(pid, axObserverCallback, &observer) == .success, let observer else { return }
+        CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
+        observers[pid] = observer
 
-            let appElement = AXUIElementCreateApplication(pid)
-            for notification in observedAXNotifications {
-                AXObserverAddNotification(observer, appElement, notification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        let details = "App: \(app.localizedName ?? "Unknown") (PID: \(pid))"
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let registrationFailed: Bool = DebugLogger.measure("createObserverForApp", details: details) {
+                let appElement = AXUIElementCreateApplication(pid)
+                return observedAXNotifications.map {
+                    AXObserverAddNotification(observer, appElement, $0 as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+                }.contains(.cannotComplete)
             }
-
-            CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
-
-            observers[pid] = observer
+            guard registrationFailed else { return }
+            AXResponsiveness.markUnresponsive(pid)
+            DispatchQueue.main.async {
+                guard let self, self.observers[pid] === observer else { return }
+                self.removeObserver(for: pid)
+            }
         }
     }
 
@@ -260,14 +268,14 @@ class WindowManipulationObservers {
     }
 
     func removeObserver(for pid: pid_t) {
-        guard let observer = observers[pid] else { return }
+        guard let observer = observers.removeValue(forKey: pid) else { return }
 
-        let appElement = AXUIElementCreateApplication(pid)
-        for notification in observedAXNotifications {
-            AXObserverRemoveNotification(observer, appElement, notification as CFString)
+        DispatchQueue.global(qos: .utility).async {
+            let appElement = AXUIElementCreateApplication(pid)
+            for notification in observedAXNotifications {
+                AXObserverRemoveNotification(observer, appElement, notification as CFString)
+            }
         }
-
-        observers.removeValue(forKey: pid)
     }
 
     func handleNewWindow(for pid: pid_t) {
@@ -295,6 +303,11 @@ class WindowManipulationObservers {
         }
     }
 
+    private func notifyRunningAppDotsIfNeeded() {
+        guard Defaults[.showActiveAppIndicator], Defaults[.activeAppIndicatorStyle] == .runningAppDots else { return }
+        ActiveAppIndicatorCoordinator.shared?.notifyWindowsChanged()
+    }
+
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         DebugLogger.log("processAXNotification", details: "Notification: \(notificationName), App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
 
@@ -309,13 +322,15 @@ class WindowManipulationObservers {
                 self?.previewCoordinator.windowSwitcherCoordinator.setFocusedWindowID(focusedWindowID)
             }
             updateTimestampIfAppActive(element: element, app: app)
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
-                guard let self else { return }
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) {
                 let windowID = try? element.cgWindowId()
-                update(windowSet: &windowSet, matching: windowID, element: element) { window in
-                    window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
-                    if let pos = try? element.position() {
-                        window.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
+                let position = try? element.position()
+                return { windowSet in
+                    Self.update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                        window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                        if let position {
+                            window.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: position)
+                        }
                     }
                 }
             }
@@ -324,16 +339,20 @@ class WindowManipulationObservers {
                 WindowUtil.quitAppOnLastWindowCloseIfNeeded(app: app)
             }
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
+            notifyRunningAppDotsIfNeeded()
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
-                guard let self else { return }
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) {
                 let windowID = try? element.cgWindowId()
-                update(windowSet: &windowSet, matching: windowID, element: element) { window in
-                    window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
-                    if let pos = try? element.position() {
-                        window.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
-                        if let size = try? element.size() {
-                            window.frame = CGRect(origin: pos, size: size)
+                let position = try? element.position()
+                let size = position.flatMap { _ in try? element.size() }
+                return { windowSet in
+                    Self.update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                        window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                        if let position {
+                            window.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: position)
+                            if let size {
+                                window.frame = CGRect(origin: position, size: size)
+                            }
                         }
                     }
                 }
@@ -341,14 +360,15 @@ class WindowManipulationObservers {
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
             let windowID = try? element.cgWindowId()
             let minimizedState = try? element.isMinimized()
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) { [weak self] windowSet in
-                guard let self else { return }
-                update(windowSet: &windowSet, matching: windowID, element: element) { window in
-                    window.isMinimized = minimizedState ?? false
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) {
+                { windowSet in
+                    Self.update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                        window.isMinimized = minimizedState ?? false
+                    }
                 }
             }
             if Defaults[.showActiveAppIndicator] {
-                ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+                ActiveAppIndicatorCoordinator.shared?.notifyWindowsChanged()
             }
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
@@ -357,35 +377,44 @@ class WindowManipulationObservers {
                     WindowUtil.purgeAppCache(with: pid)
                     removeObserver(for: pid)
                 } else {
-                    handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) { windowSet in
-                        windowSet = Set(windowSet.map { window in
-                            var updated = window
-                            updated.isHidden = true
-                            if let freshSpace = updated.id.cgsSpaces().first.map({ Int($0) }) {
-                                updated.spaceID = freshSpace
-                            }
-                            return updated
-                        })
+                    handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) {
+                        { windowSet in
+                            windowSet = Set(windowSet.map { window in
+                                var updated = window
+                                updated.isHidden = true
+                                if let freshSpace = updated.id.cgsSpaces().first.map({ Int($0) }) {
+                                    updated.spaceID = freshSpace
+                                }
+                                return updated
+                            })
+                        }
                     }
                 }
             }
         case kAXApplicationShownNotification:
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) { windowSet in
-                windowSet = Set(windowSet.map { window in
-                    var updated = window
-                    updated.isHidden = false
-                    updated.spaceID = updated.id.cgsSpaces().first.map { Int($0) }
-                    if let pos = try? updated.axElement.position() {
-                        updated.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
-                    }
-                    return updated
-                })
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) {
+                var positions: [AXUIElement: CGPoint] = [:]
+                for windowElement in WindowUtil.cachedWindowElements(for: pid) {
+                    positions[windowElement] = try? windowElement.position()
+                }
+                return { windowSet in
+                    windowSet = Set(windowSet.map { window in
+                        var updated = window
+                        updated.isHidden = false
+                        updated.spaceID = updated.id.cgsSpaces().first.map { Int($0) }
+                        if let pos = positions[window.axElement] {
+                            updated.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
+                        }
+                        return updated
+                    })
+                }
             }
         case kAXWindowCreatedNotification:
             Task.detached(priority: .userInitiated) {
                 await WindowUtil.cacheCreatedWindow(axWindow: element, app: app)
             }
             handleNewWindow(for: pid)
+            notifyRunningAppDotsIfNeeded()
         case kAXTitleChangedNotification:
             let windowID = try? element.cgWindowId()
             if let existing = WindowUtil.readCachedWindows(for: pid).first(where: { (windowID != nil && $0.id == windowID) || $0.axElement == element }) {
@@ -399,11 +428,12 @@ class WindowManipulationObservers {
                 }
                 return
             }
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
-                guard let self else { return }
-                guard let role = try? element.role(), role == kAXWindowRole as String else { return }
-                update(windowSet: &windowSet, matching: windowID, element: element) { window in
-                    if let freshTitle = try? window.axElement.title(), !freshTitle.isEmpty {
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) {
+                guard let role = try? element.role(), role == kAXWindowRole as String,
+                      let freshTitle = try? element.title(), !freshTitle.isEmpty
+                else { return { _ in } }
+                return { windowSet in
+                    Self.update(windowSet: &windowSet, matching: windowID, element: element) { window in
                         window.windowName = freshTitle
                     }
                 }
@@ -432,7 +462,7 @@ class WindowManipulationObservers {
                                    app: NSRunningApplication,
                                    notification: String,
                                    validate: Bool = false,
-                                   stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
+                                   stateAdjustment: (() -> (inout Set<WindowInfo>) -> Void)? = nil)
     {
         let inheritedValidation = cacheUpdateWorkItem?.needsValidation ?? false
 
@@ -445,12 +475,14 @@ class WindowManipulationObservers {
         let workItem = DispatchWorkItem { [weak self] in
             guard let self else { return }
             DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(effectiveValidate)") {
+                let invalidElements = effectiveValidate ? WindowUtil.cachedWindowElements(for: app.processIdentifier).filter { !WindowUtil.isValidElement($0) } : []
+                let adjustment = stateAdjustment?()
                 WindowUtil.updateWindowCache(for: app) { windowSet in
                     let previousWindows = windowSet
                     if effectiveValidate {
-                        windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
+                        windowSet = windowSet.filter { !invalidElements.contains($0.axElement) }
                     }
-                    stateAdjustment?(&windowSet)
+                    adjustment?(&windowSet)
                     if effectiveValidate, !previousWindows.isEmpty, windowSet.isEmpty {
                         WindowUtil.quitAppOnLastWindowCloseIfNeeded(app: app)
                     }
@@ -462,10 +494,10 @@ class WindowManipulationObservers {
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
-    private func update(windowSet: inout Set<WindowInfo>,
-                        matching windowID: CGWindowID?,
-                        element: AXUIElement,
-                        updateBlock: (inout WindowInfo) -> Void)
+    private static func update(windowSet: inout Set<WindowInfo>,
+                               matching windowID: CGWindowID?,
+                               element: AXUIElement,
+                               updateBlock: (inout WindowInfo) -> Void)
     {
         if let windowID,
            let existing = windowSet.first(where: { $0.id == windowID })

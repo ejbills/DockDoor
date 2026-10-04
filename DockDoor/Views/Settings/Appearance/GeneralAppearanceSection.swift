@@ -3,10 +3,12 @@ import SwiftUI
 
 struct GeneralAppearanceSection: View {
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.titleOverflowStyle) var titleOverflowStyle
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
+    @Default(.showSpaceNumber) var showSpaceNumber
     @Default(.showWindowlessAppQuitButton) var showWindowlessAppQuitButton
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
@@ -62,6 +64,18 @@ struct GeneralAppearanceSection: View {
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
+
+                    if uniformCardRadius {
+                        sliderSetting(
+                            title: "Corner Radius",
+                            value: $previewCornerRadius,
+                            range: 0 ... 40,
+                            step: 1,
+                            unit: "pt"
+                        )
+                        .padding(.leading, 20)
+                        .settingsSearchTarget("appearance.cornerRadius")
+                    }
                 }
 
                 VStack(alignment: .leading) {
@@ -83,6 +97,17 @@ struct GeneralAppearanceSection: View {
                     }
                     .settingsSearchTarget("appearance.distinguishMinimized")
                     Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $showSpaceNumber) {
+                        Text("Show Space number on previews")
+                    }
+                    .settingsSearchTarget("appearance.spaceNumber")
+                    Text("Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop.")
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)

@@ -7,7 +7,7 @@ struct MaterialPillStyle: ViewModifier {
         content
             .padding(.horizontal, 8)
             .padding(.vertical, 5)
-            .background(BlurView(appearance: backgroundAppearance))
+            .background(BlurView(shape: Capsule(style: .continuous), appearance: backgroundAppearance))
             .clipShape(Capsule(style: .continuous))
             .borderedBackground(.primary.opacity(0.1), lineWidth: 1.5, shape: Capsule(style: .continuous))
     }

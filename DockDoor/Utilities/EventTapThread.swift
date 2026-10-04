@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 
 final class EventTapThread {
@@ -30,8 +31,15 @@ final class EventTapThread {
         CFRunLoopWakeUp(runLoop)
     }
 
-    func remove(_ source: CFRunLoopSource) {
-        CFRunLoopRemoveSource(runLoop, source, .commonModes)
+    func remove(_ tap: CFMachPort, source: CFRunLoopSource?, then cleanup: (() -> Void)? = nil) {
+        CGEvent.tapEnable(tap: tap, enable: false)
+        CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes.rawValue) {
+            if let source {
+                CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
+            }
+            CFMachPortInvalidate(tap)
+            cleanup?()
+        }
         CFRunLoopWakeUp(runLoop)
     }
 }

@@ -38,6 +38,132 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.5"></a>
+# [Release 1.40.5](https://github.com/ejbills/DockDoor/releases/tag/1.40.5) - 2026-10-04
+
+## ✨ New Features
+- Open the window switcher with a trackpad swipe (thanks [@anandghegde](https://github.com/anandghegde))
+  - Swipe with 3 or 4 fingers, move left or right to change the selection, then lift your fingers to switch to the highlighted window
+  - Turn it on in Settings > Gestures & Keybinds > Trackpad Swipe for Window Switcher (off by default, requires the Window Switcher)
+- Add a shadow beneath preview panels
+  - Turn on "Show shadow beneath previews" in Settings > Appearance > Background (off by default)
+
+## 🔧 Improvements & Stability
+- Smoother dock preview slide-in
+- Window switcher closes as soon as you pick a window
+- Window tracking stays responsive with slow or hung apps
+- Parall shortcut instances stay separate
+  - Apps launched from Parall shortcuts keep their windows apart from the original app
+  - The active-app indicator, Cmd+Tab replacement, and "group app instances" recognize each shortcut tile
+- Scrolling over lyrics scrolls the lyrics
+  - Scroll over the lyrics area in the media widget without changing the volume or seeking
+
+## 🐛 Bug Fixes
+- Window switcher no longer freezes when an app is slow to respond
+- DockDoor no longer freezes after waking from sleep when an app is hung
+- Dock previews work for Parall shortcut tiles
+- Preview cards no longer jump in size when window titles are set to show on hover
+- Pinned media and calendar widgets can be dragged on macOS 27
+  - Dragging widget no longer available for < macOS 14
+- Fixed a crash after DockDoor restarts its keyboard, mouse, or Dock-lock monitoring
+  - Could happen after changing certain settings or recovering from a system event
+- Lyrics refresh on every track change
+- Embedded media and calendar widgets no longer get clipped by large card corner radii
+
+
+[Changes][1.40.5]
+
+
+<a id="1.40.4"></a>
+# [Release 1.40.4](https://github.com/ejbills/DockDoor/releases/tag/1.40.4) - 2026-10-02
+
+## 🐛 Bug Fixes
+- Stuck dock and preview clicks now recover on their own
+  - Fixes clicks on the dock or DockDoor previews that stop responding after macOS temporarily blocks DockDoor from sending input
+
+
+[Changes][1.40.4]
+
+
+<a id="1.40.3"></a>
+# [Release 1.40.3](https://github.com/ejbills/DockDoor/releases/tag/1.40.3) - 2026-10-02
+
+## ✨ New Features
+- Adjustable corner radius for previews
+  - Use the Corner Radius slider in Settings > Appearance > General Appearance, from 0 to 40 pt (default 20 pt)
+- Two-color running app dots
+  - Turn "Highlight the frontmost app" on or off in Settings > General > Active App Indicator, available when the style is "Running app dots"
+
+## 🔧 Improvements & Stability
+- Running app dots follow the Dock as it animates
+- Running app dots fade in smoothly
+- Search bar corners fixed
+
+## 🐛 Bug Fixes
+- Mac can dim and sleep normally again
+- Running app dots show when the Dock is summoned over a full-screen app
+- Running app dots stay accurate across Spaces and multiple displays
+- Settings no longer opens by itself when Siri or Apple Intelligence runs in the background
+- Liquid Glass corners no longer look distorted on the search bar or small cards with a large corner radius
+- Search bar hint shows your current search shortcut after you change it
+
+
+[Changes][1.40.3]
+
+
+<a id="1.40.2"></a>
+# [Release 1.40.2](https://github.com/ejbills/DockDoor/releases/tag/1.40.2) - 2026-09-30
+
+## ✨ New Features
+- Liquid Glass background gets a native glass look on macOS 27
+  - Real edge refraction and a bright rim
+  - Find it in Settings > Appearance > Background with the Liquid Glass style (the default style)
+  - New Opacity slider from "Clearer" to "More Opaque"
+  - New Refraction toggle, on by default; turn it off for softer frosted glass that is easier to read over busy backgrounds
+  - Replaces the older Glass Tuning options on macOS 27 and later
+  - macOS 26 keeps Glass Tuning unchanged
+  - Settings search finds Opacity and Refraction on macOS 27 and later
+- Show the Space number on window previews
+  - Turn on "Show Space number on previews" in Settings > Appearance > General Appearance
+  - Off by default, and only shown when you have more than one desktop
+  - Works in the standard and compact layouts
+  - The badge moves to a corner that doesn't overlap the window controls
+- Running app dots for the active app indicator
+  - Choose "Dots (running apps)" under Settings > General > Active App Indicator > Indicator Style
+  - Every running app gets a dot: bright for the frontmost app, dimmed for apps with open windows, black for apps with none
+  - Dots update as windows open and close and as you switch apps
+  - Indicator Height and Length are hidden for Dots; Position Offset and Shift still apply
+  - The default stays the line style
+
+## 🔧 Improvements & Stability
+- Small badges on previews use the same Liquid Glass look on macOS 27 and later
+- Updated translations for supported languages
+- Debug logs record more capture details to help diagnose blank or wrong previews
+
+## 🐛 Bug Fixes
+- Accessibility permission prompt no longer asks to restart too early
+  - OK now only opens System Settings
+  - DockDoor asks you to restart once it detects the permission has been granted
+  - If you grant access later, dock previews start working without reopening DockDoor
+- Clicks no longer stop working system-wide after permission changes
+  - When macOS refuses DockDoor's input access, DockDoor releases its keyboard and mouse monitoring so your clicks go through
+  - It restores monitoring when access returns
+- Invisible helper and phantom windows no longer appear in previews or the switcher
+- Full-size hover previews no longer stick on screen or appear late
+  - Pressing Escape also dismisses a full-size preview
+- Previews no longer turn into a cropped image when switching Spaces
+- Windows of quit or crashed apps no longer linger in the window switcher
+- Dock previews sit next to the hovered icon on a right-side Dock
+- Preview panels stay anchored to their icon and inside the visible screen when they resize
+- Newly opened dock previews show a current window list instead of stale windows
+- Native tabbed windows collapse correctly in dock previews, matching the switcher
+- Active app indicator sits correctly on macOS 27
+- DockDoor Pro icon displays correctly
+
+
+[Changes][1.40.2]
+
+
 <a id="1.40.1"></a>
 # [Release 1.40.1](https://github.com/ejbills/DockDoor/releases/tag/1.40.1) - 2026-09-03
 
@@ -2386,6 +2512,10 @@ v1.0
 [Changes][releases]
 
 
+[1.40.5]: https://github.com/ejbills/DockDoor/compare/1.40.4...1.40.5
+[1.40.4]: https://github.com/ejbills/DockDoor/compare/1.40.3...1.40.4
+[1.40.3]: https://github.com/ejbills/DockDoor/compare/1.40.2...1.40.3
+[1.40.2]: https://github.com/ejbills/DockDoor/compare/1.40.1...1.40.2
 [1.40.1]: https://github.com/ejbills/DockDoor/compare/1.40.0...1.40.1
 [1.40.0]: https://github.com/ejbills/DockDoor/compare/1.39.5...1.40.0
 [1.39.5]: https://github.com/ejbills/DockDoor/compare/1.39.4...1.39.5

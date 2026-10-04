@@ -125,19 +125,21 @@ struct WidgetSettingsView: View {
                             .disabled(!useEmbeddedMediaControls)
                             .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
 
-                            Toggle(isOn: $enablePinning) {
-                                Text("Allow pinning controls to screen")
-                            }
-                            .settingsSearchTarget("widgets.pinning")
-                            .onChange(of: enablePinning) { isEnabled in
-                                if !isEnabled {
-                                    SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
+                            if #available(macOS 15.0, *) {
+                                Toggle(isOn: $enablePinning) {
+                                    Text("Allow pinning controls to screen")
                                 }
+                                .settingsSearchTarget("widgets.pinning")
+                                .onChange(of: enablePinning) { isEnabled in
+                                    if !isEnabled {
+                                        SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
+                                    }
+                                }
+                                Text("Right-click a media or calendar widget to pin it.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.leading, 20)
                             }
-                            Text("Right-click a media or calendar widget to pin it.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 20)
                         }
                     }
 

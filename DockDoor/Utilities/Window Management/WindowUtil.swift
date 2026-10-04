@@ -397,8 +397,8 @@ extension WindowUtil {
             return // Skip update
         }
 
+        let windowID = try? element.cgWindowId()
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
-            let windowID = try? element.cgWindowId()
             if let index = windowSet.firstIndex(where: { cachedWindow in
                 if cachedWindow.axElement == element {
                     return true
@@ -700,6 +700,10 @@ extension WindowUtil {
             }
             return (visible, dimension * dimension)
         }
+    }
+
+    static func cachedWindowElements(for pid: pid_t) -> [AXUIElement] {
+        desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.axElement)
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -1398,14 +1402,14 @@ extension WindowUtil {
         var cgID: CGWindowID = 0
         guard _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 else { return }
 
-        createdWindowsInFlightLock.lock()
-        let alreadyInFlight = !createdWindowsInFlight.insert(axWindow).inserted
-        createdWindowsInFlightLock.unlock()
+        let alreadyInFlight = createdWindowsInFlightLock.withLock {
+            !createdWindowsInFlight.insert(axWindow).inserted
+        }
         guard !alreadyInFlight else { return }
         defer {
-            createdWindowsInFlightLock.lock()
-            createdWindowsInFlight.remove(axWindow)
-            createdWindowsInFlightLock.unlock()
+            _ = createdWindowsInFlightLock.withLock {
+                createdWindowsInFlight.remove(axWindow)
+            }
         }
 
         let appAxElement = AXUIElementCreateApplication(pid)

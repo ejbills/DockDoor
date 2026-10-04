@@ -139,11 +139,6 @@ struct MediaControlsView: View {
                 withAnimation(showAnimations ? .smooth(duration: 0.3) : nil) {
                     artworkRotation += 360
                 }
-                if lyricsMode {
-                    Task {
-                        await mediaInfo.fetchLyricsIfNeeded(lyricsMode: lyricsMode)
-                    }
-                }
             }
             if !hasAppeared { hasAppeared = true }
         }
