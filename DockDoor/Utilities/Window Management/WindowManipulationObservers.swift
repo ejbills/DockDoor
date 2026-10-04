@@ -82,7 +82,7 @@ class WindowManipulationObservers {
 
     func reset() {
         removeAllObservers()
-        let apps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
+        let apps = LauncherShortcutResolver.resolvingInPlaceReexecs(NSWorkspace.shared.runningApplications).filter { $0.activationPolicy == .regular }
         for app in apps {
             createObserverForApp(app)
         }
@@ -107,7 +107,7 @@ class WindowManipulationObservers {
             notificationCenter.addObserver(self, selector: #selector(activeSpaceDidChange(_:)), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
             notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
 
-            let apps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
+            let apps = LauncherShortcutResolver.resolvingInPlaceReexecs(NSWorkspace.shared.runningApplications).filter { $0.activationPolicy == .regular }
             DebugLogger.log("setupObservers", details: "Setting up observers for \(apps.count) running apps")
 
             for app in apps {
@@ -117,11 +117,12 @@ class WindowManipulationObservers {
     }
 
     @objc private func appDidLaunch(_ notification: Notification) {
-        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-              app.activationPolicy == .regular
+        guard let launchedApp = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+              launchedApp.activationPolicy == .regular
         else {
             return
         }
+        let app = LauncherShortcutResolver.resolvingInPlaceReexec(launchedApp)
         DebugLogger.log("appDidLaunch", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
         createObserverForApp(app)
         handleNewWindow(for: app.processIdentifier)
@@ -280,7 +281,7 @@ class WindowManipulationObservers {
     func handleNewWindow(for pid: pid_t) {
         let delay = AXResponsiveness.isUnresponsive(pid) ? AXResponsiveness.backoff : windowProcessingDebounceInterval
         debounce(key: "windowCreation-\(pid)", delay: delay) {
-            if let app = NSRunningApplication(processIdentifier: pid) {
+            if let app = LauncherShortcutResolver.application(forProcessIdentifier: pid) {
                 DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
                 await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {
                     await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false)
@@ -512,7 +513,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
 
     axObserverWorkQueue.async {
         if notification == kAXWindowCreatedNotification,
-           let app = NSRunningApplication(processIdentifier: pid),
+           let app = LauncherShortcutResolver.application(forProcessIdentifier: pid),
            let observerInstance = activeWindowManipulationObserversInstance
         {
             observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)
@@ -523,7 +524,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
 
         let workItem = DispatchWorkItem {
             pendingNotifications.removeValue(forKey: key)
-            if let app = NSRunningApplication(processIdentifier: pid),
+            if let app = LauncherShortcutResolver.application(forProcessIdentifier: pid),
                let observerInstance = activeWindowManipulationObserversInstance
             {
                 observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)

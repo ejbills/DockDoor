@@ -34,7 +34,7 @@ struct WindowCandidateAttributes {
 enum WindowOwnerResolver {
     static func ownerApp(for window: SCWindow) -> NSRunningApplication? {
         guard let pid = window.owningApplication?.processID else { return nil }
-        return NSRunningApplication(processIdentifier: pid)
+        return LauncherShortcutResolver.application(forProcessIdentifier: pid)
     }
 
     static func windowBelongsToDisplayApp(_ window: SCWindow, displayApp: NSRunningApplication) -> Bool {

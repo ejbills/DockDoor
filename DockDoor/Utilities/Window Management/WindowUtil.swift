@@ -782,7 +782,7 @@ extension WindowUtil {
         let pidsWithWindows = Set(existingWindows.map(\.app.processIdentifier))
         let ownBundleId = Bundle.main.bundleIdentifier
 
-        return NSWorkspace.shared.runningApplications
+        return LauncherShortcutResolver.resolvingInPlaceReexecs(NSWorkspace.shared.runningApplications)
             .filter { app in
                 app.activationPolicy == .regular &&
                     !pidsWithWindows.contains(app.processIdentifier) &&
@@ -1051,7 +1051,7 @@ extension WindowUtil {
                 let windowAppPairs: [(window: SCWindow, displayApp: NSRunningApplication, ownerApp: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
                           !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
-                          let ownerApp = NSRunningApplication(processIdentifier: scApp.processID)
+                          let ownerApp = LauncherShortcutResolver.application(forProcessIdentifier: scApp.processID)
                     else { return nil }
                     let displayApp = displayAppsByOwner[ownerApp.processIdentifier] ?? WindowOwnerResolver.displayApp(forOwner: ownerApp)
                     displayAppsByOwner[ownerApp.processIdentifier] = displayApp
@@ -1084,7 +1084,7 @@ extension WindowUtil {
         }
 
         // AX fallback
-        let runningApps = NSWorkspace.shared.runningApplications.filter {
+        let runningApps = LauncherShortcutResolver.resolvingInPlaceReexecs(NSWorkspace.shared.runningApplications).filter {
             $0.activationPolicy == .regular &&
                 !WindowOwnerResolver.isAuxiliaryOwner($0) &&
                 !filteredBundleIdentifiers.contains($0.bundleIdentifier ?? "") &&

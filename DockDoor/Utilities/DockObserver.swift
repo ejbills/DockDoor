@@ -10,7 +10,7 @@ struct ApplicationInfo: Sendable {
     let localizedName: String?
 
     func app() -> NSRunningApplication? {
-        NSRunningApplication(processIdentifier: processIdentifier)
+        LauncherShortcutResolver.application(forProcessIdentifier: processIdentifier)
     }
 }
 

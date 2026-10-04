@@ -1,5 +1,47 @@
 import AppKit
 
+private final class InPlaceReexecApplication: NSRunningApplication {
+    private let base: NSRunningApplication
+    private let pid: pid_t
+
+    init(base: NSRunningApplication, pid: pid_t) {
+        self.base = base
+        self.pid = pid
+        super.init()
+    }
+
+    override var processIdentifier: pid_t { pid }
+    override var bundleIdentifier: String? { base.bundleIdentifier }
+    override var bundleURL: URL? { base.bundleURL }
+    override var executableURL: URL? { base.executableURL }
+    override var localizedName: String? { base.localizedName }
+    override var icon: NSImage? { base.icon }
+    override var launchDate: Date? { base.launchDate }
+    override var activationPolicy: NSApplication.ActivationPolicy { base.activationPolicy }
+    override var executableArchitecture: Int { base.executableArchitecture }
+    override var isActive: Bool { base.isActive }
+    override var isHidden: Bool { base.isHidden }
+    override var isTerminated: Bool { base.isTerminated }
+    override var isFinishedLaunching: Bool { base.isFinishedLaunching }
+    override var ownsMenuBar: Bool { base.ownsMenuBar }
+    override var hash: Int { Int(pid) }
+
+    override func isEqual(_ object: Any?) -> Bool {
+        (object as? NSRunningApplication)?.processIdentifier == pid
+    }
+
+    override func hide() -> Bool { base.hide() }
+    override func unhide() -> Bool { base.unhide() }
+    override func activate(options: NSApplication.ActivationOptions) -> Bool { base.activate(options: options) }
+    @available(macOS 14.0, *)
+    override func activate(from application: NSRunningApplication, options: NSApplication.ActivationOptions) -> Bool {
+        base.activate(from: application, options: options)
+    }
+
+    override func terminate() -> Bool { base.terminate() }
+    override func forceTerminate() -> Bool { base.forceTerminate() }
+}
+
 enum LauncherShortcutResolver {
     private struct ParallManifest {
         let targetBundleIdentifier: String
@@ -14,8 +56,23 @@ enum LauncherShortcutResolver {
     private static let procPIDCoalitionInfoFlavor: Int32 = 20
     private static let launchBundleIdentifierPrefix = "__CFBundleIdentifier="
 
+    static func application(forProcessIdentifier pid: pid_t) -> NSRunningApplication? {
+        guard let app = NSRunningApplication(processIdentifier: pid) else { return nil }
+        return app.processIdentifier == -1 ? InPlaceReexecApplication(base: app, pid: pid) : app
+    }
+
+    static func resolvingInPlaceReexec(_ app: NSRunningApplication) -> NSRunningApplication {
+        guard app.processIdentifier == -1, let pid = inPlaceReexecProcessIdentifier(of: app) else { return app }
+        return InPlaceReexecApplication(base: app, pid: pid)
+    }
+
+    static func resolvingInPlaceReexecs(_ apps: [NSRunningApplication]) -> [NSRunningApplication] {
+        guard apps.contains(where: { $0.processIdentifier == -1 }) else { return apps }
+        return apps.map(resolvingInPlaceReexec)
+    }
+
     static func runningApplications(forBundleAt url: URL, bundleIdentifier: String) -> [NSRunningApplication] {
-        let direct = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+        let direct = resolvingInPlaceReexecs(NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier))
             .filter { owningShortcutBundleIdentifier(of: $0) == nil }
         if direct.contains(where: { $0.activationPolicy == .regular }) {
             return direct
@@ -34,7 +91,7 @@ enum LauncherShortcutResolver {
         if let shortcutURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: launchIdentifier),
            parallManifest(at: shortcutURL)?.targetBundleIdentifier == bundleIdentifier
         {
-            return dockSawLaunch(of: app) ? launchIdentifier : nil
+            return dockShowsOnShortcutTile(app, shortcutURL: shortcutURL) ? launchIdentifier : nil
         }
 
         let launchers = NSRunningApplication.runningApplications(withBundleIdentifier: launchIdentifier)
@@ -44,16 +101,16 @@ enum LauncherShortcutResolver {
     static func siblingInstances(of app: NSRunningApplication) -> [NSRunningApplication] {
         guard let bundleIdentifier = app.bundleIdentifier, !bundleIdentifier.isEmpty else { return [app] }
         let owner = owningShortcutBundleIdentifier(of: app)
-        let siblings = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+        let siblings = resolvingInPlaceReexecs(NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier))
             .filter { owningShortcutBundleIdentifier(of: $0) == owner }
         return siblings.isEmpty ? [app] : siblings
     }
 
     private static func shortcutInstances(at url: URL, shortcutBundleIdentifier: String, launchers: [NSRunningApplication]) -> [NSRunningApplication] {
         if let manifest = parallManifest(at: url) {
-            return NSRunningApplication.runningApplications(withBundleIdentifier: manifest.targetBundleIdentifier).filter { app in
+            return resolvingInPlaceReexecs(NSRunningApplication.runningApplications(withBundleIdentifier: manifest.targetBundleIdentifier)).filter { app in
                 guard app.activationPolicy == .regular else { return false }
-                if dockSawLaunch(of: app), let process = processStrings(of: app.processIdentifier) {
+                if dockShowsOnShortcutTile(app, shortcutURL: url), let process = processStrings(of: app.processIdentifier) {
                     if launchBundleIdentifier(process) == shortcutBundleIdentifier {
                         return true
                     }
@@ -91,6 +148,33 @@ enum LauncherShortcutResolver {
               let start = startTime(of: pid)
         else { return false }
         return launcherStart <= start
+    }
+
+    private static func inPlaceReexecProcessIdentifier(of app: NSRunningApplication) -> pid_t? {
+        guard !app.isTerminated,
+              let executablePath = app.executableURL?.resolvingSymlinksInPath().path
+        else { return nil }
+
+        var pids = [pid_t](repeating: 0, count: Int(proc_listallpids(nil, 0)) + 64)
+        let count = Int(proc_listallpids(&pids, Int32(pids.count * MemoryLayout<pid_t>.size)))
+        var pathBuffer = [CChar](repeating: 0, count: Int(MAXPATHLEN) * 4)
+
+        return pids.prefix(max(count, 0)).first { pid in
+            pid > 0 &&
+                proc_pidpath(pid, &pathBuffer, UInt32(pathBuffer.count)) > 0 &&
+                URL(fileURLWithPath: String(cString: pathBuffer)).resolvingSymlinksInPath().path == executablePath &&
+                NSRunningApplication(processIdentifier: pid)?.isEqual(app) == true
+        }
+    }
+
+    private static func dockShowsOnShortcutTile(_ app: NSRunningApplication, shortcutURL: URL) -> Bool {
+        guard app is InPlaceReexecApplication else { return dockSawLaunch(of: app) }
+        let shortcutPath = shortcutURL.standardizedFileURL.path
+        return (try? ActiveAppIndicatorDockDetection.dockList()?.children())?.contains { item in
+            (try? item.subrole()) == "AXApplicationDockItem" &&
+                (try? item.appIsRunning()) == true &&
+                (try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL)?.standardizedFileURL.path == shortcutPath
+        } ?? false
     }
 
     private static func dockSawLaunch(of app: NSRunningApplication) -> Bool {
