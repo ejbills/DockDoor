@@ -51,6 +51,17 @@ enum LiquidGlass {
         return unsafeBitCast(pointer, to: GlassGetter.self)
     }
 
+    // Isolate indirect Swift ABI calls from optimizer result-layout rewriting.
+    @inline(never)
+    private static func readGlass(_ getter: GlassGetter) -> PrivateGlassStorage {
+        getter()
+    }
+
+    @inline(never)
+    private static func constructGlass(_ initializer: GlassInitializer, _ storage: PrivateGlassStorage) -> Glass {
+        initializer(storage)
+    }
+
     private static let initializeGlass: GlassInitializer? = {
         guard let pointer = dlsym(processHandle, explicitGlassInitSymbol) else { return nil }
         return unsafeBitCast(pointer, to: GlassInitializer.self)
@@ -125,7 +136,7 @@ enum LiquidGlass {
 
     private static func variantOptionBit(_ symbol: String) -> UInt64? {
         guard let getter = resolveGetter(symbol) else { return nil }
-        let bit = withUnsafeBytes(of: getter()) { $0.load(as: UInt64.self) }
+        let bit = withUnsafeBytes(of: readGlass(getter)) { $0.load(as: UInt64.self) }
         return bit.nonzeroBitCount == 1 ? bit : nil
     }
 
@@ -134,7 +145,7 @@ enum LiquidGlass {
               let glassType = _typeByName(privateGlassTypeName),
               let getter = opacityOrdered.first(where: { $0.getter != nil })?.getter
         else { return nil }
-        let probe = getter()
+        let probe = readGlass(getter)
         guard let offsets = variantOptionOffsets(of: probe, glassType: glassType) else { return nil }
         let layout = VariantOptionsLayout(addedOptionsOffset: offsets.added, removedOptionsOffset: offsets.removed)
         let variant = Mirror(reflecting: reflectedGlass(layout.adding(bit, to: probe), glassType: glassType)).descendant("variant")
@@ -184,9 +195,9 @@ enum LiquidGlass {
         var bits: UInt64 = 0
         if activeAppearance, let forceActiveAppearanceBit { bits |= forceActiveAppearanceBit }
         guard bits != 0, let variantOptionsLayout else {
-            return initializeGlass(storage)
+            return constructGlass(initializeGlass, storage)
         }
-        return initializeGlass(variantOptionsLayout.adding(bits, to: storage))
+        return constructGlass(initializeGlass, variantOptionsLayout.adding(bits, to: storage))
     }
 
     @MainActor
@@ -194,7 +205,7 @@ enum LiquidGlass {
         if let cached = borderGlassCache[activeAppearance] { return cached }
         guard usesModernPipeline,
               let getter = resolveGetter(focusBorderSymbol),
-              let glass = makeGlass(getter(), activeAppearance: activeAppearance)
+              let glass = makeGlass(readGlass(getter), activeAppearance: activeAppearance)
         else { return nil }
         borderGlassCache[activeAppearance] = glass
         return glass
@@ -208,7 +219,7 @@ enum LiquidGlass {
         let key = GlassKey(flavor: availableFlavors[index], activeAppearance: activeAppearance)
         if let cached = glassCache[key] { return cached }
         guard let getter = opacityOrdered.first(where: { $0.flavor == key.flavor })?.getter,
-              let glass = makeGlass(getter(), activeAppearance: activeAppearance)
+              let glass = makeGlass(readGlass(getter), activeAppearance: activeAppearance)
         else { return nil }
         glassCache[key] = glass
         return glass
