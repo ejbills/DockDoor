@@ -585,22 +585,23 @@ extension WindowUtil {
         forceRefresh: Bool = false
     ) async -> PreviewImageCapture? {
         guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled else { return nil }
-        guard stageManagerProtection.enabled else {
-            guard let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh) else { return nil }
-            return PreviewImageCapture(image: image, capturedAt: Date(), approved: false)
-        }
         guard let app = NSRunningApplication(processIdentifier: pid) else { return nil }
         let sizeBefore = stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow)
-        if let sizeBefore,
-           let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: true),
-           stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow) == sizeBefore,
-           isPlausibleStageManagerImage(image), !Task.isCancelled
+        if !stageManagerProtection.enabled || sizeBefore != nil,
+           let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title,
+                                                     forceRefresh: forceRefresh || sizeBefore != nil)
         {
-            let capturedAt = Date()
-            guard isCurrentStageManagerProtection(stageManagerProtection) else { return nil }
-            return PreviewImageCapture(image: image, capturedAt: capturedAt, approved: true)
+            // Approval describes these pixels, including captures made before protection activates.
+            // Bypass image-cache reuse when verifying: current geometry cannot approve older pixels.
+            let approved = sizeBefore != nil &&
+                stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow) == sizeBefore &&
+                isPlausibleStageManagerImage(image)
+            guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled else { return nil }
+            if !stageManagerProtection.enabled || approved {
+                return PreviewImageCapture(image: image, capturedAt: Date(), approved: approved)
+            }
         }
-        guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled,
+        guard stageManagerProtection.enabled, isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled,
               isValidElement(axWindow), stageManagerAXIdentityMatches(windowID: windowID, pid: pid, axWindow: axWindow) else { return nil }
         if let window = desktopSpaceWindowCacheManager.readCache(pid: cachePID ?? pid).first(where: {
             $0.id == windowID && $0.axElement == axWindow && $0.ownerApp.processIdentifier == pid && $0.ownerApp.launchDate == app.launchDate
