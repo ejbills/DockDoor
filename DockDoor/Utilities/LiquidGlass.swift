@@ -7,36 +7,15 @@ private struct PrivateGlassStorage {
 }
 
 @available(macOS 26.0, *)
-@_weakLinked
-@_silgen_name("$s7SwiftUI5GlassV8explicitAcA01_C0V_tcfC")
-private func privateGlassInit(explicit variant: PrivateGlassStorage) -> Glass
-
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV8monogramACvgZ") private func glassMonogram() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV5loupeACvgZ") private func glassLoupe() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV7regularACvgZ") private func glassRegular() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV8keyboardACvgZ") private func glassKeyboard() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV8appIconsACvgZ") private func glassAppIcons() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV8avplayerACvgZ") private func glassAVPlayer() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV4dockACvgZ") private func glassDock() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV5clearACvgZ") private func glassClear() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV13controlCenterACvgZ") private func glassControlCenter() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV11siriSnippetACvgZ") private func glassSiriSnippet() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV6cameraACvgZ") private func glassCamera() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV18notificationCenterACvgZ") private func glassNotificationCenter() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV16cartouchePopoverACvgZ") private func glassCartouchePopover() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV4siriACvgZ") private func glassSiri() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV7sidebarACvgZ") private func glassSidebar() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV4menuACvgZ") private func glassMenu() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV7widgetsACvgZ") private func glassWidgets() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV11focusBorderACvgZ") private func glassFocusBorder() -> PrivateGlassStorage
-@_weakLinked @_silgen_name("$s7SwiftUI6_GlassV14VariantOptionsV21forceActiveAppearanceAEvgZ") private func glassForceActiveAppearanceOption() -> PrivateGlassStorage
-
-@available(macOS 26.0, *)
 enum LiquidGlass {
+    private typealias GlassGetter = @convention(thin) () -> PrivateGlassStorage
+    private typealias GlassInitializer = @convention(thin) (PrivateGlassStorage) -> Glass
+
     private struct Variant {
         let flavor: DockLiquidGlassFlavor
         let symbol: String
-        let getter: () -> PrivateGlassStorage
+
+        var getter: GlassGetter? { resolveGetter(symbol) }
     }
 
     private static let privateGlassTypeName = "7SwiftUI6_GlassV"
@@ -45,28 +24,37 @@ enum LiquidGlass {
     private static let forceActiveAppearanceSymbol = "$s7SwiftUI6_GlassV14VariantOptionsV21forceActiveAppearanceAEvgZ"
 
     private static let opacityOrdered: [Variant] = [
-        Variant(flavor: .monogram, symbol: "$s7SwiftUI6_GlassV8monogramACvgZ", getter: glassMonogram),
-        Variant(flavor: .loupe, symbol: "$s7SwiftUI6_GlassV5loupeACvgZ", getter: glassLoupe),
-        Variant(flavor: .avPlayer, symbol: "$s7SwiftUI6_GlassV8avplayerACvgZ", getter: glassAVPlayer),
-        Variant(flavor: .clearGlass, symbol: "$s7SwiftUI6_GlassV5clearACvgZ", getter: glassClear),
-        Variant(flavor: .dock, symbol: "$s7SwiftUI6_GlassV4dockACvgZ", getter: glassDock),
-        Variant(flavor: .controlCenter, symbol: "$s7SwiftUI6_GlassV13controlCenterACvgZ", getter: glassControlCenter),
-        Variant(flavor: .widgets, symbol: "$s7SwiftUI6_GlassV7widgetsACvgZ", getter: glassWidgets),
-        Variant(flavor: .cartouchePopover, symbol: "$s7SwiftUI6_GlassV16cartouchePopoverACvgZ", getter: glassCartouchePopover),
-        Variant(flavor: .sidebar, symbol: "$s7SwiftUI6_GlassV7sidebarACvgZ", getter: glassSidebar),
-        Variant(flavor: .regular, symbol: "$s7SwiftUI6_GlassV7regularACvgZ", getter: glassRegular),
-        Variant(flavor: .notificationCenter, symbol: "$s7SwiftUI6_GlassV18notificationCenterACvgZ", getter: glassNotificationCenter),
-        Variant(flavor: .menu, symbol: "$s7SwiftUI6_GlassV4menuACvgZ", getter: glassMenu),
-        Variant(flavor: .camera, symbol: "$s7SwiftUI6_GlassV6cameraACvgZ", getter: glassCamera),
-        Variant(flavor: .appIcons, symbol: "$s7SwiftUI6_GlassV8appIconsACvgZ", getter: glassAppIcons),
-        Variant(flavor: .siriSnippet, symbol: "$s7SwiftUI6_GlassV11siriSnippetACvgZ", getter: glassSiriSnippet),
-        Variant(flavor: .siri, symbol: "$s7SwiftUI6_GlassV4siriACvgZ", getter: glassSiri),
-        Variant(flavor: .keyboard, symbol: "$s7SwiftUI6_GlassV8keyboardACvgZ", getter: glassKeyboard),
+        Variant(flavor: .monogram, symbol: "$s7SwiftUI6_GlassV8monogramACvgZ"),
+        Variant(flavor: .loupe, symbol: "$s7SwiftUI6_GlassV5loupeACvgZ"),
+        Variant(flavor: .avPlayer, symbol: "$s7SwiftUI6_GlassV8avplayerACvgZ"),
+        Variant(flavor: .clearGlass, symbol: "$s7SwiftUI6_GlassV5clearACvgZ"),
+        Variant(flavor: .dock, symbol: "$s7SwiftUI6_GlassV4dockACvgZ"),
+        Variant(flavor: .controlCenter, symbol: "$s7SwiftUI6_GlassV13controlCenterACvgZ"),
+        Variant(flavor: .widgets, symbol: "$s7SwiftUI6_GlassV7widgetsACvgZ"),
+        Variant(flavor: .cartouchePopover, symbol: "$s7SwiftUI6_GlassV16cartouchePopoverACvgZ"),
+        Variant(flavor: .sidebar, symbol: "$s7SwiftUI6_GlassV7sidebarACvgZ"),
+        Variant(flavor: .regular, symbol: "$s7SwiftUI6_GlassV7regularACvgZ"),
+        Variant(flavor: .notificationCenter, symbol: "$s7SwiftUI6_GlassV18notificationCenterACvgZ"),
+        Variant(flavor: .menu, symbol: "$s7SwiftUI6_GlassV4menuACvgZ"),
+        Variant(flavor: .camera, symbol: "$s7SwiftUI6_GlassV6cameraACvgZ"),
+        Variant(flavor: .appIcons, symbol: "$s7SwiftUI6_GlassV8appIconsACvgZ"),
+        Variant(flavor: .siriSnippet, symbol: "$s7SwiftUI6_GlassV11siriSnippetACvgZ"),
+        Variant(flavor: .siri, symbol: "$s7SwiftUI6_GlassV4siriACvgZ"),
+        Variant(flavor: .keyboard, symbol: "$s7SwiftUI6_GlassV8keyboardACvgZ"),
     ]
 
-    private static func resolvable(_ symbol: String) -> Bool {
-        dlsym(dlopen(nil, RTLD_NOW), symbol) != nil
+    private static let processHandle = dlopen(nil, RTLD_NOW)
+
+    private static func resolveGetter(_ symbol: String) -> GlassGetter? {
+        guard let pointer = dlsym(processHandle, symbol) else { return nil }
+        // Keep the Swift calling convention used by these private getters.
+        return unsafeBitCast(pointer, to: GlassGetter.self)
     }
+
+    private static let initializeGlass: GlassInitializer? = {
+        guard let pointer = dlsym(processHandle, explicitGlassInitSymbol) else { return nil }
+        return unsafeBitCast(pointer, to: GlassInitializer.self)
+    }()
 
     private static func runtimeTypeFits<T>(_ typeName: String, in _: T.Type) -> Bool {
         guard let runtimeType = _typeByName(typeName) else { return false }
@@ -85,11 +73,11 @@ enum LiquidGlass {
 
     static let availableFlavors: [DockLiquidGlassFlavor] = {
         guard supportsModernGlass else { return [] }
-        return opacityOrdered.filter { resolvable($0.symbol) }.map(\.flavor)
+        return opacityOrdered.filter { $0.getter != nil }.map(\.flavor)
     }()
 
     private static let supportsModernGlass: Bool = runtimeTypeFits(privateGlassTypeName, in: PrivateGlassStorage.self)
-        && resolvable(explicitGlassInitSymbol)
+        && initializeGlass != nil
 
     static func sliderIndex(for flavor: DockLiquidGlassFlavor) -> Int {
         if let index = availableFlavors.firstIndex(of: flavor) { return index }
@@ -133,10 +121,10 @@ enum LiquidGlass {
         }
     }
 
-    private static let forceActiveAppearanceBit = variantOptionBit(forceActiveAppearanceSymbol, glassForceActiveAppearanceOption)
+    private static let forceActiveAppearanceBit = variantOptionBit(forceActiveAppearanceSymbol)
 
-    private static func variantOptionBit(_ symbol: String, _ getter: () -> PrivateGlassStorage) -> UInt64? {
-        guard resolvable(symbol) else { return nil }
+    private static func variantOptionBit(_ symbol: String) -> UInt64? {
+        guard let getter = resolveGetter(symbol) else { return nil }
         let bit = withUnsafeBytes(of: getter()) { $0.load(as: UInt64.self) }
         return bit.nonzeroBitCount == 1 ? bit : nil
     }
@@ -144,9 +132,10 @@ enum LiquidGlass {
     private static let variantOptionsLayout: VariantOptionsLayout? = {
         guard supportsModernGlass, let bit = forceActiveAppearanceBit,
               let glassType = _typeByName(privateGlassTypeName),
-              let probe = opacityOrdered.first(where: { resolvable($0.symbol) })?.getter(),
-              let offsets = variantOptionOffsets(of: probe, glassType: glassType)
+              let getter = opacityOrdered.first(where: { $0.getter != nil })?.getter
         else { return nil }
+        let probe = getter()
+        guard let offsets = variantOptionOffsets(of: probe, glassType: glassType) else { return nil }
         let layout = VariantOptionsLayout(addedOptionsOffset: offsets.added, removedOptionsOffset: offsets.removed)
         let variant = Mirror(reflecting: reflectedGlass(layout.adding(bit, to: probe), glassType: glassType)).descendant("variant")
         guard let variant,
@@ -190,22 +179,23 @@ enum LiquidGlass {
         return (added, removed)
     }
 
-    private static func makeGlass(_ storage: PrivateGlassStorage, activeAppearance: Bool) -> Glass {
+    private static func makeGlass(_ storage: PrivateGlassStorage, activeAppearance: Bool) -> Glass? {
+        guard let initializeGlass else { return nil }
         var bits: UInt64 = 0
         if activeAppearance, let forceActiveAppearanceBit { bits |= forceActiveAppearanceBit }
         guard bits != 0, let variantOptionsLayout else {
-            return privateGlassInit(explicit: storage)
+            return initializeGlass(storage)
         }
-        return privateGlassInit(explicit: variantOptionsLayout.adding(bits, to: storage))
+        return initializeGlass(variantOptionsLayout.adding(bits, to: storage))
     }
-
-    private static let focusBorderResolvable: Bool = resolvable(focusBorderSymbol)
 
     @MainActor
     static func borderGlass(activeAppearance: Bool = false) -> Glass? {
         if let cached = borderGlassCache[activeAppearance] { return cached }
-        guard usesModernPipeline, focusBorderResolvable else { return nil }
-        let glass = makeGlass(glassFocusBorder(), activeAppearance: activeAppearance)
+        guard usesModernPipeline,
+              let getter = resolveGetter(focusBorderSymbol),
+              let glass = makeGlass(getter(), activeAppearance: activeAppearance)
+        else { return nil }
         borderGlassCache[activeAppearance] = glass
         return glass
     }
@@ -217,8 +207,9 @@ enum LiquidGlass {
         guard availableFlavors.indices.contains(index) else { return nil }
         let key = GlassKey(flavor: availableFlavors[index], activeAppearance: activeAppearance)
         if let cached = glassCache[key] { return cached }
-        guard let variant = opacityOrdered.first(where: { $0.flavor == key.flavor }) else { return nil }
-        let glass = makeGlass(variant.getter(), activeAppearance: activeAppearance)
+        guard let getter = opacityOrdered.first(where: { $0.flavor == key.flavor })?.getter,
+              let glass = makeGlass(getter(), activeAppearance: activeAppearance)
+        else { return nil }
         glassCache[key] = glass
         return glass
     }
