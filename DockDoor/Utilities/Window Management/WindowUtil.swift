@@ -364,8 +364,8 @@ enum WindowUtil {
         }
         return Set(windows.compactMap { window -> CGWindowID? in
             guard window.axElement != focusedWindow,
-                  let image = window.image,
-                  !stageManagerProtection.enabled || (window.stageManagerImageApproved && isPlausibleStageManagerImage(image)),
+                  window.image != nil,
+                  !stageManagerProtection.enabled || window.stageManagerImageApproved,
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -605,7 +605,7 @@ extension WindowUtil {
               isValidElement(axWindow), stageManagerAXIdentityMatches(windowID: windowID, pid: pid, axWindow: axWindow) else { return nil }
         if let window = desktopSpaceWindowCacheManager.readCache(pid: cachePID ?? pid).first(where: {
             $0.id == windowID && $0.axElement == axWindow && $0.ownerApp.processIdentifier == pid && $0.ownerApp.launchDate == app.launchDate
-        }), window.stageManagerImageApproved, let image = window.image, isPlausibleStageManagerImage(image) {
+        }), window.stageManagerImageApproved, let image = window.image {
             return PreviewImageCapture(image: image, capturedAt: window.imageCapturedTime, approved: true)
         }
         return nil
@@ -1632,11 +1632,11 @@ extension WindowUtil {
         return Set(windowsByID.values)
     }
 
-    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo, stageManagerProtection: StageManagerProtection? = nil) {
+    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo, stageManagerProtection: StageManagerProtection) {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
         // A previous capture batch must not overwrite previews after the mode changes.
-        if let stageManagerProtection, lastStageManagerProtection != stageManagerProtection { return }
+        guard lastStageManagerProtection == stageManagerProtection else { return }
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             let matchingWindows = windowSet.filter { $0.id == windowInfo.id || $0.axElement == windowInfo.axElement }
             let bestMatch = matchingWindows.reduce(nil as WindowInfo?) { best, window in
@@ -1661,8 +1661,8 @@ extension WindowUtil {
                     true
                 }
 
-                if newImageIsTiny, let cachedImage = matchingWindow.image,
-                   stageManagerProtection?.enabled != true || (matchingWindow.stageManagerImageApproved && isPlausibleStageManagerImage(cachedImage))
+                if newImageIsTiny, matchingWindow.image != nil,
+                   !stageManagerProtection.enabled || matchingWindow.stageManagerImageApproved
                 {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
