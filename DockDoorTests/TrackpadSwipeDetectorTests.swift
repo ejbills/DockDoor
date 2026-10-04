@@ -153,4 +153,30 @@ struct TrackpadSwipeDetectorTests {
         #expect(detector.handle(fingers(3, x: 0.4), fingers: 3, horizontal: true) == nil)
         #expect(detector.handle(fingers(3, x: 0.5), fingers: 3, horizontal: true) == nil)
     }
+
+    @Test func higherSensitivityOpensOverAShorterSwipe() {
+        var detector = TrackpadSwipeDetector()
+        _ = detector.handle(fingers(3, x: 0.2), fingers: 3, horizontal: true)
+        #expect(detector.handle(fingers(3, x: 0.22), fingers: 3, horizontal: true) == nil)
+
+        var sensitive = TrackpadSwipeDetector()
+        sensitive.sensitivity = 2
+        _ = sensitive.handle(fingers(3, x: 0.2), fingers: 3, horizontal: true)
+        #expect(sensitive.handle(fingers(3, x: 0.22), fingers: 3, horizontal: true) == .open)
+
+        var sluggish = TrackpadSwipeDetector()
+        sluggish.sensitivity = 0.5
+        _ = sluggish.handle(fingers(3, x: 0.2), fingers: 3, horizontal: true)
+        #expect(sluggish.handle(fingers(3, x: 0.25), fingers: 3, horizontal: true) == nil)
+        #expect(sluggish.handle(fingers(3, x: 0.27), fingers: 3, horizontal: true) == .open)
+    }
+
+    @Test func higherSensitivityCyclesOverAShorterSwipe() {
+        var sensitive = TrackpadSwipeDetector()
+        sensitive.sensitivity = 2
+        open(&sensitive)
+        #expect(sensitive.handle(fingers(3, x: 0.32), fingers: 3, horizontal: true) == nil)
+        #expect(sensitive.handle(fingers(3, x: 0.33), fingers: 3, horizontal: true) == .cycleForward)
+        #expect(sensitive.handle(fingers(3, x: 0.36), fingers: 3, horizontal: true) == .cycleForward)
+    }
 }

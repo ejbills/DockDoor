@@ -87051,6 +87051,196 @@
         }
       }
     },
+    "Higher values open and cycle the switcher over shorter swipes. 1 is the default." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Higher values open and cycle the switcher over shorter swipes. 1 is the default."
+          }
+        }
+      }
+    },
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -177121,6 +177311,196 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在Dock彈出的視窗預覽上滑動。採用Dock位置的相對方向——滑向Dock（例如Dock在底部是向下滑動，或Dock在左側時向左滑動）。"
+          }
+        }
+      }
+    },
+    "Swipe Sensitivity" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Swipe Sensitivity"
           }
         }
       }

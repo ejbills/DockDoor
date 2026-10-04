@@ -1525,6 +1525,14 @@ enum SettingsSearchCatalog {
             section: String(localized: "Trackpad Swipe for Window Switcher"),
             icon: "arrow.left.and.right"
         ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeSensitivity",
+            title: String(localized: "Swipe Sensitivity"),
+            keywords: ["trackpad", "sensitivity", "swipe", "distance", "travel"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "slider.horizontal.3"
+        ),
     ]
 
     // MARK: - Filters

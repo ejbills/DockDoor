@@ -14,9 +14,12 @@ enum TrackpadSwipeEvent: Equatable {
 }
 
 struct TrackpadSwipeDetector {
-    static let openDistance: CGFloat = 0.03
-    static let firstCycleDistance: CGFloat = 0.15
-    static let cycleDistance: CGFloat = 0.04
+    /// Multiplier for the swipe travel distances; values above 1 trigger the same gesture over a shorter swipe.
+    var sensitivity: CGFloat = 1
+
+    private var openDistance: CGFloat { 0.03 / max(sensitivity, 0.1) }
+    private var firstCycleDistance: CGFloat { 0.15 / max(sensitivity, 0.1) }
+    private var cycleDistance: CGFloat { 0.04 / max(sensitivity, 0.1) }
     static let maxOffAxisDistance: CGFloat = 0.1
     static let axisDominanceRatio: CGFloat = 1.5
 
@@ -35,7 +38,7 @@ struct TrackpadSwipeDetector {
             }
             guard let deltas = travel(touches) else { return nil }
             let averageAlong = deltas.map { horizontal ? $0.x : $0.y }.reduce(0, +) / CGFloat(deltas.count)
-            let threshold = hasCycled ? Self.cycleDistance : Self.firstCycleDistance
+            let threshold = hasCycled ? cycleDistance : firstCycleDistance
             guard abs(averageAlong) >= threshold else { return nil }
             hasCycled = true
             rebase(touches)
@@ -66,8 +69,8 @@ struct TrackpadSwipeDetector {
             isSpent = true
             return nil
         }
-        let allPositive = alongAxis.allSatisfy { $0 >= Self.openDistance }
-        let allNegative = alongAxis.allSatisfy { $0 <= -Self.openDistance }
+        let allPositive = alongAxis.allSatisfy { $0 >= openDistance }
+        let allNegative = alongAxis.allSatisfy { $0 <= -openDistance }
         guard allPositive || allNegative else { return nil }
         guard zip(alongAxis.map(abs), acrossAxis).allSatisfy({ $0 > $1 * Self.axisDominanceRatio }) else { return nil }
 
@@ -176,6 +179,7 @@ final class TrackpadSwipeTrigger {
 
         let fingers = min(max(Defaults[.trackpadSwitcherSwipeFingers], 3), 4)
         let horizontal = Defaults[.trackpadSwitcherSwipeDirection] == .horizontal
+        detector.sensitivity = min(max(Defaults[.trackpadSwitcherSwipeSensitivity], 0.5), 2)
         guard let event = detector.handle(swipeTouches, fingers: fingers, horizontal: horizontal) else { return }
 
         let onSwipe = onSwipe
