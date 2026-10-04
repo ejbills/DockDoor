@@ -634,38 +634,28 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func applyWindowFrame(_ frame: CGRect, animated: Bool, dockPositionOverride: DockPosition? = nil) {
         let shouldAnimate = animated && Defaults[.showAnimations]
 
-        if shouldAnimate {
-            // Window is appearing for the first time, apply slide animation
-            let dockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
-            let animationOffset: CGFloat = 7.0
-            var startFrame = frame
-
-            switch dockPosition {
-            case .bottom, .cli:
-                startFrame.origin.y -= animationOffset
-            case .left:
-                startFrame.origin.x -= animationOffset
-            case .right:
-                startFrame.origin.x += animationOffset
-            default:
-                startFrame.origin.y -= animationOffset
-            }
-
-            setFrame(startFrame, display: true)
-            orderFront(nil)
-
-            NSAnimationContext.runAnimationGroup { context in
-                context.duration = 0.175
-                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                self.animator().setFrame(frame, display: true)
-            }
-        } else {
-            setFrame(frame, display: true)
-        }
-
+        setFrame(frame, display: true)
         alphaValue = 1.0
         makeKeyAndOrderFront(nil)
         publishTapSnapshot()
+
+        if shouldAnimate, let layer = contentView?.layer {
+            let animationOffset: CGFloat = 7.0
+            let downward: CGFloat = contentView?.superview?.isFlipped == true ? animationOffset : -animationOffset
+            let offset = switch dockPositionOverride ?? DockUtils.getDockPosition() {
+            case .left: CGSize(width: -animationOffset, height: 0)
+            case .right: CGSize(width: animationOffset, height: 0)
+            default: CGSize(width: 0, height: downward)
+            }
+
+            let slide = CABasicAnimation(keyPath: "transform.translation")
+            slide.fromValue = NSValue(size: offset)
+            slide.toValue = NSValue(size: .zero)
+            slide.isAdditive = true
+            slide.duration = 0.175
+            slide.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            layer.add(slide, forKey: "slideIn")
+        }
     }
 
     @MainActor
