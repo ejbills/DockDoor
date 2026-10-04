@@ -34,7 +34,7 @@ enum LauncherShortcutResolver {
         if let shortcutURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: launchIdentifier),
            parallManifest(at: shortcutURL)?.targetBundleIdentifier == bundleIdentifier
         {
-            return launchIdentifier
+            return dockSawLaunch(of: app) ? launchIdentifier : nil
         }
 
         let launchers = NSRunningApplication.runningApplications(withBundleIdentifier: launchIdentifier)
@@ -53,7 +53,7 @@ enum LauncherShortcutResolver {
         if let manifest = parallManifest(at: url) {
             return NSRunningApplication.runningApplications(withBundleIdentifier: manifest.targetBundleIdentifier).filter { app in
                 guard app.activationPolicy == .regular else { return false }
-                if let process = processStrings(of: app.processIdentifier) {
+                if dockSawLaunch(of: app), let process = processStrings(of: app.processIdentifier) {
                     if launchBundleIdentifier(process) == shortcutBundleIdentifier {
                         return true
                     }
@@ -91,6 +91,14 @@ enum LauncherShortcutResolver {
               let start = startTime(of: pid)
         else { return false }
         return launcherStart <= start
+    }
+
+    private static func dockSawLaunch(of app: NSRunningApplication) -> Bool {
+        guard let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
+              let dockStart = startTime(of: dock.processIdentifier),
+              let start = startTime(of: app.processIdentifier)
+        else { return true }
+        return dockStart <= start
     }
 
     private static func parallManifest(at url: URL) -> ParallManifest? {
