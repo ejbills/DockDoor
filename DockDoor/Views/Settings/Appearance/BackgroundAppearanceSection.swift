@@ -13,6 +13,9 @@ struct BackgroundAppearanceSection: View {
     @Default(.dockBackgroundBorderOpacity) var borderOpacity
     @Default(.dockBackgroundBorderWidth) var borderWidth
     @Default(.dockBackgroundMaterial) var material
+    @Default(.showPreviewShadow) var showPreviewShadow
+    @Default(.previewShadowRadius) var previewShadowRadius
+    @Default(.previewShadowOpacity) var previewShadowOpacity
 
     private var isGlass: Bool { backgroundStyle == .liquidGlass }
     private var isFrosted: Bool { backgroundStyle == .frostedMaterial }
@@ -162,6 +165,38 @@ struct BackgroundAppearanceSection: View {
                         .settingsSearchTarget("appearance.glassTuning")
                     }
                 }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $showPreviewShadow) {
+                        Text("Show shadow beneath previews")
+                    }
+                    Text("Casts a soft shadow around preview panels so their edges stay visible over light backgrounds.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+
+                    if showPreviewShadow {
+                        sliderSetting(
+                            title: "Shadow Size",
+                            value: $previewShadowRadius,
+                            range: 2 ... 10,
+                            step: 1,
+                            unit: "pt"
+                        )
+                        .padding(.leading, 20)
+
+                        sliderSetting(
+                            title: "Shadow Opacity",
+                            value: $previewShadowOpacity,
+                            range: 0.05 ... 1.0,
+                            step: 0.05,
+                            unit: "",
+                            formatter: NumberFormatter.percentFormatter
+                        )
+                        .padding(.leading, 20)
+                    }
+                }
+                .settingsSearchTarget("appearance.previewShadow")
             }
         }
     }

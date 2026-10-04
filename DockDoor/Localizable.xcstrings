@@ -31829,6 +31829,9 @@
         }
       }
     },
+    "Casts a soft shadow around preview panels so their edges stay visible over light backgrounds." : {
+
+    },
     "Center Window" : {
       "comment" : "Window action",
       "localizations" : {
@@ -156005,6 +156008,12 @@
         }
       }
     },
+    "Shadow Opacity" : {
+
+    },
+    "Shadow Size" : {
+
+    },
     "Shadowed" : {
       "comment" : "Preview title style option",
       "localizations" : {
@@ -162855,6 +162864,9 @@
           }
         }
       }
+    },
+    "Show shadow beneath previews" : {
+
     },
     "Show small windows (under 100px)" : {
       "localizations" : {

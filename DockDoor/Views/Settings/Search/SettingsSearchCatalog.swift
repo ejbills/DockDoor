@@ -834,6 +834,15 @@ enum SettingsSearchCatalog {
             section: String(localized: "Background"),
             icon: "rectangle.fill"
         ),
+        SettingsSearchItem(
+            id: "appearance.previewShadow",
+            title: String(localized: "Show shadow beneath previews"),
+            description: String(localized: "Casts a soft shadow around preview panels so their edges stay visible over light backgrounds."),
+            keywords: ["shadow", "depth", "drop shadow", "edge", "contrast", "size", "opacity"],
+            tab: "Appearance",
+            section: String(localized: "Background"),
+            icon: "shadow"
+        ),
         // Window Background
         SettingsSearchItem(
             id: "appearance.hoverHighlightColor",
