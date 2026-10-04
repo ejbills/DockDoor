@@ -272,6 +272,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 }
 
 struct StageManagerProtection: Equatable {
+    let settingEnabled: Bool
     let enabled: Bool
     let generation: UInt64
 }
@@ -332,15 +333,16 @@ enum WindowUtil {
     private static let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
 
     private static let stageManagerStateLock = NSLock()
-    private static var lastStageManagerProtection = StageManagerProtection(enabled: false, generation: 0)
+    private static var lastStageManagerProtection = StageManagerProtection(settingEnabled: false, enabled: false, generation: 0)
 
     static func stageManagerProtectionSnapshot() -> StageManagerProtection {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
-        let enabled = Defaults[.stageManagerOptimization] &&
+        let settingEnabled = Defaults[.stageManagerOptimization]
+        let enabled = settingEnabled &&
             (windowManagerDefaults?.object(forKey: "GloballyEnabled") as? Bool ?? false)
-        if enabled != lastStageManagerProtection.enabled {
-            lastStageManagerProtection = StageManagerProtection(enabled: enabled, generation: lastStageManagerProtection.generation &+ 1)
+        if settingEnabled != lastStageManagerProtection.settingEnabled || enabled != lastStageManagerProtection.enabled {
+            lastStageManagerProtection = StageManagerProtection(settingEnabled: settingEnabled, enabled: enabled, generation: lastStageManagerProtection.generation &+ 1)
         }
         return lastStageManagerProtection
     }
@@ -365,7 +367,7 @@ enum WindowUtil {
         return Set(windows.compactMap { window -> CGWindowID? in
             guard window.axElement != focusedWindow,
                   window.image != nil,
-                  !stageManagerProtection.enabled || window.stageManagerImageApproved,
+                  !stageManagerProtection.settingEnabled || window.stageManagerImageApproved,
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
             return window.id
@@ -585,6 +587,11 @@ extension WindowUtil {
         forceRefresh: Bool = false
     ) async -> PreviewImageCapture? {
         guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled else { return nil }
+        if !stageManagerProtection.settingEnabled {
+            guard let image = try? await captureWindowImage(windowID: windowID, pid: pid, windowTitle: title, forceRefresh: forceRefresh),
+                  isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled else { return nil }
+            return PreviewImageCapture(image: image, capturedAt: Date(), approved: false)
+        }
         guard let app = NSRunningApplication(processIdentifier: pid) else { return nil }
         let sizeBefore = stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow)
         if !stageManagerProtection.enabled || sizeBefore != nil,
@@ -698,9 +705,7 @@ extension WindowUtil {
         let boundsAspect = bounds.width / bounds.height
         guard abs(imageAspect - boundsAspect) / boundsAspect > 0.02 else { return false }
         let spaces = Set(windowID.cgsSpaces().map { Int($0) })
-        let activeSpaces = currentActiveSpaceIDs()
-        guard !spaces.isEmpty, !activeSpaces.isEmpty else { return false }
-        return spaces.isDisjoint(with: activeSpaces)
+        return !spaces.isEmpty && spaces.isDisjoint(with: currentActiveSpaceIDs())
     }
 
     private static func logCapture(windowID: CGWindowID, pid: pid_t, title: String?, image: CGImage?, transparent: Bool, clipped: Bool, entry: [String: AnyObject]?, quality: CGSWindowCaptureOptions) {
@@ -716,16 +721,33 @@ extension WindowUtil {
     }
 
     private static func isFullyTransparent(_ image: CGImage) -> Bool {
-        guard let samples = alphaSamples(image, minimumAlpha: 0) else { return false }
-        return samples.sampled > 0 && samples.visible == 0
+        let alphaOffset: Int
+        switch image.alphaInfo {
+        case .premultipliedFirst, .first: alphaOffset = 0
+        case .premultipliedLast, .last: alphaOffset = 3
+        default: return false
+        }
+        guard image.bitsPerPixel == 32,
+              let data = image.dataProvider?.data,
+              let bytes = CFDataGetBytePtr(data)
+        else { return false }
+        let length = CFDataGetLength(data)
+        let stepX = max(image.width / 16, 1)
+        let stepY = max(image.height / 16, 1)
+        var y = 0
+        while y < image.height {
+            var x = 0
+            while x < image.width {
+                let offset = y * image.bytesPerRow + x * 4 + alphaOffset
+                if offset < length, bytes[offset] != 0 { return false }
+                x += stepX
+            }
+            y += stepY
+        }
+        return true
     }
 
     private static func isMostlyTransparent(_ image: CGImage) -> Bool {
-        guard let samples = alphaSamples(image, minimumAlpha: 16) else { return false }
-        return samples.sampled > 0 && samples.visible * 20 < samples.sampled
-    }
-
-    private static func alphaSamples(_ image: CGImage, minimumAlpha: UInt8) -> (visible: Int, sampled: Int)? {
         let dimension = 16
         var pixels = [UInt8](repeating: 0, count: dimension * dimension * 4)
         return pixels.withUnsafeMutableBytes { buffer in
@@ -738,14 +760,14 @@ extension WindowUtil {
                 bytesPerRow: dimension * 4,
                 space: CGColorSpaceCreateDeviceRGB(),
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
-            ) else { return nil }
+            ) else { return false }
             context.interpolationQuality = .none
             context.draw(image, in: CGRect(x: 0, y: 0, width: dimension, height: dimension))
             var visible = 0
             for offset in stride(from: 3, to: buffer.count, by: 4) {
-                if buffer[offset] > minimumAlpha { visible += 1 }
+                if buffer[offset] > 16 { visible += 1 }
             }
-            return (visible, dimension * dimension)
+            return visible * 20 < dimension * dimension
         }
     }
 
@@ -1766,7 +1788,7 @@ extension WindowUtil {
     static func purgeAllCaches() {
         stageManagerStateLock.lock()
         defer { stageManagerStateLock.unlock() }
-        lastStageManagerProtection = StageManagerProtection(enabled: lastStageManagerProtection.enabled, generation: lastStageManagerProtection.generation &+ 1)
+        lastStageManagerProtection = StageManagerProtection(settingEnabled: lastStageManagerProtection.settingEnabled, enabled: lastStageManagerProtection.enabled, generation: lastStageManagerProtection.generation &+ 1)
         desktopSpaceWindowCacheManager.purgeAll()
     }
 

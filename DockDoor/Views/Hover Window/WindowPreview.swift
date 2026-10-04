@@ -244,7 +244,7 @@ struct WindowPreview: View, Equatable {
 
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
-        let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels && !showStageManagerMissingPreviewTip
+        let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels
         let quality = appearance.livePreviewQuality
         let frameRate = appearance.livePreviewFrameRate
 
@@ -259,8 +259,9 @@ struct WindowPreview: View, Equatable {
                     .scaledToFit()
             } else if showStageManagerMissingPreviewTip {
                 VStack(spacing: 8) {
-                    Image(systemName: "rectangle.on.rectangle")
-                        .font(.title2)
+                    Image(systemName: inactive ? "eye.slash" : "rectangle.on.rectangle")
+                        .font(inactive ? .largeTitle : .title2)
+                        .foregroundColor(inactive ? .primary : .secondary)
                     Text(String(localized: "Bring this window to the front once to show its preview.", comment: "Missing Stage Manager window screenshot hint"))
                         .font(.caption)
                         .multilineTextAlignment(.center)
@@ -269,9 +270,9 @@ struct WindowPreview: View, Equatable {
                 .padding()
             }
         }
-        .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
+        .markHidden(isHidden: (inactive && !showStageManagerMissingPreviewTip) || (windowSwitcherActive && !isSelected))
         .overlay {
-            if inactive, appearance.showMinimizedHiddenLabels {
+            if inactive, !showStageManagerMissingPreviewTip {
                 Image(systemName: "eye.slash")
                     .font(.largeTitle)
                     .foregroundColor(.primary)

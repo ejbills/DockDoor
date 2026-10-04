@@ -41,7 +41,7 @@ class PreviewStateCoordinator: ObservableObject {
     var initialHoverLocation: CGPoint?
     var fullWindowPreviewActive: Bool = false
     @Published private(set) var stageManagerProtectionEnabled = false
-    private(set) var stageManagerProtection = StageManagerProtection(enabled: false, generation: 0)
+    private(set) var stageManagerProtection = StageManagerProtection(settingEnabled: false, enabled: false, generation: 0)
     @Published var windows: [WindowInfo] = [] {
         didSet { invalidateFilterCache() }
     }
