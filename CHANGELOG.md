@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.7"></a>
+# [Release 1.40.7](https://github.com/ejbills/DockDoor/releases/tag/1.40.7) - 2026-10-04
+
+## 🐛 Bug Fixes
+- Parall-launched apps that relaunch themselves are recognized
+
+
+[Changes][1.40.7]
+
+
 <a id="1.40.6"></a>
 # [Release 1.40.6](https://github.com/ejbills/DockDoor/releases/tag/1.40.6) - 2026-10-04
 
@@ -2522,6 +2532,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.7]: https://github.com/ejbills/DockDoor/compare/1.40.6...1.40.7
 [1.40.6]: https://github.com/ejbills/DockDoor/compare/1.40.5...1.40.6
 [1.40.5]: https://github.com/ejbills/DockDoor/compare/1.40.4...1.40.5
 [1.40.4]: https://github.com/ejbills/DockDoor/compare/1.40.3...1.40.4
