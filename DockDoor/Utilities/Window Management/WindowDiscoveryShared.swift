@@ -22,11 +22,11 @@ struct WindowCandidateAttributes {
     let size: CGSize?
     let position: CGPoint?
 
-    init(axWindow: AXUIElement) {
+    init(axWindow: AXUIElement, size: CGSize? = nil) {
         title = try? axWindow.title()
         role = try? axWindow.role()
         subrole = try? axWindow.subrole()
-        size = try? axWindow.size()
+        self.size = size ?? (try? axWindow.size())
         position = try? axWindow.position()
     }
 }

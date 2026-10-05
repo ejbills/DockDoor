@@ -555,9 +555,11 @@ extension WindowUtil {
     }
 
     private static func stageManagerCaptureGeometry(windowID: CGWindowID, pid: pid_t, axWindow: AXUIElement) -> CGSize? {
-        guard !Task.isCancelled, isValidElement(axWindow),
-              stageManagerAXIdentityMatches(windowID: windowID, pid: pid, axWindow: axWindow),
-              let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first,
+        var axPID: pid_t = 0
+        guard !Task.isCancelled, AXUIElementGetPid(axWindow, &axPID) == .success, axPID == pid else { return nil }
+        let axID = try? axWindow.cgWindowId()
+        if let axID, axID != 0, axID != windowID { return nil }
+        guard let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first,
               (entry[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value == pid,
               let bounds = (entry[kCGWindowBounds as String] as? NSDictionary).flatMap({ CGRect(dictionaryRepresentation: $0) }),
               let size = try? axWindow.size(),
@@ -565,8 +567,8 @@ extension WindowUtil {
               bounds.width > 0, bounds.height > 0, size.width > 0, size.height > 0,
               bounds.width >= size.width * 0.9, bounds.height >= size.height * 0.9
         else { return nil }
-        if (try? axWindow.cgWindowId()).map({ $0 == 0 }) ?? true {
-            guard mapAXToCG(attributes: WindowCandidateAttributes(axWindow: axWindow), candidates: [entry], excluding: []) == windowID else { return nil }
+        if axID == nil || axID == 0 {
+            guard mapAXToCG(attributes: WindowCandidateAttributes(axWindow: axWindow, size: size), candidates: [entry], excluding: []) == windowID else { return nil }
         }
         return size
     }
