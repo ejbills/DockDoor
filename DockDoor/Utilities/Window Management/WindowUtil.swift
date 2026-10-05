@@ -541,12 +541,6 @@ extension WindowUtil {
 // MARK: - Window Capture
 
 extension WindowUtil {
-    private static func isPlausibleStageManagerImage(_ image: CGImage) -> Bool {
-        image.width >= minUsableImageDimension &&
-            image.height >= minUsableImageDimension &&
-            !isMostlyTransparent(image)
-    }
-
     private struct PreviewImageCapture {
         let image: CGImage
         let capturedAt: Date
@@ -601,8 +595,7 @@ extension WindowUtil {
             // Approval describes these pixels, including captures made before protection activates.
             // Bypass image-cache reuse when verifying: current geometry cannot approve older pixels.
             let approved = sizeBefore != nil &&
-                stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow) == sizeBefore &&
-                isPlausibleStageManagerImage(image)
+                stageManagerCaptureGeometry(windowID: windowID, pid: pid, axWindow: axWindow) == sizeBefore
             guard isCurrentStageManagerProtection(stageManagerProtection), !Task.isCancelled else { return nil }
             if !stageManagerProtection.enabled || approved {
                 return PreviewImageCapture(image: image, capturedAt: Date(), approved: approved)
@@ -745,30 +738,6 @@ extension WindowUtil {
             y += stepY
         }
         return true
-    }
-
-    private static func isMostlyTransparent(_ image: CGImage) -> Bool {
-        let dimension = 16
-        var pixels = [UInt8](repeating: 0, count: dimension * dimension * 4)
-        return pixels.withUnsafeMutableBytes { buffer in
-            // Normalize the pixel layout before reading alpha, including default byte order and HDR images.
-            guard let context = CGContext(
-                data: buffer.baseAddress,
-                width: dimension,
-                height: dimension,
-                bitsPerComponent: 8,
-                bytesPerRow: dimension * 4,
-                space: CGColorSpaceCreateDeviceRGB(),
-                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
-            ) else { return false }
-            context.interpolationQuality = .none
-            context.draw(image, in: CGRect(x: 0, y: 0, width: dimension, height: dimension))
-            var visible = 0
-            for offset in stride(from: 3, to: buffer.count, by: 4) {
-                if buffer[offset] > 16 { visible += 1 }
-            }
-            return visible * 20 < dimension * dimension
-        }
     }
 
     static func cachedWindowElements(for pid: pid_t) -> [AXUIElement] {
