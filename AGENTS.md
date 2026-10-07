@@ -2,9 +2,19 @@
 
 macOS dock enhancement app — window previews on dock hover, Alt+Tab window switcher, Cmd+Tab overlay. Menu bar only (`LSUIElement: true`). Swift 5.10 / SwiftUI / AppKit. GPL-3.0.
 
+## Before Doing Anything on GitHub
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before you open, edit or comment on a pull request, and follow it, including its "If you are an AI agent" section. PRs that ignore it are closed without discussion. The rules that agents break most often:
+
+- Start every PR and issue body from its template in `.github/`. `gh pr create --body`, `gh pr create --fill` and `gh issue create --body` skip the templates.
+- Fill in the AI disclosure. Don't tick checkboxes or write "Describe your changes" for your human.
+- One issue per PR, with no unrelated changes.
+
+These rules are for contributors. The maintainer (@ejbills) is exempt.
+
 ## Build
 
-Open `DockDoor.xcodeproj` in Xcode and build (Cmd+R). No CLI build commands — this is an Xcode-managed project, not SPM.
+Requires Xcode 27 or later on macOS 27 or later. Open `DockDoor.xcodeproj` in Xcode and build (Cmd+R). No CLI build commands — this is an Xcode-managed project, not SPM.
 
 ## Adding Files to the Project
 

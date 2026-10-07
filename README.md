@@ -159,6 +159,7 @@ More at [dockdoor.net/works-with](https://dockdoor.net/works-with).
 
 DockDoor is written almost entirely by one developer, with fixes, features and translations from the open-source community.
 
+- 📖 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request
 - ⭐ [Star it on GitHub](https://github.com/ejbills/DockDoor) to help other people find it
 - 🐛 [Report a bug or ask for a feature](https://github.com/ejbills/DockDoor/issues)
 - 🌍 [Translate it on Crowdin](https://crowdin.com/project/dockdoor)
