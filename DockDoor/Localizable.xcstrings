@@ -26110,6 +26110,7 @@
         }
       }
     },
+    "Backup & Restore" : {},
     "Backward cycle key:" : {
       "localizations" : {
         "af" : {
@@ -71232,6 +71233,7 @@
         }
       }
     },
+    "Export DockDoor Settings" : {},
     "Export Logs" : {
       "localizations" : {
         "af" : {
@@ -71422,6 +71424,7 @@
         }
       }
     },
+    "Export Settings…" : {},
     "Extra Extra Small" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -91240,6 +91243,9 @@
         }
       }
     },
+    "Import DockDoor Settings" : {},
+    "Import Settings" : {},
+    "Import Settings…" : {},
     "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -157318,6 +157324,8 @@
         }
       }
     },
+    "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor." : {},
+    "Settings Backup Failed" : {},
     "Shadow Opacity" : {
       "localizations" : {
         "af" : {
@@ -181128,6 +181136,9 @@
         }
       }
     },
+    "The backup could not be read: %@" : {},
+    "The backup could not be saved: %@" : {},
+    "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults." : {},
     "The changes to permissions will take effect after restarting." : {
       "localizations" : {
         "af" : {
@@ -182078,6 +182089,7 @@
         }
       }
     },
+    "The selected file is not a DockDoor settings backup." : {},
     "The selected positions for Traffic Light Buttons and Window Title will overlap." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -184365,6 +184377,7 @@
         }
       }
     },
+    "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them." : {},
     "Thumbnail (320px)" : {
       "localizations" : {
         "af" : {
