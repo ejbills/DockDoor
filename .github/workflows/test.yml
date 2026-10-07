@@ -3,7 +3,7 @@ on: pull_request
 
 jobs:
   build:
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v4
       - name: Resolve packages
@@ -12,7 +12,7 @@ jobs:
         run: xcodebuild build -project DockDoor.xcodeproj -scheme DockDoor -destination 'platform=macOS' CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
   test:
-    runs-on: macos-26
+    runs-on: xcode-27
     needs: build
     steps:
       - uses: actions/checkout@v4
