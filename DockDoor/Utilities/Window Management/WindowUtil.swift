@@ -1450,6 +1450,9 @@ extension WindowUtil {
             isHidden: hiddenState
         )
         info.windowName = windowTitle
+        if let position = attributes.position, let size = attributes.size {
+            info.frame = CGRect(origin: position, size: size)
+        }
         return info
     }
 
