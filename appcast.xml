@@ -3,6 +3,62 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.40.8b1</title>
+            <pubDate>Thu, 08 Oct 2026 14:30:33 -0700</pubDate>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.40.8b1</sparkle:version>
+            <sparkle:shortVersionString>1.40.8b1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;BETA RELEASE WARNING&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This is an unstable pre-release version intended for testing purposes only.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;✨ New Features&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Back up and restore settings as a JSON file&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Open Settings &amp;gt; General &amp;gt; Backup &amp;amp; Restore, then click &amp;quot;Export Settings…&amp;quot; or &amp;quot;Import Settings…&amp;quot;&lt;/li&gt;
+  &lt;li&gt;Keep a copy in iCloud Drive or a dotfiles repository, or use it to move your setup to another Mac&lt;/li&gt;
+  &lt;li&gt;The exported file name defaults to &amp;quot;DockDoor Settings &amp;lt;date&amp;gt;.json&amp;quot;&lt;/li&gt;
+  &lt;li&gt;Importing asks for confirmation first, shows how many settings the backup contains, replaces all your current settings, and restarts DockDoor&lt;/li&gt;
+  &lt;li&gt;If the backup came from a different DockDoor version, settings that no longer exist are ignored and new settings keep their defaults&lt;/li&gt;
+  &lt;li&gt;Searching Settings for &amp;quot;backup&amp;quot;, &amp;quot;export&amp;quot;, &amp;quot;import&amp;quot;, &amp;quot;restore&amp;quot;, &amp;quot;sync&amp;quot;, &amp;quot;dotfiles&amp;quot;, or &amp;quot;iCloud&amp;quot; finds these options&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+&lt;h3&gt;🔧 Improvements &amp;amp; Stability&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Clear alert when a settings backup fails&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;A &amp;quot;Settings Backup Failed&amp;quot; alert appears if a backup can&amp;#x27;t be saved or the chosen file isn&amp;#x27;t a DockDoor backup&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Window previews and tracking stay more accurate for tabs you switch to&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Happens automatically in apps with native macOS tabs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+&lt;h3&gt;🐛 Bug Fixes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Window switcher returns to the tab you selected&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Applies to apps with native macOS tabs, such as Finder, Terminal, and Safari&lt;/li&gt;
+  &lt;li&gt;Tabs you switch to are now remembered, listed in the switcher, and can be jumped to&lt;/li&gt;
+  &lt;li&gt;Works automatically, so just switch tabs as usual&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Switching tabs or windows in a background app no longer changes its recent order in the switcher&lt;/li&gt;
+&lt;li&gt;Active app indicator no longer drifts while a Dock icon bounces&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;It stays lined up with the Dock&amp;#x27;s edge with the Dock at the bottom, left, or right&lt;/li&gt;
+  &lt;li&gt;Works automatically if you use Settings &amp;gt; General &amp;gt; Active App Indicator&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;DockDoor now launches on macOS versions that lack some of the system components used for the Liquid Glass look&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;No action needed on older macOS releases&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+</description>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.40.8b1/DockDoor.dmg" length="22549045" type="application/octet-stream" sparkle:edSignature="MJlqejjW0JnMq8Ecf4SvurH27eloUPqRYKO2AJfMukm7CFEFUTlir9WQHZPqLuC58mQOg6/2wB80WQyCVxISBg==" />
+        </item>
+    <item>
             <title>1.40.7</title>
             <pubDate>Sat, 03 Oct 2026 21:15:06 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
