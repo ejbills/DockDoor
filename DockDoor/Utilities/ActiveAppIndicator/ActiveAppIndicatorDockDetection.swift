@@ -38,19 +38,17 @@ enum ActiveAppIndicatorDockDetection {
             return nil
         }
 
-        // Find the dock item for this app
-        for item in dockItems {
-            guard let subrole = try? item.subrole(),
-                  subrole == "AXApplicationDockItem"
-            else { continue }
+        let appItems = dockItems.filter { (try? $0.subrole()) == "AXApplicationDockItem" }
 
+        // Find the dock item for this app
+        for item in appItems {
             // Check if this is our app by comparing bundle identifiers
             if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
                 .absoluteURL,
                 let itemBundle = Bundle(url: itemURL),
                 itemBundle.bundleIdentifier == bundleIdentifier
             {
-                return frame(of: item)
+                return frame(of: item).map { restingFrame($0, among: appItems) }
             }
 
             // Check by running app if bundle ID check failed
@@ -58,11 +56,27 @@ enum ActiveAppIndicatorDockDetection {
                let itemTitle = try? item.title(),
                itemTitle == app.localizedName
             {
-                return frame(of: item)
+                return frame(of: item).map { restingFrame($0, among: appItems) }
             }
         }
 
         return nil
+    }
+
+    private static func restingFrame(_ itemFrame: CGRect, among items: [AXUIElement]) -> CGRect {
+        let frames = items.compactMap { frame(of: $0) }
+        var resting = itemFrame
+        switch DockUtils.getDockPosition() {
+        case .bottom:
+            if let edge = frames.map(\.maxY).max() { resting.origin.y = edge - resting.height }
+        case .left:
+            if let edge = frames.map(\.minX).min() { resting.origin.x = edge }
+        case .right:
+            if let edge = frames.map(\.maxX).max() { resting.origin.x = edge - resting.width }
+        case .top, .cmdTab, .cli, .unknown:
+            break
+        }
+        return resting
     }
 
     /// Gets the frame for a dock element from accessibility.
