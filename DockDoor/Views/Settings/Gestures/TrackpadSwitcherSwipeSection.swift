@@ -6,6 +6,7 @@ struct TrackpadSwitcherSwipeSection: View {
     @Default(.enableTrackpadSwitcherSwipe) var enableTrackpadSwitcherSwipe
     @Default(.trackpadSwitcherSwipeFingers) var trackpadSwitcherSwipeFingers
     @Default(.trackpadSwitcherSwipeDirection) var trackpadSwitcherSwipeDirection
+    @Default(.trackpadSwitcherSwipeSensitivity) var trackpadSwitcherSwipeSensitivity
 
     var body: some View {
         SettingsGroup(header: "Trackpad Swipe for Window Switcher") {
@@ -44,6 +45,24 @@ struct TrackpadSwitcherSwipeSection: View {
                     .pickerStyle(.menu)
                     .fixedSize()
                     .settingsSearchTarget("gestures.trackpadSwitcherSwipeDirection")
+
+                    let sensitivityBinding = Binding<Double>(
+                        get: { Double(trackpadSwitcherSwipeSensitivity) },
+                        set: { trackpadSwitcherSwipeSensitivity = CGFloat($0) }
+                    )
+                    sliderSetting(
+                        title: "Swipe Sensitivity",
+                        value: sensitivityBinding,
+                        range: Double(TrackpadSwipeDetector.sensitivityRange.lowerBound) ... Double(TrackpadSwipeDetector.sensitivityRange.upperBound),
+                        step: 0.1,
+                        unit: "",
+                        formatter: NumberFormatter.percentFormatter
+                    )
+                    .settingsSearchTarget("gestures.trackpadSwitcherSwipeSensitivity")
+
+                    Text("Higher values open the switcher and change the selection with shorter swipes.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
 
                     Text("If macOS uses the same swipe for Mission Control, App Exposé or switching between full-screen apps, turn that gesture off in System Settings > Trackpad > More Gestures.")
                         .font(.caption)

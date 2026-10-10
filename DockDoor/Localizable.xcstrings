@@ -87054,6 +87054,7 @@
         }
       }
     },
+    "Higher values open the switcher and change the selection with shorter swipes." : {},
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -177133,6 +177134,7 @@
         }
       }
     },
+    "Swipe Sensitivity" : {},
     "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch." : {
       "localizations" : {
         "af" : {

@@ -314,6 +314,7 @@ extension Defaults.Keys {
     static let enableTrackpadSwitcherSwipe = Key<Bool>("enableTrackpadSwitcherSwipe", default: false)
     static let trackpadSwitcherSwipeFingers = Key<Int>("trackpadSwitcherSwipeFingers", default: 3)
     static let trackpadSwitcherSwipeDirection = Key<TrackpadSwipeDirection>("trackpadSwitcherSwipeDirection", default: .horizontal)
+    static let trackpadSwitcherSwipeSensitivity = Key<CGFloat>("trackpadSwitcherSwipeSensitivity", default: 1)
 
     // MARK: - Middle Click Action
 
