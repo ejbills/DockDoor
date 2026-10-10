@@ -2,6 +2,7 @@ import Defaults
 import SwiftUI
 
 struct DockScrollGestureSection: View {
+    @Default(.enableWindowGestures) var enableWindowGestures
     @Default(.enableDockScrollGesture) var enableDockScrollGesture
     @Default(.dockIconScrollBehavior) var dockIconScrollBehavior
     @Default(.dockIconMediaScrollBehavior) var dockIconMediaScrollBehavior
@@ -17,6 +18,12 @@ struct DockScrollGestureSection: View {
                     }
                 }
                 .settingsSearchTarget("gestures.dockScroll")
+
+                if enableWindowGestures {
+                    Text("Window Gestures is on and handles swipes on running apps' Dock icons instead.")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
 
                 if enableDockScrollGesture {
                     Text("Choose what happens when scrolling directly on a dock icon.")
@@ -52,6 +59,7 @@ struct DockScrollGestureSection: View {
 }
 
 struct TitleBarScrollGestureSection: View {
+    @Default(.enableWindowGestures) var enableWindowGestures
     @Default(.enableTitleBarScrollGesture) var enableTitleBarScrollGesture
     @Default(.titleBarScrollCenteredWindowScale) var titleBarScrollCenteredWindowScale
     @Default(.titleBarScrollCenteredWindowSizingMode) var titleBarScrollCenteredWindowSizingMode
@@ -71,6 +79,12 @@ struct TitleBarScrollGestureSection: View {
                     }
                 }
                 .settingsSearchTarget("gestures.titleBarScroll")
+
+                if enableWindowGestures {
+                    Text("Window Gestures is on and handles title bar gestures instead.")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
 
                 if enableTitleBarScrollGesture {
                     let centeredWindowScaleBinding = Binding<Double>(

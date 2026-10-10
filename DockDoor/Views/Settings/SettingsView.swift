@@ -206,6 +206,8 @@ struct SettingsView: View {
                                 .tag("DockPreviews")
                             Label(String(localized: "Window Switcher", comment: "Settings tab title"), systemImage: "uiwindow.split.2x1")
                                 .tag("WindowSwitcher")
+                            Label(String(localized: "Window Gestures", comment: "Settings tab title"), systemImage: "rectangle.split.2x2.fill")
+                                .tag("WindowGestures")
                             Label(String(localized: "Cmd+Tab", comment: "Settings tab title"), systemImage: "command")
                                 .tag("CmdTab")
                             Label(String(localized: "Dock Locking", comment: "Settings tab title"), systemImage: "lock.fill")
@@ -244,6 +246,8 @@ struct SettingsView: View {
                     DockPreviewsSettingsView()
                 case "WindowSwitcher":
                     WindowSwitcherBehaviorSettingsView()
+                case "WindowGestures":
+                    WindowGesturesSettingsView()
                 case "CmdTab":
                     CmdTabSettingsView()
                 case "DockLocking":

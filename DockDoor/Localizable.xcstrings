@@ -16402,6 +16402,9 @@
         }
       }
     },
+    "Almost Fill Screen" : {
+      "comment" : "Snap region\nWindow gesture"
+    },
     "Alphabetical by title" : {
       "comment" : "Window preview sort order option",
       "localizations" : {
@@ -18686,6 +18689,12 @@
           }
         }
       }
+    },
+    "Anywhere Modifier" : {
+      "comment" : "Window gesture modifier role"
+    },
+    "App" : {
+      "comment" : "Fallback app name in window gesture tooltip"
     },
     "App Header Style" : {
       "localizations" : {
@@ -28393,6 +28402,9 @@
         }
       }
     },
+    "Bottom Half" : {
+      "comment" : "Snap region"
+    },
     "Bottom Left" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
@@ -28774,6 +28786,12 @@
           }
         }
       }
+    },
+    "Bottom Third" : {
+      "comment" : "Snap region"
+    },
+    "Bottom Two Thirds" : {
+      "comment" : "Snap region"
     },
     "Bring App Windows to Current Space" : {
       "comment" : "Dock icon scroll option",
@@ -29157,6 +29175,7 @@
         }
       }
     },
+    "Bring windows to the front after snapping" : {},
     "Browse for .app file..." : {
       "localizations" : {
         "af" : {
@@ -31252,6 +31271,11 @@
         }
       }
     },
+    "Cancel a gesture by pressing Esc, or by keeping your fingers still for this long. To repeat a direction, like swiping up twice, pause briefly until you feel a click, then keep going." : {},
+    "Cancel After Resting" : {},
+    "Cancelled" : {
+      "comment" : "Window gesture tooltip"
+    },
     "Cannot Add Color" : {
       "localizations" : {
         "af" : {
@@ -32393,6 +32417,18 @@
           }
         }
       }
+    },
+    "Center" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Center & Unsnap" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
+    "Center and restore size" : {
+      "comment" : "Center gesture option"
+    },
+    "Center only" : {
+      "comment" : "Center gesture option"
     },
     "Center Window" : {
       "comment" : "Window action",
@@ -38103,6 +38139,9 @@
         }
       }
     },
+    "Close Tab" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
     "Close Window" : {
       "comment" : "Window action",
       "localizations" : {
@@ -38293,6 +38332,9 @@
           }
         }
       }
+    },
+    "Close, quit, hide and move between Spaces with swipes and taps." : {
+      "comment" : "Window gesture modifier role description"
     },
     "CMD + Right Click on dock icon to quit app" : {
       "localizations" : {
@@ -50291,6 +50333,9 @@
         }
       }
     },
+    "Cycle Windows" : {
+      "comment" : "Window gesture"
+    },
     "Dark" : {
       "comment" : "App appearance mode option",
       "localizations" : {
@@ -55242,6 +55287,9 @@
         }
       }
     },
+    "Displays & Spaces" : {
+      "comment" : "Window gestures section"
+    },
     "Displays a colored line below the currently active application's dock icon." : {
       "comment" : "A description of the feature that shows a colored line below the currently active application's dock icon.",
       "localizations" : {
@@ -55812,6 +55860,9 @@
           }
         }
       }
+    },
+    "Dock & App Menu" : {
+      "comment" : "Window gestures section"
     },
     "Dock Click Action" : {
       "localizations" : {
@@ -62666,6 +62717,21 @@
         }
       }
     },
+    "Double-tap gestures need \"Smart zoom\" turned on in Trackpad settings." : {},
+    "Double-tap on a title bar" : {},
+    "Double-tap to center a window and bring back the size it had before it was snapped." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Double-tap to hide or show the app. Add the secondary modifier to hide every other app instead." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Double-tap to unsnap every snapped window on this display. Add the secondary modifier for all displays." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Double-tap while holding the general modifier to hide the app. Hold the secondary modifier instead to hide every other app." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Drag a snapped window to restore its size" : {},
     "Dynamic image sizing" : {
       "localizations" : {
         "af" : {
@@ -72196,6 +72262,7 @@
         }
       }
     },
+    "Feel" : {},
     "Fill Bottom Half" : {
       "comment" : "Window action",
       "localizations" : {
@@ -73150,6 +73217,9 @@
           }
         }
       }
+    },
+    "Fill Screen" : {
+      "comment" : "Snap region\nWindow gesture"
     },
     "Fill Top Half" : {
       "comment" : "Window action",
@@ -74676,6 +74746,9 @@
           }
         }
       }
+    },
+    "fn (Globe)" : {
+      "comment" : "Modifier key option"
     },
     "Focus and use previews" : {
       "localizations" : {
@@ -78105,6 +78178,12 @@
         }
       }
     },
+    "Full Screen" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
+    "Full Screen on Other Display" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
     "Fullscreen" : {
       "localizations" : {
         "af" : {
@@ -79057,6 +79136,9 @@
         }
       }
     },
+    "General Modifier" : {
+      "comment" : "Window gesture modifier role"
+    },
     "General settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -79818,6 +79900,15 @@
           }
         }
       }
+    },
+    "Gestures on a running app's Dock icon, or on its menu next to the Apple menu." : {
+      "comment" : "Window gestures section description"
+    },
+    "Gestures on a tab in Safari, Chrome, Finder and other apps with tabs." : {
+      "comment" : "Window gestures section description"
+    },
+    "Gestures on an empty part of the menu bar." : {
+      "comment" : "Window gestures section description"
     },
     "Get DockDoor Pro" : {
       "comment" : "DockDoor Pro banner link",
@@ -81913,6 +82004,7 @@
         }
       }
     },
+    "Grid Spacing" : {},
     "Group multiple app instances together" : {
       "localizations" : {
         "af" : {
@@ -82484,6 +82576,7 @@
         }
       }
     },
+    "Haptic feedback" : {},
     "Have an Idea?" : {
       "localizations" : {
         "af" : {
@@ -84390,6 +84483,12 @@
         }
       }
     },
+    "Hide" : {
+      "comment" : "Window gesture"
+    },
+    "Hide %@" : {
+      "comment" : "Window gesture tooltip, the argument is an app name"
+    },
     "Hide Advanced Settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -85724,6 +85823,9 @@
         }
       }
     },
+    "Hide Others" : {
+      "comment" : "Window gesture tooltip"
+    },
     "Hide preview card background" : {
       "localizations" : {
         "af" : {
@@ -86104,6 +86206,7 @@
         }
       }
     },
+    "Hide the pointer while a gesture is in progress" : {},
     "Hide Traffic Lights" : {
       "localizations" : {
         "af" : {
@@ -87055,6 +87158,7 @@
       }
     },
     "Higher values open the switcher and change the selection with shorter swipes." : {},
+    "Higher values recognize swipes and pinches with less finger travel." : {},
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -87815,6 +87919,19 @@
         }
       }
     },
+    "Hold Duration" : {},
+    "Hold the screen modifier and swipe to move every snapped window on this display to the next display." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Hold the screen modifier and swipe toward another display. Snapped windows keep their place in the grid." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Hold the secondary modifier and swipe left or right for a third. Swipe twice for two thirds, or tap and hold for the middle third." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Hold the tertiary modifier for a 3×3 grid. Swipe once for an edge row or column and twice to span two." : {
+      "comment" : "Window gesture instructions"
+    },
     "Hold this key to temporarily allow the Dock to move freely." : {
       "localizations" : {
         "af" : {
@@ -88004,6 +88121,9 @@
           }
         }
       }
+    },
+    "Hold to use window gestures anywhere on a window, not just its title bar." : {
+      "comment" : "Window gesture modifier role description"
     },
     "Horizontal" : {
       "comment" : "Media widget scroll direction option\nScroll direction option",
@@ -91054,6 +91174,7 @@
         }
       }
     },
+    "Ignored Apps" : {},
     "Immediately close" : {
       "localizations" : {
         "af" : {
@@ -92392,6 +92513,7 @@
         }
       }
     },
+    "Include screen edges in spacing" : {},
     "Includes small windows like Finder's copy progress dialog in previews." : {
       "localizations" : {
         "af" : {
@@ -98108,6 +98230,13 @@
         }
       }
     },
+    "Leaves room for the recent apps strip when Stage Manager is on." : {},
+    "Left & Right Halves" : {
+      "comment" : "Window gesture"
+    },
+    "Left Half" : {
+      "comment" : "Snap region"
+    },
     "Left or right" : {
       "comment" : "Trackpad swipe direction option",
       "localizations" : {
@@ -98298,6 +98427,12 @@
           }
         }
       }
+    },
+    "Left Third" : {
+      "comment" : "Snap region"
+    },
+    "Left Two Thirds" : {
+      "comment" : "Snap region"
     },
     "Let's set things up" : {
       "localizations" : {
@@ -102677,6 +102812,8 @@
         }
       }
     },
+    "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar." : {},
+    "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar. Snap to halves, quarters and thirds, close, quit, minimize, go full screen, and move windows between displays and Spaces." : {},
     "Marquee (scrolling)" : {
       "comment" : "Title overflow style option",
       "localizations" : {
@@ -106487,6 +106624,9 @@
         }
       }
     },
+    "Menu Bar" : {
+      "comment" : "Window gestures section"
+    },
     "Menu Bar Icon Hidden" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -106869,6 +107009,9 @@
         }
       }
     },
+    "Middle Third" : {
+      "comment" : "Snap region"
+    },
     "Minimize" : {
       "comment" : "Window action",
       "localizations" : {
@@ -107250,6 +107393,12 @@
         }
       }
     },
+    "Minimize All on Every Display" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Minimize All on This Display" : {
+      "comment" : "Window gesture tooltip"
+    },
     "Minimize all windows" : {
       "comment" : "Aero shake action option",
       "localizations" : {
@@ -107440,6 +107589,9 @@
           }
         }
       }
+    },
+    "Minimize All Windows" : {
+      "comment" : "Window gesture tooltip"
     },
     "Minimize all windows except the current one" : {
       "comment" : "Aero shake action option",
@@ -107822,6 +107974,9 @@
           }
         }
       }
+    },
+    "Minimize Windows" : {
+      "comment" : "Window gesture"
     },
     "Minimized" : {
       "localizations" : {
@@ -108964,6 +109119,7 @@
         }
       }
     },
+    "Modifier Keys" : {},
     "More Opaque" : {
       "localizations" : {
         "af" : {
@@ -109535,6 +109691,12 @@
         }
       }
     },
+    "Move Snapped Windows" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
+    "Move Tab to New Window" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
     "Move the cursor to the center of the selected window." : {
       "localizations" : {
         "af" : {
@@ -109724,6 +109886,22 @@
           }
         }
       }
+    },
+    "Move the pointer along when moving a window to another display" : {},
+    "Move to Display" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
+    "Move to Space" : {
+      "comment" : "Window gesture"
+    },
+    "Move to Space on the Left" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Move to Space on the Right" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Move windows between displays." : {
+      "comment" : "Window gesture modifier role description"
     },
     "Moving the mouse back over the preview during fade-out will not reactivate it." : {
       "localizations" : {
@@ -111822,6 +112000,9 @@
         }
       }
     },
+    "New Tab or Window" : {
+      "comment" : "Window gesture\nWindow gesture tooltip"
+    },
     "New Window" : {
       "localizations" : {
         "af" : {
@@ -112012,6 +112193,9 @@
         }
       }
     },
+    "Next App" : {
+      "comment" : "Window gesture tooltip"
+    },
     "Next page" : {
       "localizations" : {
         "af" : {
@@ -112201,6 +112385,12 @@
           }
         }
       }
+    },
+    "Next Window" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Ninths" : {
+      "comment" : "Window gesture"
     },
     "No action" : {
       "comment" : "Aero shake action option\nWindow popup hover action option",
@@ -114868,6 +115058,7 @@
         }
       }
     },
+    "No ignored apps" : {},
     "No lyrics available" : {
       "localizations" : {
         "af" : {
@@ -116769,6 +116960,9 @@
           }
         }
       }
+    },
+    "None" : {
+      "comment" : "Modifier key option"
     },
     "Not %@" : {
       "localizations" : {
@@ -121913,6 +122107,7 @@
         }
       }
     },
+    "Open Trackpad Settings" : {},
     "Open window switcher with a trackpad swipe" : {
       "localizations" : {
         "af" : {
@@ -125529,6 +125724,12 @@
         }
       }
     },
+    "Pick Up Front Window" : {
+      "comment" : "Window gesture"
+    },
+    "Pick Up Window" : {
+      "comment" : "Window gesture tooltip"
+    },
     "Pin to" : {
       "localizations" : {
         "af" : {
@@ -126290,6 +126491,28 @@
           }
         }
       }
+    },
+    "Pinch gestures need \"Zoom in or out\" turned on in Trackpad settings." : {},
+    "Pinch in on a tab to close it." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Pinch in once. You can also swipe down once while holding the general modifier." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Pinch in to quit the app." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Pinch in twice, pausing in between, or tap and hold and then pinch in. With the general modifier, swipe down twice." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Pinch out to open a new tab, or a new window in apps without tabs." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Pinch out twice, or pinch out while holding the screen modifier, to go full screen on the other display." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Pinch out, or tap and hold and then swipe up, to enter or leave full screen." : {
+      "comment" : "Window gesture instructions"
     },
     "Pinned to screen" : {
       "comment" : "Window switcher placement option",
@@ -134291,6 +134514,7 @@
         }
       }
     },
+    "Preview where the window will snap" : {},
     "Preview Width" : {
       "localizations" : {
         "af" : {
@@ -135433,6 +135657,12 @@
         }
       }
     },
+    "Previous App" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Previous Window" : {
+      "comment" : "Window gesture tooltip"
+    },
     "Profile" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -136194,6 +136424,9 @@
         }
       }
     },
+    "Quarters" : {
+      "comment" : "Window gesture"
+    },
     "Quit" : {
       "localizations" : {
         "af" : {
@@ -136383,6 +136616,9 @@
           }
         }
       }
+    },
+    "Quit %@" : {
+      "comment" : "Window gesture tooltip, the argument is an app name"
     },
     "Quit App" : {
       "comment" : "Window action",
@@ -144185,6 +144421,8 @@
         }
       }
     },
+    "Resize neighboring snapped windows together" : {},
+    "Rest two fingers on the trackpad without moving them to unlock extra gestures, like moving windows between Spaces. Shorten the hold if gestures feel slow, or lengthen it if two-finger clicks on Dock icons trigger it." : {},
     "Restart app" : {
       "localizations" : {
         "af" : {
@@ -144947,6 +145185,9 @@
         }
       }
     },
+    "Restore All" : {
+      "comment" : "Window gesture"
+    },
     "Restore all minimized windows on dock icon click" : {
       "localizations" : {
         "af" : {
@@ -145136,6 +145377,18 @@
           }
         }
       }
+    },
+    "Restore All on Every Display" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Restore All on This Display" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Restore All Windows" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Restore Minimized" : {
+      "comment" : "Window gesture"
     },
     "Restore settings window to front on wake from sleep" : {
       "extractionState" : "stale",
@@ -145327,6 +145580,12 @@
           }
         }
       }
+    },
+    "Restore size and position" : {
+      "comment" : "Center gesture option"
+    },
+    "Restore Window" : {
+      "comment" : "Window gesture tooltip"
     },
     "Restore Window Time" : {
       "localizations" : {
@@ -146087,6 +146346,15 @@
           }
         }
       }
+    },
+    "Right Half" : {
+      "comment" : "Snap region"
+    },
+    "Right Third" : {
+      "comment" : "Snap region"
+    },
+    "Right Two Thirds" : {
+      "comment" : "Snap region"
     },
     "Right-click a media or calendar widget to pin it." : {
       "localizations" : {
@@ -147989,6 +148257,9 @@
           }
         }
       }
+    },
+    "Screen Modifier" : {
+      "comment" : "Window gesture modifier role"
     },
     "Screen recording" : {
       "localizations" : {
@@ -151608,6 +151879,9 @@
           }
         }
       }
+    },
+    "Secondary Modifier" : {
+      "comment" : "Window gesture modifier role"
     },
     "seconds" : {
       "localizations" : {
@@ -156180,6 +156454,9 @@
         }
       }
     },
+    "Send windows to another display or Desktop space." : {
+      "comment" : "Window gestures section description"
+    },
     "Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable." : {
       "localizations" : {
         "af" : {
@@ -159229,6 +159506,7 @@
         }
       }
     },
+    "Show a tooltip with the action next to the pointer" : {},
     "Show active app indicator below dock icon" : {
       "comment" : "A toggle switch label that enables or disables the display of a line below the currently active application's dock icon.",
       "localizations" : {
@@ -170081,6 +170359,9 @@
         }
       }
     },
+    "Sixths" : {
+      "comment" : "Window gesture"
+    },
     "Size" : {
       "comment" : "Folder widget sort option",
       "localizations" : {
@@ -171036,6 +171317,27 @@
         }
       }
     },
+    "Snap to %lld/%lld of the Screen" : {
+      "comment" : "Snap region with a fraction of the screen, e.g. 2/9",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Snap to %1$lld/%2$lld of the Screen"
+          }
+        }
+      }
+    },
+    "Snap to a 3×3 grid." : {
+      "comment" : "Window gesture modifier role description"
+    },
+    "Snap to thirds, and act on all windows or all displays." : {
+      "comment" : "Window gesture modifier role description"
+    },
+    "Snapping" : {
+      "comment" : "Window gestures section"
+    },
+    "Snapping Options" : {},
     "Snappy" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -172940,6 +173242,7 @@
         }
       }
     },
+    "Stage Manager Space" : {},
     "Standard" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -176944,6 +177247,27 @@
         }
       }
     },
+    "Swipe down once. For a full screen window, tap and hold before swiping down." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe down to minimize every window on this display. Swipe twice, or add the secondary modifier, for all displays." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe down to minimize the front window. Add the secondary modifier, or pinch in twice, to minimize them all." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe left or right to bring the app's windows forward one at a time, then keep going with any window gesture." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe left or right to fill that half of the screen." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe left or right to switch to the previous or next app in the Dock. Tap and hold, then swipe, to open the window switcher." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe on a title bar to snap the window to a grid. Hold the secondary modifier for thirds, or the tertiary modifier for a 3×3 grid." : {
+      "comment" : "Window gestures section description"
+    },
     "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)." : {
       "localizations" : {
         "af" : {
@@ -177135,6 +177459,9 @@
       }
     },
     "Swipe Sensitivity" : {},
+    "Swipe sideways and then up or down, in either order, to fill a quarter." : {
+      "comment" : "Window gesture instructions"
+    },
     "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch." : {
       "localizations" : {
         "af" : {
@@ -177708,6 +178035,12 @@
         }
       }
     },
+    "Swipe up once to fill the screen with a small margin. Replaces Fill Screen while on." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe up once to fill the whole screen." : {
+      "comment" : "Window gesture instructions"
+    },
     "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode." : {
       "localizations" : {
         "af" : {
@@ -177897,6 +178230,21 @@
           }
         }
       }
+    },
+    "Swipe up or down twice, pausing in between, to fill the top or bottom half." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe up to restore minimized windows on this display. Swipe twice, or add the secondary modifier, for all displays." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe up to restore the last minimized window. Add the secondary modifier, or pinch out twice, to restore them all." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Swipe, pinch and tap with two fingers on a window's title bar or toolbar." : {
+      "comment" : "Window gestures section description"
+    },
+    "Switch Apps" : {
+      "comment" : "Window gesture"
     },
     "Switch to Compact" : {
       "localizations" : {
@@ -180756,6 +181104,25 @@
         }
       }
     },
+    "Tabs" : {
+      "comment" : "Window gestures section"
+    },
+    "Tap & Hold" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Tap and hold" : {},
+    "Tap and hold on a tab to move it into its own window, then keep going with any window gesture." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Tap and hold to bring the app's front window forward, then keep going with any window gesture." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Tap and hold, then swipe left or right to carry the window to the next Desktop. You can also hold the general modifier instead." : {
+      "comment" : "Window gesture instructions"
+    },
+    "Tertiary Modifier" : {
+      "comment" : "Window gesture modifier role"
+    },
     "Thank you to all contributors ❤️" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -183044,6 +183411,9 @@
           }
         }
       }
+    },
+    "Thirds" : {
+      "comment" : "Window gesture"
     },
     "This display is currently disconnected." : {
       "localizations" : {
@@ -185524,6 +185894,9 @@
         }
       }
     },
+    "Title Bar" : {
+      "comment" : "Window gestures section"
+    },
     "Title Bar Scroll Gesture" : {
       "localizations" : {
         "af" : {
@@ -186666,6 +187039,11 @@
         }
       }
     },
+    "Tooltip size" : {},
+    "Tooltips" : {},
+    "Top & Bottom Halves" : {
+      "comment" : "Window gesture"
+    },
     "Top edge stays fixed regardless of switcher size." : {
       "localizations" : {
         "af" : {
@@ -186855,6 +187233,9 @@
           }
         }
       }
+    },
+    "Top Half" : {
+      "comment" : "Snap region"
     },
     "Top Left" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
@@ -187238,6 +187619,12 @@
         }
       }
     },
+    "Top Third" : {
+      "comment" : "Snap region"
+    },
+    "Top Two Thirds" : {
+      "comment" : "Snap region"
+    },
     "Towards Dock" : {
       "comment" : "Gesture direction label",
       "localizations" : {
@@ -187429,6 +187816,7 @@
         }
       }
     },
+    "Trackpad Settings" : {},
     "Trackpad Swipe for Window Switcher" : {
       "localizations" : {
         "af" : {
@@ -192002,6 +192390,18 @@
           }
         }
       }
+    },
+    "Unsnap" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Unsnap All" : {
+      "comment" : "Window gesture"
+    },
+    "Unsnap All on Every Display" : {
+      "comment" : "Window gesture tooltip"
+    },
+    "Unsnap All on This Display" : {
+      "comment" : "Window gesture tooltip"
     },
     "Untitled" : {
       "comment" : "Fallback window title",
@@ -204205,6 +204605,7 @@
         }
       }
     },
+    "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for gestures. It replaces the title bar scroll gesture in Gestures & Keybinds. The three- or four-finger swipe for the window switcher keeps working as before." : {},
     "Whole window" : {
       "comment" : "Title bar centered window sizing mode",
       "localizations" : {
@@ -206873,6 +207274,12 @@
         }
       }
     },
+    "Window Gestures" : {
+      "comment" : "Settings tab title"
+    },
+    "Window gestures don't respond on these apps' windows, Dock icons or menus." : {},
+    "Window Gestures is on and handles swipes on running apps' Dock icons instead." : {},
+    "Window Gestures is on and handles title bar gestures instead." : {},
     "Window Image Cache Lifespan" : {
       "localizations" : {
         "af" : {
@@ -213728,6 +214135,9 @@
           }
         }
       }
+    },
+    "With the secondary modifier, add an up or down swipe to use the top or bottom half of a third." : {
+      "comment" : "Window gesture instructions"
     },
     "X-Large" : {
       "comment" : "Compact mode item size option",

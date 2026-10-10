@@ -974,12 +974,17 @@ class KeybindHelper {
     }
 
     @MainActor
-    private func handleTrackpadSwipe(_ event: TrackpadSwipeEvent) {
+    func handleGestureSwitcher(_ event: TrackpadSwipeEvent) {
+        handleTrackpadSwipe(event, requiresSwipeSetting: false)
+    }
+
+    @MainActor
+    private func handleTrackpadSwipe(_ event: TrackpadSwipeEvent, requiresSwipeSetting: Bool = true) {
         Task { @MainActor [weak self] in
             guard let self else { return }
             switch event {
             case .open, .cycleForward, .cycleBackward:
-                guard Defaults[.enableWindowSwitcher], Defaults[.enableTrackpadSwitcherSwipe] else { return }
+                guard Defaults[.enableWindowSwitcher], !requiresSwipeSetting || Defaults[.enableTrackpadSwitcherSwipe] else { return }
                 if event == .open {
                     guard !WindowUtil.shouldIgnoreKeybindForFrontmostApp() else { return }
                     if !windowSwitchingCoordinator.isActive(previewCoordinator: previewCoordinator) {
@@ -999,6 +1004,11 @@ class KeybindHelper {
                       !previewCoordinator.isSearchWindowFocused
                 else { return }
                 selectOnSwitcherRelease()
+            case .cancel:
+                guard windowSwitchingCoordinator.trackpadOpenedCurrentSession else { return }
+                windowSwitchingCoordinator.trackpadOpenedCurrentSession = false
+                windowSwitchingCoordinator.cancelSwitching(previewCoordinator: previewCoordinator)
+                previewCoordinator.hideWindow()
             }
         }
     }

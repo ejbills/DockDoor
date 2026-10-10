@@ -1,6 +1,6 @@
 import AppKit
 
-private final class InPlaceReexecApplication: NSRunningApplication {
+private final class InPlaceReexecApplication: NSRunningApplication, @unchecked Sendable {
     private let base: NSRunningApplication
     private let pid: pid_t
 
