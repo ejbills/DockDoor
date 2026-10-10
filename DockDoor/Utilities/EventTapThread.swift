@@ -2,13 +2,13 @@ import CoreGraphics
 import Foundation
 
 final class EventTapThread {
-    static let shared = EventTapThread()
+    static let shared = EventTapThread(name: "com.ethanbills.DockDoor.eventTap")
 
     private let thread: Thread
     private let ready = DispatchSemaphore(value: 0)
     private var runLoop: CFRunLoop!
 
-    private init() {
+    init(name: String) {
         var capturedRunLoop: CFRunLoop!
         let ready = ready
         thread = Thread {
@@ -19,7 +19,7 @@ final class EventTapThread {
             ready.signal()
             CFRunLoopRun()
         }
-        thread.name = "com.ethanbills.DockDoor.eventTap"
+        thread.name = name
         thread.qualityOfService = .userInteractive
         thread.start()
         ready.wait()
@@ -28,6 +28,16 @@ final class EventTapThread {
 
     func add(_ source: CFRunLoopSource) {
         CFRunLoopAddSource(runLoop, source, .commonModes)
+        CFRunLoopWakeUp(runLoop)
+    }
+
+    func add(_ timer: CFRunLoopTimer) {
+        CFRunLoopAddTimer(runLoop, timer, .commonModes)
+        CFRunLoopWakeUp(runLoop)
+    }
+
+    func perform(_ block: @escaping () -> Void) {
+        CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes.rawValue, block)
         CFRunLoopWakeUp(runLoop)
     }
 

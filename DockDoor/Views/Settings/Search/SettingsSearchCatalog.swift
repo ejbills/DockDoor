@@ -2,7 +2,7 @@ import Foundation
 
 enum SettingsSearchCatalog {
     static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
-        + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
+        + windowGestureItems + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
         + widgetItems + pinningItems + advancedItems + supportItems
 
     // MARK: - General
@@ -566,6 +566,131 @@ enum SettingsSearchCatalog {
             tab: "CmdTab",
             section: String(localized: "Window Display"),
             icon: "arrow.up.arrow.down"
+        ),
+    ]
+
+    // MARK: - Window Gestures
+
+    private static let windowGestureItems: [SettingsSearchItem] = [
+        SettingsSearchItem(
+            id: "windowGestures.enable",
+            title: String(localized: "Window Gestures"),
+            description: String(localized: "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar."),
+            keywords: ["swish", "gesture", "trackpad", "snap", "tile", "window management", "pinch", "swipe", "title bar"],
+            tab: "WindowGestures",
+            icon: "rectangle.split.2x2.fill"
+        ),
+    ] + WindowGesture.allCases.map { gesture in
+        SettingsSearchItem(
+            id: "windowGestures.\(gesture.rawValue)",
+            title: gesture.title,
+            description: gesture.instructions,
+            keywords: ["gesture", "trackpad", "swish"],
+            tab: "WindowGestures",
+            section: gesture.section.title,
+            icon: gesture.symbolName
+        )
+    } + GestureModifierRole.allCases.map { role in
+        SettingsSearchItem(
+            id: "windowGestures.modifier.\(role.rawValue)",
+            title: role.title,
+            description: role.explanation,
+            keywords: ["modifier", "key", "gesture"],
+            tab: "WindowGestures",
+            section: String(localized: "Modifier Keys"),
+            icon: role.symbolName
+        )
+    } + [
+        SettingsSearchItem(
+            id: "windowGestures.sensitivity",
+            title: String(localized: "Swipe Sensitivity"),
+            description: String(localized: "Higher values recognize swipes and pinches with less finger travel."),
+            keywords: ["sensitivity", "distance", "trackpad", "gesture"],
+            tab: "WindowGestures",
+            section: String(localized: "Feel"),
+            icon: "slider.horizontal.3"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.tapAndHold",
+            title: String(localized: "Tap and hold"),
+            keywords: ["hold", "rest", "tap", "gesture"],
+            tab: "WindowGestures",
+            section: String(localized: "Feel"),
+            icon: "hand.raised"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.cancelTimeout",
+            title: String(localized: "Cancel After Resting"),
+            keywords: ["cancel", "timeout", "escape", "gesture"],
+            tab: "WindowGestures",
+            section: String(localized: "Feel"),
+            icon: "xmark.circle"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.haptics",
+            title: String(localized: "Haptic feedback"),
+            keywords: ["haptic", "vibration", "click", "feedback"],
+            tab: "WindowGestures",
+            section: String(localized: "Feel"),
+            icon: "waveform"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.tooltips",
+            title: String(localized: "Show a tooltip with the action next to the pointer"),
+            keywords: ["tooltip", "hint", "label", "preview"],
+            tab: "WindowGestures",
+            section: String(localized: "Tooltips"),
+            icon: "text.bubble"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.livePreview",
+            title: String(localized: "Preview where the window will snap"),
+            keywords: ["preview", "live", "snap", "overlay"],
+            tab: "WindowGestures",
+            section: String(localized: "Tooltips"),
+            icon: "rectangle.dashed"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.gridSpacing",
+            title: String(localized: "Grid Spacing"),
+            keywords: ["gap", "spacing", "margin", "padding", "snap"],
+            tab: "WindowGestures",
+            section: String(localized: "Snapping Options"),
+            icon: "square.grid.2x2"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.stageManager",
+            title: String(localized: "Stage Manager Space"),
+            description: String(localized: "Leaves room for the recent apps strip when Stage Manager is on."),
+            keywords: ["stage manager", "offset", "strip"],
+            tab: "WindowGestures",
+            section: String(localized: "Snapping Options"),
+            icon: "sidebar.left"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.dragToUnsnap",
+            title: String(localized: "Drag a snapped window to restore its size"),
+            keywords: ["unsnap", "drag", "restore", "size"],
+            tab: "WindowGestures",
+            section: String(localized: "Snapping Options"),
+            icon: "arrow.up.and.down.and.arrow.left.and.right"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.resizeAdjacent",
+            title: String(localized: "Resize neighboring snapped windows together"),
+            keywords: ["resize", "divider", "adjacent", "neighbor"],
+            tab: "WindowGestures",
+            section: String(localized: "Snapping Options"),
+            icon: "rectangle.split.2x1"
+        ),
+        SettingsSearchItem(
+            id: "windowGestures.ignoredApps",
+            title: String(localized: "Ignored Apps"),
+            description: String(localized: "Window gestures don't respond on these apps' windows, Dock icons or menus."),
+            keywords: ["ignore", "exclude", "blacklist", "app"],
+            tab: "WindowGestures",
+            section: String(localized: "Ignored Apps"),
+            icon: "nosign"
         ),
     ]
 

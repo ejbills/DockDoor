@@ -10,6 +10,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var windowSeeder: WindowSeeder?
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
+    private var windowGestureController: WindowGestureController?
     private var activeAppIndicator: ActiveAppIndicatorCoordinator?
     private var dockLocker: DockLocker?
     private var statusBarItem: NSStatusItem?
@@ -86,6 +87,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             if Defaults[.enableWindowSwitcher] || Defaults[.enableCmdTabEnhancements] {
                 keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
+            }
+
+            windowGestureController = WindowGestureController(previewCoordinator: currentPreviewCoordinator) { [weak self] event in
+                self?.keybindHelper?.handleGestureSwitcher(event)
             }
 
             if Defaults[.showActiveAppIndicator] {
@@ -290,6 +295,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keybindHelper?.recover()
         appClosureObserver?.reset()
         dockLocker?.reset()
+        windowGestureController?.reset()
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {

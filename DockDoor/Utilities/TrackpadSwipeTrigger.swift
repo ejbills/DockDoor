@@ -11,6 +11,7 @@ enum TrackpadSwipeEvent: Equatable {
     case cycleForward
     case cycleBackward
     case release
+    case cancel
 }
 
 struct TrackpadSwipeDetector {

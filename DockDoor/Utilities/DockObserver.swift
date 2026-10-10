@@ -655,6 +655,24 @@ final class DockObserver {
         return dockChildren
     }
 
+    func runningApplicationsInDockOrder() -> [NSRunningApplication] {
+        guard let items = getAllDockItemChildren() else { return [] }
+        var seen = Set<pid_t>()
+        return items.compactMap { item -> NSRunningApplication? in
+            guard (try? item.subrole()) == "AXApplicationDockItem",
+                  (try? item.appIsRunning()) == true,
+                  let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+                  let bundleIdentifier = Bundle(url: url)?.bundleIdentifier
+            else { return nil }
+            let app = LauncherShortcutResolver.runningApplications(forBundleAt: url, bundleIdentifier: bundleIdentifier)
+                .first { !seen.contains($0.processIdentifier) }
+            if let app {
+                seen.insert(app.processIdentifier)
+            }
+            return app
+        }
+    }
+
     /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
     /// This is used to correctly identify which instance of a multi-instance app is being hovered.
     private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
@@ -861,7 +879,7 @@ final class DockObserver {
         }
 
         if type == .scrollWheel {
-            if Defaults[.enableTitleBarScrollGesture], handleTitleBarScroll(event) {
+            if Defaults[.enableTitleBarScrollGesture], !Defaults[.enableWindowGestures], handleTitleBarScroll(event) {
                 return nil
             }
 
@@ -1415,14 +1433,14 @@ final class DockObserver {
     }
 
     private func switchToPreviousSpace() {
-        postControlArrowKey(CGKeyCode(kVK_LeftArrow))
+        Self.postControlArrowKey(CGKeyCode(kVK_LeftArrow))
     }
 
     private func switchToNextSpace() {
-        postControlArrowKey(CGKeyCode(kVK_RightArrow))
+        Self.postControlArrowKey(CGKeyCode(kVK_RightArrow))
     }
 
-    private func postControlArrowKey(_ keyCode: CGKeyCode) {
+    static func postControlArrowKey(_ keyCode: CGKeyCode) {
         guard let source = CGEventSource(stateID: .combinedSessionState) else {
             return
         }
