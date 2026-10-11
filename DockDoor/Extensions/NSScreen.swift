@@ -12,6 +12,15 @@ extension NSScreen {
             ?? NSScreen.main!
     }
 
+    static func screen(containing frame: CGRect) -> NSScreen? {
+        func overlap(_ screen: NSScreen) -> CGFloat {
+            let intersection = screen.frame.intersection(frame)
+            return intersection.isNull ? 0 : intersection.width * intersection.height
+        }
+        guard let best = screens.max(by: { overlap($0) < overlap($1) }), overlap(best) > 0 else { return main }
+        return best
+    }
+
     func convertPoint(fromGlobal point: CGPoint) -> CGPoint {
         let primaryScreen = NSScreen.screens.first!
         let baseCoordinate = primaryScreen.frame.maxY

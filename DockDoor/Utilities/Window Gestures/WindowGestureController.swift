@@ -48,9 +48,6 @@ final class WindowGestureController {
     private lazy var thread = EventTapThread(name: "com.ethanbills.DockDoor.windowGestures")
     private let executor = WindowGestureExecutor()
     private let hud: WindowGestureHUD
-    private let dragTracker: WindowSnapDragTracker
-    private var enabledObservation: Defaults.Observation?
-    private var escapeMonitor: Any?
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
@@ -68,38 +65,12 @@ final class WindowGestureController {
         self.previewCoordinator = previewCoordinator
         self.switcher = switcher
         hud = WindowGestureHUD()
-        dragTracker = WindowSnapDragTracker()
-        enabledObservation = Defaults.observe(.enableWindowGestures) { [weak self] change in
-            DispatchQueue.main.async {
-                MainActor.assumeIsolated {
-                    guard let self else { return }
-                    if change.newValue {
-                        self.start()
-                        self.dragTracker.start()
-                        self.startEscapeMonitor()
-                    } else {
-                        self.stop()
-                        self.dragTracker.stop()
-                        self.stopEscapeMonitor()
-                    }
-                }
-            }
-        }
-    }
-
-    deinit {
-        enabledObservation?.invalidate()
+        start()
     }
 
     func start() {
         thread.perform { [weak self] in
             self?.installTap()
-        }
-    }
-
-    func stop() {
-        thread.perform { [weak self] in
-            self?.removeTap()
         }
     }
 
@@ -123,8 +94,9 @@ final class WindowGestureController {
     }
 
     private func installTap() {
-        guard eventTap == nil, Defaults[.enableWindowGestures], DockObserver.canPostEvents else { return }
+        guard eventTap == nil, DockObserver.canPostEvents else { return }
         let mask: CGEventMask = (1 << CGEventType.scrollWheel.rawValue)
+            | (1 << CGEventType.keyDown.rawValue)
             | (1 << CGEventMask(Self.gestureEventType))
             | (1 << CGEventMask(Self.smartMagnifyEventType))
 
@@ -172,25 +144,6 @@ final class WindowGestureController {
         }
     }
 
-    @MainActor
-    private func startEscapeMonitor() {
-        guard escapeMonitor == nil else { return }
-        escapeMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard event.keyCode == UInt16(kVK_Escape) else { return }
-            self?.thread.perform { [weak self] in
-                self?.escapePressed()
-            }
-        }
-    }
-
-    @MainActor
-    private func stopEscapeMonitor() {
-        if let escapeMonitor {
-            NSEvent.removeMonitor(escapeMonitor)
-        }
-        escapeMonitor = nil
-    }
-
     private func handle(type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
             if let eventTap {
@@ -205,6 +158,11 @@ final class WindowGestureController {
         switch type.rawValue {
         case CGEventType.scrollWheel.rawValue:
             return handleScroll(event)
+        case CGEventType.keyDown.rawValue:
+            if session != nil, event.getIntegerValueField(.keyboardEventKeycode) == Int64(kVK_Escape) {
+                escapePressed()
+            }
+            return Unmanaged.passUnretained(event)
         case Self.gestureEventType:
             return handleGesture(event)
         case Self.smartMagnifyEventType:
@@ -389,7 +347,7 @@ final class WindowGestureController {
             recognizer: WindowGestureRecognizer(configuration: configuration),
             cursor: point,
             disabled: disabled,
-            windowFrame: zone.window?.frame
+            windowFrame: zone.window?.currentWindowFrame()
         )
         startTickTimer()
         return true
@@ -630,8 +588,8 @@ final class WindowGestureController {
     private func hudContent(for command: WindowGestureCommand, app: NSRunningApplication?) -> WindowGestureHUD.Content {
         var content = WindowGestureHUD.Content(title: command.title(appName: app?.localizedName), symbolName: command.symbolName)
         switch command {
-        case let .snap(region):
-            content.region = region
+        case let .window(action) where action != .center:
+            content.region = action.positionRect
         case .quitApp, .restoreLastMinimized, .minimizeFrontWindow:
             content.appIcon = app?.icon
         default:
@@ -641,18 +599,11 @@ final class WindowGestureController {
     }
 
     private func previewFrame(for command: WindowGestureCommand) -> CGRect? {
-        guard let current = session else { return nil }
-        let screen = current.windowFrame.flatMap(WindowGestureScreens.screen(containing:)) ?? NSScreen.screenFromQuartzPoint(current.cursor)
-        switch command {
-        case let .snap(region):
-            return WindowGestureScreens.frame(for: region, on: screen)
-        case .center:
-            guard let windowFrame = current.windowFrame else { return nil }
-            let restoreSize = WindowSnapRegistry.shared.record(for: current.zone.window?.windowID)?.restoreFrame.size
-            return WindowGestureScreens.centered(restoreSize ?? windowFrame.size, in: WindowGestureScreens.usableFrame(for: screen))
-        default:
-            return nil
-        }
+        guard case let .window(action) = command, let rect = action.positionRect,
+              let current = session, let windowFrame = current.windowFrame
+        else { return nil }
+        let restoreSize = action == .center ? WindowSnapRegistry.shared.record(for: current.zone.window?.id)?.restoreFrame.size : nil
+        return WindowInfo.positionedFrame(rect, for: windowFrame, size: restoreSize)
     }
 
     // MARK: - Ticks

@@ -31,11 +31,6 @@ final class EventTapThread {
         CFRunLoopWakeUp(runLoop)
     }
 
-    func add(_ timer: CFRunLoopTimer) {
-        CFRunLoopAddTimer(runLoop, timer, .commonModes)
-        CFRunLoopWakeUp(runLoop)
-    }
-
     func perform(_ block: @escaping () -> Void) {
         CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes.rawValue, block)
         CFRunLoopWakeUp(runLoop)

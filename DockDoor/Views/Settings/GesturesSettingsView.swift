@@ -53,6 +53,7 @@ struct GesturesSettingsView: View {
                             .font(.title3.weight(.semibold))
                     }
                     .toggleStyle(.switch)
+                    .onChange(of: enableWindowGestures) { _ in askUserToRestartApplication() }
                     .settingsSearchTarget("windowGestures.enable")
 
                     Text("Snap, minimize and close windows with two fingers on your trackpad. Swipe or pinch on a window's title bar, a Dock icon or the menu bar.")

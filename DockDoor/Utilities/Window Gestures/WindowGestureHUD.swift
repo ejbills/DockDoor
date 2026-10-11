@@ -25,7 +25,7 @@ final class WindowGestureHUD {
     struct Content {
         let title: String
         let symbolName: String
-        var region: SnapRegion?
+        var region: WindowInfo.WindowPositionRect?
         var appIcon: NSImage?
         var isDimmed = false
     }
@@ -86,8 +86,8 @@ final class WindowGestureHUD {
         tooltipView.rootView = WindowGestureTooltip(content: content, backgroundAppearance: .resolve())
         let size = tooltipView.fittingSize
         let screen = NSScreen.screenFromQuartzPoint(cursor)
-        let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
-        var origin = CGPoint(x: cursor.x + Self.cursorOffset.x, y: primaryMaxY - cursor.y + Self.cursorOffset.y - size.height / 2)
+        let anchor = DockObserver.nsPointFromCGPoint(cursor, forScreen: screen)
+        var origin = CGPoint(x: anchor.x + Self.cursorOffset.x, y: anchor.y + Self.cursorOffset.y - size.height / 2)
         let bounds = screen.visibleFrame.insetBy(dx: 8, dy: 8)
         origin.x = min(max(origin.x, bounds.minX), bounds.maxX - size.width)
         origin.y = min(max(origin.y, bounds.minY), bounds.maxY - size.height)
@@ -201,7 +201,7 @@ private struct WindowGestureTooltip: View {
                         .resizable()
                         .frame(width: 18, height: 18)
                 } else if let region = content.region {
-                    SnapRegionGlyph(region: region)
+                    SnapGlyph(region: region)
                         .frame(width: 22, height: 14)
                 } else {
                     Image(systemName: content.symbolName)
@@ -219,8 +219,8 @@ private struct WindowGestureTooltip: View {
     }
 }
 
-private struct SnapRegionGlyph: View {
-    let region: SnapRegion
+private struct SnapGlyph: View {
+    let region: WindowInfo.WindowPositionRect
 
     var body: some View {
         Canvas { context, size in

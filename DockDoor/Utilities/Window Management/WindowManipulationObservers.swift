@@ -149,6 +149,9 @@ class WindowManipulationObservers {
 
     @MainActor
     private func handleAppTermination(_ app: NSRunningApplication) {
+        if let bundleIdentifier = app.bundleIdentifier {
+            ScreenReservations.shared.remove(source: bundleIdentifier)
+        }
         handleAppTermination(pid: app.processIdentifier)
     }
 
@@ -525,6 +528,10 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
         {
             observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)
             return
+        }
+
+        if notification == kAXWindowMovedNotification || notification == kAXWindowResizedNotification, Defaults[.enableWindowGestures] {
+            WindowSnapRegistry.shared.windowFrameChanged(element)
         }
 
         pendingNotifications[key]?.cancel()

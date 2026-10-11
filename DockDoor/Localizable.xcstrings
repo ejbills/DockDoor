@@ -32413,11 +32413,8 @@
         }
       }
     },
-    "Center" : {
-      "comment" : "Window gesture tooltip"
-    },
     "Center Window" : {
-      "comment" : "Window action",
+      "comment" : "Window action\nWindow gesture",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -38129,7 +38126,7 @@
       "comment" : "Window gesture\nWindow gesture tooltip"
     },
     "Close Window" : {
-      "comment" : "Window action",
+      "comment" : "Window action\nWindow gesture",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -73184,7 +73181,7 @@
       }
     },
     "Fill Screen" : {
-      "comment" : "Snap region\nWindow gesture"
+      "comment" : "Window gesture"
     },
     "Fill Top Half" : {
       "comment" : "Window action",
@@ -78141,7 +78138,7 @@
       }
     },
     "Full Screen" : {
-      "comment" : "Window gesture\nWindow gesture tooltip"
+      "comment" : "Window gesture"
     },
     "Fullscreen" : {
       "localizations" : {
@@ -79671,6 +79668,7 @@
     },
     "Gestures & Keybinds" : {
       "comment" : "Settings tab title",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -98157,9 +98155,6 @@
     "Left" : {
       "comment" : "Reserved screen edge option"
     },
-    "Left Half" : {
-      "comment" : "Snap region"
-    },
     "Left or right" : {
       "comment" : "Trackpad swipe direction option",
       "localizations" : {
@@ -106923,7 +106918,7 @@
       }
     },
     "Minimize" : {
-      "comment" : "Window action",
+      "comment" : "Window action\nWindow gesture",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -107114,6 +107109,7 @@
       }
     },
     "Minimize All" : {
+      "comment" : "Window gesture tooltip",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -112457,7 +112453,7 @@
       }
     },
     "No Action" : {
-      "comment" : "Window action",
+      "comment" : "Window action\nWindow gesture tooltip",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -136487,7 +136483,7 @@
       "comment" : "Window gesture tooltip, the argument is an app name"
     },
     "Quit App" : {
-      "comment" : "Window action",
+      "comment" : "Window action\nWindow gesture",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -146205,9 +146201,6 @@
           }
         }
       }
-    },
-    "Right Half" : {
-      "comment" : "Snap region"
     },
     "Right-click a media or calendar widget to pin it." : {
       "localizations" : {
@@ -171159,9 +171152,6 @@
           }
         }
       }
-    },
-    "Snap" : {
-      "comment" : "Snap region"
     },
     "Snap Left or Right" : {
       "comment" : "Window gesture"
@@ -209905,7 +209895,7 @@
       }
     },
     "Window Switcher" : {
-      "comment" : "Settings tab title",
+      "comment" : "Settings tab title\nWindow gesture tooltip",
       "localizations" : {
         "af" : {
           "stringUnit" : {
