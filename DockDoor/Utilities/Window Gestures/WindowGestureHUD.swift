@@ -1,5 +1,6 @@
 import AppKit
 import Defaults
+import SwiftUI
 
 enum WindowGestureOverlays {
     private static let lock = NSLock()
@@ -33,17 +34,20 @@ final class WindowGestureHUD {
     private static let flashDuration: TimeInterval = 0.7
 
     private var tooltipPanel: NSPanel?
-    private let tooltipView = WindowGestureTooltipView()
+    private let tooltipView: NSHostingView<WindowGestureTooltip> = {
+        let view = NSHostingView(rootView: WindowGestureTooltip(content: nil, backgroundAppearance: .resolve()))
+        view.sizingOptions = [.intrinsicContentSize]
+        return view
+    }()
+
     private var previewPanel: NSPanel?
     private var hideWorkItem: DispatchWorkItem?
-    private var cursorHidden = false
 
     func show(_ content: Content, cursor: CGPoint, preview: CGRect?) {
         hideWorkItem?.cancel()
         hideWorkItem = nil
         showTooltip(content, cursor: cursor)
         showPreview(Defaults[.windowGestureLivePreview] ? preview : nil)
-        hideCursorIfNeeded()
     }
 
     func flash(_ content: Content, cursor: CGPoint) {
@@ -56,7 +60,6 @@ final class WindowGestureHUD {
         hideWorkItem = nil
         fadeOut(tooltipPanel)
         fadeOut(previewPanel)
-        showCursorIfNeeded()
     }
 
     func finish(_ content: Content?, cursor: CGPoint) {
@@ -66,7 +69,6 @@ final class WindowGestureHUD {
         }
         showPreview(nil)
         showTooltip(content, cursor: cursor)
-        showCursorIfNeeded()
         scheduleHide(after: 0.35)
     }
 
@@ -78,14 +80,10 @@ final class WindowGestureHUD {
     // MARK: - Tooltip
 
     private func showTooltip(_ content: Content, cursor: CGPoint) {
-        guard Defaults[.windowGestureShowTooltips] else {
-            fadeOut(tooltipPanel)
-            return
-        }
         let panel = tooltipPanel ?? makeTooltipPanel()
         tooltipPanel = panel
 
-        tooltipView.update(content, scale: Defaults[.windowGestureTooltipSize].scale)
+        tooltipView.rootView = WindowGestureTooltip(content: content, backgroundAppearance: .resolve())
         let size = tooltipView.fittingSize
         let screen = NSScreen.screenFromQuartzPoint(cursor)
         let primaryMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
@@ -95,6 +93,7 @@ final class WindowGestureHUD {
         origin.y = min(max(origin.y, bounds.minY), bounds.maxY - size.height)
 
         panel.setFrame(CGRect(origin: origin, size: size), display: true)
+        panel.invalidateShadow()
         fadeIn(panel)
     }
 
@@ -188,127 +187,50 @@ final class WindowGestureHUD {
         hideWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
-
-    // MARK: - Cursor
-
-    private func hideCursorIfNeeded() {
-        guard !cursorHidden, Defaults[.windowGestureHideCursor] else { return }
-        let connection = CGSMainConnectionID()
-        _ = CGSSetConnectionProperty(connection, connection, "SetsCursorInBackground" as CFString, kCFBooleanTrue)
-        CGDisplayHideCursor(CGMainDisplayID())
-        cursorHidden = true
-    }
-
-    private func showCursorIfNeeded() {
-        guard cursorHidden else { return }
-        CGDisplayShowCursor(CGMainDisplayID())
-        cursorHidden = false
-    }
 }
 
-private final class WindowGestureTooltipView: NSView {
-    private let background = NSVisualEffectView()
-    private let iconView = NSImageView()
-    private let glyphView = SnapRegionGlyphView()
-    private let label = NSTextField(labelWithString: "")
-    private let stack = NSStackView()
+private struct WindowGestureTooltip: View {
+    let content: WindowGestureHUD.Content?
+    let backgroundAppearance: BackgroundAppearance
 
-    init() {
-        super.init(frame: .zero)
-        background.material = .hudWindow
-        background.blendingMode = .behindWindow
-        background.state = .active
-        background.wantsLayer = true
-        background.layer?.cornerRadius = 10
-        background.layer?.cornerCurve = .continuous
-        background.layer?.masksToBounds = true
-        background.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(background)
-
-        iconView.imageScaling = .scaleProportionallyUpOrDown
-        label.lineBreakMode = .byTruncatingTail
-        label.maximumNumberOfLines = 1
-
-        stack.orientation = .horizontal
-        stack.alignment = .centerY
-        stack.spacing = 8
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.addArrangedSubview(glyphView)
-        stack.addArrangedSubview(iconView)
-        stack.addArrangedSubview(label)
-        background.addSubview(stack)
-
-        NSLayoutConstraint.activate([
-            background.leadingAnchor.constraint(equalTo: leadingAnchor),
-            background.trailingAnchor.constraint(equalTo: trailingAnchor),
-            background.topAnchor.constraint(equalTo: topAnchor),
-            background.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stack.leadingAnchor.constraint(equalTo: background.leadingAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
-            stack.topAnchor.constraint(equalTo: background.topAnchor, constant: 7),
-            stack.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -7),
-        ])
-    }
-
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private var iconWidth: NSLayoutConstraint?
-    private var iconHeight: NSLayoutConstraint?
-    private var glyphWidth: NSLayoutConstraint?
-    private var glyphHeight: NSLayoutConstraint?
-
-    func update(_ content: WindowGestureHUD.Content, scale: CGFloat) {
-        label.stringValue = content.title
-        label.font = .systemFont(ofSize: (13 * scale).rounded(), weight: .semibold)
-        label.textColor = content.isDimmed ? .secondaryLabelColor : .labelColor
-
-        let iconSide = (20 * scale).rounded()
-        if let appIcon = content.appIcon {
-            iconView.image = appIcon
-            iconView.contentTintColor = nil
-        } else {
-            let configuration = NSImage.SymbolConfiguration(pointSize: (14 * scale).rounded(), weight: .semibold)
-            iconView.image = NSImage(systemSymbolName: content.symbolName, accessibilityDescription: nil)?
-                .withSymbolConfiguration(configuration)
-            iconView.contentTintColor = content.isDimmed ? .secondaryLabelColor : .controlAccentColor
+    var body: some View {
+        if let content {
+            HStack(spacing: 6) {
+                if let appIcon = content.appIcon {
+                    Image(nsImage: appIcon)
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                } else if let region = content.region {
+                    SnapRegionGlyph(region: region)
+                        .frame(width: 22, height: 14)
+                } else {
+                    Image(systemName: content.symbolName)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(content.isDimmed ? Color.secondary : Color.accentColor)
+                }
+                Text(content.title)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(content.isDimmed ? .secondary : .primary)
+                    .lineLimit(1)
+            }
+            .fixedSize()
+            .materialPill(backgroundAppearance: backgroundAppearance)
         }
-        iconView.isHidden = content.region != nil && content.appIcon == nil
-        glyphView.region = content.region
-        glyphView.isHidden = content.region == nil
-
-        iconWidth?.isActive = false
-        iconHeight?.isActive = false
-        glyphWidth?.isActive = false
-        glyphHeight?.isActive = false
-        iconWidth = iconView.widthAnchor.constraint(equalToConstant: iconSide)
-        iconHeight = iconView.heightAnchor.constraint(equalToConstant: iconSide)
-        glyphWidth = glyphView.widthAnchor.constraint(equalToConstant: (30 * scale).rounded())
-        glyphHeight = glyphView.heightAnchor.constraint(equalToConstant: (20 * scale).rounded())
-        NSLayoutConstraint.activate([iconWidth, iconHeight, glyphWidth, glyphHeight].compactMap { $0 })
-        layoutSubtreeIfNeeded()
     }
 }
 
-private final class SnapRegionGlyphView: NSView {
-    var region: SnapRegion? {
-        didSet { needsDisplay = true }
-    }
+private struct SnapRegionGlyph: View {
+    let region: SnapRegion
 
-    override func draw(_: NSRect) {
-        guard let region else { return }
-        let outer = bounds.insetBy(dx: 1, dy: 1)
-        let outline = NSBezierPath(roundedRect: outer, xRadius: 3, yRadius: 3)
-        NSColor.secondaryLabelColor.setStroke()
-        outline.lineWidth = 1.2
-        outline.stroke()
-
-        let inner = outer.insetBy(dx: 2, dy: 2)
-        let fill = region.frame(in: inner, spacing: 0, includeEdges: false)
-        NSColor.controlAccentColor.setFill()
-        NSBezierPath(roundedRect: fill, xRadius: 1.5, yRadius: 1.5).fill()
+    var body: some View {
+        Canvas { context, size in
+            let outer = CGRect(origin: .zero, size: size).insetBy(dx: 0.75, dy: 0.75)
+            context.stroke(Path(roundedRect: outer, cornerRadius: 3), with: .color(.secondary), lineWidth: 1.2)
+            let inner = outer.insetBy(dx: 2, dy: 2)
+            let fill = region.frame(in: CGRect(origin: .zero, size: inner.size))
+            let flipped = CGRect(x: inner.minX + fill.minX, y: inner.minY + inner.height - fill.maxY, width: fill.width, height: fill.height)
+            context.fill(Path(roundedRect: flipped, cornerRadius: 1.5), with: .color(.accentColor))
+        }
     }
 }
 
@@ -351,8 +273,9 @@ private final class WindowGesturePreviewView: NSView {
 
     override func layout() {
         super.layout()
+        let inset: CGFloat = bounds.width > 8 && bounds.height > 8 ? 4 : 0
         for subview in subviews {
-            subview.frame = bounds.insetBy(dx: 4, dy: 4)
+            subview.frame = bounds.insetBy(dx: inset, dy: inset)
         }
     }
 }

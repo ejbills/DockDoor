@@ -364,6 +364,10 @@ enum DockDoorCommands {
         lines.append("  position window \"active\" to \"left\"")
         lines.append("  position window \"12345\" to \"top-right\"")
         lines.append("")
+        lines.append("  -- Keep 80 pt at the bottom of the main display free for a custom dock")
+        lines.append("  reserve screen edge \"bottom\" thickness 80 for \"com.example.MyDock\" on display \"main\"")
+        lines.append("  reserve screen edge \"none\" for \"com.example.MyDock\"")
+        lines.append("")
         lines.append("  -- App lookup by name (default)")
         lines.append("  show preview \"Safari\"")
         lines.append("  list windows \"Finder\"")
@@ -557,6 +561,21 @@ class PositionWindowCommand: NSScriptCommand {
 class GetHelpCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         DockDoorCommands.getHelp()
+    }
+}
+
+@objc(ReserveScreenEdgeCommand)
+class ReserveScreenEdgeCommand: NSScriptCommand {
+    override func performDefaultImplementation() -> Any? {
+        guard let reservation = ScreenReservation.parse(
+            edge: directParameter as? String,
+            thickness: (evaluatedArguments?["thickness"] as? NSNumber)?.doubleValue ?? 0,
+            display: evaluatedArguments?["display"] as? String
+        ) else {
+            return "error: Edge must be bottom, left, right, top or none, with a thickness of 0 or more"
+        }
+        ScreenReservations.shared.report(reservation, from: evaluatedArguments?["source"] as? String ?? "applescript")
+        return "ok"
     }
 }
 

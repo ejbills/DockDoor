@@ -883,7 +883,7 @@ final class DockObserver {
                 return nil
             }
 
-            guard Defaults[.enableDockScrollGesture], isPointNearDock(event.location) else {
+            guard Defaults[.enableDockScrollGesture], !Defaults[.enableWindowGestures], isPointNearDock(event.location) else {
                 return Unmanaged.passUnretained(event)
             }
 
@@ -1433,14 +1433,14 @@ final class DockObserver {
     }
 
     private func switchToPreviousSpace() {
-        Self.postControlArrowKey(CGKeyCode(kVK_LeftArrow))
+        postControlArrowKey(CGKeyCode(kVK_LeftArrow))
     }
 
     private func switchToNextSpace() {
-        Self.postControlArrowKey(CGKeyCode(kVK_RightArrow))
+        postControlArrowKey(CGKeyCode(kVK_RightArrow))
     }
 
-    static func postControlArrowKey(_ keyCode: CGKeyCode) {
+    private func postControlArrowKey(_ keyCode: CGKeyCode) {
         guard let source = CGEventSource(stateID: .combinedSessionState) else {
             return
         }

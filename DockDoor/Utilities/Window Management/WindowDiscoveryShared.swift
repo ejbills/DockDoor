@@ -505,28 +505,6 @@ enum WindowSpaces {
         }
     }
 
-    struct DisplaySpaceList {
-        let spaces: [CGSSpaceID]
-        let desktopSpaces: Set<CGSSpaceID>
-    }
-
-    static func spaceList(containing targetSpaceID: CGSSpaceID) -> DisplaySpaceList? {
-        guard let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: AnyObject]] else {
-            return nil
-        }
-
-        for display in displays {
-            let entries = display["Spaces"] as? [[String: AnyObject]] ?? []
-            let ids = entries.compactMap { spaceID(from: $0) }
-            guard ids.contains(targetSpaceID) else { continue }
-            let desktops = entries
-                .filter { ($0["type"] as? NSNumber)?.intValue == 0 }
-                .compactMap { spaceID(from: $0) }
-            return DisplaySpaceList(spaces: ids, desktopSpaces: Set(desktops))
-        }
-        return nil
-    }
-
     static func allManagedSpaceIDs() -> Set<Int> {
         Set(managedDisplays().flatMap { display in
             display.spaceIDs.union(display.currentSpaceID.map { [$0] } ?? []).map { Int($0) }

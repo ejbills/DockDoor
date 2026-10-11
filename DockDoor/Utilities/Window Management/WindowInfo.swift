@@ -340,7 +340,7 @@ extension WindowInfo {
             return
         }
 
-        let visibleFrame = context.screen.visibleFrame
+        let visibleFrame = context.screen.snappingFrame
         let targetFrame = rect.frame(in: visibleFrame, currentSize: context.size)
         applyWindowFrame(targetFrame, on: context.screen)
     }
@@ -386,7 +386,7 @@ extension WindowInfo {
             return
         }
 
-        let visibleFrame = context.screen.visibleFrame
+        let visibleFrame = context.screen.snappingFrame
         let clampedScale = min(max(scale, 0.2), 1.0)
         let targetSize = CGSize(
             width: visibleFrame.width * clampedScale,
@@ -401,7 +401,7 @@ extension WindowInfo {
             return
         }
 
-        let visibleFrame = context.screen.visibleFrame
+        let visibleFrame = context.screen.snappingFrame
 
         let clampedWidthScale = min(max(widthScale, 0.2), 1.0)
         let clampedHeightScale = min(max(heightScale, 0.2), 1.0)

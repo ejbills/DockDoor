@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E19A881D6DC44BDD88353104 /* WindowGesturesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9C7D8765A140F0A595DD16 /* WindowGesturesSettingsView.swift */; };
+		7B0C516C06C44C8B87621ABD /* ScreenReservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AC6332C434450F9FF53CF3 /* ScreenReservationTests.swift */; };
+		F97DA8E2FB6A4BE992DB4522 /* WindowGestureDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1F391DA2A46F98D82A4F1 /* WindowGestureDemoView.swift */; };
+		72F81E67A26E470D9895F9FA /* ScreenReservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0448C6F30A6F48A0875C81C3 /* ScreenReservations.swift */; };
+		E19A881D6DC44BDD88353104 /* GesturesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9C7D8765A140F0A595DD16 /* GesturesSettingsView.swift */; };
 		78C4522B5F444A80806B970A /* WindowSnapDragTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88539FE4365487091B7BBEF /* WindowSnapDragTracker.swift */; };
 		37102045B9244655A3CC681B /* WindowGestureHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91187A811BBD421699BDA72F /* WindowGestureHUD.swift */; };
 		2D1394BA8B694A88B66028D5 /* WindowGestureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB6B5E6E45444D4BC4951A0 /* WindowGestureController.swift */; };
@@ -185,7 +188,7 @@
 		BB709B3D2EF21E9E007809A2 /* VolumeScrollModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB709B3C2EF21E9E007809A2 /* VolumeScrollModifier.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
 		BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */; };
-		BB7CD3CD2EE66EE800412546 /* GesturesAndKeybindsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CD3CC2EE66EE800412546 /* GesturesAndKeybindsSettingsView.swift */; };
+		BB7CD3CD2EE66EE800412546 /* KeybindsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */; };
 		BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */; };
 		BB918BB52CF7613400931236 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB918BB42CF7613200931236 /* CGRect.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
@@ -265,7 +268,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AE9C7D8765A140F0A595DD16 /* WindowGesturesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGesturesSettingsView.swift; sourceTree = "<group>"; };
+		22AC6332C434450F9FF53CF3 /* ScreenReservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenReservationTests.swift; sourceTree = "<group>"; };
+		C4D1F391DA2A46F98D82A4F1 /* WindowGestureDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGestureDemoView.swift; sourceTree = "<group>"; };
+		0448C6F30A6F48A0875C81C3 /* ScreenReservations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenReservations.swift; sourceTree = "<group>"; };
+		AE9C7D8765A140F0A595DD16 /* GesturesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesSettingsView.swift; sourceTree = "<group>"; };
 		D88539FE4365487091B7BBEF /* WindowSnapDragTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSnapDragTracker.swift; sourceTree = "<group>"; };
 		91187A811BBD421699BDA72F /* WindowGestureHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGestureHUD.swift; sourceTree = "<group>"; };
 		6FB6B5E6E45444D4BC4951A0 /* WindowGestureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGestureController.swift; sourceTree = "<group>"; };
@@ -441,7 +447,7 @@
 		BB709B3C2EF21E9E007809A2 /* VolumeScrollModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeScrollModifier.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
 		BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadGestureModifier.swift; sourceTree = "<group>"; };
-		BB7CD3CC2EE66EE800412546 /* GesturesAndKeybindsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesAndKeybindsSettingsView.swift; sourceTree = "<group>"; };
+		BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindsSettingsView.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarInfo.swift; sourceTree = "<group>"; };
 		BB918BB42CF7613200931236 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -519,6 +525,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		42B9B5D70B7648AF97FC591B /* WindowGestures */ = {
+			isa = PBXGroup;
+			children = (
+				C4D1F391DA2A46F98D82A4F1 /* WindowGestureDemoView.swift */,
+			);
+			path = WindowGestures;
+			sourceTree = "<group>";
+		};
 		DAA46B46CA724CB39EB9FBA8 /* Window Gestures */ = {
 			isa = PBXGroup;
 			children = (
@@ -695,6 +709,7 @@
 				92FFF970DCB649F3BBE19214 /* WindowGestureRecognizerTests.swift */,
 				49E6B5DEC1D045BFBAE71564 /* WindowGestureResolverTests.swift */,
 				57D1951BF6F040FF89F832F8 /* SnapGridTests.swift */,
+				22AC6332C434450F9FF53CF3 /* ScreenReservationTests.swift */,
 			);
 			path = DockDoorTests;
 			sourceTree = "<group>";
@@ -1003,6 +1018,7 @@
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
 				BB157B782C0E330100997315 /* WindowUtil.swift */,
 				B6D02B0085604D66A1A26D4A /* WindowActionCatalog.swift */,
+				0448C6F30A6F48A0875C81C3 /* ScreenReservations.swift */,
 			);
 			path = "Window Management";
 			sourceTree = "<group>";
@@ -1049,10 +1065,11 @@
 				0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */,
 				BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */,
 				BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */,
-				BB7CD3CC2EE66EE800412546 /* GesturesAndKeybindsSettingsView.swift */,
+				BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */,
 				BB709B3A2EF21493007809A2 /* WidgetSettingsView.swift */,
 				AA11001122334455AA110033 /* DockLockingSettingsView.swift */,
-				AE9C7D8765A140F0A595DD16 /* WindowGesturesSettingsView.swift */,
+				AE9C7D8765A140F0A595DD16 /* GesturesSettingsView.swift */,
+				42B9B5D70B7648AF97FC591B /* WindowGestures */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1203,6 +1220,7 @@
 				204F31BF2B7E46239664231A /* WindowGestureRecognizerTests.swift in Sources */,
 				FBF8A3761BBB44ADA589043B /* WindowGestureResolverTests.swift in Sources */,
 				C91D81FAF6744A248A3130AC /* SnapGridTests.swift in Sources */,
+				7B0C516C06C44C8B87621ABD /* ScreenReservationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1255,7 +1273,7 @@
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
 				BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
-				BB7CD3CD2EE66EE800412546 /* GesturesAndKeybindsSettingsView.swift in Sources */,
+				BB7CD3CD2EE66EE800412546 /* KeybindsSettingsView.swift in Sources */,
 				BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */,
 				BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */,
 				BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */,
@@ -1419,7 +1437,9 @@
 				37102045B9244655A3CC681B /* WindowGestureHUD.swift in Sources */,
 				2D1394BA8B694A88B66028D5 /* WindowGestureController.swift in Sources */,
 				78C4522B5F444A80806B970A /* WindowSnapDragTracker.swift in Sources */,
-				E19A881D6DC44BDD88353104 /* WindowGesturesSettingsView.swift in Sources */,
+				E19A881D6DC44BDD88353104 /* GesturesSettingsView.swift in Sources */,
+				72F81E67A26E470D9895F9FA /* ScreenReservations.swift in Sources */,
+				F97DA8E2FB6A4BE992DB4522 /* WindowGestureDemoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

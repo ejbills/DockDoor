@@ -6,14 +6,9 @@ final class WindowGestureController {
     private struct Session {
         let zone: WindowGestureZone
         var recognizer: WindowGestureRecognizer
-        let chain = WindowGestureChain()
         var cursor: CGPoint
         let disabled: Set<WindowGesture>
-        var isPortrait: Bool
-        let hasOtherDisplays: Bool
-        var windowFrame: CGRect?
-        var geometryStale = false
-        var chainedKind: WindowGestureZoneKind?
+        let windowFrame: CGRect?
         var naturalScrolling: Bool?
         var ownsPinch = false
         var lastProgress = GestureProgress()
@@ -24,7 +19,6 @@ final class WindowGestureController {
     private struct RecentZone {
         let zone: WindowGestureZone?
         let point: CGPoint
-        let anywhere: Bool
         let time: TimeInterval
     }
 
@@ -68,8 +62,6 @@ final class WindowGestureController {
     private var swallowingPinch = false
     private var lastDoubleTap: TimeInterval = 0
     private var recentZone: RecentZone?
-    private var modifierKeys: [GestureModifierRole: GestureModifierKey] = [:]
-    private var ignoredApps: [String] = []
 
     @MainActor
     init(previewCoordinator: SharedPreviewWindowCoordinator, switcher: @escaping @MainActor (TrackpadSwipeEvent) -> Void) {
@@ -247,11 +239,11 @@ final class WindowGestureController {
                 if current.recognizer.isPinching {
                     return nil
                 }
-                process(session?.recognizer.handle(.touchDown, at: now) ?? [], flags: event.flags)
+                process(session?.recognizer.handle(.touchDown, at: now) ?? [])
                 abandonSession(swallowRemainder: false)
             }
-            guard startSession(at: event.location, flags: event.flags, now: now) else { return pass }
-            process(session?.recognizer.handle(.touchDown, at: now) ?? [], flags: event.flags)
+            guard startSession(at: event.location, now: now) else { return pass }
+            process(session?.recognizer.handle(.touchDown, at: now) ?? [])
             return session?.zone.consumesScroll == false ? pass : nil
         }
 
@@ -267,7 +259,7 @@ final class WindowGestureController {
         case Self.scrollBegan, Self.scrollChanged:
             if session == nil, phase == Self.scrollBegan {
                 consumingMomentum = false
-                guard startSession(at: event.location, flags: event.flags, now: now) else { return pass }
+                guard startSession(at: event.location, now: now) else { return pass }
             }
             guard let current = session else { return pass }
             guard current.zone.consumesScroll else {
@@ -280,13 +272,13 @@ final class WindowGestureController {
             let deltaX = CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis2))
             let deltaY = CGFloat(event.getDoubleValueField(.scrollWheelEventPointDeltaAxis1))
             let input: WindowGestureRecognizer.Input = natural ? .scroll(dx: deltaX, dy: -deltaY) : .scroll(dx: -deltaX, dy: deltaY)
-            process(session?.recognizer.handle(input, at: now) ?? [], flags: event.flags)
+            process(session?.recognizer.handle(input, at: now) ?? [])
             return nil
 
         case Self.scrollEnded, Self.scrollCancelled:
             guard let current = session else { return pass }
             let consumes = current.zone.consumesScroll
-            process(session?.recognizer.handle(.scrollLift, at: now) ?? [], flags: event.flags)
+            process(session?.recognizer.handle(.scrollLift, at: now) ?? [])
             guard consumes else { return pass }
             consumingMomentum = phase == Self.scrollEnded
             return nil
@@ -313,11 +305,11 @@ final class WindowGestureController {
         if phase & Self.gestureBegan != 0 {
             swallowingPinch = false
             if session == nil {
-                guard startSession(at: event.location, flags: event.flags, now: now) else { return pass }
+                guard startSession(at: event.location, now: now) else { return pass }
             }
             session?.ownsPinch = true
             session?.cursor = event.location
-            process(session?.recognizer.handle(.pinchBegan, at: now) ?? [], flags: event.flags)
+            process(session?.recognizer.handle(.pinchBegan, at: now) ?? [])
             return nil
         }
 
@@ -331,7 +323,7 @@ final class WindowGestureController {
 
         if isEnd {
             let input: WindowGestureRecognizer.Input = phase & Self.gestureCancelled != 0 ? .pinchCancelled : .pinchEnded
-            process(session?.recognizer.handle(input, at: now) ?? [], flags: event.flags)
+            process(session?.recognizer.handle(input, at: now) ?? [])
             if session?.recognizer.isIdle == true {
                 endSession()
             }
@@ -339,7 +331,7 @@ final class WindowGestureController {
         }
 
         let magnification = CGFloat(event.getDoubleValueField(Self.magnificationField))
-        process(session?.recognizer.handle(.pinch(magnification), at: now) ?? [], flags: event.flags)
+        process(session?.recognizer.handle(.pinch(magnification), at: now) ?? [])
         return nil
     }
 
@@ -347,26 +339,15 @@ final class WindowGestureController {
         let pass = Unmanaged.passUnretained(event)
         let now = ProcessInfo.processInfo.systemUptime
         guard now - lastDoubleTap > Self.doubleTapDebounce, !NSScreen.screens.isEmpty else { return pass }
-        refreshSettings()
-        let modifiers = activeModifiers(event.flags)
         let point = event.location
-        let zone = session?.zone ?? zone(at: point, anywhere: modifiers.contains(.anywhere), now: now)
-        guard let zone else { return pass }
+        guard let zone = session?.zone ?? zone(at: point, now: now) else { return pass }
 
-        let screen = NSScreen.screenFromQuartzPoint(point)
-        let context = WindowGestureContext(
-            zone: zone.kind,
-            doubleTap: true,
-            modifiers: modifiers.subtracting([.anywhere]),
-            isPortrait: screen.frame.height > screen.frame.width,
-            hasOtherDisplays: NSScreen.screens.count > 1,
-            disabled: Defaults[.windowGesturesDisabled]
-        )
+        let context = WindowGestureContext(zone: zone.kind, doubleTap: true, disabled: Defaults[.windowGesturesDisabled])
         guard let resolution = WindowGestureResolver.resolve(context) else { return pass }
         lastDoubleTap = now
         DebugLogger.log("WindowGestures", details: "double tap \(resolution.command)")
 
-        execute(resolution.command, zone: zone, chain: session?.chain ?? WindowGestureChain(), cursor: point)
+        execute(resolution.command, zone: zone, cursor: point)
         let content = hudContent(for: resolution.command, app: zone.app)
         DispatchQueue.main.async { [hud] in
             MainActor.assumeIsolated {
@@ -379,20 +360,18 @@ final class WindowGestureController {
 
     private func escapePressed() {
         guard let current = session, !current.recognizer.isIdle, !current.recognizer.isSpent else { return }
-        process(session?.recognizer.handle(.escape, at: ProcessInfo.processInfo.systemUptime) ?? [], flags: CGEventSource.flagsState(.combinedSessionState))
+        process(session?.recognizer.handle(.escape, at: ProcessInfo.processInfo.systemUptime) ?? [])
     }
 
     // MARK: - Sessions
 
-    private func startSession(at point: CGPoint, flags: CGEventFlags, now: TimeInterval) -> Bool {
+    private func startSession(at point: CGPoint, now: TimeInterval) -> Bool {
         guard !NSScreen.screens.isEmpty else { return false }
-        refreshSettings()
-        let modifiers = activeModifiers(flags)
         guard !previewCoordinator.containsQuartzPoint(point) else {
             DebugLogger.log("WindowGestures", details: "point \(point) is over a DockDoor preview")
             return false
         }
-        guard let zone = zone(at: point, anywhere: modifiers.contains(.anywhere), now: now) else {
+        guard let zone = zone(at: point, now: now) else {
             DebugLogger.log("WindowGestures", details: "no gesture zone at \(point)")
             return false
         }
@@ -403,38 +382,29 @@ final class WindowGestureController {
 
         let configuration = WindowGestureRecognizer.Configuration.make(
             sensitivity: Defaults[.windowGestureSensitivity],
-            holdEnabled: Defaults[.windowGestureTapAndHold],
-            holdDuration: Defaults[.windowGestureHoldDuration],
-            cancelTimeout: Defaults[.windowGestureCancelTimeout]
+            holds: zone.kind == .menuBar
         )
-        let windowFrame = zone.window?.frame
-        let screen = windowFrame.flatMap(WindowGestureScreens.screen(containing:)) ?? NSScreen.screenFromQuartzPoint(point)
         session = Session(
             zone: zone,
             recognizer: WindowGestureRecognizer(configuration: configuration),
             cursor: point,
             disabled: disabled,
-            isPortrait: screen.frame.height > screen.frame.width,
-            hasOtherDisplays: NSScreen.screens.count > 1,
-            windowFrame: windowFrame
+            windowFrame: zone.window?.frame
         )
         startTickTimer()
         return true
     }
 
-    private func zone(at point: CGPoint, anywhere: Bool, now: TimeInterval) -> WindowGestureZone? {
-        if let recentZone, now - recentZone.time < Self.zoneReuseWindow, recentZone.anywhere == anywhere,
+    private func zone(at point: CGPoint, now: TimeInterval) -> WindowGestureZone? {
+        if let recentZone, now - recentZone.time < Self.zoneReuseWindow,
            hypot(recentZone.point.x - point.x, recentZone.point.y - point.y) < 4
         {
             return recentZone.zone
         }
-        let ignored = ignoredApps
         let zone = DebugLogger.measureSlow("WindowGestures zone", thresholdMs: 30, details: "\(point)") {
-            WindowGestureZoneResolver.resolve(at: point, anywhere: anywhere) { app in
-                WindowUtil.matchesAppFilters(bundleIdentifier: app.bundleIdentifier, appName: app.localizedName ?? "", filters: ignored)
-            }
+            WindowGestureZoneResolver.resolve(at: point)
         }
-        recentZone = RecentZone(zone: zone, point: point, anywhere: anywhere, time: now)
+        recentZone = RecentZone(zone: zone, point: point, time: now)
         return zone
     }
 
@@ -461,21 +431,21 @@ final class WindowGestureController {
     }
 
     private static func hasEnabledGestures(for zone: WindowGestureZone, disabled: Set<WindowGesture>) -> Bool {
-        let sections: [WindowGestureSection] = switch zone {
-        case .window, .tab: [.windows, .snapping, .screensAndSpaces, .tabs]
-        case .app: [.dock]
-        case .menuBar: [.menuBar]
+        let area: WindowGestureArea = switch zone {
+        case .window, .tab: .titleBar
+        case .app: .dock
+        case .menuBar: .menuBar
         }
-        return sections.flatMap(\.gestures).contains { !disabled.contains($0) }
+        return area.gestures.contains { !disabled.contains($0) }
     }
 
     // MARK: - Recognition
 
-    private func process(_ outputs: [WindowGestureRecognizer.Output], flags: CGEventFlags) {
+    private func process(_ outputs: [WindowGestureRecognizer.Output]) {
         for output in outputs {
             switch output {
             case let .progressed(progress):
-                progressed(progress, flags: flags)
+                progressed(progress)
             case .rearmed:
                 DispatchQueue.main.async {
                     MainActor.assumeIsolated {
@@ -485,14 +455,13 @@ final class WindowGestureController {
             case .cancelled:
                 cancelled()
             case let .finished(progress):
-                finished(progress, flags: flags)
+                finished(progress)
             }
         }
     }
 
-    private func progressed(_ progress: GestureProgress, flags: CGEventFlags) {
+    private func progressed(_ progress: GestureProgress) {
         guard let current = session else { return }
-        let modifiers = activeModifiers(flags)
 
         if case .menuBar = current.zone, current.switcherArmed || progress.held, switcherAvailable(disabled: current.disabled) {
             advanceSwitcher(progress)
@@ -501,23 +470,17 @@ final class WindowGestureController {
 
         let changed = progress != current.lastProgress
         session?.lastProgress = progress
-        var resolution = WindowGestureResolver.resolve(context(for: current, progress: progress, modifiers: modifiers))
+        var resolution = WindowGestureResolver.resolve(context(for: current, progress: progress))
         if resolution?.command == .openSwitcher {
             resolution = nil
         }
 
         if let resolution, resolution.command.isImmediate {
             DebugLogger.log("WindowGestures", details: "immediate \(resolution.command)")
-            execute(resolution.command, zone: current.zone, chain: current.chain, cursor: current.cursor)
+            execute(resolution.command, zone: current.zone, cursor: current.cursor)
             session?.recognizer.clearSteps()
             session?.lastProgress = GestureProgress()
-            if resolution.command.chainsWindow {
-                session?.chainedKind = .window(isFullscreen: false)
-            }
-            if case .moveToDisplay = resolution.command {
-                session?.geometryStale = true
-            }
-            let content = hudContent(for: resolution.command, app: current.chain.window?.app ?? current.zone.app)
+            let content = hudContent(for: resolution.command, app: current.zone.app)
             DispatchQueue.main.async { [hud] in
                 MainActor.assumeIsolated {
                     WindowGestureHUD.haptic(.levelChange)
@@ -528,10 +491,8 @@ final class WindowGestureController {
         }
 
         let content: WindowGestureHUD.Content? = if let resolution {
-            hudContent(for: resolution.command, app: current.chain.window?.app ?? current.zone.app)
-        } else if progress.held, progress.steps.isEmpty {
-            WindowGestureHUD.Content(title: String(localized: "Tap & Hold", comment: "Window gesture tooltip"), symbolName: "hand.raised", isDimmed: true)
-        } else if !progress.isEmpty {
+            hudContent(for: resolution.command, app: current.zone.app)
+        } else if !progress.steps.isEmpty {
             WindowGestureHUD.Content(title: String(localized: "No Action", comment: "Window gesture tooltip"), symbolName: "nosign", isDimmed: true)
         } else {
             nil
@@ -566,7 +527,7 @@ final class WindowGestureController {
         }
     }
 
-    private func finished(_ progress: GestureProgress?, flags: CGEventFlags) {
+    private func finished(_ progress: GestureProgress?) {
         guard let current = session else { return }
         endSession()
 
@@ -580,15 +541,14 @@ final class WindowGestureController {
             return
         }
 
-        let modifiers = activeModifiers(flags)
         var content: WindowGestureHUD.Content?
         if let progress,
-           let resolution = WindowGestureResolver.resolve(context(for: current, progress: progress, modifiers: modifiers)),
+           let resolution = WindowGestureResolver.resolve(context(for: current, progress: progress)),
            !resolution.command.isImmediate
         {
             DebugLogger.log("WindowGestures", details: "finish \(resolution.command)")
-            execute(resolution.command, zone: current.zone, chain: current.chain, cursor: current.cursor)
-            content = hudContent(for: resolution.command, app: current.chain.window?.app ?? current.zone.app)
+            execute(resolution.command, zone: current.zone, cursor: current.cursor)
+            content = hudContent(for: resolution.command, app: current.zone.app)
         } else if let progress {
             DebugLogger.log("WindowGestures", details: "finish without action steps=\(progress.steps) held=\(progress.held)")
         }
@@ -599,28 +559,8 @@ final class WindowGestureController {
         }
     }
 
-    private func context(for session: Session, progress: GestureProgress, modifiers: Set<GestureModifierRole>) -> WindowGestureContext {
-        WindowGestureContext(
-            zone: session.chainedKind ?? session.zone.kind,
-            progress: progress,
-            modifiers: modifiers.subtracting([.anywhere]),
-            isPortrait: refreshedGeometry(of: session).isPortrait,
-            hasOtherDisplays: session.hasOtherDisplays,
-            disabled: session.disabled
-        )
-    }
-
-    private func refreshedGeometry(of current: Session) -> (windowFrame: CGRect?, isPortrait: Bool) {
-        guard current.geometryStale else { return (current.windowFrame, current.isPortrait) }
-        let frame = current.zone.window?.frame
-        let screen = frame.flatMap(WindowGestureScreens.screen(containing:)) ?? NSScreen.screenFromQuartzPoint(current.cursor)
-        let isPortrait = screen.frame.height > screen.frame.width
-        if session != nil {
-            session?.windowFrame = frame
-            session?.isPortrait = isPortrait
-            session?.geometryStale = false
-        }
-        return (frame, isPortrait)
+    private func context(for session: Session, progress: GestureProgress) -> WindowGestureContext {
+        WindowGestureContext(zone: session.zone.kind, progress: progress, disabled: session.disabled)
     }
 
     // MARK: - Window Switcher
@@ -675,9 +615,9 @@ final class WindowGestureController {
 
     // MARK: - Execution
 
-    private func execute(_ command: WindowGestureCommand, zone: WindowGestureZone, chain: WindowGestureChain, cursor: CGPoint) {
+    private func execute(_ command: WindowGestureCommand, zone: WindowGestureZone, cursor: CGPoint) {
         recentZone = nil
-        executor.perform(command, zone: zone, chain: chain, cursor: cursor)
+        executor.perform(command, zone: zone, cursor: cursor)
         guard case .app = zone else { return }
         let previewCoordinator = previewCoordinator
         DispatchQueue.main.async {
@@ -688,15 +628,11 @@ final class WindowGestureController {
     }
 
     private func hudContent(for command: WindowGestureCommand, app: NSRunningApplication?) -> WindowGestureHUD.Content {
-        var content = WindowGestureHUD.Content(
-            title: command.title(appName: app?.localizedName, centerAction: Defaults[.windowGestureCenterAction]),
-            symbolName: command.symbolName
-        )
+        var content = WindowGestureHUD.Content(title: command.title(appName: app?.localizedName), symbolName: command.symbolName)
         switch command {
         case let .snap(region):
             content.region = region
-        case .quitApp, .hideApp, .toggleHidden, .hideOtherApps, .newTabOrWindow, .cycleWindows,
-             .restoreLastMinimized, .restoreAllMinimized, .minimizeFrontWindow, .minimizeAllWindows, .pickUpFrontWindow:
+        case .quitApp, .restoreLastMinimized, .minimizeFrontWindow:
             content.appIcon = app?.icon
         default:
             break
@@ -706,34 +642,17 @@ final class WindowGestureController {
 
     private func previewFrame(for command: WindowGestureCommand) -> CGRect? {
         guard let current = session else { return nil }
-        let windowFrame = current.chainedKind == nil ? refreshedGeometry(of: current).windowFrame : current.chain.window?.frame
-        let screen = windowFrame.flatMap(WindowGestureScreens.screen(containing:)) ?? NSScreen.screenFromQuartzPoint(current.cursor)
+        let screen = current.windowFrame.flatMap(WindowGestureScreens.screen(containing:)) ?? NSScreen.screenFromQuartzPoint(current.cursor)
         switch command {
         case let .snap(region):
-            return WindowGestureScreens.geometry(for: screen).frame(for: region)
+            return WindowGestureScreens.frame(for: region, on: screen)
         case .center:
-            guard let windowFrame else { return nil }
-            let windowID = current.chainedKind == nil ? current.zone.window?.windowID : current.chain.window?.windowID
-            let restoreSize = WindowSnapRegistry.shared.record(for: windowID)?.restoreFrame.size
-            let size = Defaults[.windowGestureCenterAction] == .center ? windowFrame.size : (restoreSize ?? windowFrame.size)
-            return WindowGestureScreens.centered(size, in: WindowGestureScreens.usableFrame(for: screen))
+            guard let windowFrame = current.windowFrame else { return nil }
+            let restoreSize = WindowSnapRegistry.shared.record(for: current.zone.window?.windowID)?.restoreFrame.size
+            return WindowGestureScreens.centered(restoreSize ?? windowFrame.size, in: WindowGestureScreens.usableFrame(for: screen))
         default:
             return nil
         }
-    }
-
-    // MARK: - Settings
-
-    private func refreshSettings() {
-        modifierKeys = Dictionary(uniqueKeysWithValues: GestureModifierRole.allCases.map { ($0, Defaults[$0.defaultsKey]) })
-        ignoredApps = Defaults[.windowGestureIgnoredApps]
-    }
-
-    private func activeModifiers(_ flags: CGEventFlags) -> Set<GestureModifierRole> {
-        Set(GestureModifierRole.allCases.filter { role in
-            guard let flag = modifierKeys[role]?.eventFlag else { return false }
-            return flags.contains(flag)
-        })
     }
 
     // MARK: - Ticks
@@ -764,7 +683,6 @@ final class WindowGestureController {
             stopTickTimer()
             return
         }
-        let flags = CGEventSource.flagsState(.combinedSessionState)
-        process(session?.recognizer.handle(.tick, at: ProcessInfo.processInfo.systemUptime) ?? [], flags: flags)
+        process(session?.recognizer.handle(.tick, at: ProcessInfo.processInfo.systemUptime) ?? [])
     }
 }

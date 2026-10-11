@@ -1,25 +1,6 @@
 import AppKit
 import ApplicationServices
 import Carbon.HIToolbox.Events
-import Defaults
-
-final class WindowGestureChain: @unchecked Sendable {
-    private let lock = NSLock()
-    private var storedWindow: GestureWindowTarget?
-
-    var window: GestureWindowTarget? {
-        get {
-            lock.lock()
-            defer { lock.unlock() }
-            return storedWindow
-        }
-        set {
-            lock.lock()
-            storedWindow = newValue
-            lock.unlock()
-        }
-    }
-}
 
 final class WindowGestureExecutor {
     private let queue = DispatchQueue(label: "com.ethanbills.DockDoor.windowGestures.actions", qos: .userInteractive)
@@ -27,118 +8,59 @@ final class WindowGestureExecutor {
     private let minimizeHistory = WindowMinimizeHistory.shared
     private static let fullScreenTransitionDelay: TimeInterval = 0.8
 
-    private static let moveTabMenuTitles: Set<String> = {
-        let key = "Move Tab to New Window"
-        let appKitTitle = Bundle(for: NSWindow.self).localizedString(forKey: key, value: key, table: "MenuCommands")
-        return [key, appKitTitle]
-    }()
-
-    func perform(_ command: WindowGestureCommand, zone: WindowGestureZone, chain: WindowGestureChain, cursor: CGPoint) {
+    func perform(_ command: WindowGestureCommand, zone: WindowGestureZone, cursor: CGPoint) {
         queue.async { [self] in
-            let chained = chain.window
-            let result = run(command, zone: zone, window: chained ?? zone.window, app: chained?.app ?? zone.app, cursor: cursor)
-            if command.chainsWindow, let result {
-                chain.window = result
-            }
+            run(command, zone: zone, cursor: cursor)
         }
     }
 
-    private func run(_ command: WindowGestureCommand, zone: WindowGestureZone, window: GestureWindowTarget?, app: NSRunningApplication?, cursor: CGPoint) -> GestureWindowTarget? {
+    private func run(_ command: WindowGestureCommand, zone: WindowGestureZone, cursor: CGPoint) {
+        let window = zone.window
+        let app = zone.app
         switch command {
         case let .snap(region):
-            guard let window else { return nil }
+            guard let window else { return }
             snap(window, to: region)
-            return window
         case .center:
-            guard let window else { return nil }
+            guard let window else { return }
             center(window)
-            return window
         case .minimize:
-            guard let window else { return nil }
+            guard let window else { return }
             minimize(window)
         case .close:
             window?.close()
-        case .quitApp:
-            app?.terminate()
-        case .toggleFullScreen:
-            guard let window else { return nil }
-            window.focus()
-            window.setFullScreen(!window.isFullscreen)
-        case .fullScreenOnOtherDisplay:
-            guard let window else { return nil }
-            fullScreenOnOtherDisplay(window)
-        case .hideApp:
-            app?.hide()
-        case .hideOtherApps:
-            guard let app else { return nil }
-            hideOtherApps(except: app)
-        case let .moveToSpace(offset):
-            guard let window else { return nil }
-            moveToSpace(window, offset: offset)
-        case let .moveToDisplay(direction):
-            guard let window else { return nil }
-            moveToDisplay(window, toward: direction, cursor: cursor)
-            return window
         case .closeTab:
             closeTab(in: zone)
-        case .detachTab:
-            return detachTab(in: zone)
-        case let .cycleWindows(forward):
-            guard let app else { return nil }
-            return cycleWindows(of: app, forward: forward)
-        case .restoreLastMinimized:
-            guard let app else { return nil }
-            return restoreLastMinimized(of: app)
-        case .restoreAllMinimized:
-            guard let app else { return nil }
-            restore(minimizedWindows(of: app))
+        case .toggleFullScreen:
+            guard let window else { return }
+            window.focus()
+            window.setFullScreen(!window.isFullscreen)
         case .minimizeFrontWindow:
-            guard let app, let front = frontWindow(of: app) else { return nil }
+            guard let app, let front = frontWindow(of: app) else { return }
             minimize(front)
-        case .minimizeAllWindows:
-            guard let app else { return nil }
-            minimizeAll(visibleWindows(of: app))
-        case .newTabOrWindow:
-            guard let app else { return nil }
-            openNewTabOrWindow(in: app)
-        case .toggleHidden:
-            guard let app else { return nil }
-            if app.isHidden {
-                bringForward(app)
-            } else {
-                app.hide()
-            }
-        case .pickUpFrontWindow:
-            guard let app else { return nil }
-            return pickUpFrontWindow(of: app)
+        case .restoreLastMinimized:
+            guard let app else { return }
+            restoreLastMinimized(of: app)
+        case .quitApp:
+            app?.terminate()
         case let .switchApp(forward):
             switchApp(forward: forward)
         case .openSwitcher:
-            return nil
-        case let .minimizeAllOnDisplay(allDisplays):
-            guard let screen = WindowGestureScreens.screen(atQuartzPoint: cursor) else { return nil }
-            minimizeAll(onScreenWindows(screen: allDisplays ? nil : screen))
-        case let .restoreAllOnDisplay(allDisplays):
-            guard let screen = WindowGestureScreens.screen(atQuartzPoint: cursor) else { return nil }
-            restoreAll(screen: allDisplays ? nil : screen)
-        case let .unsnapAll(allDisplays):
-            guard let screen = WindowGestureScreens.screen(atQuartzPoint: cursor) else { return nil }
-            for record in registry.liveRecords(screenIdentifier: allDisplays ? nil : screen.uniqueIdentifier()) {
-                record.target.setFrame(record.restoreFrame)
-                registry.remove(record.windowID)
-            }
-        case let .moveSnappedWindows(direction):
-            guard let screen = WindowGestureScreens.screen(atQuartzPoint: cursor) else { return nil }
-            moveSnappedWindows(from: screen, toward: direction)
+            break
+        case .minimizeAllOnDisplay:
+            guard let screen = WindowGestureScreens.screen(atQuartzPoint: cursor) else { return }
+            minimizeAll(onScreenWindows(screen: screen))
+        case .restoreAllOnDisplay:
+            guard let screen = WindowGestureScreens.screen(atQuartzPoint: cursor) else { return }
+            restoreAll(screen: screen)
         }
-        return nil
     }
 
     // MARK: - Snapping
 
     private func snap(_ window: GestureWindowTarget, to region: SnapRegion) {
         guard let current = window.frame, let screen = WindowGestureScreens.screen(containing: current) else { return }
-        let target = WindowGestureScreens.geometry(for: screen).frame(for: region)
+        let target = WindowGestureScreens.frame(for: region, on: screen)
         let restoreFrame = registry.liveRecord(for: window.windowID)?.restoreFrame ?? current
 
         window.setFrame(target)
@@ -152,9 +74,7 @@ final class WindowGestureExecutor {
                 screenIdentifier: screen.uniqueIdentifier()
             ))
         }
-        if Defaults[.windowGestureActivateAfterSnap] {
-            window.focus()
-        }
+        window.focus()
     }
 
     private func center(_ window: GestureWindowTarget) {
@@ -162,18 +82,8 @@ final class WindowGestureExecutor {
         let usable = WindowGestureScreens.usableFrame(for: screen)
         let record = registry.remove(window.windowID)
 
-        let frame: CGRect = switch Defaults[.windowGestureCenterAction] {
-        case .centerAndRestore:
-            WindowGestureScreens.centered(record?.restoreFrame.size ?? current.size, in: usable)
-        case .restore:
-            record?.restoreFrame ?? WindowGestureScreens.centered(current.size, in: usable)
-        case .center:
-            WindowGestureScreens.centered(current.size, in: usable)
-        }
-        window.setFrame(frame)
-        if Defaults[.windowGestureActivateAfterSnap] {
-            window.focus()
-        }
+        window.setFrame(WindowGestureScreens.centered(record?.restoreFrame.size ?? current.size, in: usable))
+        window.focus()
     }
 
     // MARK: - Minimizing
@@ -202,13 +112,15 @@ final class WindowGestureExecutor {
         }
     }
 
-    private func restoreLastMinimized(of app: NSRunningApplication) -> GestureWindowTarget? {
+    private func restoreLastMinimized(of app: NSRunningApplication) {
         let fromHistory = minimizeHistory.popLatest(pid: app.processIdentifier)
         let window = fromHistory ?? minimizedWindows(of: app).first
         DebugLogger.log("WindowGestures", details: "restore last minimized: \(fromHistory != nil ? "history" : window != nil ? "cache" : "none") window=\(window?.windowID.map(String.init) ?? "-")")
-        guard let window else { return pickUpFrontWindow(of: app) }
+        guard let window else {
+            bringForward(app)
+            return
+        }
         window.restore()
-        return window
     }
 
     private func restore(_ windows: [GestureWindowTarget]) {
@@ -225,129 +137,15 @@ final class WindowGestureExecutor {
         windows.last?.focus()
     }
 
-    private func restoreAll(screen: NSScreen?) {
-        let screenIdentifier = screen?.uniqueIdentifier()
+    private func restoreAll(screen: NSScreen) {
+        let screenIdentifier = screen.uniqueIdentifier()
         var targets = minimizeHistory.take(screenIdentifier: screenIdentifier)
         let known = Set(targets.compactMap(\.windowID))
         let cached = WindowUtil.getAllWindowsIgnoringSwitcherFilters().filter { window in
-            window.isMinimized && !window.isWindowlessApp && !known.contains(window.id)
-                && (screenIdentifier == nil || window.screenIdentifier == screenIdentifier)
+            window.isMinimized && !window.isWindowlessApp && !known.contains(window.id) && window.screenIdentifier == screenIdentifier
         }
         targets.append(contentsOf: cached.map(GestureWindowTarget.init(window:)))
         restore(targets)
-    }
-
-    // MARK: - Fullscreen & Displays
-
-    private func fullScreenOnOtherDisplay(_ window: GestureWindowTarget) {
-        if window.isFullscreen {
-            window.setFullScreen(false)
-            Thread.sleep(forTimeInterval: Self.fullScreenTransitionDelay)
-        }
-        guard let current = window.frame,
-              let source = WindowGestureScreens.screen(containing: current),
-              let destination = WindowGestureScreens.otherScreen(than: source)
-        else { return }
-
-        window.setFrame(WindowGestureScreens.map(current, from: source.visibleFrame, to: destination.visibleFrame))
-        registry.remove(window.windowID)
-        window.focus()
-        queue.asyncAfter(deadline: .now() + 0.25) {
-            window.setFullScreen(true)
-        }
-    }
-
-    private func moveToDisplay(_ window: GestureWindowTarget, toward direction: GestureDirection, cursor: CGPoint) {
-        guard !window.isFullscreen,
-              let current = window.frame,
-              let source = WindowGestureScreens.screen(containing: current),
-              let destination = WindowGestureScreens.screen(from: source, toward: direction)
-        else { return }
-
-        let sourceFrame = WindowGestureScreens.usableFrame(for: source)
-        let destinationFrame = WindowGestureScreens.usableFrame(for: destination)
-        if var record = registry.liveRecord(for: window.windowID) {
-            let target = WindowGestureScreens.geometry(for: destination).frame(for: record.region)
-            window.setFrame(target)
-            record.snappedFrame = window.frame ?? target
-            record.restoreFrame = WindowGestureScreens.map(record.restoreFrame, from: sourceFrame, to: destinationFrame)
-            record.screenIdentifier = destination.uniqueIdentifier()
-            registry.set(record)
-        } else {
-            window.setFrame(WindowGestureScreens.map(current, from: sourceFrame, to: destinationFrame))
-        }
-
-        if Defaults[.windowGestureMoveCursorWithWindow], let moved = window.frame {
-            warpCursor(cursor, from: current, to: moved)
-        }
-        window.focus()
-    }
-
-    private func moveSnappedWindows(from source: NSScreen, toward direction: GestureDirection) {
-        guard let destination = WindowGestureScreens.screen(from: source, toward: direction) else { return }
-        let geometry = WindowGestureScreens.geometry(for: destination)
-        let sourceFrame = WindowGestureScreens.usableFrame(for: source)
-        let destinationFrame = WindowGestureScreens.usableFrame(for: destination)
-        for var record in registry.liveRecords(screenIdentifier: source.uniqueIdentifier()) {
-            let target = geometry.frame(for: record.region)
-            record.target.setFrame(target)
-            record.snappedFrame = record.target.frame ?? target
-            record.restoreFrame = WindowGestureScreens.map(record.restoreFrame, from: sourceFrame, to: destinationFrame)
-            record.screenIdentifier = destination.uniqueIdentifier()
-            registry.set(record)
-        }
-    }
-
-    private func warpCursor(_ cursor: CGPoint, from oldFrame: CGRect, to newFrame: CGRect) {
-        guard oldFrame.width > 0, oldFrame.height > 0, let primaryMaxY = NSScreen.screens.first?.frame.maxY else { return }
-        let appKitCursor = CGPoint(x: cursor.x, y: primaryMaxY - cursor.y)
-        let relativeX = min(max((appKitCursor.x - oldFrame.minX) / oldFrame.width, 0), 1)
-        let relativeY = min(max((appKitCursor.y - oldFrame.minY) / oldFrame.height, 0), 1)
-        let destination = CGPoint(
-            x: newFrame.minX + relativeX * newFrame.width,
-            y: primaryMaxY - (newFrame.minY + relativeY * newFrame.height)
-        )
-        CGWarpMouseCursorPosition(destination)
-        CGAssociateMouseAndMouseCursorPosition(1)
-    }
-
-    // MARK: - Spaces
-
-    private func moveToSpace(_ window: GestureWindowTarget, offset: Int) {
-        guard offset != 0, !window.isFullscreen,
-              let windowID = window.windowID,
-              let currentSpace = windowID.cgsSpaces().first,
-              let list = WindowSpaces.spaceList(containing: currentSpace),
-              let currentIndex = list.spaces.firstIndex(of: currentSpace)
-        else { return }
-
-        let step = offset < 0 ? -1 : 1
-        var remaining = abs(offset)
-        var index = currentIndex
-        var targetIndex: Int?
-        while remaining > 0 {
-            index += step
-            guard list.spaces.indices.contains(index) else { break }
-            if list.desktopSpaces.contains(list.spaces[index]) {
-                targetIndex = index
-                remaining -= 1
-            }
-        }
-
-        guard let targetIndex, WindowSpaces.move(windowID: windowID, toManagedSpace: list.spaces[targetIndex]) else { return }
-        if let cached = window.cachedWindow {
-            WindowUtil.updateCachedWindowState(cached, spaceID: .some(Int(list.spaces[targetIndex])))
-        }
-
-        guard DockObserver.canPostEvents else { return }
-        let keyCode = CGKeyCode(step < 0 ? kVK_LeftArrow : kVK_RightArrow)
-        for _ in 0 ..< abs(targetIndex - currentIndex) {
-            DockObserver.postControlArrowKey(keyCode)
-            Thread.sleep(forTimeInterval: 0.05)
-        }
-        queue.asyncAfter(deadline: .now() + 0.5) {
-            window.focus()
-        }
     }
 
     // MARK: - Tabs
@@ -360,19 +158,6 @@ final class WindowGestureExecutor {
         }
         guard select(tab, in: target) else { return }
         Self.postShortcut(keyCode: CGKeyCode(kVK_ANSI_W), to: target.pid)
-    }
-
-    private func detachTab(in zone: WindowGestureZone) -> GestureWindowTarget? {
-        guard case let .tab(target, tab, _, _) = zone, select(tab, in: target) else { return nil }
-        guard let item = Self.menuItem(in: target.pid, where: { item in
-            (try? item.title()).map(Self.moveTabMenuTitles.contains) ?? false
-        }) else { return nil }
-
-        try? item.performAction(kAXPressAction)
-        Thread.sleep(forTimeInterval: 0.35)
-        let appElement = AXUIElementCreateApplication(target.pid)
-        guard let detached = (try? appElement.focusedWindow()) ?? nil else { return nil }
-        return GestureWindowTarget(element: detached, app: target.app)
     }
 
     private func select(_ tab: AXUIElement, in target: GestureWindowTarget) -> Bool {
@@ -434,10 +219,6 @@ final class WindowGestureExecutor {
             .map { GestureWindowTarget(element: $0, app: app) }
     }
 
-    private func visibleWindows(of app: NSRunningApplication) -> [GestureWindowTarget] {
-        appWindows(of: app).filter { !$0.isMinimized }
-    }
-
     private func minimizedWindows(of app: NSRunningApplication) -> [GestureWindowTarget] {
         let cached = WindowUtil.readCachedWindows(for: app.processIdentifier)
             .filter { $0.isMinimized && !$0.isWindowlessApp }
@@ -457,58 +238,6 @@ final class WindowGestureExecutor {
         let element = ((try? appElement.focusedWindow()) ?? nil)
             ?? ((try? appElement.attribute(kAXMainWindowAttribute, AXUIElement.self)) ?? nil)
         return element.map { GestureWindowTarget(element: $0, app: app) }
-    }
-
-    private func cycleWindows(of app: NSRunningApplication, forward: Bool) -> GestureWindowTarget? {
-        let windows = visibleWindows(of: app)
-        guard !windows.isEmpty else { return restoreLastMinimized(of: app) }
-
-        let focusedID = app.isActive ? frontWindow(of: app)?.windowID : nil
-        let next: GestureWindowTarget
-        if let focusedID, let index = windows.firstIndex(where: { $0.windowID == focusedID }) {
-            next = windows[(index + (forward ? 1 : -1) + windows.count) % windows.count]
-        } else {
-            let mostRecent = windows.max { ($0.cachedWindow?.lastAccessedTime ?? .distantPast) < ($1.cachedWindow?.lastAccessedTime ?? .distantPast) }
-            next = mostRecent ?? windows[0]
-        }
-        next.focus()
-        return next
-    }
-
-    private func pickUpFrontWindow(of app: NSRunningApplication) -> GestureWindowTarget? {
-        if app.isHidden {
-            app.unhide()
-        }
-        guard let front = frontWindow(of: app), !front.isMinimized else {
-            bringForward(app)
-            return nil
-        }
-        front.focus()
-        return front
-    }
-
-    private func hideOtherApps(except app: NSRunningApplication) {
-        bringForward(app)
-        let ownPID = ProcessInfo.processInfo.processIdentifier
-        for other in NSWorkspace.shared.runningApplications
-            where other.activationPolicy == .regular && other.processIdentifier != app.processIdentifier && other.processIdentifier != ownPID
-        {
-            other.hide()
-        }
-    }
-
-    private func openNewTabOrWindow(in app: NSRunningApplication) {
-        if app.isHidden {
-            app.unhide()
-        }
-        let item = Self.menuItem(in: app.processIdentifier, menus: 2 ..< 5) { Self.isCommandShortcut($0, character: "T") }
-            ?? Self.menuItem(in: app.processIdentifier, menus: 2 ..< 5) { Self.isCommandShortcut($0, character: "N") }
-        if let item {
-            try? item.performAction(kAXPressAction)
-            bringForward(app)
-        } else {
-            WindowUtil.activateAndOpenNewWindow(app: app)
-        }
     }
 
     private func switchApp(forward: Bool) {
@@ -539,9 +268,9 @@ final class WindowGestureExecutor {
         }
     }
 
-    private func onScreenWindows(screen: NSScreen?) -> [GestureWindowTarget] {
+    private func onScreenWindows(screen: NSScreen) -> [GestureWindowTarget] {
         let ownPID = ProcessInfo.processInfo.processIdentifier
-        let screenFrame = screen?.cgFrame
+        let screenFrame = screen.cgFrame
         var idsByPID: [pid_t: Set<CGWindowID>] = [:]
         for window in WindowGestureZoneResolver.onScreenWindows() {
             guard (window[kCGWindowLayer as String] as? NSNumber)?.intValue == 0,
@@ -549,7 +278,7 @@ final class WindowGestureExecutor {
                   let id = (window[kCGWindowNumber as String] as? NSNumber)?.uint32Value,
                   let bounds = WindowGestureZoneResolver.bounds(of: window), bounds.width > 40, bounds.height > 40
             else { continue }
-            if let screenFrame, !screenFrame.contains(CGPoint(x: bounds.midX, y: bounds.midY)) {
+            if !screenFrame.contains(CGPoint(x: bounds.midX, y: bounds.midY)) {
                 continue
             }
             idsByPID[pid, default: []].insert(CGWindowID(id))
@@ -569,36 +298,6 @@ final class WindowGestureExecutor {
     }
 
     // MARK: - Menus & Keys
-
-    private static func isCommandShortcut(_ item: AXUIElement, character: String) -> Bool {
-        guard (try? item.attribute(kAXEnabledAttribute, Bool.self)) == true,
-              let commandCharacter = (try? item.attribute(kAXMenuItemCmdCharAttribute, String.self)) ?? nil,
-              commandCharacter.caseInsensitiveCompare(character) == .orderedSame
-        else { return false }
-        let modifiers = (try? item.attribute(kAXMenuItemCmdModifiersAttribute, Int.self)) ?? nil
-        return (modifiers ?? 0) == 0
-    }
-
-    private static func menuItem(in pid: pid_t, menus range: Range<Int>? = nil, where matches: (AXUIElement) -> Bool) -> AXUIElement? {
-        let appElement = AXUIElementCreateApplication(pid)
-        guard let menuBar = (try? appElement.attribute(kAXMenuBarAttribute, AXUIElement.self)) ?? nil,
-              let barItems = try? menuBar.children()
-        else { return nil }
-
-        let candidates: [AXUIElement] = if let range {
-            Array(barItems[min(range.lowerBound, barItems.count) ..< min(range.upperBound, barItems.count)])
-        } else {
-            barItems.reversed()
-        }
-
-        for barItem in candidates {
-            guard let menu = (try? barItem.children())?.first, let items = try? menu.children() else { continue }
-            if let match = items.first(where: matches) {
-                return match
-            }
-        }
-        return nil
-    }
 
     private static func postShortcut(keyCode: CGKeyCode, to pid: pid_t) {
         let source = CGEventSource(stateID: .combinedSessionState)
