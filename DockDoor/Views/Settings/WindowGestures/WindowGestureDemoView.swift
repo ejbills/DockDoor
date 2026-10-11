@@ -15,7 +15,7 @@ struct GestureDemo {
     }
 
     enum Outcome {
-        case snap(SnapRegion)
+        case snap(WindowInfo.WindowPositionRect)
         case center
         case minimize
         case close
@@ -37,7 +37,7 @@ extension WindowGesture {
     var demo: GestureDemo {
         switch self {
         case .snapHalves: GestureDemo(place: .titleBar, motion: .swipe([.right]), outcome: .snap(.rightHalf))
-        case .snapMax: GestureDemo(place: .titleBar, motion: .swipe([.up]), outcome: .snap(.maximize))
+        case .snapMax: GestureDemo(place: .titleBar, motion: .swipe([.up]), outcome: .snap(.full))
         case .snapQuarters: GestureDemo(place: .titleBar, motion: .swipe([.right, .down]), outcome: .snap(.bottomRightQuarter))
         case .windowMinimize: GestureDemo(place: .titleBar, motion: .swipe([.down]), outcome: .minimize)
         case .windowClose: GestureDemo(place: .titleBar, motion: .pinch(inward: true), outcome: .close)
@@ -198,7 +198,7 @@ private struct GestureDemoRenderer {
             CGRect(x: workspace.midX - workspace.width * 0.3, y: workspace.minY + workspace.height * 0.14, width: workspace.width * 0.6, height: workspace.height * 0.66)
         }
 
-        func frame(for region: SnapRegion) -> CGRect {
+        func frame(for region: WindowInfo.WindowPositionRect) -> CGRect {
             let frame = region.frame(in: CGRect(origin: .zero, size: workspace.size)).insetBy(dx: 1, dy: 1)
             return CGRect(x: workspace.minX + frame.minX, y: workspace.minY + workspace.height - frame.maxY, width: frame.width, height: frame.height)
         }

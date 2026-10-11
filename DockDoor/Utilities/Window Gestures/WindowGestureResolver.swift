@@ -25,12 +25,8 @@ enum WindowGestureZoneKind: Equatable {
 }
 
 enum WindowGestureCommand: Equatable {
-    case snap(SnapRegion)
-    case center
-    case minimize
-    case close
+    case window(WindowAction)
     case closeTab
-    case toggleFullScreen
     case minimizeFrontWindow
     case restoreLastMinimized
     case quitApp
@@ -49,18 +45,12 @@ enum WindowGestureCommand: Equatable {
     func title(appName: String?) -> String {
         let name = appName ?? String(localized: "App", comment: "Fallback app name in window gesture tooltip")
         switch self {
-        case let .snap(region):
-            return region.localizedName
-        case .center:
-            return String(localized: "Center", comment: "Window gesture tooltip")
-        case .minimize, .minimizeFrontWindow:
-            return String(localized: "Minimize", comment: "Window gesture tooltip")
-        case .close:
-            return String(localized: "Close Window", comment: "Window gesture tooltip")
+        case let .window(action):
+            return action.localizedName
+        case .minimizeFrontWindow:
+            return WindowAction.minimize.localizedName
         case .closeTab:
             return String(localized: "Close Tab", comment: "Window gesture tooltip")
-        case .toggleFullScreen:
-            return String(localized: "Full Screen", comment: "Window gesture tooltip")
         case .restoreLastMinimized:
             return String(localized: "Restore Window", comment: "Window gesture tooltip")
         case .quitApp:
@@ -80,12 +70,9 @@ enum WindowGestureCommand: Equatable {
 
     var symbolName: String {
         switch self {
-        case .snap: "rectangle.split.2x2"
-        case .center: "arrow.down.right.and.arrow.up.left"
-        case .minimize, .minimizeFrontWindow: "arrow.down.to.line"
-        case .close: "xmark.square"
+        case let .window(action): action.iconName
+        case .minimizeFrontWindow: WindowAction.minimize.iconName
         case .closeTab: "xmark.rectangle"
-        case .toggleFullScreen: "arrow.up.left.and.arrow.down.right"
         case .restoreLastMinimized: "arrow.up.to.line"
         case .quitApp: "power"
         case let .switchApp(forward): forward ? "arrow.right" : "arrow.left"
@@ -133,14 +120,14 @@ enum WindowGestureResolver {
         let steps = context.progress.steps
 
         if context.doubleTap {
-            return isFullscreen ? nil : .init(command: .center, gesture: .snapCenter)
+            return isFullscreen ? nil : .init(command: .window(.center), gesture: .snapCenter)
         }
 
         if !steps.isEmpty, steps.allSatisfy({ $0 == .pinchIn }) {
-            return onTab ? .init(command: .closeTab, gesture: .tabClose) : .init(command: .close, gesture: .windowClose)
+            return onTab ? .init(command: .closeTab, gesture: .tabClose) : .init(command: .window(.close), gesture: .windowClose)
         }
         if !steps.isEmpty, steps.allSatisfy({ $0 == .pinchOut }) {
-            return .init(command: .toggleFullScreen, gesture: .windowFullscreen)
+            return .init(command: .window(.toggleFullScreen), gesture: .windowFullscreen)
         }
         guard !isFullscreen else { return nil }
 
@@ -150,19 +137,19 @@ enum WindowGestureResolver {
 
         switch (horizontal.first, vertical.first) {
         case let (horizontalStep?, nil):
-            return .init(command: .snap(horizontalStep == .left ? .leftHalf : .rightHalf), gesture: .snapHalves)
+            return .init(command: .window(horizontalStep == .left ? .fillLeftHalf : .fillRightHalf), gesture: .snapHalves)
         case (nil, .up?):
-            return .init(command: .snap(.maximize), gesture: .snapMax)
+            return .init(command: .window(.maximize), gesture: .snapMax)
         case (nil, .down?):
-            return .init(command: .minimize, gesture: .windowMinimize)
+            return .init(command: .window(.minimize), gesture: .windowMinimize)
         case let (horizontalStep?, verticalStep?):
-            let region: SnapRegion = switch (horizontalStep, verticalStep) {
-            case (.left, .up): .topLeftQuarter
-            case (.right, .up): .topRightQuarter
-            case (.left, _): .bottomLeftQuarter
-            default: .bottomRightQuarter
+            let action: WindowAction = switch (horizontalStep, verticalStep) {
+            case (.left, .up): .fillTopLeftQuarter
+            case (.right, .up): .fillTopRightQuarter
+            case (.left, _): .fillBottomLeftQuarter
+            default: .fillBottomRightQuarter
             }
-            return .init(command: .snap(region), gesture: .snapQuarters)
+            return .init(command: .window(action), gesture: .snapQuarters)
         default:
             return nil
         }

@@ -1,17 +1,11 @@
 import AppKit
 import ApplicationServices
 
-struct GestureWindowTarget {
-    let element: AXUIElement
-    let app: NSRunningApplication
-    let windowID: CGWindowID?
-}
-
 enum WindowGestureZone {
-    case window(GestureWindowTarget, isFullscreen: Bool)
-    case tab(GestureWindowTarget, tab: AXUIElement, isFullscreen: Bool, scrollable: Bool)
+    case window(WindowInfo, isFullscreen: Bool)
+    case tab(WindowInfo, tab: AXUIElement, isFullscreen: Bool, scrollable: Bool)
     case app(NSRunningApplication)
-    case menuBar(screenFrame: CGRect)
+    case menuBar
 
     var kind: WindowGestureZoneKind {
         switch self {
@@ -29,16 +23,16 @@ enum WindowGestureZone {
         return true
     }
 
-    var window: GestureWindowTarget? {
+    var window: WindowInfo? {
         switch self {
-        case let .window(target, _), let .tab(target, _, _, _): target
+        case let .window(window, _), let .tab(window, _, _, _): window
         case .app, .menuBar: nil
         }
     }
 
     var app: NSRunningApplication? {
         switch self {
-        case let .window(target, _), let .tab(target, _, _, _): target.app
+        case let .window(window, _), let .tab(window, _, _, _): window.app
         case let .app(app): app
         case .menuBar: nil
         }
@@ -88,7 +82,7 @@ enum WindowGestureZoneResolver {
         case .notHere: break
         }
 
-        switch dockZone(at: point, screen: screen) {
+        switch dockZone(at: point) {
         case let .zone(zone): return zone
         case .blocked: return nil
         case .notHere: break
@@ -117,7 +111,7 @@ enum WindowGestureZoneResolver {
         guard let frontmost = NSWorkspace.shared.frontmostApplication,
               frontmost.processIdentifier != ProcessInfo.processInfo.processIdentifier
         else {
-            return .zone(.menuBar(screenFrame: screen.frame))
+            return .zone(.menuBar)
         }
 
         let appElement = AXUIElementCreateApplication(frontmost.processIdentifier)
@@ -125,7 +119,7 @@ enum WindowGestureZoneResolver {
               let node = node(for: hit),
               node.role == kAXMenuBarItemRole as String
         else {
-            return .zone(.menuBar(screenFrame: screen.frame))
+            return .zone(.menuBar)
         }
 
         guard let menuBar = node.parent,
@@ -139,8 +133,8 @@ enum WindowGestureZoneResolver {
 
     // MARK: - Dock
 
-    private static func dockZone(at point: CGPoint, screen: NSScreen) -> Outcome {
-        guard isWithinDockBand(point, screen: screen), let dockObserver = DockObserver.activeInstance else { return .notHere }
+    private static func dockZone(at point: CGPoint) -> Outcome {
+        guard let dockObserver = DockObserver.activeInstance, dockObserver.isPointNearDock(point) else { return .notHere }
         let hovered = dockObserver.getDockItemAppStatusUnderMouse()
         guard hovered.dockItemElement != nil else { return .notHere }
         guard case let .success(app) = hovered.status,
@@ -149,29 +143,6 @@ enum WindowGestureZoneResolver {
             return .blocked
         }
         return .zone(.app(app))
-    }
-
-    private static func isWithinDockBand(_ point: CGPoint, screen: NSScreen) -> Bool {
-        let frame = screen.cgFrame
-        let thickness = dockBandThickness(on: screen)
-        switch DockUtils.getDockPosition() {
-        case .bottom: return frame.maxY - point.y <= thickness
-        case .left: return point.x - frame.minX <= thickness
-        case .right: return frame.maxX - point.x <= thickness
-        case .top: return point.y - frame.minY <= thickness
-        case .cmdTab, .cli, .unknown: return false
-        }
-    }
-
-    private static func dockBandThickness(on screen: NSScreen) -> CGFloat {
-        let reserved = DockUtils.getDockSize(on: screen)
-        if reserved > 0 {
-            return reserved + 8
-        }
-        let preferences = UserDefaults(suiteName: "com.apple.dock")
-        let tileSize = preferences?.double(forKey: "tilesize") ?? 0
-        let largeSize = preferences?.bool(forKey: "magnification") == true ? (preferences?.double(forKey: "largesize") ?? 0) : 0
-        return max(tileSize > 0 ? tileSize : 64, largeSize) + 24
     }
 
     // MARK: - Windows
@@ -231,8 +202,8 @@ enum WindowGestureZoneResolver {
             DebugLogger.log("WindowGestures", details: "unsupported window in \(app.localizedName ?? "-") chain=\(describe(chain))")
             return .notHere
         }
+        guard let target = WindowUtil.windowInfo(for: windowElement, app: app, windowID: windowID) else { return .notHere }
 
-        let target = GestureWindowTarget(element: windowElement, app: app, windowID: windowID)
         let isFullscreen = (try? windowElement.isFullscreen()) == true
 
         if let tabIndex = chain.prefix(4).firstIndex(where: { isTab($0, in: chain) }) {
@@ -267,7 +238,7 @@ enum WindowGestureZoneResolver {
             return .notHere
         }
         let isFullscreen = NSScreen.screens.contains { $0.cgFrame == bounds }
-        return .zone(.window(GestureWindowTarget(window: cached), isFullscreen: isFullscreen))
+        return .zone(.window(cached, isFullscreen: isFullscreen))
     }
 
     private static func describe(_ chain: [AXNode]) -> String {
@@ -283,7 +254,7 @@ enum WindowGestureZoneResolver {
 
     // MARK: - Helpers
 
-    static func topWindow(at point: CGPoint, in windows: [[String: AnyObject]], tolerance: CGFloat = 0) -> [String: AnyObject]? {
+    private static func topWindow(at point: CGPoint, in windows: [[String: AnyObject]]) -> [String: AnyObject]? {
         let dockPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier
         let cursorLevel = Int(CGWindowLevelForKey(.cursorWindow))
         let screenFrames = NSScreen.screens.map(\.cgFrame)
@@ -294,7 +265,7 @@ enum WindowGestureZoneResolver {
                   (window[kCGWindowOwnerName as String] as? String) != "Window Server",
                   ((window[kCGWindowAlpha as String] as? NSNumber)?.doubleValue ?? 1) > 0.01,
                   let frame = bounds(of: window), frame.width > 40, frame.height > 40,
-                  frame.insetBy(dx: -tolerance, dy: -tolerance).contains(point)
+                  frame.contains(point)
             else { return false }
             let layer = (window[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
             guard layer < cursorLevel else { return false }
@@ -307,11 +278,11 @@ enum WindowGestureZoneResolver {
         return (session["CGSSessionScreenIsLocked"] as? Bool) == true
     }
 
-    static func onScreenWindows() -> [[String: AnyObject]] {
+    private static func onScreenWindows() -> [[String: AnyObject]] {
         (CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]]) ?? []
     }
 
-    static func bounds(of window: [String: AnyObject]) -> CGRect? {
+    private static func bounds(of window: [String: AnyObject]) -> CGRect? {
         guard let dictionary = window[kCGWindowBounds as String] as? NSDictionary else { return nil }
         return CGRect(dictionaryRepresentation: dictionary)
     }

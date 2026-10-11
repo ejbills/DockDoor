@@ -90,8 +90,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
             }
 
-            windowGestureController = WindowGestureController(previewCoordinator: currentPreviewCoordinator) { [weak self] event in
-                self?.keybindHelper?.handleGestureSwitcher(event)
+            if Defaults[.enableWindowGestures] {
+                windowGestureController = WindowGestureController(previewCoordinator: currentPreviewCoordinator) { [weak self] event in
+                    self?.keybindHelper?.handleGestureSwitcher(event)
+                }
             }
 
             if Defaults[.showActiveAppIndicator] {

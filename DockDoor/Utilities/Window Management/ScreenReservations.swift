@@ -93,31 +93,22 @@ final class ScreenReservations: @unchecked Sendable {
     static let reportNotification = Notification.Name("com.ethanbills.DockDoor.reserveScreenEdge")
     static let requestNotification = Notification.Name("com.ethanbills.DockDoor.requestScreenReservations")
     static let reportsDidChange = Notification.Name("com.ethanbills.DockDoor.screenReservationsDidChange")
+    private static let stageManagerStripWidth: CGFloat = 140
 
     private let lock = NSLock()
     private var reported: [String: ScreenReservation] = [:]
-    private var observers: [NSObjectProtocol] = []
+    private var reportObserver: NSObjectProtocol?
 
     @MainActor
     func start() {
-        guard observers.isEmpty else { return }
-        observers.append(DistributedNotificationCenter.default().addObserver(
+        guard reportObserver == nil else { return }
+        reportObserver = DistributedNotificationCenter.default().addObserver(
             forName: Self.reportNotification,
             object: nil,
             queue: .main
         ) { [weak self] notification in
             self?.handle(notification)
-        })
-        observers.append(NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.didTerminateApplicationNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] notification in
-            guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-                  let bundleIdentifier = app.bundleIdentifier
-            else { return }
-            self?.remove(source: bundleIdentifier)
-        })
+        }
         DistributedNotificationCenter.default().postNotificationName(Self.requestNotification, object: nil, userInfo: nil, deliverImmediately: true)
     }
 
@@ -156,6 +147,13 @@ final class ScreenReservations: @unchecked Sendable {
             display: ScreenReservation.allDisplays
         )
         reservations.append(manual)
+        if UserDefaults(suiteName: "com.apple.WindowManager")?.bool(forKey: "GloballyEnabled") == true {
+            reservations.append(ScreenReservation(
+                edge: DockUtils.getDockPosition() == .left ? .right : .left,
+                thickness: Self.stageManagerStripWidth,
+                display: ScreenReservation.allDisplays
+            ))
+        }
         return ScreenReservation.usableFrame(
             visibleFrame: screen.visibleFrame,
             screenFrame: screen.frame,

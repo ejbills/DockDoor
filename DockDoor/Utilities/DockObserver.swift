@@ -655,16 +655,21 @@ final class DockObserver {
         return dockChildren
     }
 
-    func runningApplicationsInDockOrder() -> [NSRunningApplication] {
-        guard let items = getAllDockItemChildren() else { return [] }
-        var seen = Set<pid_t>()
-        return items.compactMap { item -> NSRunningApplication? in
+    private func applicationDockItems() -> [(element: AXUIElement, url: URL, bundleIdentifier: String)] {
+        (getAllDockItemChildren() ?? []).compactMap { item in
             guard (try? item.subrole()) == "AXApplicationDockItem",
-                  (try? item.appIsRunning()) == true,
                   let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
                   let bundleIdentifier = Bundle(url: url)?.bundleIdentifier
             else { return nil }
-            let app = LauncherShortcutResolver.runningApplications(forBundleAt: url, bundleIdentifier: bundleIdentifier)
+            return (item, url, bundleIdentifier)
+        }
+    }
+
+    func runningApplicationsInDockOrder() -> [NSRunningApplication] {
+        var seen = Set<pid_t>()
+        return applicationDockItems().compactMap { item -> NSRunningApplication? in
+            guard (try? item.element.appIsRunning()) == true else { return nil }
+            let app = LauncherShortcutResolver.runningApplications(forBundleAt: item.url, bundleIdentifier: item.bundleIdentifier)
                 .first { !seen.contains($0.processIdentifier) }
             if let app {
                 seen.insert(app.processIdentifier)
@@ -676,31 +681,9 @@ final class DockObserver {
     /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
     /// This is used to correctly identify which instance of a multi-instance app is being hovered.
     private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
-        guard let allDockItems = getAllDockItemChildren() else {
-            return 0
-        }
-
-        // Filter to only AXApplicationDockItems with the same bundle ID
-        var matchingItems: [AXUIElement] = []
-        for item in allDockItems {
-            guard (try? item.subrole()) == "AXApplicationDockItem",
-                  let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
-                  let itemBundle = Bundle(url: itemURL),
-                  itemBundle.bundleIdentifier == bundleIdentifier
-            else {
-                continue
-            }
-            matchingItems.append(item)
-        }
-
-        // Find the index of the hovered item among matching items
-        for (index, item) in matchingItems.enumerated() {
-            if CFEqual(item, hoveredItem) {
-                return index
-            }
-        }
-
-        return 0
+        applicationDockItems()
+            .filter { $0.bundleIdentifier == bundleIdentifier }
+            .firstIndex { CFEqual($0.element, hoveredItem) } ?? 0
     }
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
@@ -817,7 +800,7 @@ final class DockObserver {
 
     private static let dockProximityBand: CGFloat = 220
 
-    private func isPointNearDock(_ point: CGPoint) -> Bool {
+    func isPointNearDock(_ point: CGPoint) -> Bool {
         let position = DockUtils.getDockPosition()
         var displayCount: UInt32 = 0
         var displays = [CGDirectDisplayID](repeating: 0, count: 16)

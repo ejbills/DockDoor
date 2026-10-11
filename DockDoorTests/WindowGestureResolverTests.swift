@@ -19,24 +19,24 @@ struct WindowGestureResolverTests {
     }
 
     @Test func titleBarSwipesSnapToHalvesAndQuarters() {
-        #expect(resolve(steps: [.left]) == .snap(.leftHalf))
-        #expect(resolve(steps: [.right]) == .snap(.rightHalf))
-        #expect(resolve(steps: [.right, .down]) == .snap(.bottomRightQuarter))
-        #expect(resolve(steps: [.down, .right]) == .snap(.bottomRightQuarter))
-        #expect(resolve(steps: [.up, .left]) == .snap(.topLeftQuarter))
-        #expect(resolve(steps: [.left, .down]) == .snap(.bottomLeftQuarter))
-        #expect(resolve(steps: [.right, .up]) == .snap(.topRightQuarter))
+        #expect(resolve(steps: [.left]) == .window(.fillLeftHalf))
+        #expect(resolve(steps: [.right]) == .window(.fillRightHalf))
+        #expect(resolve(steps: [.right, .down]) == .window(.fillBottomRightQuarter))
+        #expect(resolve(steps: [.down, .right]) == .window(.fillBottomRightQuarter))
+        #expect(resolve(steps: [.up, .left]) == .window(.fillTopLeftQuarter))
+        #expect(resolve(steps: [.left, .down]) == .window(.fillBottomLeftQuarter))
+        #expect(resolve(steps: [.right, .up]) == .window(.fillTopRightQuarter))
     }
 
     @Test func verticalSwipesFillAndMinimize() {
-        #expect(resolve(steps: [.up]) == .snap(.maximize))
-        #expect(resolve(steps: [.down]) == .minimize)
+        #expect(resolve(steps: [.up]) == .window(.maximize))
+        #expect(resolve(steps: [.down]) == .window(.minimize))
         #expect(resolve(steps: [.up, .up]) == nil)
         #expect(resolve(steps: [.right, .right]) == nil)
     }
 
     @Test func holdingDoesNotChangeTitleBarSwipes() {
-        #expect(resolve(steps: [.right], held: true) == .snap(.rightHalf))
+        #expect(resolve(steps: [.right], held: true) == .window(.fillRightHalf))
         #expect(resolve(held: true) == nil)
     }
 
@@ -47,28 +47,28 @@ struct WindowGestureResolverTests {
     }
 
     @Test func pinchesCloseAndToggleFullScreen() {
-        #expect(resolve(steps: [.pinchIn]) == .close)
-        #expect(resolve(steps: [.pinchIn, .pinchIn]) == .close)
-        #expect(resolve(steps: [.pinchOut]) == .toggleFullScreen)
-        #expect(resolve(steps: [.pinchOut, .pinchOut]) == .toggleFullScreen)
+        #expect(resolve(steps: [.pinchIn]) == .window(.close))
+        #expect(resolve(steps: [.pinchIn, .pinchIn]) == .window(.close))
+        #expect(resolve(steps: [.pinchOut]) == .window(.toggleFullScreen))
+        #expect(resolve(steps: [.pinchOut, .pinchOut]) == .window(.toggleFullScreen))
     }
 
     @Test func doubleTapCenters() {
-        #expect(resolve(doubleTap: true) == .center)
+        #expect(resolve(doubleTap: true) == .window(.center))
         #expect(resolve(doubleTap: true, disabled: [.snapCenter]) == nil)
     }
 
     @Test func tabsCloseOnPinchAndSnapOnSwipe() {
         #expect(resolve(.tab(isFullscreen: false), steps: [.pinchIn]) == .closeTab)
-        #expect(resolve(.tab(isFullscreen: false), steps: [.left]) == .snap(.leftHalf))
+        #expect(resolve(.tab(isFullscreen: false), steps: [.left]) == .window(.fillLeftHalf))
         #expect(resolve(.tab(isFullscreen: false), steps: [.pinchIn], disabled: [.tabClose]) == nil)
     }
 
     @Test func fullScreenWindowsOnlyLeaveFullScreenOrClose() {
         #expect(resolve(.window(isFullscreen: true), steps: [.left]) == nil)
         #expect(resolve(.window(isFullscreen: true), steps: [.down]) == nil)
-        #expect(resolve(.window(isFullscreen: true), steps: [.pinchOut]) == .toggleFullScreen)
-        #expect(resolve(.window(isFullscreen: true), steps: [.pinchIn]) == .close)
+        #expect(resolve(.window(isFullscreen: true), steps: [.pinchOut]) == .window(.toggleFullScreen))
+        #expect(resolve(.window(isFullscreen: true), steps: [.pinchIn]) == .window(.close))
         #expect(resolve(.window(isFullscreen: true), doubleTap: true) == nil)
     }
 
@@ -93,7 +93,7 @@ struct WindowGestureResolverTests {
 
     @Test func onlyAppSwitchingActsMidGesture() {
         #expect(WindowGestureCommand.switchApp(forward: true).isImmediate)
-        #expect(!WindowGestureCommand.snap(.leftHalf).isImmediate)
+        #expect(!WindowGestureCommand.window(.fillLeftHalf).isImmediate)
         #expect(!WindowGestureCommand.minimizeFrontWindow.isImmediate)
     }
 }
