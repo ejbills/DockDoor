@@ -2,7 +2,7 @@ import Foundation
 
 enum SettingsSearchCatalog {
     static let items: [SettingsSearchItem] = generalItems + dockPreviewItems + windowSwitcherItems
-        + windowGestureItems + cmdTabItems + dockLockingItems + appearanceItems + glassItems + gesturesItems + filtersItems
+        + gestureItems + cmdTabItems + dockLockingItems + appearanceItems + glassItems + keybindItems + filtersItems
         + widgetItems + pinningItems + advancedItems + supportItems
 
     // MARK: - General
@@ -569,128 +569,226 @@ enum SettingsSearchCatalog {
         ),
     ]
 
-    // MARK: - Window Gestures
+    // MARK: - Gestures
 
-    private static let windowGestureItems: [SettingsSearchItem] = [
+    private static let gestureItems: [SettingsSearchItem] = [
         SettingsSearchItem(
             id: "windowGestures.enable",
             title: String(localized: "Window Gestures"),
             description: String(localized: "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar."),
             keywords: ["swish", "gesture", "trackpad", "snap", "tile", "window management", "pinch", "swipe", "title bar"],
-            tab: "WindowGestures",
+            tab: "Gestures",
             icon: "rectangle.split.2x2.fill"
         ),
     ] + WindowGesture.allCases.map { gesture in
         SettingsSearchItem(
             id: "windowGestures.\(gesture.rawValue)",
             title: gesture.title,
-            description: gesture.instructions,
+            description: gesture.summary,
             keywords: ["gesture", "trackpad", "swish"],
-            tab: "WindowGestures",
-            section: gesture.section.title,
+            tab: "Gestures",
+            section: gesture.area.title,
             icon: gesture.symbolName
-        )
-    } + GestureModifierRole.allCases.map { role in
-        SettingsSearchItem(
-            id: "windowGestures.modifier.\(role.rawValue)",
-            title: role.title,
-            description: role.explanation,
-            keywords: ["modifier", "key", "gesture"],
-            tab: "WindowGestures",
-            section: String(localized: "Modifier Keys"),
-            icon: role.symbolName
         )
     } + [
         SettingsSearchItem(
             id: "windowGestures.sensitivity",
-            title: String(localized: "Swipe Sensitivity"),
-            description: String(localized: "Higher values recognize swipes and pinches with less finger travel."),
+            title: String(localized: "Sensitivity"),
+            description: String(localized: "Turn this up if gestures need too much finger movement."),
             keywords: ["sensitivity", "distance", "trackpad", "gesture"],
-            tab: "WindowGestures",
-            section: String(localized: "Feel"),
+            tab: "Gestures",
+            section: String(localized: "Options"),
             icon: "slider.horizontal.3"
         ),
         SettingsSearchItem(
-            id: "windowGestures.tapAndHold",
-            title: String(localized: "Tap and hold"),
-            keywords: ["hold", "rest", "tap", "gesture"],
-            tab: "WindowGestures",
-            section: String(localized: "Feel"),
-            icon: "hand.raised"
-        ),
-        SettingsSearchItem(
-            id: "windowGestures.cancelTimeout",
-            title: String(localized: "Cancel After Resting"),
-            keywords: ["cancel", "timeout", "escape", "gesture"],
-            tab: "WindowGestures",
-            section: String(localized: "Feel"),
-            icon: "xmark.circle"
+            id: "windowGestures.livePreview",
+            title: String(localized: "Show where the window will land"),
+            keywords: ["preview", "live", "snap", "overlay"],
+            tab: "Gestures",
+            section: String(localized: "Options"),
+            icon: "rectangle.dashed"
         ),
         SettingsSearchItem(
             id: "windowGestures.haptics",
             title: String(localized: "Haptic feedback"),
             keywords: ["haptic", "vibration", "click", "feedback"],
-            tab: "WindowGestures",
-            section: String(localized: "Feel"),
+            tab: "Gestures",
+            section: String(localized: "Options"),
             icon: "waveform"
         ),
         SettingsSearchItem(
-            id: "windowGestures.tooltips",
-            title: String(localized: "Show a tooltip with the action next to the pointer"),
-            keywords: ["tooltip", "hint", "label", "preview"],
-            tab: "WindowGestures",
-            section: String(localized: "Tooltips"),
-            icon: "text.bubble"
+            id: "windowGestures.dockSpace",
+            title: String(localized: "Space for a Custom Dock"),
+            description: String(localized: "Keep a strip of the screen free so snapped windows don't cover a custom dock."),
+            keywords: ["custom dock", "reserve", "edge", "height", "space", "ubar"],
+            tab: "Gestures",
+            section: String(localized: "Space for a Custom Dock"),
+            icon: "dock.rectangle"
+        ),
+    ] + [
+        SettingsSearchItem(
+            id: "gestures.dockScroll",
+            title: String(localized: "Enable scroll gestures on dock icons"),
+            description: String(localized: "Choose what happens when scrolling directly on a dock icon."),
+            keywords: ["scroll", "dock", "gesture", "hide", "front"],
+            tab: "Gestures",
+            section: String(localized: "Dock Icon Scroll Gesture"),
+            icon: "arrow.up.and.down.circle"
         ),
         SettingsSearchItem(
-            id: "windowGestures.livePreview",
-            title: String(localized: "Preview where the window will snap"),
-            keywords: ["preview", "live", "snap", "overlay"],
-            tab: "WindowGestures",
-            section: String(localized: "Tooltips"),
-            icon: "rectangle.dashed"
+            id: "gestures.titleBarScroll",
+            title: String(localized: "Enable scroll gestures on active window title bars"),
+            description: String(localized: "Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size."),
+            keywords: ["title bar", "scroll", "maximize", "center", "spaces"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "arrow.up.and.down.text.horizontal"
         ),
         SettingsSearchItem(
-            id: "windowGestures.gridSpacing",
-            title: String(localized: "Grid Spacing"),
-            keywords: ["gap", "spacing", "margin", "padding", "snap"],
-            tab: "WindowGestures",
-            section: String(localized: "Snapping Options"),
-            icon: "square.grid.2x2"
+            id: "gestures.dockPreview",
+            title: String(localized: "Enable gestures on dock window previews"),
+            description: String(localized: "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)."),
+            keywords: ["swipe", "gesture", "preview", "dock"],
+            tab: "Gestures",
+            section: String(localized: "Dock Preview Gestures"),
+            icon: "hand.draw"
         ),
         SettingsSearchItem(
-            id: "windowGestures.stageManager",
-            title: String(localized: "Stage Manager Space"),
-            description: String(localized: "Leaves room for the recent apps strip when Stage Manager is on."),
-            keywords: ["stage manager", "offset", "strip"],
-            tab: "WindowGestures",
-            section: String(localized: "Snapping Options"),
-            icon: "sidebar.left"
+            id: "gestures.sensitivity",
+            title: String(localized: "Gesture Sensitivity"),
+            description: String(localized: "Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher."),
+            keywords: ["sensitivity", "threshold", "swipe"],
+            tab: "Gestures",
+            section: String(localized: "Gesture Settings"),
+            icon: "slider.horizontal.3"
         ),
         SettingsSearchItem(
-            id: "windowGestures.dragToUnsnap",
-            title: String(localized: "Drag a snapped window to restore its size"),
-            keywords: ["unsnap", "drag", "restore", "size"],
-            tab: "WindowGestures",
-            section: String(localized: "Snapping Options"),
-            icon: "arrow.up.and.down.and.arrow.left.and.right"
+            id: "gestures.dockIconScroll",
+            title: String(localized: "Dock icon scroll:"),
+            description: String(localized: "Choose what happens when scrolling directly on a dock icon."),
+            keywords: ["scroll", "dock", "space", "desktop", "activate", "hide"],
+            tab: "Gestures",
+            section: String(localized: "Dock Icon Scroll Gesture"),
+            icon: "dock.rectangle"
         ),
         SettingsSearchItem(
-            id: "windowGestures.resizeAdjacent",
-            title: String(localized: "Resize neighboring snapped windows together"),
-            keywords: ["resize", "divider", "adjacent", "neighbor"],
-            tab: "WindowGestures",
-            section: String(localized: "Snapping Options"),
-            icon: "rectangle.split.2x1"
+            id: "gestures.musicScroll",
+            title: String(localized: "Music & Spotify dock icon scroll"),
+            description: String(localized: "Only applies when scrolling directly on Apple Music or Spotify dock icons."),
+            keywords: ["music", "spotify", "scroll", "volume", "track"],
+            tab: "Gestures",
+            section: String(localized: "Dock Icon Scroll Gesture"),
+            icon: "music.note"
         ),
         SettingsSearchItem(
-            id: "windowGestures.ignoredApps",
-            title: String(localized: "Ignored Apps"),
-            description: String(localized: "Window gestures don't respond on these apps' windows, Dock icons or menus."),
-            keywords: ["ignore", "exclude", "blacklist", "app"],
-            tab: "WindowGestures",
-            section: String(localized: "Ignored Apps"),
-            icon: "nosign"
+            id: "gestures.centeredSizingMode",
+            title: String(localized: "Centered Window Sizing"),
+            keywords: ["centered", "sizing", "uniform", "separate"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "rectangle.center.inset.filled"
+        ),
+        SettingsSearchItem(
+            id: "gestures.centeredWindowSize",
+            title: String(localized: "Centered Window Size"),
+            keywords: ["centered", "size", "scale", "percent"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "arrow.up.left.and.arrow.down.right"
+        ),
+        SettingsSearchItem(
+            id: "gestures.centeredLockAspect",
+            title: String(localized: "Lock aspect ratio (uniform scaling)"),
+            keywords: ["aspect", "ratio", "lock", "centered"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "aspectratio"
+        ),
+        SettingsSearchItem(
+            id: "gestures.centeredWidth",
+            title: String(localized: "Centered Window Width"),
+            keywords: ["centered", "width", "size"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "arrow.left.and.right"
+        ),
+        SettingsSearchItem(
+            id: "gestures.centeredHeight",
+            title: String(localized: "Centered Window Height"),
+            keywords: ["centered", "height", "size"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "arrow.up.and.down"
+        ),
+        SettingsSearchItem(
+            id: "gestures.restoreTime",
+            title: String(localized: "Restore Window Time"),
+            description: String(localized: "Repeat the same up/down scroll within this time to restore the previous window size."),
+            keywords: ["restore", "time", "interval", "undo"],
+            tab: "Gestures",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "clock.arrow.circlepath"
+        ),
+        SettingsSearchItem(
+            id: "gestures.swipeTowardsDock",
+            title: String(localized: "Towards Dock"),
+            description: String(localized: "Swipe toward the dock edge"),
+            keywords: ["swipe", "towards", "dock", "action"],
+            tab: "Gestures",
+            section: String(localized: "Dock Preview Gestures"),
+            icon: "arrow.down.to.line"
+        ),
+        SettingsSearchItem(
+            id: "gestures.swipeAwayFromDock",
+            title: String(localized: "Away from Dock"),
+            description: String(localized: "Swipe away from the dock edge"),
+            keywords: ["swipe", "away", "dock", "action"],
+            tab: "Gestures",
+            section: String(localized: "Dock Preview Gestures"),
+            icon: "arrow.up.to.line"
+        ),
+        SettingsSearchItem(
+            id: "gestures.aeroShake",
+            title: String(localized: "Aero Shake"),
+            description: String(localized: "Shake a window preview rapidly"),
+            keywords: ["aero", "shake", "rapid", "action"],
+            tab: "Gestures",
+            section: String(localized: "Dock Preview Gestures"),
+            icon: "hand.point.up.left.and.text"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipe",
+            title: String(localized: "Open window switcher with a trackpad swipe"),
+            description: String(localized: "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."),
+            keywords: ["trackpad", "swipe", "three finger", "four finger", "gesture", "switcher", "alt tab"],
+            tab: "Gestures",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "hand.draw"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeFingers",
+            title: String(localized: "Fingers:"),
+            keywords: ["trackpad", "fingers", "three", "four", "swipe"],
+            tab: "Gestures",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "hand.raised"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeDirection",
+            title: String(localized: "Direction:"),
+            keywords: ["trackpad", "direction", "horizontal", "vertical", "swipe"],
+            tab: "Gestures",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "arrow.left.and.right"
+        ),
+        SettingsSearchItem(
+            id: "gestures.trackpadSwitcherSwipeSensitivity",
+            title: String(localized: "Swipe Sensitivity"),
+            description: String(localized: "Higher values open the switcher and change the selection with shorter swipes."),
+            keywords: ["trackpad", "sensitivity", "swipe", "distance", "speed"],
+            tab: "Gestures",
+            section: String(localized: "Trackpad Swipe for Window Switcher"),
+            icon: "slider.horizontal.3"
         ),
     ]
 
@@ -1398,51 +1496,15 @@ enum SettingsSearchCatalog {
         ]
     }()
 
-    // MARK: - Gestures & Keybinds
+    // MARK: - Keybinds
 
-    private static let gesturesItems: [SettingsSearchItem] = [
-        SettingsSearchItem(
-            id: "gestures.dockScroll",
-            title: String(localized: "Enable scroll gestures on dock icons"),
-            description: String(localized: "Choose what happens when scrolling directly on a dock icon."),
-            keywords: ["scroll", "dock", "gesture", "hide", "front"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Icon Scroll Gesture"),
-            icon: "arrow.up.and.down.circle"
-        ),
-        SettingsSearchItem(
-            id: "gestures.titleBarScroll",
-            title: String(localized: "Enable scroll gestures on active window title bars"),
-            description: String(localized: "Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size."),
-            keywords: ["title bar", "scroll", "maximize", "center", "spaces"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "arrow.up.and.down.text.horizontal"
-        ),
-        SettingsSearchItem(
-            id: "gestures.dockPreview",
-            title: String(localized: "Enable gestures on dock window previews"),
-            description: String(localized: "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)."),
-            keywords: ["swipe", "gesture", "preview", "dock"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Preview Gestures"),
-            icon: "hand.draw"
-        ),
-        SettingsSearchItem(
-            id: "gestures.sensitivity",
-            title: String(localized: "Gesture Sensitivity"),
-            description: String(localized: "Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher."),
-            keywords: ["sensitivity", "threshold", "swipe"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Gesture Settings"),
-            icon: "slider.horizontal.3"
-        ),
+    private static let keybindItems: [SettingsSearchItem] = [
         SettingsSearchItem(
             id: "gestures.middleClick",
             title: String(localized: "Middle Click"),
             description: String(localized: "Action performed when middle-clicking on a window preview."),
             keywords: ["middle", "click", "mouse", "button", "open", "activate", "window", "app"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Mouse Actions"),
             icon: "computermouse"
         ),
@@ -1451,7 +1513,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Window Preview Keyboard Shortcuts"),
             description: String(localized: "Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode."),
             keywords: ["shortcut", "cmd", "keyboard", "hotkey"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Preview Keyboard Shortcuts"),
             icon: "command"
         ),
@@ -1459,7 +1521,7 @@ enum SettingsSearchCatalog {
             id: "gestures.switcherKeybind",
             title: String(localized: "Window Switcher Shortcuts"),
             keywords: ["keybind", "shortcut", "alt tab", "switcher", "initializer"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "keyboard"
         ),
@@ -1468,7 +1530,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Enable Vim Motions"),
             description: String(localized: "Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused."),
             keywords: ["vim", "hjkl", "navigation"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "character.textbox"
         ),
@@ -1477,123 +1539,16 @@ enum SettingsSearchCatalog {
             title: String(localized: "Pass Arrow Keys Through to System"),
             description: String(localized: "When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching."),
             keywords: ["arrow", "passthrough", "spaces", "ctrl"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "arrow.left.arrow.right"
         ),
-        SettingsSearchItem(
-            id: "gestures.switcherGestures",
-            title: String(localized: "Enable gestures in window switcher"),
-            description: String(localized: "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode."),
-            keywords: ["swipe", "gesture", "switcher"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Window Switcher Gestures"),
-            icon: "hand.draw"
-        ),
-        // Dock Scroll - additional
-        SettingsSearchItem(
-            id: "gestures.dockIconScroll",
-            title: String(localized: "Dock icon scroll:"),
-            description: String(localized: "Choose what happens when scrolling directly on a dock icon."),
-            keywords: ["scroll", "dock", "space", "desktop", "activate", "hide"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Icon Scroll Gesture"),
-            icon: "dock.rectangle"
-        ),
-        SettingsSearchItem(
-            id: "gestures.musicScroll",
-            title: String(localized: "Music & Spotify dock icon scroll"),
-            description: String(localized: "Only applies when scrolling directly on Apple Music or Spotify dock icons."),
-            keywords: ["music", "spotify", "scroll", "volume", "track"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Icon Scroll Gesture"),
-            icon: "music.note"
-        ),
-        // Title Bar Scroll - additional
-        SettingsSearchItem(
-            id: "gestures.centeredSizingMode",
-            title: String(localized: "Centered Window Sizing"),
-            keywords: ["centered", "sizing", "uniform", "separate"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "rectangle.center.inset.filled"
-        ),
-        SettingsSearchItem(
-            id: "gestures.centeredWindowSize",
-            title: String(localized: "Centered Window Size"),
-            keywords: ["centered", "size", "scale", "percent"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "arrow.up.left.and.arrow.down.right"
-        ),
-        SettingsSearchItem(
-            id: "gestures.centeredLockAspect",
-            title: String(localized: "Lock aspect ratio (uniform scaling)"),
-            keywords: ["aspect", "ratio", "lock", "centered"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "aspectratio"
-        ),
-        SettingsSearchItem(
-            id: "gestures.centeredWidth",
-            title: String(localized: "Centered Window Width"),
-            keywords: ["centered", "width", "size"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "arrow.left.and.right"
-        ),
-        SettingsSearchItem(
-            id: "gestures.centeredHeight",
-            title: String(localized: "Centered Window Height"),
-            keywords: ["centered", "height", "size"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "arrow.up.and.down"
-        ),
-        SettingsSearchItem(
-            id: "gestures.restoreTime",
-            title: String(localized: "Restore Window Time"),
-            description: String(localized: "Repeat the same up/down scroll within this time to restore the previous window size."),
-            keywords: ["restore", "time", "interval", "undo"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Title Bar Scroll Gesture"),
-            icon: "clock.arrow.circlepath"
-        ),
-        // Dock Preview Gestures - additional
-        SettingsSearchItem(
-            id: "gestures.swipeTowardsDock",
-            title: String(localized: "Towards Dock"),
-            description: String(localized: "Swipe toward the dock edge"),
-            keywords: ["swipe", "towards", "dock", "action"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Preview Gestures"),
-            icon: "arrow.down.to.line"
-        ),
-        SettingsSearchItem(
-            id: "gestures.swipeAwayFromDock",
-            title: String(localized: "Away from Dock"),
-            description: String(localized: "Swipe away from the dock edge"),
-            keywords: ["swipe", "away", "dock", "action"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Preview Gestures"),
-            icon: "arrow.up.to.line"
-        ),
-        SettingsSearchItem(
-            id: "gestures.aeroShake",
-            title: String(localized: "Aero Shake"),
-            description: String(localized: "Shake a window preview rapidly"),
-            keywords: ["aero", "shake", "rapid", "action"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Dock Preview Gestures"),
-            icon: "hand.point.up.left.and.text"
-        ),
-        // Window Switcher Shortcuts - additional
         SettingsSearchItem(
             id: "gestures.backwardKey",
             title: String(localized: "Backward Key"),
             description: String(localized: "The key used to navigate backward in the window switcher."),
             keywords: ["backward", "key", "navigate", "back"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "arrow.left"
         ),
@@ -1601,7 +1556,7 @@ enum SettingsSearchCatalog {
             id: "gestures.requireShiftTab",
             title: String(localized: "Require \u{21E7}+Tab to go back in Switcher"),
             keywords: ["shift", "tab", "back", "require"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "arrow.uturn.backward"
         ),
@@ -1610,7 +1565,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Selection Key"),
             description: String(localized: "The key used to select and bring to front the highlighted window in the switcher."),
             keywords: ["selection", "key", "enter", "return", "select"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "return"
         ),
@@ -1619,7 +1574,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Alternate Shortcut"),
             description: String(localized: "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."),
             keywords: ["alternate", "shortcut", "trigger", "mode", "modifier", "escape"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "keyboard"
         ),
@@ -1628,7 +1583,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Search Trigger Key"),
             description: String(localized: "The key that activates search while the window switcher is open."),
             keywords: ["search", "trigger", "key", "activate"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "magnifyingglass"
         ),
@@ -1637,44 +1592,9 @@ enum SettingsSearchCatalog {
             title: String(localized: "Fullscreen App Blacklist"),
             description: String(localized: "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."),
             keywords: ["fullscreen", "blacklist", "exclude", "app"],
-            tab: "GesturesKeybinds",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "app.badge.checkmark"
-        ),
-        // Trackpad Swipe for Window Switcher
-        SettingsSearchItem(
-            id: "gestures.trackpadSwitcherSwipe",
-            title: String(localized: "Open window switcher with a trackpad swipe"),
-            description: String(localized: "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."),
-            keywords: ["trackpad", "swipe", "three finger", "four finger", "gesture", "switcher", "alt tab"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Trackpad Swipe for Window Switcher"),
-            icon: "hand.draw"
-        ),
-        SettingsSearchItem(
-            id: "gestures.trackpadSwitcherSwipeFingers",
-            title: String(localized: "Fingers:"),
-            keywords: ["trackpad", "fingers", "three", "four", "swipe"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Trackpad Swipe for Window Switcher"),
-            icon: "hand.raised"
-        ),
-        SettingsSearchItem(
-            id: "gestures.trackpadSwitcherSwipeDirection",
-            title: String(localized: "Direction:"),
-            keywords: ["trackpad", "direction", "horizontal", "vertical", "swipe"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Trackpad Swipe for Window Switcher"),
-            icon: "arrow.left.and.right"
-        ),
-        SettingsSearchItem(
-            id: "gestures.trackpadSwitcherSwipeSensitivity",
-            title: String(localized: "Swipe Sensitivity"),
-            description: String(localized: "Higher values open the switcher and change the selection with shorter swipes."),
-            keywords: ["trackpad", "sensitivity", "swipe", "distance", "speed"],
-            tab: "GesturesKeybinds",
-            section: String(localized: "Trackpad Swipe for Window Switcher"),
-            icon: "slider.horizontal.3"
         ),
     ]
 

@@ -73,6 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         MediaRemoteService.shared.activate()
+        ScreenReservations.shared.start()
 
         if !Defaults[.launched] {
             handleFirstTimeLaunch()

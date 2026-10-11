@@ -1,6 +1,5 @@
 import AppKit
 import ApplicationServices
-import Defaults
 
 extension GestureWindowTarget {
     init(window: WindowInfo) {
@@ -102,6 +101,8 @@ extension GestureWindowTarget {
 }
 
 enum WindowGestureScreens {
+    private static let stageManagerOffset: CGFloat = 140
+
     static func screen(containing frame: CGRect) -> NSScreen? {
         let screens = NSScreen.screens
         let best = screens.max { overlap($0.frame, frame) < overlap($1.frame, frame) }
@@ -115,64 +116,20 @@ enum WindowGestureScreens {
         NSScreen.screens.isEmpty ? nil : NSScreen.screenFromQuartzPoint(point)
     }
 
-    static func geometry(for screen: NSScreen) -> SnapScreenGeometry {
-        SnapScreenGeometry(
-            visibleFrame: usableFrame(for: screen),
-            spacing: Defaults[.windowGestureGridSpacing],
-            includeEdges: Defaults[.windowGestureSpacingIncludesEdges]
-        )
+    static func frame(for region: SnapRegion, on screen: NSScreen) -> CGRect {
+        region.frame(in: usableFrame(for: screen))
     }
 
     static func usableFrame(for screen: NSScreen) -> CGRect {
-        let offset = isStageManagerEnabled ? Defaults[.windowGestureStageManagerOffset] : 0
-        return SnapScreenGeometry.usableFrame(
-            visibleFrame: screen.visibleFrame,
-            stageManagerOffset: offset,
+        SnapScreenGeometry.usableFrame(
+            visibleFrame: screen.snappingFrame,
+            stageManagerOffset: isStageManagerEnabled ? stageManagerOffset : 0,
             stageManagerOnLeft: DockUtils.getDockPosition() != .left
         )
     }
 
     static var isStageManagerEnabled: Bool {
         UserDefaults(suiteName: "com.apple.WindowManager")?.bool(forKey: "GloballyEnabled") == true
-    }
-
-    static func screen(from source: NSScreen, toward direction: GestureDirection) -> NSScreen? {
-        let others = NSScreen.screens.filter { $0 != source }
-        guard let index = neighborIndex(of: others.map(\.frame), from: source.frame, toward: direction) else { return nil }
-        return others[index]
-    }
-
-    static func otherScreen(than source: NSScreen) -> NSScreen? {
-        let screens = NSScreen.screens
-        guard screens.count > 1, let index = screens.firstIndex(of: source) else { return nil }
-        return screens[(index + 1) % screens.count]
-    }
-
-    static func neighborIndex(of candidates: [CGRect], from source: CGRect, toward direction: GestureDirection) -> Int? {
-        let origin = CGPoint(x: source.midX, y: source.midY)
-        let scored = candidates.enumerated().compactMap { index, rect -> (index: Int, distance: CGFloat)? in
-            let dx = rect.midX - origin.x
-            let dy = rect.midY - origin.y
-            let (along, across): (CGFloat, CGFloat) = switch direction {
-            case .right: (dx, dy)
-            case .left: (-dx, dy)
-            case .up: (dy, dx)
-            case .down: (-dy, dx)
-            }
-            guard along > 0, abs(across) <= along * 2 else { return nil }
-            return (index, hypot(dx, dy))
-        }
-        return scored.min { $0.distance < $1.distance }?.index
-    }
-
-    static func map(_ frame: CGRect, from source: CGRect, to destination: CGRect) -> CGRect {
-        let width = min(frame.width, destination.width)
-        let height = min(frame.height, destination.height)
-        let relativeX = source.width > frame.width ? (frame.minX - source.minX) / (source.width - frame.width) : 0.5
-        let relativeY = source.height > frame.height ? (frame.minY - source.minY) / (source.height - frame.height) : 0.5
-        let x = destination.minX + (destination.width - width) * min(max(relativeX, 0), 1)
-        let y = destination.minY + (destination.height - height) * min(max(relativeY, 0), 1)
-        return CGRect(x: x.rounded(), y: y.rounded(), width: width.rounded(), height: height.rounded())
     }
 
     static func centered(_ size: CGSize, in frame: CGRect) -> CGRect {
@@ -248,17 +205,6 @@ final class WindowSnapRegistry: @unchecked Sendable {
             return nil
         }
         return record
-    }
-
-    func liveRecords(screenIdentifier: String?) -> [Record] {
-        lock.lock()
-        let snapshot = Array(records.values)
-        lock.unlock()
-
-        return snapshot.filter { record in
-            guard screenIdentifier == nil || record.screenIdentifier == screenIdentifier else { return false }
-            return liveRecord(for: record.windowID) != nil
-        }
     }
 
     static func matches(_ lhs: CGRect, _ rhs: CGRect) -> Bool {

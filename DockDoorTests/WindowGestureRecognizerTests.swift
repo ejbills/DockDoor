@@ -192,13 +192,13 @@ struct WindowGestureRecognizerTests {
     }
 
     @Test func sensitivityScalesTheStepDistance() {
-        let sensitive = WindowGestureRecognizer.Configuration.make(sensitivity: 2, holdEnabled: true, holdDuration: 0.35, cancelTimeout: 1.5)
-        let sluggish = WindowGestureRecognizer.Configuration.make(sensitivity: 0.5, holdEnabled: false, holdDuration: 0.35, cancelTimeout: 0)
-        let clamped = WindowGestureRecognizer.Configuration.make(sensitivity: 50, holdEnabled: true, holdDuration: 0.35, cancelTimeout: 1.5)
+        let sensitive = WindowGestureRecognizer.Configuration.make(sensitivity: 2, holds: true)
+        let sluggish = WindowGestureRecognizer.Configuration.make(sensitivity: 0.5, holds: false)
+        let clamped = WindowGestureRecognizer.Configuration.make(sensitivity: 50, holds: true)
         #expect(sensitive.stepDistance == 20)
+        #expect(sensitive.holdDuration != nil)
         #expect(sluggish.stepDistance == 80)
         #expect(sluggish.holdDuration == nil)
-        #expect(sluggish.cancelTimeout == nil)
         #expect(clamped.stepDistance == 20)
     }
 

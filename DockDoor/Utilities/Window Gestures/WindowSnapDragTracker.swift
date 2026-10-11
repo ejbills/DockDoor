@@ -1,5 +1,4 @@
 import AppKit
-import Defaults
 
 @MainActor
 final class WindowSnapDragTracker {
@@ -58,10 +57,6 @@ final class WindowSnapDragTracker {
 
     private func mouseDown() {
         drag = nil
-        let dragToUnsnap = Defaults[.windowGestureDragToUnsnap]
-        let resizeAdjacent = Defaults[.windowGestureResizeAdjacent]
-        guard dragToUnsnap || resizeAdjacent else { return }
-
         let point = NSEvent.mouseLocation
         let records = registry.allRecords()
         let candidates = records.filter {
@@ -73,7 +68,7 @@ final class WindowSnapDragTracker {
         else { return }
 
         let frame = record.snappedFrame
-        if resizeAdjacent, let edge = Self.edge(of: frame, near: point) {
+        if let edge = Self.edge(of: frame, near: point) {
             let followers = followers(of: record, among: records, axis: edge.axis, line: edge.line, draggedMaxEdge: edge.isMax)
             if !followers.isEmpty {
                 drag = .resize(record: record, axis: edge.axis, draggedMaxEdge: edge.isMax, followers: followers, validity: FollowerValidity())
@@ -81,7 +76,7 @@ final class WindowSnapDragTracker {
             }
         }
 
-        if dragToUnsnap, point.y >= frame.maxY - Self.titleBarHeight, point.y <= frame.maxY {
+        if point.y >= frame.maxY - Self.titleBarHeight, point.y <= frame.maxY {
             drag = .unsnap(record: record, start: point)
         }
     }
@@ -130,7 +125,6 @@ final class WindowSnapDragTracker {
         guard finishing || !resizeInFlight else { return }
         resizeInFlight = true
         let registry = registry
-        let spacing = Defaults[.windowGestureGridSpacing]
 
         queue.async { [weak self] in
             defer {
@@ -160,7 +154,7 @@ final class WindowSnapDragTracker {
                     follower.record.snappedFrame,
                     axis: axis,
                     movesMinEdge: follower.movesMinEdge,
-                    edge: follower.movesMinEdge == !draggedMaxEdge ? line : (draggedMaxEdge ? line + spacing : line - spacing)
+                    edge: line
                 )
                 follower.record.target.setFrame(frame)
                 if finishing {
@@ -192,17 +186,15 @@ final class WindowSnapDragTracker {
     }
 
     private func followers(of record: WindowSnapRegistry.Record, among records: [WindowSnapRegistry.Record], axis: Axis, line: CGFloat, draggedMaxEdge: Bool) -> [Follower] {
-        let spacing = Defaults[.windowGestureGridSpacing]
-        let across = draggedMaxEdge ? line + spacing : line - spacing
-        return records.compactMap { other in
+        records.compactMap { other in
             guard other.windowID != record.windowID, other.screenIdentifier == record.screenIdentifier else { return nil }
             let frame = other.snappedFrame
             let (minEdge, maxEdge) = axis == .vertical ? (frame.minX, frame.maxX) : (frame.minY, frame.maxY)
             if draggedMaxEdge {
-                if abs(minEdge - across) <= Self.lineTolerance { return Follower(record: other, movesMinEdge: true) }
+                if abs(minEdge - line) <= Self.lineTolerance { return Follower(record: other, movesMinEdge: true) }
                 if abs(maxEdge - line) <= Self.lineTolerance { return Follower(record: other, movesMinEdge: false) }
             } else {
-                if abs(maxEdge - across) <= Self.lineTolerance { return Follower(record: other, movesMinEdge: false) }
+                if abs(maxEdge - line) <= Self.lineTolerance { return Follower(record: other, movesMinEdge: false) }
                 if abs(minEdge - line) <= Self.lineTolerance { return Follower(record: other, movesMinEdge: true) }
             }
             return nil

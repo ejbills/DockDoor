@@ -57,15 +57,6 @@ func CGSHWCaptureWindowList(
     _ options: CGSWindowCaptureOptions
 ) -> CFArray?
 
-// Private: lets a background app hide the cursor via the "SetsCursorInBackground" property
-@_silgen_name("CGSSetConnectionProperty") @discardableResult
-func CGSSetConnectionProperty(
-    _ cid: CGSConnectionID,
-    _ targetCID: CGSConnectionID,
-    _ key: CFString,
-    _ value: CFTypeRef
-) -> Int32
-
 // Private spaces API: returns array of space IDs corresponding to the provided windows
 @_silgen_name("CGSCopySpacesForWindows")
 func CGSCopySpacesForWindows(

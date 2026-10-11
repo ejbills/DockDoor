@@ -45,13 +45,14 @@ struct WindowGestureRecognizer {
 
         static let sensitivityRange: ClosedRange<CGFloat> = 0.5 ... 2
 
-        static func make(sensitivity: CGFloat, holdEnabled: Bool, holdDuration: TimeInterval, cancelTimeout: TimeInterval) -> Configuration {
+        static func make(sensitivity: CGFloat, holds: Bool) -> Configuration {
             let clamped = min(max(sensitivity, sensitivityRange.lowerBound), sensitivityRange.upperBound)
             var configuration = Configuration()
             configuration.stepDistance /= clamped
             configuration.pinchDistance /= clamped
-            configuration.holdDuration = holdEnabled ? max(holdDuration, 0.1) : nil
-            configuration.cancelTimeout = cancelTimeout > 0 ? cancelTimeout : nil
+            if !holds {
+                configuration.holdDuration = nil
+            }
             return configuration
         }
     }

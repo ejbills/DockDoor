@@ -46,6 +46,7 @@ enum WindowGestureZone {
 }
 
 enum WindowGestureZoneResolver {
+    static let titleBarHeight: CGFloat = 28
     static let titleBandHeight: CGFloat = 36
     static let maximumToolbarHeight: CGFloat = 96
     private static let messagingTimeout: Float = 0.15
@@ -76,24 +77,24 @@ enum WindowGestureZoneResolver {
         case notHere
     }
 
-    static func resolve(at point: CGPoint, anywhere: Bool, isIgnored: (NSRunningApplication) -> Bool) -> WindowGestureZone? {
+    static func resolve(at point: CGPoint) -> WindowGestureZone? {
         guard !isScreenLocked else { return nil }
         let screen = NSScreen.screenFromQuartzPoint(point)
         let windows = onScreenWindows()
 
-        switch menuBarZone(at: point, screen: screen, windows: windows, isIgnored: isIgnored) {
+        switch menuBarZone(at: point, screen: screen, windows: windows) {
         case let .zone(zone): return zone
         case .blocked: return nil
         case .notHere: break
         }
 
-        switch dockZone(at: point, screen: screen, isIgnored: isIgnored) {
+        switch dockZone(at: point, screen: screen) {
         case let .zone(zone): return zone
         case .blocked: return nil
         case .notHere: break
         }
 
-        if case let .zone(zone) = windowZone(at: point, windows: windows, anywhere: anywhere, isIgnored: isIgnored) {
+        if case let .zone(zone) = windowZone(at: point, windows: windows) {
             return zone
         }
         return nil
@@ -101,7 +102,7 @@ enum WindowGestureZoneResolver {
 
     // MARK: - Menu Bar
 
-    private static func menuBarZone(at point: CGPoint, screen: NSScreen, windows: [[String: AnyObject]], isIgnored: (NSRunningApplication) -> Bool) -> Outcome {
+    private static func menuBarZone(at point: CGPoint, screen: NSScreen, windows: [[String: AnyObject]]) -> Outcome {
         let menuBarHeight = screen.frame.maxY - screen.visibleFrame.maxY
         let screenTop = screen.cgFrame.minY
         guard menuBarHeight > 0, point.y >= screenTop, point.y < screenTop + menuBarHeight else { return .notHere }
@@ -129,8 +130,7 @@ enum WindowGestureZoneResolver {
 
         guard let menuBar = node.parent,
               let items = try? menuBar.children(),
-              items.count > 1, CFEqual(items[1], hit),
-              !isIgnored(frontmost)
+              items.count > 1, CFEqual(items[1], hit)
         else {
             return .blocked
         }
@@ -139,13 +139,12 @@ enum WindowGestureZoneResolver {
 
     // MARK: - Dock
 
-    private static func dockZone(at point: CGPoint, screen: NSScreen, isIgnored: (NSRunningApplication) -> Bool) -> Outcome {
+    private static func dockZone(at point: CGPoint, screen: NSScreen) -> Outcome {
         guard isWithinDockBand(point, screen: screen), let dockObserver = DockObserver.activeInstance else { return .notHere }
         let hovered = dockObserver.getDockItemAppStatusUnderMouse()
         guard hovered.dockItemElement != nil else { return .notHere }
         guard case let .success(app) = hovered.status,
-              app.processIdentifier != ProcessInfo.processInfo.processIdentifier,
-              !isIgnored(app)
+              app.processIdentifier != ProcessInfo.processInfo.processIdentifier
         else {
             return .blocked
         }
@@ -177,7 +176,7 @@ enum WindowGestureZoneResolver {
 
     // MARK: - Windows
 
-    private static func windowZone(at point: CGPoint, windows: [[String: AnyObject]], anywhere: Bool, isIgnored: (NSRunningApplication) -> Bool) -> Outcome {
+    private static func windowZone(at point: CGPoint, windows: [[String: AnyObject]]) -> Outcome {
         guard let hit = topWindow(at: point, in: windows) else {
             return .notHere
         }
@@ -187,20 +186,22 @@ enum WindowGestureZoneResolver {
               (hit[kCGWindowLayer as String] as? NSNumber)?.intValue == 0,
               let windowBounds = bounds(of: hit),
               let app = NSRunningApplication(processIdentifier: pid),
-              app.activationPolicy != .prohibited,
-              !isIgnored(app)
+              app.activationPolicy != .prohibited
         else {
             return .blocked
         }
 
         let offsetFromTop = point.y - windowBounds.minY
-        if !anywhere, offsetFromTop > maximumToolbarHeight {
+        if offsetFromTop > maximumToolbarHeight {
             return .notHere
         }
 
+        let windowID = (hit[kCGWindowNumber as String] as? NSNumber).map { CGWindowID($0.uint32Value) }
         let deadline = CFAbsoluteTimeGetCurrent() + resolutionBudget
         let appElement = AXUIElementCreateApplication(pid)
-        guard let hitElement = element(in: appElement, at: point), let hitNode = node(for: hitElement) else { return .notHere }
+        guard let hitElement = element(in: appElement, at: point), let hitNode = node(for: hitElement) else {
+            return cachedTitleBarZone(windowID: windowID, bounds: windowBounds, offsetFromTop: offsetFromTop, app: app)
+        }
 
         var chain: [AXNode] = []
         var windowElement: AXUIElement?
@@ -222,18 +223,17 @@ enum WindowGestureZoneResolver {
         }
 
         guard CFAbsoluteTimeGetCurrent() < deadline,
-              let windowElement,
-              let windowNode = node(for: windowElement),
-              acceptedWindowSubroles.contains(windowNode.subrole ?? "")
-        else { return .notHere }
+              let windowElement = windowElement ?? cachedWindow(windowID, pid: pid)?.axElement
+        else {
+            return cachedTitleBarZone(windowID: windowID, bounds: windowBounds, offsetFromTop: offsetFromTop, app: app)
+        }
+        guard let windowNode = node(for: windowElement), acceptedWindowSubroles.contains(windowNode.subrole ?? "") else {
+            DebugLogger.log("WindowGestures", details: "unsupported window in \(app.localizedName ?? "-") chain=\(describe(chain))")
+            return .notHere
+        }
 
-        let windowID = (hit[kCGWindowNumber as String] as? NSNumber).map { CGWindowID($0.uint32Value) }
         let target = GestureWindowTarget(element: windowElement, app: app, windowID: windowID)
         let isFullscreen = (try? windowElement.isFullscreen()) == true
-
-        if anywhere {
-            return .zone(.window(target, isFullscreen: isFullscreen))
-        }
 
         if let tabIndex = chain.prefix(4).firstIndex(where: { isTab($0, in: chain) }) {
             let scrollable = chain.suffix(from: tabIndex + 1).prefix(4).contains { $0.role == kAXScrollAreaRole as String }
@@ -249,10 +249,29 @@ enum WindowGestureZoneResolver {
         if inToolbar, !roles.contains(where: contentRoles.contains) {
             return .zone(.window(target, isFullscreen: isFullscreen))
         }
-        if offsetFromTop <= titleBandHeight, !isFullscreen, !roles.contains(where: scrollingRoles.contains) {
+        if !isFullscreen, offsetFromTop <= titleBarHeight || (offsetFromTop <= titleBandHeight && !roles.contains(where: scrollingRoles.contains)) {
             return .zone(.window(target, isFullscreen: isFullscreen))
         }
+        DebugLogger.log("WindowGestures", details: "not a title bar in \(app.localizedName ?? "-") offset=\(offsetFromTop) chain=\(describe(chain))")
         return .notHere
+    }
+
+    private static func cachedWindow(_ windowID: CGWindowID?, pid: pid_t) -> WindowInfo? {
+        guard let windowID else { return nil }
+        return WindowUtil.readCachedWindows(for: pid).first { $0.id == windowID && !$0.isMinimized }
+    }
+
+    private static func cachedTitleBarZone(windowID: CGWindowID?, bounds: CGRect, offsetFromTop: CGFloat, app: NSRunningApplication) -> Outcome {
+        guard offsetFromTop <= titleBarHeight, let cached = cachedWindow(windowID, pid: app.processIdentifier) else {
+            DebugLogger.log("WindowGestures", details: "hit test failed in \(app.localizedName ?? "-") offset=\(offsetFromTop)")
+            return .notHere
+        }
+        let isFullscreen = NSScreen.screens.contains { $0.cgFrame == bounds }
+        return .zone(.window(GestureWindowTarget(window: cached), isFullscreen: isFullscreen))
+    }
+
+    private static func describe(_ chain: [AXNode]) -> String {
+        chain.map { node in [node.role, node.subrole].compactMap { $0 }.joined(separator: "/") }.joined(separator: ">")
     }
 
     private static func isTab(_ node: AXNode, in chain: [AXNode]) -> Bool {

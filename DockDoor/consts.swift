@@ -319,30 +319,12 @@ extension Defaults.Keys {
     // MARK: - Window Gestures
 
     static let enableWindowGestures = Key<Bool>("enableWindowGestures", default: false)
-    static let windowGesturesDisabled = Key<Set<WindowGesture>>("windowGesturesDisabled", default: WindowGesture.disabledByDefault)
+    static let windowGesturesDisabled = Key<Set<WindowGesture>>("windowGesturesDisabled", default: [])
     static let windowGestureSensitivity = Key<CGFloat>("windowGestureSensitivity", default: 1)
-    static let windowGestureTapAndHold = Key<Bool>("windowGestureTapAndHold", default: true)
-    static let windowGestureHoldDuration = Key<Double>("windowGestureHoldDuration", default: 0.35)
-    static let windowGestureCancelTimeout = Key<Double>("windowGestureCancelTimeout", default: 1.5)
     static let windowGestureHaptics = Key<Bool>("windowGestureHaptics", default: true)
-    static let windowGestureShowTooltips = Key<Bool>("windowGestureShowTooltips", default: true)
-    static let windowGestureTooltipSize = Key<WindowGestureTooltipSize>("windowGestureTooltipSize", default: .medium)
     static let windowGestureLivePreview = Key<Bool>("windowGestureLivePreview", default: true)
-    static let windowGestureHideCursor = Key<Bool>("windowGestureHideCursor", default: false)
-    static let windowGestureAnywhereModifier = Key<GestureModifierKey>("windowGestureAnywhereModifier", default: .function)
-    static let windowGestureGeneralModifier = Key<GestureModifierKey>("windowGestureGeneralModifier", default: .option)
-    static let windowGestureSecondaryModifier = Key<GestureModifierKey>("windowGestureSecondaryModifier", default: .shift)
-    static let windowGestureTertiaryModifier = Key<GestureModifierKey>("windowGestureTertiaryModifier", default: .control)
-    static let windowGestureScreenModifier = Key<GestureModifierKey>("windowGestureScreenModifier", default: .command)
-    static let windowGestureGridSpacing = Key<CGFloat>("windowGestureGridSpacing", default: 0)
-    static let windowGestureSpacingIncludesEdges = Key<Bool>("windowGestureSpacingIncludesEdges", default: true)
-    static let windowGestureStageManagerOffset = Key<CGFloat>("windowGestureStageManagerOffset", default: 140)
-    static let windowGestureDragToUnsnap = Key<Bool>("windowGestureDragToUnsnap", default: true)
-    static let windowGestureResizeAdjacent = Key<Bool>("windowGestureResizeAdjacent", default: true)
-    static let windowGestureActivateAfterSnap = Key<Bool>("windowGestureActivateAfterSnap", default: true)
-    static let windowGestureCenterAction = Key<WindowGestureCenterAction>("windowGestureCenterAction", default: .centerAndRestore)
-    static let windowGestureMoveCursorWithWindow = Key<Bool>("windowGestureMoveCursorWithWindow", default: true)
-    static let windowGestureIgnoredApps = Key<[String]>("windowGestureIgnoredApps", default: [])
+    static let customDockReservationEdge = Key<ScreenReservationEdge>("customDockReservationEdge", default: .none)
+    static let customDockReservationThickness = Key<CGFloat>("customDockReservationThickness", default: 70)
 
     // MARK: - Middle Click Action
 

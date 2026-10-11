@@ -119,6 +119,21 @@
             <result type="text" description="Success or error message."/>
         </command>
 
+        <command name="reserve screen edge" code="DKDRrsve" description="Reserve space at a screen edge, such as for a custom dock, so DockDoor's window snapping leaves it free. Use the edge 'none' or a thickness of 0 to clear it.">
+            <cocoa class="ReserveScreenEdgeCommand"/>
+            <direct-parameter type="text" description="Edge: 'bottom', 'left', 'right', 'top', or 'none'."/>
+            <parameter name="thickness" code="thck" type="real" optional="yes" description="Height of a bottom or top dock, or width of a left or right dock, in points. A top reservation is measured from below the menu bar.">
+                <cocoa key="thickness"/>
+            </parameter>
+            <parameter name="for" code="srce" type="text" optional="yes" description="Who is reserving the space, such as your app's bundle ID. A reservation made for a bundle ID ends when that app quits. Defaults to 'applescript'.">
+                <cocoa key="source"/>
+            </parameter>
+            <parameter name="on display" code="dspl" type="text" optional="yes" description="Display UUID or display ID, or 'main'. Defaults to every display.">
+                <cocoa key="display"/>
+            </parameter>
+            <result type="text" description="Success or error message."/>
+        </command>
+
         <!-- Window Data Commands (with images) -->
 
         <command name="get window" code="DKDRgtwn" description="Get window info including cached preview image.">
