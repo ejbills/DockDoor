@@ -673,8 +673,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : "(숨김)"
           }
         },
         "nl" : {
@@ -733,8 +733,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (gizli)"
           }
         },
         "uk" : {
@@ -864,8 +864,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : "(최소화됨)"
           }
         },
         "nl" : {
@@ -888,8 +888,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (minimizado)"
           }
         },
         "pt-PT" : {
@@ -924,8 +924,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (küçültülmüş)"
           }
         },
         "uk" : {
@@ -1926,8 +1926,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld app%2$@ selected"
+            "state" : "translated",
+            "value" : "%1$lld تطبيق%2$@ محدد"
           }
         },
         "ca" : {
@@ -2123,7 +2123,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld px"
           }
         },
@@ -2313,7 +2313,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld%%"
           }
         },
@@ -2503,8 +2503,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld+ windows"
+            "state" : "translated",
+            "value" : "%lld+ نوافذ"
           }
         },
         "ca" : {
@@ -3458,8 +3458,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• عند التنقل فوق المرتبة في الأسفل، تتدفق النوافذ في صفوف من اليسار إلى اليمين"
           }
         },
         "ca" : {
@@ -3649,8 +3649,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "• عند التنقل فوق المربع على الجانبين، تتدفق النوافذ في الأعمدة من الأعلى إلى الأسفل"
           }
         },
         "ca" : {
@@ -3840,8 +3840,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• عند استخدام مبدل النافذة، تتدفق النوافذ دائما في صفوف من اليسار إلى اليمين"
           }
         },
         "ca" : {
@@ -4220,8 +4220,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "+%lld more"
+            "state" : "translated",
+            "value" : "+%lld أخرى"
           }
         },
         "ca" : {
@@ -4410,7 +4410,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "×"
           }
         },
@@ -4600,7 +4600,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "⌘"
           }
         },
@@ -4791,8 +4791,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "20 دولار لمرة واحدة"
           }
         },
         "ca" : {
@@ -4881,8 +4881,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "$20 결제 한 번"
           }
         },
         "nl" : {
@@ -4941,8 +4941,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "$20 tek-zamanlı"
           }
         },
         "uk" : {
@@ -5173,8 +5173,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. حدد \"الأمر (⌘)\" كمفتاح التهيئة."
           }
         },
         "ca" : {
@@ -5364,7 +5364,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         },
@@ -5746,8 +5746,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. انقر فوق \"بدء تسجيل مفتاح المشغل\"."
           }
         },
         "ca" : {
@@ -5937,8 +5937,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2X-Large"
+            "state" : "translated",
+            "value" : "2X-كبير"
           }
         },
         "ca" : {
@@ -6127,7 +6127,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3"
           }
         },
@@ -6217,13 +6217,13 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3"
           }
         },
@@ -6277,7 +6277,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3"
           }
         },
@@ -6295,7 +6295,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3"
           }
         },
@@ -6318,8 +6318,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 حواسيب · ضمان استرداد الأموال لمدة 14 يوماً"
           }
         },
         "ca" : {
@@ -6408,8 +6408,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3개의 맥에서 · 14일 내 환불 보장"
           }
         },
         "nl" : {
@@ -6468,8 +6468,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 Mac'e kadar · 14 gün para iade garantisi"
           }
         },
         "uk" : {
@@ -6700,8 +6700,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. اضغط فقط على مفتاح التبويب (ليس الأمر +Tab)."
           }
         },
         "ca" : {
@@ -6891,8 +6891,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3X-Large"
+            "state" : "translated",
+            "value" : "3X-كبير"
           }
         },
         "ca" : {
@@ -7081,7 +7081,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4"
           }
         },
@@ -7171,13 +7171,13 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4"
           }
         },
@@ -7231,7 +7231,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4"
           }
         },
@@ -7249,7 +7249,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4"
           }
         },
@@ -7463,8 +7463,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. سيتم تعيين ارتباط المفتاح الخاص بك إلى الأمر +Tab."
           }
         },
         "ca" : {
@@ -7653,7 +7653,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "5 FPS"
           }
         },
@@ -7843,7 +7843,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "10 FPS"
           }
         },
@@ -8033,7 +8033,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "15 FPS"
           }
         },
@@ -8223,7 +8223,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "24 FPS"
           }
         },
@@ -8413,7 +8413,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "30 FPS"
           }
         },
@@ -8603,7 +8603,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "60 FPS"
           }
         },
@@ -8793,7 +8793,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "120 FPS (ProMotion)"
           }
         },
@@ -8985,8 +8985,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A separate paid app that fully replaces the macOS Dock with profiles, widgets, file tray, media controls with lyrics, and a built-in switcher."
+            "state" : "translated",
+            "value" : "تطبيق منفصل مدفوع يستبدل بشكل كامل منصة macOS بملفات شخصية، ودويدجيت، وقاعة الملفات، وأجهزة تحكم الوسائط بكلمات الأغنية، ومبدل مدمج."
           }
         },
         "ca" : {
@@ -9747,8 +9747,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Acknowledgments"
+            "state" : "translated",
+            "value" : "شكر وتقدير"
           }
         },
         "ca" : {
@@ -9937,8 +9937,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Action performed when middle-clicking on a window preview."
+            "state" : "translated",
+            "value" : "تم الإجراء عند النقر الأوسط على معاينة النافذة."
           }
         },
         "ca" : {
@@ -10128,8 +10128,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide"
+            "state" : "translated",
+            "value" : "تفعيل/إخفاء"
           }
         },
         "ca" : {
@@ -10319,8 +10319,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide (same as other apps)"
+            "state" : "translated",
+            "value" : "تفعيل/إخفاء (نفس التطبيقات الأخرى)"
           }
         },
         "ca" : {
@@ -10510,8 +10510,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active App + Current Space"
+            "state" : "translated",
+            "value" : "التطبيق النشط + الفضاء الحالي"
           }
         },
         "ca" : {
@@ -10700,8 +10700,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active App Indicator"
+            "state" : "translated",
+            "value" : "تشغيل مؤشر التطبيق"
           }
         },
         "ca" : {
@@ -10891,8 +10891,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active App Only"
+            "state" : "translated",
+            "value" : "مقبض التطبيق النشط"
           }
         },
         "ca" : {
@@ -11081,8 +11081,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "أضف"
           }
         },
         "ca" : {
@@ -11272,8 +11272,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "إضافة أدلة إضافية للبحث عن التطبيقات"
           }
         },
         "ca" : {
@@ -11462,8 +11462,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications. This is useful if you keep apps outside standard locations."
+            "state" : "translated",
+            "value" : "إضافة أدلة إضافية لفحص التطبيقات. هذا مفيد إذا احتفظت بالتطبيقات خارج المواقع القياسية."
           }
         },
         "ca" : {
@@ -11652,8 +11652,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App"
+            "state" : "translated",
+            "value" : "أضف تطبيقًا"
           }
         },
         "ca" : {
@@ -11842,8 +11842,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App to Blacklist"
+            "state" : "translated",
+            "value" : "أضف التطبيق إلى القائمة السوداء"
           }
         },
         "ca" : {
@@ -12032,8 +12032,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "إضافة مجلد"
           }
         },
         "ca" : {
@@ -12222,8 +12222,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "إضافة تصفية"
           }
         },
         "ca" : {
@@ -12604,8 +12604,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust volume"
+            "state" : "translated",
+            "value" : "ضبط مستوى الصوت"
           }
         },
         "ca" : {
@@ -12794,8 +12794,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how much of the screen shows through the Liquid Glass background."
+            "state" : "translated",
+            "value" : "يعدل كَمّيَّة الشاشة التي تظهر في الخلفية الزجاجية السائلة."
           }
         },
         "ca" : {
@@ -12884,8 +12884,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how much of the screen shows through the Liquid Glass background."
+            "state" : "translated",
+            "value" : "Liquid Glass 배경을 통해 화면이 얼마나 비쳐 보일지 조절합니다."
           }
         },
         "nl" : {
@@ -12944,8 +12944,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how much of the screen shows through the Liquid Glass background."
+            "state" : "translated",
+            "value" : "Liquid Glass arka planından ekranın ne kadarının görüneceğini ayarlar."
           }
         },
         "uk" : {
@@ -12985,8 +12985,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how responsive the app feels and behaves during interaction."
+            "state" : "translated",
+            "value" : "يعدل مدى استجابة التطبيق للشعور والتصرف أثناء التفاعل."
           }
         },
         "ca" : {
@@ -13176,8 +13176,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Advanced"
+            "state" : "translated",
+            "value" : "خيارات متقدمة"
           }
         },
         "ca" : {
@@ -13366,8 +13366,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake"
+            "state" : "translated",
+            "value" : "اهتزاز صفر"
           }
         },
         "ca" : {
@@ -13557,8 +13557,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "إجراء الاهتزاز الصفري"
           }
         },
         "ca" : {
@@ -13748,8 +13748,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "After changing the locked screen, move your cursor to the bottom of that screen to relocate the Dock."
+            "state" : "translated",
+            "value" : "بعد تغيير الشاشة المقفلة، قم بنقل المؤشر إلى أسفل تلك الشاشة لتغيير موقع المرفأ."
           }
         },
         "ca" : {
@@ -18027,8 +18027,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "필요한 경우, 별도의 보조 키를 조합해 다른 필터 모드로 윈도우 전환기를 여는 추가 실행 키입니다."
           }
         },
         "nl" : {
@@ -20121,8 +20121,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application"
+            "state" : "translated",
+            "value" : "어플리케이션"
           }
         },
         "nl" : {
@@ -20181,8 +20181,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application"
+            "state" : "translated",
+            "value" : "Uygulama"
           }
         },
         "uk" : {
@@ -20882,8 +20882,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."
+            "state" : "translated",
+            "value" : "이 목록에 있는 앱은 전체 화면 모드에서 윈도우 전환기 단축키에 반응하지 않습니다."
           }
         },
         "nl" : {
@@ -21644,8 +21644,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Arrange"
+            "state" : "translated",
+            "value" : "범위"
           }
         },
         "nl" : {
@@ -21704,8 +21704,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Arrange"
+            "state" : "translated",
+            "value" : "Sırala"
           }
         },
         "uk" : {
@@ -24117,8 +24117,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates in the background"
+            "state" : "translated",
+            "value" : "백그라운드에서 자동으로 업데이트 확인"
           }
         },
         "nl" : {
@@ -24307,8 +24307,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically focus the search bar when the window switcher opens."
+            "state" : "translated",
+            "value" : "윈도우 전환기가 열리면 검색창에 자동으로 입력 포커스를 맞춥니다."
           }
         },
         "nl" : {
@@ -24498,8 +24498,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically scrolls the window switcher when hovering over windows with the mouse."
+            "state" : "translated",
+            "value" : "마우스 포인터를 윈도우 위로 이동하면 윈도우 전환기가 자동으로 스크롤됩니다."
           }
         },
         "nl" : {
@@ -24688,8 +24688,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically select first window"
+            "state" : "translated",
+            "value" : "첫 번째 윈도우 자동 선택"
           }
         },
         "nl" : {
@@ -24879,8 +24879,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically sends ⌘N to open a new window when activating an app with no windows."
+            "state" : "translated",
+            "value" : "열린 윈도우가 없는 앱을 활성화하면 자동으로 ⌘N을 보내 새 윈도우를 엽니다."
           }
         },
         "nl" : {
@@ -25259,8 +25259,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically set length"
+            "state" : "translated",
+            "value" : "길이 자동 설정"
           }
         },
         "nl" : {
@@ -25450,8 +25450,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Away from Dock"
+            "state" : "translated",
+            "value" : "Dock에서 멀어지는 방향"
           }
         },
         "nl" : {
@@ -26110,7 +26110,196 @@
         }
       }
     },
-    "Backup & Restore" : {},
+    "Backup & Restore" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup & Restore"
+          }
+        }
+      }
+    },
     "Backward cycle key:" : {
       "localizations" : {
         "af" : {
@@ -26211,8 +26400,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backward cycle key:"
+            "state" : "translated",
+            "value" : "역순 전환 키:"
           }
         },
         "nl" : {
@@ -26401,8 +26590,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backward Key"
+            "state" : "translated",
+            "value" : "역순 전환 키"
           }
         },
         "nl" : {
@@ -26971,8 +27160,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bends the background at the edges and adds a bright rim. Turn off for softer frosted glass that is easier to read over busy backgrounds."
+            "state" : "translated",
+            "value" : "가장자리에서 배경을 굴절시키고 밝은 테두리를 더합니다. 복잡한 배경에서도 내용을 쉽게 읽을 수 있는 부드러운 반투명 유리 효과를 원하면 이 옵션을 끄세요."
           }
         },
         "nl" : {
@@ -27162,8 +27351,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Best quality (full resolution)"
+            "state" : "translated",
+            "value" : "최고화질 (전체 해상도)"
           }
         },
         "nl" : {
@@ -27923,8 +28112,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Body"
+            "state" : "translated",
+            "value" : "본문"
           }
         },
         "nl" : {
@@ -28113,8 +28302,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Border Opacity"
+            "state" : "translated",
+            "value" : "테두리 불투명도"
           }
         },
         "nl" : {
@@ -28876,8 +29065,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bring App Windows to Current Space"
+            "state" : "translated",
+            "value" : "앱의 윈도우를 현재 데스크탑으로 가져옴"
           }
         },
         "nl" : {
@@ -29067,8 +29256,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bring to Current Space"
+            "state" : "translated",
+            "value" : "현재 데스크탑으로 가져옴"
           }
         },
         "nl" : {
@@ -29257,8 +29446,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Browse for .app file..."
+            "state" : "translated",
+            "value" : ".app 파일 찾아보기..."
           }
         },
         "nl" : {
@@ -30019,8 +30208,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bypass modifier key"
+            "state" : "translated",
+            "value" : "Dock 고정 임시 해제 보조 키"
           }
         },
         "nl" : {
@@ -31733,8 +31922,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Caption"
+            "state" : "translated",
+            "value" : "캡션"
           }
         },
         "nl" : {
@@ -31924,8 +32113,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Caption 2"
+            "state" : "translated",
+            "value" : "캡션 2"
           }
         },
         "nl" : {
@@ -32114,8 +32303,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Capture performance metrics for troubleshooting"
+            "state" : "translated",
+            "value" : "문제 해결을 위한 성능 지표 기록"
           }
         },
         "nl" : {
@@ -32304,14 +32493,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Casts a soft shadow around preview panels so their edges stay visible over light backgrounds."
+            "state" : "translated",
+            "value" : "밝은 배경에서도 가장자리가 잘 보이도록 미리보기 패널 주위에 부드러운 그림자를 더합니다."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Casts a soft shadow around preview panels so their edges stay visible over light backgrounds."
+            "state" : "translated",
+            "value" : "Zorgt voor een zachte schaduw rond voorbeeldvensters, zodat de randen ervan zichtbaar blijven op een lichte achtergrond."
           }
         },
         "no" : {
@@ -32382,8 +32571,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Casts a soft shadow around preview panels so their edges stay visible over light backgrounds."
+            "state" : "translated",
+            "value" : "在预览面板周围投射柔和阴影，使其边缘在浅色背景上仍保持可见。"
           }
         },
         "zh-Hant" : {
@@ -32495,8 +32684,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Center Window"
+            "state" : "translated",
+            "value" : "윈도우를 중앙에 배치"
           }
         },
         "nl" : {
@@ -32685,8 +32874,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Centered - Controls top, title bottom"
+            "state" : "translated",
+            "value" : "가운데 정렬 - 제어 버튼 위, 제목 아래"
           }
         },
         "nl" : {
@@ -32875,8 +33064,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Centered - Title top, controls bottom"
+            "state" : "translated",
+            "value" : "가운데 정렬 - 제목 위, 제어 버튼 아래"
           }
         },
         "nl" : {
@@ -33065,8 +33254,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Centered Window Height"
+            "state" : "translated",
+            "value" : "중앙 배치 시 윈도우 높이"
           }
         },
         "nl" : {
@@ -33255,8 +33444,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Centered Window Size"
+            "state" : "translated",
+            "value" : "중앙 배치 시 윈도우 크기"
           }
         },
         "nl" : {
@@ -33445,8 +33634,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Centered Window Sizing"
+            "state" : "translated",
+            "value" : "중앙 배치 시 윈도우 크기 설정"
           }
         },
         "nl" : {
@@ -33635,8 +33824,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Centered Window Width"
+            "state" : "translated",
+            "value" : "중앙 배치 시 윈도우 너비"
           }
         },
         "nl" : {
@@ -33825,8 +34014,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Change…"
+            "state" : "translated",
+            "value" : "변경…"
           }
         },
         "nl" : {
@@ -34015,8 +34204,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Changes to permissions require an app restart to take effect."
+            "state" : "translated",
+            "value" : "변경한 권한을 적용하려면 앱을 재시작해야 합니다."
           }
         },
         "nl" : {
@@ -34585,8 +34774,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check Now"
+            "state" : "translated",
+            "value" : "지금 확인"
           }
         },
         "nl" : {
@@ -34775,8 +34964,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose between stable releases and beta versions"
+            "state" : "translated",
+            "value" : "정식 버전과 베타 버전 중 선택"
           }
         },
         "nl" : {
@@ -34965,8 +35154,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions."
+            "state" : "translated",
+            "value" : "Dock 아이콘에 마우스 포인터를 올렸을 때 표시되는 윈도우 미리보기의 크기를 선택합니다. 모든 윈도우 이미지는 원래 비율을 유지하면서 이 크기에 맞게 자동으로 조절됩니다."
           }
         },
         "nl" : {
@@ -35156,8 +35345,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how windows are sorted in Cmd+Tab previews."
+            "state" : "translated",
+            "value" : "Cmd+Tab 미리보기에서 윈도우를 정렬하는 방식을 선택합니다."
           }
         },
         "nl" : {
@@ -35347,8 +35536,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how windows are sorted in the preview."
+            "state" : "translated",
+            "value" : "미리보기에서 윈도우를 정렬하는 방식을 선택합니다."
           }
         },
         "nl" : {
@@ -35538,8 +35727,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how windows are sorted in the window switcher."
+            "state" : "translated",
+            "value" : "윈도우 전환기에서 윈도우를 정렬하는 방식을 선택합니다."
           }
         },
         "nl" : {
@@ -35728,8 +35917,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose this folder to let DockDoor show its contents."
+            "state" : "translated",
+            "value" : "DockDoor가 폴더의 내용을 표시할 수 있도록 이 폴더를 선택하세요."
           }
         },
         "nl" : {
@@ -35918,8 +36107,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose what happens when scrolling directly on a dock icon."
+            "state" : "translated",
+            "value" : "Dock 아이콘 위에서 스크롤할 때 수행할 동작을 선택합니다."
           }
         },
         "nl" : {
@@ -36109,8 +36298,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose where the window switcher appears on screen."
+            "state" : "translated",
+            "value" : "윈도우 전환기가 화면에 표시될 위치를 선택합니다."
           }
         },
         "nl" : {
@@ -36300,8 +36489,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose whether vertical or horizontal scrolling controls the media widget."
+            "state" : "translated",
+            "value" : "미디어 위젯을 세로 스크롤로 제어할지 가로 스크롤로 제어할지 선택합니다."
           }
         },
         "nl" : {
@@ -36491,8 +36680,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear"
+            "state" : "translated",
+            "value" : "지우기"
           }
         },
         "nl" : {
@@ -36681,8 +36870,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear All"
+            "state" : "translated",
+            "value" : "모두 지우기"
           }
         },
         "nl" : {
@@ -36871,8 +37060,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear Logs"
+            "state" : "translated",
+            "value" : "로그 지우기"
           }
         },
         "nl" : {
@@ -37061,8 +37250,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clearer"
+            "state" : "translated",
+            "value" : "더 투명하게"
           }
         },
         "nl" : {
@@ -37121,8 +37310,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clearer"
+            "state" : "translated",
+            "value" : "Daha Şeffaf"
           }
         },
         "uk" : {
@@ -40728,8 +40917,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Collapse native tabs into a single window"
+            "state" : "translated",
+            "value" : "Свернуть нативные вкладки в одно окно"
           }
         },
         "sr" : {
@@ -47594,8 +47783,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy"
+            "state" : "translated",
+            "value" : "Kopyala"
           }
         },
         "uk" : {
@@ -47730,8 +47919,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Corner Radius"
+            "state" : "translated",
+            "value" : "Ronding van hoeken"
           }
         },
         "no" : {
@@ -47784,8 +47973,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Corner Radius"
+            "state" : "translated",
+            "value" : "Köşe Yarıçapı"
           }
         },
         "uk" : {
@@ -50261,8 +50450,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cut"
+            "state" : "translated",
+            "value" : "Kes"
           }
         },
         "uk" : {
@@ -52114,8 +52303,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Desktop %lld"
+            "state" : "translated",
+            "value" : "Bureaublad %lld"
           }
         },
         "no" : {
@@ -52168,8 +52357,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Desktop %lld"
+            "state" : "translated",
+            "value" : "Masaüstü %lld"
           }
         },
         "uk" : {
@@ -58637,8 +58826,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Modifier"
+            "state" : "translated",
+            "value" : "Dock Önizleme Aracı"
           }
         },
         "uk" : {
@@ -59398,8 +59587,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Trigger"
+            "state" : "translated",
+            "value" : "Dock Önizleme Tetiği"
           }
         },
         "uk" : {
@@ -61304,8 +61493,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project."
+            "state" : "translated",
+            "value" : "DockDoor Free'de ödeme duvarı yoktur ve hiçbir zaman olmayacaktır. Pro, çok daha derin sistem kontrolü için macOS Dock'unun yerini tamamen alan ayrı bir uygulamadır. Pro'yu satın almak, ücretsiz projeyi desteklemenin en iyi yoludur."
           }
         },
         "uk" : {
@@ -63016,8 +63205,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "Düzenle"
           }
         },
         "uk" : {
@@ -71233,7 +71422,196 @@
         }
       }
     },
-    "Export DockDoor Settings" : {},
+    "Export DockDoor Settings" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export DockDoor Settings"
+          }
+        }
+      }
+    },
     "Export Logs" : {
       "localizations" : {
         "af" : {
@@ -71424,7 +71802,196 @@
         }
       }
     },
-    "Export Settings…" : {},
+    "Export Settings…" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export Settings…"
+          }
+        }
+      }
+    },
     "Extra Extra Small" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -74593,8 +75160,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fingers:"
+            "state" : "translated",
+            "value" : "Vingers:"
           }
         },
         "no" : {
@@ -74647,8 +75214,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fingers:"
+            "state" : "translated",
+            "value" : "Parmaklar:"
           }
         },
         "uk" : {
@@ -74665,8 +75232,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fingers:"
+            "state" : "translated",
+            "value" : "手指数量："
           }
         },
         "zh-Hant" : {
@@ -77314,8 +77881,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit App"
+            "state" : "translated",
+            "value" : "Uygulamadan Çıkmaya Zorla"
           }
         },
         "uk" : {
@@ -79980,8 +80547,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro"
+            "state" : "translated",
+            "value" : "DockDoor Pro Al"
           }
         },
         "uk" : {
@@ -80170,8 +80737,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro…"
+            "state" : "translated",
+            "value" : "DockDoor Pro Al..."
           }
         },
         "uk" : {
@@ -80740,8 +81307,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Glass Variant"
+            "state" : "translated",
+            "value" : "Cam Çeşidi"
           }
         },
         "uk" : {
@@ -87350,8 +87917,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight the frontmost app"
+            "state" : "translated",
+            "value" : "Markeer de voorste app"
           }
         },
         "no" : {
@@ -88546,8 +89113,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover"
+            "state" : "translated",
+            "value" : "Üzerinden geç"
           }
         },
         "uk" : {
@@ -90017,8 +90584,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If macOS uses the same swipe for Mission Control, App Exposé or switching between full-screen apps, turn that gesture off in System Settings > Trackpad > More Gestures."
+            "state" : "translated",
+            "value" : "Als macOS dezelfde veegbeweging gebruikt voor Mission Control, App Exposé of het schakelen tussen apps in volledig scherm, schakel die gebaren dan uit via Systeeminstellingen > Trackpad > Meer gebaren."
           }
         },
         "no" : {
@@ -90089,8 +90656,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If macOS uses the same swipe for Mission Control, App Exposé or switching between full-screen apps, turn that gesture off in System Settings > Trackpad > More Gestures."
+            "state" : "translated",
+            "value" : "如果 macOS 将同一轻扫手势用于调度中心、App Exposé 或在全屏 App 之间切换，请在“系统设置”>“触控板”>“更多手势”中关闭该手势。"
           }
         },
         "zh-Hant" : {
@@ -91243,9 +91810,576 @@
         }
       }
     },
-    "Import DockDoor Settings" : {},
-    "Import Settings" : {},
-    "Import Settings…" : {},
+    "Import DockDoor Settings" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import DockDoor Settings"
+          }
+        }
+      }
+    },
+    "Import Settings" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings"
+          }
+        }
+      }
+    },
+    "Import Settings…" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import Settings…"
+          }
+        }
+      }
+    },
     "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -93314,8 +94448,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Style"
+            "state" : "translated",
+            "value" : "Belirteç Stili"
           }
         },
         "uk" : {
@@ -96497,8 +97631,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop."
+            "state" : "translated",
+            "value" : "Voor elk voorbeeld wordt het nummer van het bureaublad (Space) weergegeven waarop het venster zich bevindt. Dit wordt alleen weergegeven als je meer dan één bureaublad hebt."
           }
         },
         "no" : {
@@ -98214,8 +99348,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left or right"
+            "state" : "translated",
+            "value" : "Linker of rechts"
           }
         },
         "no" : {
@@ -98268,8 +99402,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left or right"
+            "state" : "translated",
+            "value" : "Sola veya sağa"
           }
         },
         "uk" : {
@@ -98286,8 +99420,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left or right"
+            "state" : "translated",
+            "value" : "向左或向右"
           }
         },
         "zh-Hant" : {
@@ -99793,8 +100927,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Line (active app)"
+            "state" : "translated",
+            "value" : "Çizgi (aktif uygulama)"
           }
         },
         "uk" : {
@@ -109123,8 +110257,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "More Opaque"
+            "state" : "translated",
+            "value" : "Daha Opak"
           }
         },
         "uk" : {
@@ -122018,8 +123152,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open window switcher with a trackpad swipe"
+            "state" : "translated",
+            "value" : "Vensterwisselaar openen met een veegbeweging op het trackpad"
           }
         },
         "no" : {
@@ -122090,8 +123224,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open window switcher with a trackpad swipe"
+            "state" : "translated",
+            "value" : "使用触控板轻扫打开窗口切换器"
           }
         },
         "zh-Hant" : {
@@ -132111,7 +133245,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voorbeeld uiterlijk & kwaliteit"
+            "value" : "Voorbeeld uiterlijk en kwaliteit"
           }
         },
         "no" : {
@@ -132302,7 +133436,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voorbeeld uiterlijk & kwaliteit (Dock-voorbeeld)"
+            "value" : "Voorbeeld uiterlijk en kwaliteit (Dock-voorbeeld)"
           }
         },
         "no" : {
@@ -137875,8 +139009,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Refraction"
+            "state" : "translated",
+            "value" : "Kırılma"
           }
         },
         "uk" : {
@@ -147008,8 +148142,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Same as main (%@)"
+            "state" : "translated",
+            "value" : "Ana (%@) ile aynı"
           }
         },
         "uk" : {
@@ -157324,8 +158458,386 @@
         }
       }
     },
-    "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor." : {},
-    "Settings Backup Failed" : {},
+    "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+          }
+        }
+      }
+    },
+    "Settings Backup Failed" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings Backup Failed"
+          }
+        }
+      }
+    },
     "Shadow Opacity" : {
       "localizations" : {
         "af" : {
@@ -157432,8 +158944,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Opacity"
+            "state" : "translated",
+            "value" : "Schaduw dekking"
           }
         },
         "no" : {
@@ -157486,8 +158998,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Opacity"
+            "state" : "translated",
+            "value" : "Gölge Saydamlığı"
           }
         },
         "uk" : {
@@ -157504,8 +159016,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Opacity"
+            "state" : "translated",
+            "value" : "阴影不透明度"
           }
         },
         "zh-Hant" : {
@@ -157622,8 +159134,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Size"
+            "state" : "translated",
+            "value" : "Schaduw grootte"
           }
         },
         "no" : {
@@ -157676,8 +159188,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Size"
+            "state" : "translated",
+            "value" : "Gölge Boyutu"
           }
         },
         "uk" : {
@@ -157694,8 +159206,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Size"
+            "state" : "translated",
+            "value" : "阴影大小"
           }
         },
         "zh-Hant" : {
@@ -164663,8 +166175,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show shadow beneath previews"
+            "state" : "translated",
+            "value" : "Toon schaduw onder voorbeelden"
           }
         },
         "no" : {
@@ -164735,8 +166247,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show shadow beneath previews"
+            "state" : "translated",
+            "value" : "在预览下方显示阴影"
           }
         },
         "zh-Hant" : {
@@ -165043,8 +166555,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Space number on previews"
+            "state" : "translated",
+            "value" : "Toon Space-nummer op voorbeelden"
           }
         },
         "no" : {
@@ -168278,8 +169790,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows a dot under every running application: bright for apps with open windows, black for apps with none."
+            "state" : "translated",
+            "value" : "Geeft een stip weer onder elke geopende app: helder voor apps met geopende vensters, zwart voor apps zonder vensters."
           }
         },
         "no" : {
@@ -177239,8 +178751,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."
+            "state" : "translated",
+            "value" : "Veeg om de wisselaar te openen, houd je vingers op het touchpad en beweeg naar links of rechts om de selectie te wijzigen. Til daarna je vingers op om over te schakelen."
           }
         },
         "no" : {
@@ -177311,8 +178823,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."
+            "state" : "translated",
+            "value" : "轻扫打开切换器，保持手指放在触控板上并向左或向右移动以更改选择，然后抬起手指进行切换。"
           }
         },
         "zh-Hant" : {
@@ -180344,8 +181856,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display"
+            "state" : "translated",
+            "value" : "Sistem Ana Ekranı"
           }
         },
         "uk" : {
@@ -181136,9 +182648,576 @@
         }
       }
     },
-    "The backup could not be read: %@" : {},
-    "The backup could not be saved: %@" : {},
-    "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults." : {},
+    "The backup could not be read: %@" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be read: %@"
+          }
+        }
+      }
+    },
+    "The backup could not be saved: %@" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup could not be saved: %@"
+          }
+        }
+      }
+    },
+    "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+          }
+        }
+      }
+    },
     "The changes to permissions will take effect after restarting." : {
       "localizations" : {
         "af" : {
@@ -182089,7 +184168,196 @@
         }
       }
     },
-    "The selected file is not a DockDoor settings backup." : {},
+    "The selected file is not a DockDoor settings backup." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The selected file is not a DockDoor settings backup."
+          }
+        }
+      }
+    },
     "The selected positions for Traffic Light Buttons and Window Title will overlap." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -184377,7 +186645,196 @@
         }
       }
     },
-    "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them." : {},
+    "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+          }
+        }
+      }
+    },
     "Thumbnail (320px)" : {
       "localizations" : {
         "af" : {
@@ -187533,8 +189990,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad Swipe for Window Switcher"
+            "state" : "translated",
+            "value" : "Vingergebaar op het trackpad om van venster te wisselen"
           }
         },
         "no" : {
@@ -187605,8 +190062,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad Swipe for Window Switcher"
+            "state" : "translated",
+            "value" : "窗口切换器的触控板轻扫"
           }
         },
         "zh-Hant" : {
@@ -190637,8 +193094,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Undo"
+            "state" : "translated",
+            "value" : "Geri al"
           }
         },
         "uk" : {
@@ -190828,8 +193285,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unhide App"
+            "state" : "translated",
+            "value" : "Uygulamayı Göster"
           }
         },
         "uk" : {
@@ -191210,8 +193667,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown App"
+            "state" : "translated",
+            "value" : "Bilinmeyen Uygulama"
           }
         },
         "uk" : {
@@ -192162,8 +194619,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Untitled"
+            "state" : "translated",
+            "value" : "Başlıksız"
           }
         },
         "uk" : {
@@ -192299,8 +194756,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up or down"
+            "state" : "translated",
+            "value" : "Omhoog of omlaag"
           }
         },
         "no" : {
@@ -192353,8 +194810,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up or down"
+            "state" : "translated",
+            "value" : "Yukarı veya aşağı"
           }
         },
         "uk" : {
@@ -192371,8 +194828,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up or down"
+            "state" : "translated",
+            "value" : "向上或向下"
           }
         },
         "zh-Hant" : {
@@ -197306,8 +199763,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Variant"
+            "state" : "translated",
+            "value" : "Çeşit"
           }
         },
         "uk" : {
@@ -205698,8 +208155,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window"
+            "state" : "translated",
+            "value" : "Pencere"
           }
         },
         "uk" : {
@@ -205889,8 +208346,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Actions"
+            "state" : "translated",
+            "value" : "Pencere Eylemleri"
           }
         },
         "uk" : {
