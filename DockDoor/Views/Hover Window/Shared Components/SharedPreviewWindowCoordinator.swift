@@ -1057,9 +1057,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             // Final validation: ensure mouse is still over the expected dock item
             if !bypassDockMouseValidation {
                 if let expectedBundleId = bundleIdentifier {
-                    guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else {
+                    guard let dockObserver = DockObserver.activeInstance else {
                         return
                     }
+                    let currentDockItemStatus = dockObserver.getDockItemAppStatusUnderMouse()
                     let matches: Bool = switch currentDockItemStatus.status {
                     case let .success(app):
                         app.bundleIdentifier == expectedBundleId
@@ -1068,7 +1069,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     case .notFound:
                         false
                     }
-                    guard matches else {
+                    guard matches,
+                          let dockItem = currentDockItemStatus.dockItemElement,
+                          dockObserver.isPointOverDockItem(DockObserver.getMousePosition(), item: dockItem)
+                    else {
                         return
                     }
                 }

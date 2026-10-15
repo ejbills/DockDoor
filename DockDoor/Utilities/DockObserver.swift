@@ -798,9 +798,10 @@ final class DockObserver {
         eventTapRunLoopSource = nil
     }
 
-    private static let dockProximityBand: CGFloat = 220
+    static let dockProximityBand: CGFloat = 220
+    private static let dockItemHoverSlop: CGFloat = 8
 
-    func isPointNearDock(_ point: CGPoint) -> Bool {
+    func isPointNearDock(_ point: CGPoint, band: CGFloat = DockObserver.dockProximityBand) -> Bool {
         let position = DockUtils.getDockPosition()
         var displayCount: UInt32 = 0
         var displays = [CGDirectDisplayID](repeating: 0, count: 16)
@@ -809,14 +810,27 @@ final class DockObserver {
             let bounds = CGDisplayBounds(display)
             guard bounds.contains(point) else { continue }
             switch position {
-            case .left: return point.x - bounds.minX <= Self.dockProximityBand
-            case .right: return bounds.maxX - point.x <= Self.dockProximityBand
-            case .bottom: return bounds.maxY - point.y <= Self.dockProximityBand
-            case .top: return point.y - bounds.minY <= Self.dockProximityBand
+            case .left: return point.x - bounds.minX <= band
+            case .right: return bounds.maxX - point.x <= band
+            case .bottom: return bounds.maxY - point.y <= band
+            case .top: return point.y - bounds.minY <= band
             default: return true
             }
         }
         return false
+    }
+
+    func isPointOverDockItem(_ point: CGPoint, item: AXUIElement) -> Bool {
+        guard let position = try? item.position(), let size = try? item.size() else { return true }
+        let frame = CGRect(origin: position, size: size).insetBy(dx: -Self.dockItemHoverSlop, dy: -Self.dockItemHoverSlop)
+        switch DockUtils.getDockPosition() {
+        case .left, .right:
+            return point.y >= frame.minY && point.y <= frame.maxY && isPointNearDock(point, band: frame.width)
+        case .top, .bottom:
+            return point.x >= frame.minX && point.x <= frame.maxX && isPointNearDock(point, band: frame.height)
+        default:
+            return true
+        }
     }
 
     private func setupEventTap() {
