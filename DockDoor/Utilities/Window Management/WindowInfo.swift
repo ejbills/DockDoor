@@ -442,6 +442,9 @@ extension WindowInfo {
             return
         }
 
+        // Public activation so tiling window managers (AeroSpace, yabai) see the focus change.
+        ownerApp.activate(options: [.activateIgnoringOtherApps])
+
         var psn = ProcessSerialNumber()
         _ = GetProcessForPID(ownerApp.processIdentifier, &psn)
         _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
