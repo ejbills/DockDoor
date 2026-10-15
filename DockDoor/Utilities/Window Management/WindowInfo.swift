@@ -442,7 +442,10 @@ extension WindowInfo {
             return
         }
 
-        // Public activation so tiling window managers (AeroSpace, yabai) see the focus change.
+        // Public activation so tiling window managers (AeroSpace, yabai) see the focus change, even if the app is already active.
+        if ownerApp.isActive {
+            NSApp.activate(ignoringOtherApps: true)
+        }
         ownerApp.activate(options: [.activateIgnoringOtherApps])
 
         var psn = ProcessSerialNumber()
