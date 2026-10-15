@@ -38,6 +38,71 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.41.0"></a>
+# [Release 1.41.0](https://github.com/ejbills/DockDoor/releases/tag/1.41.0) - 2026-10-15
+
+## ✨ New Features
+- Trackpad Window Gestures for title bars, Dock icons and the menu bar
+  - Off by default; turn on in Settings > Gestures, then restart DockDoor when prompted
+  - Title bar: swipe left or right to snap to a half, swipe up to fill the screen, swipe sideways then up or down to snap to a corner
+  - Title bar: swipe down to minimize, pinch in to close the window (or just the tab when you pinch a tab), pinch out for full screen, double-tap to center at the earlier size
+  - Running app's Dock icon: swipe down to minimize its front window, swipe up to restore its last minimized window, pinch in to quit
+  - Empty menu bar: swipe left or right to switch apps, swipe down to minimize all windows on that display, swipe up to restore them
+  - Menu bar: tap and hold, then swipe, to open the Window Switcher (requires the Window Switcher to be enabled)
+  - Press Escape mid-gesture to cancel
+  - A tooltip beside the cursor names the action as you gesture
+- New Gestures tab with per-gesture controls
+  - Each gesture has its own on/off switch and an animated demo that plays when you hover over it
+  - Options group: Sensitivity slider, "Show where the window will land" snap-area preview, and Haptic feedback
+  - A banner warns when the needed trackpad settings (Zoom in or out for pinches, Smart zoom for double-taps) are off, with an Open Trackpad Settings button
+- Reserve screen space for a custom dock
+  - Settings > Gestures > Space for a Custom Dock
+  - Choose the edge (Off, Bottom, Left, Right, Top) and a size from 10 to 300 px
+  - Snapped and positioned windows, title bar scroll centering and window positioning commands stay clear of it
+  - Dock apps can report their own reserved space, listed under Reported by Apps
+- AppleScript command to reserve screen edges
+  - Example: `reserve screen edge "bottom" thickness 80 for "com.example.MyDock" on display "main"`
+  - Use "none" to release the space; it is also released when the app quits
+  - Listed in DockDoor's built-in scripting help
+- Export and import settings as a JSON backup
+  - Settings > General > Backup & Restore > Export Settings… or Import Settings…
+
+## 🔧 Improvements & Stability
+- Gestures and keybinds now have separate Settings pages
+  - Settings > Gestures holds all gestures, including Dock and title bar scrolling, dock preview swipes and the trackpad swipe window switcher
+  - Settings > Keybinds holds Mouse Actions, Command-key shortcuts and the Window Switcher keybind
+  - Settings search points to the new locations
+- Adjust trackpad swipe window switcher sensitivity
+  - Find the swipe sensitivity slider under Trackpad Swipe for Window Switcher in Settings > Gestures (50%–200%, default 100%)
+  - Higher values respond to shorter swipes; lower values reduce accidental triggers
+- Dock and title bar scroll gestures pause while Window Gestures is on
+  - Turn Window Gestures off to use them again
+- Snapped windows stay linked
+  - Drag a snapped window's title bar to unsnap it and restore its size
+  - Drag the shared edge between snapped windows to resize them together
+- Snapping and centering account for Stage Manager's side strip automatically
+- Gestures respect reserved screen edges and use the same positioning as DockDoor's window actions
+- Restoring from a Dock icon or the menu bar brings back the most recently minimized window, or every minimized window on that display
+- Window gestures stay out of the way of DockDoor's preview windows, and previews hide when a Dock icon gesture runs
+- Gesture tooltip matches DockDoor's look and sits closer to the cursor on multi-display setups
+- Title bar detection is more reliable, so gestures work on more windows and apps
+- Window switcher ordering is no longer shuffled by background app activity
+- Website has a new Window Gestures section with a trackpad demo
+- Updated translations in supported languages
+
+## 🐛 Bug Fixes
+- DockDoor now launches on macOS versions missing certain glass-effect system features
+- Window switcher returns to the tab you selected in apps with native tabs, such as Finder and Terminal
+- Tabbed windows are matched and shown correctly in previews and the switcher
+- Active app indicator stays in place while a Dock icon bounces on bottom, left and right Docks
+- Dock previews no longer appear for an icon you've already moved past
+- Centering a window larger than the screen now fits it on screen
+- Screen space reserved by other apps is released when they quit
+
+
+[Changes][1.41.0]
+
+
 <a id="1.40.7"></a>
 # [Release 1.40.7](https://github.com/ejbills/DockDoor/releases/tag/1.40.7) - 2026-10-04
 
@@ -2532,6 +2597,7 @@ v1.0
 [Changes][releases]
 
 
+[1.41.0]: https://github.com/ejbills/DockDoor/compare/1.40.7...1.41.0
 [1.40.7]: https://github.com/ejbills/DockDoor/compare/1.40.6...1.40.7
 [1.40.6]: https://github.com/ejbills/DockDoor/compare/1.40.5...1.40.6
 [1.40.5]: https://github.com/ejbills/DockDoor/compare/1.40.4...1.40.5
