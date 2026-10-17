@@ -2124,6 +2124,10 @@ kbd {
     box-shadow: 0 0 0 1px var(--line), 0 24px 48px -32px rgba(22, 20, 50, 0.3);
 }
 
+.partner + .partner {
+    margin-top: 24px;
+}
+
 .partner-icon {
     width: clamp(72px, 8vw, 96px);
     filter: drop-shadow(0 10px 14px rgba(30, 50, 90, 0.22));
