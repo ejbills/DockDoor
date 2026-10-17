@@ -156,8 +156,10 @@ struct WindowSwitcherKeybindSection: View {
             // Current shortcut summary
             if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
                 HStack(spacing: 8) {
-                    KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: nil)
-                    Text("+").foregroundColor(.secondary)
+                    ForEach(ShortcutModifier.contained(in: keybind.modifierFlags)) { modifier in
+                        KeyCapView(text: modifier.localizedName, symbol: nil)
+                        Text("+").foregroundColor(.secondary)
+                    }
                     KeyCapView(text: KeyboardLabel.localizedKey(for: keybind.keyCode), symbol: nil)
                 }
             } else {
@@ -166,20 +168,14 @@ struct WindowSwitcherKeybindSection: View {
 
             // Controls: initializer modifier + capture button
             HStack(spacing: 12) {
-                Picker("Initializer", selection: $keybindModel.modifierKey) {
-                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-                }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-                .onChange(of: keybindModel.modifierKey) { newValue in
-                    if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
-                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
-                        Defaults[.UserKeybind] = updatedKeybind
-                        keybindModel.currentKeybind = updatedKeybind
+                ModifierKeyToggles(modifierFlags: $keybindModel.modifierKey)
+                    .onChange(of: keybindModel.modifierKey) { newValue in
+                        if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
+                            let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
+                            Defaults[.UserKeybind] = updatedKeybind
+                            keybindModel.currentKeybind = updatedKeybind
+                        }
                     }
-                }
 
                 Button(action: { keybindModel.isRecording.toggle() }) {
                     HStack {
@@ -199,7 +195,7 @@ struct WindowSwitcherKeybindSection: View {
                 .buttonStyle(.bordered)
             }
 
-            Text("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
+            Text("Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all.")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -256,6 +252,10 @@ struct WindowSwitcherKeybindSection: View {
                 }
             }
 
+            Text("Alternate shortcuts with no modifiers selected use the main shortcut's modifiers.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
             Button {
                 additionalAlternateKeybinds.append(AlternateKeybind())
             } label: {
@@ -277,15 +277,7 @@ struct WindowSwitcherKeybindSection: View {
 
     private func alternateShortcutRow(_ alternate: Binding<AlternateKeybind>, index: Int, canRemove: Bool, onRemove: @escaping () -> Void) -> some View {
         HStack(spacing: 12) {
-            Picker("Modifier", selection: alternate.modifierFlags) {
-                Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
-                Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-            }
-            .pickerStyle(.menu)
-            .labelsHidden()
-            .fixedSize()
+            ModifierKeyToggles(modifierFlags: alternate.modifierFlags, compact: true, inheritedModifierFlags: keybindModel.modifierKey)
             Text("+")
                 .font(.system(size: 12))
                 .foregroundColor(.secondary)
