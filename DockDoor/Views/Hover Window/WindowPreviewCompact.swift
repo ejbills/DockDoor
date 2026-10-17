@@ -157,49 +157,25 @@ struct WindowPreviewCompact: View, Equatable {
         .frame(width: appearance.previewWidth, height: appearance.compactModeItemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
-            let cornerRadius = appearance.radii.card
-
-            if !appearance.hidePreviewCardBackground {
-                BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
-                    .padding(.horizontal, -CardRadius.innerPadding)
-                    .overlay {
-                        if isHighlighted {
-                            let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .fill(highlightColor.opacity(appearance.selectionOpacity))
-                                .padding(.horizontal, -CardRadius.innerPadding)
-                        }
-                    }
-                    .overlay {
-                        if isActiveWindow {
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .strokeBorder(appearance.activeAppIndicatorColor, lineWidth: 2.5)
-                                .padding(.horizontal, -CardRadius.innerPadding)
-                        }
-                    }
-            }
-
-            // Selection border drawn outside the card-background branch so the
-            // selected item stays visible when hidePreviewCardBackground is on.
-            if isHighlighted {
-                let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .strokeBorder(highlightColor, lineWidth: 2.5)
-                    .padding(.horizontal, -CardRadius.innerPadding)
-            }
+            PreviewCardChrome(
+                cornerRadius: appearance.radii.card,
+                backgroundAppearance: backgroundAppearance,
+                isSelected: isHighlighted,
+                isActiveWindow: isActiveWindow,
+                selectionTint: appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor),
+                selectionFillOpacity: appearance.selectionOpacity,
+                activeIndicatorColor: appearance.activeAppIndicatorColor,
+                showsBackground: !appearance.hidePreviewCardBackground,
+                negativePadding: CardRadius.innerPadding,
+                paddedEdges: .horizontal
+            )
         }
         .opacity(isHighlighted ? 1.0 : appearance.unselectedContentOpacity)
         .padding(.horizontal, CardRadius.innerPadding)
         .contentShape(Rectangle())
         .onContinuousHover { phase in
             let setHoverState: (Bool) -> Void = { newState in
-                if appearance.showAnimations {
-                    withAnimation(.snappy(duration: 0.175)) { isHovering = newState }
-                } else {
-                    isHovering = newState
-                }
+                withAnimation(PreviewMotion.hover(enabled: appearance.showAnimations)) { isHovering = newState }
             }
 
             switch phase {

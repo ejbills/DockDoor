@@ -150,7 +150,7 @@ final class MediaKeyboardShortcutCoordinator {
         guard let mediaInfo = unambiguousVisibleSource() else { return false }
 
         Task { @MainActor in
-            withAnimation(Defaults[.showAnimations] ? .easeInOut(duration: 0.2) : nil) {
+            withAnimation(PreviewMotion.content(enabled: Defaults[.showAnimations])) {
                 mediaInfo.isPlaying.toggle()
             }
             mediaInfo.playPause()

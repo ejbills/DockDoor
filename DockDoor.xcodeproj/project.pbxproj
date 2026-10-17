@@ -31,6 +31,8 @@
 		341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */; };
 		37102045B9244655A3CC681B /* WindowGestureHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91187A811BBD421699BDA72F /* WindowGestureHUD.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
+		6DC7B6D993AE43EDA90D5782702ACAA4 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8D192835C246B189A92AE099D9D51E /* DesignTokens.swift */; };
+		EEE147BC850142B0AAE16B82BCED332C /* PreviewCardChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21449BDF83A14A998B70A353A4860F2A /* PreviewCardChrome.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
 		3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */; };
@@ -286,6 +288,8 @@
 		3217C55D219C4BC4A9A00E52 /* LiquidGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlass.swift; sourceTree = "<group>"; };
 		341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWindowCapture.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		EC8D192835C246B189A92AE099D9D51E /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		21449BDF83A14A998B70A353A4860F2A /* PreviewCardChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCardChrome.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
 		3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIWindow.swift; sourceTree = "<group>"; };
@@ -560,6 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				81BFDF0C2EE815FD00D56F65 /* CompactModeWarningBanner.swift */,
+				EC8D192835C246B189A92AE099D9D51E /* DesignTokens.swift */,
 				BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */,
 				BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */,
 				3A105FD82C1C049E0015EC66 /* dockStyle.swift */,
@@ -893,6 +898,7 @@
 				BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */,
 				BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */,
 				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
+				21449BDF83A14A998B70A353A4860F2A /* PreviewCardChrome.swift */,
 				BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */,
 				3C9A1B2D4E5F6A7B8C9D0E1F /* CardGridScrollView.swift */,
 			);
@@ -1271,6 +1277,7 @@
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
 				8FB2998BF8DE43FD9339A63D /* SettingsBackupManager.swift in Sources */,
 				BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */,
+				6DC7B6D993AE43EDA90D5782702ACAA4 /* DesignTokens.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BBDF65732E7E212400DD6D6D /* DockObserver+CmdTab.swift in Sources */,
@@ -1302,6 +1309,7 @@
 				BB918BB52CF7613400931236 /* CGRect.swift in Sources */,
 				BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */,
 				4D0B2C3E5F6A7B8C9D0E1F2A /* CardGridScrollView.swift in Sources */,
+				EEE147BC850142B0AAE16B82BCED332C /* PreviewCardChrome.swift in Sources */,
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
 				BB1865562DD57F1E000F34AD /* SupportSettingsView.swift in Sources */,
 				BB638F062E02170B0010077D /* MediaProgressBar.swift in Sources */,

@@ -24,14 +24,14 @@ struct MediaControlButtonRow: View {
                 systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill",
                 isTitle: true,
                 action: {
-                    withAnimation(showAnimations ? .easeInOut(duration: 0.2) : nil) {
+                    withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                         mediaInfo.isPlaying.toggle()
                     }
                     mediaInfo.playPause()
                 },
                 buttonDimension: buttonDimension(isMain: true)
             )
-            .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
+            .animation(PreviewMotion.content(enabled: showAnimations), value: mediaInfo.isPlaying)
 
             MediaControlButton(
                 systemName: "forward.fill",

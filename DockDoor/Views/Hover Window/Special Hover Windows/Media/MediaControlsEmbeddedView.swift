@@ -18,7 +18,7 @@ struct MediaControlsEmbeddedView: View {
     var body: some View {
         let cardRadius = CardRadius.Resolved.current().card
         compactEmbeddedDisplayCore()
-            .animation(showAnimations ? .smooth(duration: 0.125) : nil, value: isLoadingMediaInfo)
+            .animation(PreviewMotion.content(enabled: showAnimations), value: isLoadingMediaInfo)
             .padding(CardRadius.widgetContentPadding(12, cardRadius: cardRadius))
             .frame(
                 minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165),
@@ -88,7 +88,7 @@ struct MediaControlsEmbeddedView: View {
                     isEmbedded: true
                 )
             }
-            .animation(showAnimations ? .smooth(duration: 0.2) : nil, value: "\(mediaInfo.title)\(mediaInfo.artist)")
+            .animation(PreviewMotion.content(enabled: showAnimations), value: "\(mediaInfo.title)\(mediaInfo.artist)")
         }
     }
 }

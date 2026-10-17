@@ -33,17 +33,17 @@ struct MediaControlButton: View {
         .scaleEffect(isPressed ? 0.88 : 1.0)
         .opacity(isPressed ? 0.7 : 1.0)
         .onHover { hovering in
-            withAnimation(showAnimations ? .easeOut(duration: 0.15) : nil) { isHovering = hovering }
+            withAnimation(PreviewMotion.hover(enabled: showAnimations)) { isHovering = hovering }
         }
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
                     if !isPressed {
-                        withAnimation(showAnimations ? .easeOut(duration: 0.08) : nil) { isPressed = true }
+                        withAnimation(PreviewMotion.hover(enabled: showAnimations)) { isPressed = true }
                     }
                 }
                 .onEnded { _ in
-                    withAnimation(showAnimations ? .spring(response: 0.3, dampingFraction: 0.6) : nil) { isPressed = false }
+                    withAnimation(PreviewMotion.emphasis(enabled: showAnimations)) { isPressed = false }
                 }
         )
     }

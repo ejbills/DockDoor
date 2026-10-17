@@ -63,7 +63,7 @@ struct TrafficLightButtons: View {
             .contentShape(Rectangle())
             .simultaneousGesture(TapGesture())
             .onHover { isHovering in
-                withAnimation(.snappy(duration: 0.175)) {
+                withAnimation(PreviewMotion.hover(enabled: true)) {
                     self.isHovering = isHovering
                 }
             }

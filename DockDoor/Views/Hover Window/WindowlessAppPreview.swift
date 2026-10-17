@@ -169,31 +169,22 @@ struct WindowlessAppPreview: View, Equatable {
         }
         .frame(maxWidth: (dimensions?.maxDimensions.width ?? 0) > 0 ? dimensions!.maxDimensions.width : nil)
         .background {
-            let cornerRadius = appearance.radii.card
-
-            if !appearance.hidePreviewCardBackground {
-                BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
-                    .padding(-CardRadius.innerPadding)
-                    .overlay {
-                        if isSelected || isHovering {
-                            let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .fill(highlightColor.opacity(appearance.selectionOpacity))
-                                .padding(-CardRadius.innerPadding)
-                        }
-                    }
-            }
+            PreviewCardChrome(
+                cornerRadius: appearance.radii.card,
+                backgroundAppearance: backgroundAppearance,
+                isSelected: isSelected || isHovering,
+                isActiveWindow: false,
+                selectionTint: appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor),
+                selectionFillOpacity: appearance.selectionOpacity,
+                activeIndicatorColor: appearance.activeAppIndicatorColor,
+                showsBackground: !appearance.hidePreviewCardBackground,
+                negativePadding: CardRadius.innerPadding
+            )
         }
         .contentShape(Rectangle())
         .onContinuousHover { phase in
             let setHoverState: (Bool) -> Void = { newState in
-                if appearance.showAnimations {
-                    withAnimation(.snappy(duration: 0.175)) { isHovering = newState }
-                } else {
-                    isHovering = newState
-                }
+                withAnimation(PreviewMotion.hover(enabled: appearance.showAnimations)) { isHovering = newState }
             }
 
             switch phase {

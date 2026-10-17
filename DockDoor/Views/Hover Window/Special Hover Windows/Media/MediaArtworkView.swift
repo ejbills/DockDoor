@@ -50,6 +50,6 @@ struct MediaArtworkView: View {
         .frame(width: size.width, height: size.height)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         .rotation3DEffect(.degrees(artworkRotation), axis: (x: 0, y: 1, z: 0))
-        .animation(showAnimations ? .smooth(duration: 0.35) : nil, value: artwork?.tiffRepresentation)
+        .animation(PreviewMotion.content(enabled: showAnimations), value: artwork?.tiffRepresentation)
     }
 }

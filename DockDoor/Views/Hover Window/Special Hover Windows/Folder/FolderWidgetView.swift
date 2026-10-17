@@ -91,7 +91,7 @@ struct FolderWidgetPanelView: View {
     }
 
     private var navigationAnimation: Animation? {
-        showAnimations ? .smooth(duration: 0.25) : nil
+        PreviewMotion.content(enabled: showAnimations)
     }
 
     private var header: some View {
@@ -226,13 +226,13 @@ struct FolderWidgetPanelView: View {
     }
 
     private func push(_ level: FolderWidgetLevel) {
-        withAnimation(showAnimations ? .smooth(duration: 0.25) : nil) {
+        withAnimation(PreviewMotion.content(enabled: showAnimations)) {
             navigationStack.append(level)
         }
     }
 
     private func navigateBack() {
-        withAnimation(showAnimations ? .smooth(duration: 0.25) : nil) {
+        withAnimation(PreviewMotion.content(enabled: showAnimations)) {
             _ = navigationStack.popLast()
         }
     }
@@ -394,8 +394,8 @@ private struct FolderWidgetListView: View {
     }
 
     private func applyContentChange(_ change: () -> Void) {
-        if showAnimations, hasCompletedInitialLoad {
-            withAnimation(.smooth(duration: 0.25), change)
+        if hasCompletedInitialLoad {
+            withAnimation(PreviewMotion.content(enabled: showAnimations), change)
         } else {
             change()
         }
@@ -474,7 +474,7 @@ private struct FolderWidgetItemRow: View {
                     }
                 }
                 .frame(width: 28, height: 28)
-                .animation(showAnimations ? .easeIn(duration: 0.12) : nil, value: icon)
+                .animation(PreviewMotion.content(enabled: showAnimations), value: icon)
                 .onAppear { loadIcon() }
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -513,7 +513,7 @@ private struct FolderWidgetItemRow: View {
                 .strokeBorder(Color.primary.opacity(isHovering ? 0.14 : 0.08), lineWidth: 1)
         }
         .onHover { hovering in
-            withAnimation(showAnimations ? .snappy(duration: 0.175) : nil) {
+            withAnimation(PreviewMotion.hover(enabled: showAnimations)) {
                 isHovering = hovering
             }
         }

@@ -20,11 +20,11 @@ struct MediaLyricsButton: View {
                     Task {
                         await mediaInfo.fetchLyrics()
                     }
-                    withAnimation(showAnimations ? .spring(response: 0.6, dampingFraction: 0.8) : nil) {
+                    withAnimation(PreviewMotion.emphasis(enabled: showAnimations)) {
                         showingLyrics = true
                     }
                 } else {
-                    withAnimation(showAnimations ? .spring(response: 0.6, dampingFraction: 0.8) : nil) {
+                    withAnimation(PreviewMotion.emphasis(enabled: showAnimations)) {
                         showingLyrics.toggle()
                     }
                 }

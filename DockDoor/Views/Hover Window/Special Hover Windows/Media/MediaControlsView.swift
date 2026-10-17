@@ -131,12 +131,12 @@ struct MediaControlsView: View {
         }
         .onChange(of: mediaInfo.title) { newTitle in
             if !newTitle.isEmpty, isLoadingMediaInfo {
-                withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
+                withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                     isLoadingMediaInfo = false
                 }
             }
             if !mediaInfo.title.isEmpty, hasAppeared {
-                withAnimation(showAnimations ? .smooth(duration: 0.3) : nil) {
+                withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                     artworkRotation += 360
                 }
             }

@@ -64,7 +64,7 @@ struct MediaLyricsView: View {
     @ViewBuilder
     private func lyricsScrollView() -> some View {
         let visibleLyrics = getVisibleLyrics()
-        let lyricAnimation: Animation? = showAnimations ? .smooth(duration: 0.45) : nil
+        let lyricAnimation: Animation? = PreviewMotion.content(enabled: showAnimations)
 
         ScrollViewReader { proxy in
             ScrollView(.vertical, showsIndicators: false) {

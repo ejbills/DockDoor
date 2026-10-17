@@ -59,12 +59,12 @@ struct MediaPlaybackControls: View {
 
                     MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
                                        action: {
-                                           withAnimation(showAnimations ? .easeInOut(duration: 0.2) : nil) {
+                                           withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                                                mediaInfo.isPlaying.toggle()
                                            }
                                            mediaInfo.playPause()
                                        })
-                                       .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
+                                       .animation(PreviewMotion.content(enabled: showAnimations), value: mediaInfo.isPlaying)
 
                     MediaControlButton(systemName: "goforward.15", isTitle: true, action: {
                         let newTime = min(mediaInfo.duration, mediaInfo.displayTime + 15)
@@ -96,12 +96,12 @@ struct MediaPlaybackControls: View {
 
                 MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
                                    action: {
-                                       withAnimation(showAnimations ? .easeInOut(duration: 0.2) : nil) {
+                                       withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                                            mediaInfo.isPlaying.toggle()
                                        }
                                        mediaInfo.playPause()
                                    })
-                                   .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
+                                   .animation(PreviewMotion.content(enabled: showAnimations), value: mediaInfo.isPlaying)
 
                 MediaControlButton(systemName: "goforward.15", isTitle: true, action: {
                     let newTime = min(mediaInfo.duration, mediaInfo.displayTime + 15)

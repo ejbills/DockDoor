@@ -347,10 +347,28 @@ struct WindowPreviewHoverContainer: View {
         .fadeOnEdges(axis: scrollAxis == .horizontal ? .horizontal : .vertical, fadeLength: 20, disableLeading: dynamicFadeEnabled && !scrolledFromStart)
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
         .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
-            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+            if !previewStateCoordinator.windowSwitcherActive, effectiveShouldShowHeader {
+                SharedHoverAppTitle(
+                    appName: appName,
+                    appIcon: appIcon,
+                    hoveringAppIcon: hoveringAppIcon,
+                    backgroundAppearance: backgroundAppearance,
+                    showTitle: effectiveShowAppName,
+                    styleOverride: effectiveAppNameStyle,
+                    showIconOnly: effectiveShowAppIconOnly,
+                    onIconHover: { hoveringAppIcon = $0 }
+                ) {
+                    if updateAvailable, !mockPreviewActive {
+                        update()
+                    }
+                    if hoveringAppIcon, !updateAvailable, showMassActionButtons {
+                        massOperations()
+                    }
+                }
                 .onHover { isHovered in
                     hoveringWindowTitle = isHovered
                 }
+            }
         }
         .overlay {
             if !mockPreviewActive, !isDragging {
@@ -420,263 +438,51 @@ struct WindowPreviewHoverContainer: View {
     }
 
     @ViewBuilder
-    private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        let showName = !effectiveShowAppIconOnly
-
-        if !previewStateCoordinator.windowSwitcherActive, effectiveShouldShowHeader {
-            Group {
-                switch effectiveAppNameStyle {
-                case .default:
-                    HStack(alignment: .center) {
-                        HStack(spacing: 6) {
-                            if let appIcon {
-                                Image(nsImage: appIcon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .zIndex(1)
-                                    .frame(width: 24, height: 24)
-                            } else {
-                                ProgressView()
-                                    .frame(width: 24, height: 24)
-                            }
-                            if showName {
-                                hoverTitleLabelView(labelSize: labelSize)
-                            }
-                        }
-                        .contentShape(Rectangle())
-
-                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                        Group {
-                            update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable && showMassActionButtons)
-                        }
-                        .padding(.leading, 4)
-                    }
-                    .contentShape(Rectangle())
-                    .onHover { hover in
-                        hoveringAppIcon = hover
-                    }
-                    .shadow(radius: 2)
-                    .globalPadding(.top, 12)
-                    .globalPadding(.leading, 20)
-
-                case .shadowed:
-                    HStack(spacing: 2) {
-                        HStack(spacing: 6) {
-                            if let appIcon {
-                                Image(nsImage: appIcon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .zIndex(1)
-                                    .frame(width: 24, height: 24)
-                            } else {
-                                ProgressView()
-                                    .frame(width: 24, height: 24)
-                            }
-                            if showName {
-                                hoverTitleLabelView(labelSize: labelSize)
-                            }
-                        }
-                        .contentShape(Rectangle())
-
-                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                        Group {
-                            update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable && showMassActionButtons)
-                        }
-                        .padding(.leading, 4)
-                    }
-                    .contentShape(Rectangle())
-                    .onHover { hover in
-                        hoveringAppIcon = hover
-                    }
-                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-
-                case .popover:
-                    HStack(alignment: .center, spacing: 2) {
-                        HStack(spacing: 6) {
-                            if let appIcon {
-                                Image(nsImage: appIcon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .zIndex(1)
-                                    .frame(width: 24, height: 24)
-                            } else {
-                                ProgressView()
-                                    .frame(width: 24, height: 24)
-                            }
-                            if showName {
-                                hoverTitleLabelView(labelSize: labelSize)
-                            }
-                        }
-                        .contentShape(Rectangle())
-
-                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                        Group {
-                            update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable && showMassActionButtons)
-                        }
-                        .padding(.leading, 4)
-                    }
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 10)
-                    .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 10)
-                    .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .onHover { hover in
-                        hoveringAppIcon = hover
-                    }
-                    .offset(y: -30)
-                }
+    func update() -> some View {
+        Button {
+            if let appDelegate = NSApp.delegate as? AppDelegate {
+                appDelegate.updater.checkForUpdates()
             }
+        } label: {
+            Label("Update available", systemImage: "arrow.down.circle.fill")
+                .font(.caption2.weight(.medium))
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(
+                    CustomizableFluidGradientView()
+                        .opacity(effectiveAppNameStyle == .shadowed ? 1 : 0.25)
+                )
+                .clipShape(Capsule())
+                .shadow(radius: 2)
+                .overlay(
+                    Capsule()
+                        .stroke(.secondary.opacity(0.4), lineWidth: 1)
+                )
         }
+        .buttonStyle(.plain)
     }
 
     @ViewBuilder
-    func update(_ shouldDisplay: Bool) -> some View {
-        if shouldDisplay {
-            Button {
-                if let appDelegate = NSApp.delegate as? AppDelegate {
-                    appDelegate.updater.checkForUpdates()
-                }
-            } label: {
-                Label("Update available", systemImage: "arrow.down.circle.fill")
-                    .font(.caption2.weight(.medium))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(
-                        CustomizableFluidGradientView()
-                            .opacity(effectiveAppNameStyle == .shadowed ? 1 : 0.25)
-                    )
-                    .clipShape(Capsule())
-                    .shadow(radius: 2)
-                    .overlay(
-                        Capsule()
-                            .stroke(.secondary.opacity(0.4), lineWidth: 1)
-                    )
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
-    @ViewBuilder
-    func massOperations(_ shouldDisplay: Bool) -> some View {
-        if shouldDisplay {
-            Group {
-                Button {
-                    closeAllWindows()
-                } label: {
-                    Text("Close All")
-                        .font(.caption)
-                        .lineLimit(1)
-                }
-                .buttonStyle(AccentButtonStyle(small: true))
-
-                Button {
-                    minimizeAllWindows()
-                } label: {
-                    Text("Minimize All")
-                        .font(.caption)
-                        .lineLimit(1)
-                }
-                .buttonStyle(AccentButtonStyle(small: true))
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func hoverTitleLabelView(labelSize: CGSize) -> some View {
-        let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
-        let baseText = Text(trimmedAppName)
-
-        let rainbowGradientColors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
-        let rainbowGradientHighlights: [Color] = [.white.opacity(0.45), .yellow.opacity(0.35), .pink.opacity(0.4)]
-        let rainbowGradientSpeed: CGFloat = 0.65
-        let defaultBlur: CGFloat = 0.5
-
+    func massOperations() -> some View {
         Group {
-            switch effectiveAppNameStyle {
-            case .shadowed:
-                if trimmedAppName == "DockDoor" {
-                    FluidGradient(
-                        blobs: rainbowGradientColors,
-                        highlights: rainbowGradientHighlights,
-                        speed: rainbowGradientSpeed,
-                        blur: defaultBlur
-                    )
-                    .frame(width: labelSize.width, height: labelSize.height)
-                    .mask(baseText)
-                    .fontWeight(.medium)
-                    .padding(.leading, 4)
-                    .shadow(stacked: 2, radius: 6)
-                    .background(
-                        ZStack {
-                            MaterialBlurView(material: .hudWindow)
-                                .mask(
-                                    Ellipse()
-                                        .fill(
-                                            LinearGradient(
-                                                gradient: Gradient(
-                                                    colors: [
-                                                        Color.white.opacity(1.0),
-                                                        Color.white.opacity(0.35),
-                                                    ]
-                                                ),
-                                                startPoint: .top,
-                                                endPoint: .bottom
-                                            )
-                                        )
-                                )
-                                .blur(radius: 5)
-                        }
-                        .frame(width: labelSize.width + 30)
-                    )
-                } else {
-                    baseText
-                        .foregroundStyle(Color.primary)
-                        .shadow(stacked: 2, radius: 6)
-                        .background(
-                            ZStack {
-                                MaterialBlurView(material: .hudWindow)
-                                    .mask(
-                                        Ellipse()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(
-                                                        colors: [
-                                                            Color.white.opacity(1.0),
-                                                            Color.white.opacity(0.35),
-                                                        ]
-                                                    ),
-                                                    startPoint: .top,
-                                                    endPoint: .bottom
-                                                )
-                                            )
-                                    )
-                                    .blur(radius: 5)
-                            }
-                            .frame(width: labelSize.width + 30)
-                        )
-                }
-            case .default, .popover:
-                if trimmedAppName == "DockDoor" {
-                    FluidGradient(
-                        blobs: rainbowGradientColors,
-                        highlights: rainbowGradientHighlights,
-                        speed: rainbowGradientSpeed,
-                        blur: defaultBlur
-                    )
-                    .frame(width: labelSize.width, height: labelSize.height)
-                    .mask(baseText)
-                } else {
-                    baseText
-                        .foregroundStyle(Color.primary)
-                }
+            Button {
+                closeAllWindows()
+            } label: {
+                Text("Close All")
+                    .font(.caption)
+                    .lineLimit(1)
             }
+            .buttonStyle(AccentButtonStyle(small: true))
+
+            Button {
+                minimizeAllWindows()
+            } label: {
+                Text("Minimize All")
+                    .font(.caption)
+                    .lineLimit(1)
+            }
+            .buttonStyle(AccentButtonStyle(small: true))
         }
-        .lineLimit(1)
     }
 
     @ViewBuilder

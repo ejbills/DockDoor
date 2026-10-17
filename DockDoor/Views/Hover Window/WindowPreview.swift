@@ -267,7 +267,7 @@ struct WindowPreview: View, Equatable {
                     .transition(.opacity)
             }
         }
-        .animation(appearance.showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
+        .animation(PreviewMotion.content(enabled: appearance.showAnimations), value: inactive)
         .clipShape(RoundedRectangle(cornerRadius: appearance.radii.image, style: .continuous))
         .opacity(isSelected ? 1.0 : appearance.unselectedContentOpacity)
         .overlay(alignment: spaceBadgeAlignment) {
@@ -845,43 +845,22 @@ struct WindowPreview: View, Equatable {
                 view.frame(maxWidth: dimensions.maxDimensions.width > 0 ? dimensions.maxDimensions.width : nil)
             }
             .background {
-                let cornerRadius = appearance.radii.card
-
-                if !appearance.hidePreviewCardBackground {
-                    BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
-                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                        .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
-                        .padding(-CardRadius.innerPadding)
-                        .overlay {
-                            if finalIsSelected {
-                                let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
-                                RoundedRectangle(cornerRadius: cornerRadius)
-                                    .fill(highlightColor.opacity(appearance.selectionOpacity))
-                                    .padding(-CardRadius.innerPadding)
-                            }
-                        }
-                        .overlay {
-                            if isActiveWindow {
-                                RoundedRectangle(cornerRadius: cornerRadius)
-                                    .strokeBorder(appearance.activeAppIndicatorColor, lineWidth: 2.5)
-                                    .padding(-CardRadius.innerPadding)
-                            }
-                        }
-                }
-
-                // Selection border drawn outside the card-background branch so the
-                // selected item stays visible when hidePreviewCardBackground is on.
-                if finalIsSelected {
-                    let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .strokeBorder(highlightColor, lineWidth: 2.5)
-                        .padding(-CardRadius.innerPadding)
-                }
+                PreviewCardChrome(
+                    cornerRadius: appearance.radii.card,
+                    backgroundAppearance: backgroundAppearance,
+                    isSelected: finalIsSelected,
+                    isActiveWindow: isActiveWindow,
+                    selectionTint: appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor),
+                    selectionFillOpacity: appearance.selectionOpacity,
+                    activeIndicatorColor: appearance.activeAppIndicatorColor,
+                    showsBackground: !appearance.hidePreviewCardBackground,
+                    negativePadding: CardRadius.innerPadding
+                )
             }
         }
         .overlay {
             if isDraggingOver {
-                RoundedRectangle(cornerRadius: appearance.radii.card)
+                RoundedRectangle(cornerRadius: appearance.radii.card, style: .continuous)
                     .fill(Color(nsColor: .controlAccentColor).opacity(0.3))
                     .padding(-CardRadius.innerPadding)
                     .opacity(highlightOpacity)
@@ -913,12 +892,7 @@ struct WindowPreview: View, Equatable {
             if isDraggingOver { return }
 
             let setHoverState: (Bool) -> Void = { newState in
-                if appearance.showAnimations {
-                    withAnimation(.snappy(duration: 0.175)) {
-                        if windowSwitcherActive { isHoveringOverWindowSwitcherPreview = newState }
-                        else { isHoveringOverDockPeekPreview = newState }
-                    }
-                } else {
+                withAnimation(PreviewMotion.hover(enabled: appearance.showAnimations)) {
                     if windowSwitcherActive { isHoveringOverWindowSwitcherPreview = newState }
                     else { isHoveringOverDockPeekPreview = newState }
                 }

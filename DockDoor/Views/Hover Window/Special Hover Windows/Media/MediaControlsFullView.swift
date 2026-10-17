@@ -66,8 +66,8 @@ struct MediaControlsFullView: View {
                     .frame(width: MediaControlsLayout.compactContentWidth)
             }
         }
-        .animation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil, value: isArtworkExpandedFull)
-        .animation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil, value: showingLyricsInFull)
+        .animation(PreviewMotion.emphasis(enabled: showAnimations), value: isArtworkExpandedFull)
+        .animation(PreviewMotion.emphasis(enabled: showAnimations), value: showingLyricsInFull)
         .globalPadding(20)
     }
 
@@ -84,7 +84,7 @@ struct MediaControlsFullView: View {
                 .matchedGeometryEffect(id: "artworkForFullView", in: artworkExpansionFullNamespace)
                 .onTapGesture {
                     if isPinnedMode {
-                        withAnimation(showAnimations ? .smooth(duration: 0.125) : nil) {
+                        withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                             isArtworkExpandedFull = true
                         }
                     }
@@ -133,7 +133,7 @@ struct MediaControlsFullView: View {
                 .matchedGeometryEffect(id: "artworkForFullView", in: artworkExpansionFullNamespace)
                 .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
                 .onTapGesture {
-                    withAnimation(showAnimations ? .smooth(duration: 0.125) : nil) {
+                    withAnimation(PreviewMotion.content(enabled: showAnimations)) {
                         isArtworkExpandedFull = false
                         showingLyricsInFull = false
                     }
@@ -191,6 +191,6 @@ struct MediaControlsFullView: View {
                 )
             }
         }
-        .animation(showAnimations ? .smooth(duration: 0.2) : nil, value: "\(mediaInfo.title)\(mediaInfo.artist)")
+        .animation(PreviewMotion.content(enabled: showAnimations), value: "\(mediaInfo.title)\(mediaInfo.artist)")
     }
 }
