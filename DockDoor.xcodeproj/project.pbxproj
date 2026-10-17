@@ -90,6 +90,7 @@
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
 		B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */; };
 		80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */; };
+		7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */; };
 		7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
@@ -347,6 +348,7 @@
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
 		857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTitlePresentationTests.swift; sourceTree = "<group>"; };
 		EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackupManagerTests.swift; sourceTree = "<group>"; };
+		587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutModifierTests.swift; sourceTree = "<group>"; };
 		0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternateKeybindTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
@@ -704,6 +706,7 @@
 				22D3504B979C44D68BB7875D /* TrackpadSwipeDetectorTests.swift */,
 				857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */,
 				EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */,
+				587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */,
 				0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */,
 				92FFF970DCB649F3BBE19214 /* WindowGestureRecognizerTests.swift */,
 				49E6B5DEC1D045BFBAE71564 /* WindowGestureResolverTests.swift */,
@@ -1217,6 +1220,7 @@
 				524C1C716FD24706A7B0D1DE /* TrackpadSwipeDetectorTests.swift in Sources */,
 				B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */,
 				80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */,
+				7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */,
 				7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */,
 				204F31BF2B7E46239664231A /* WindowGestureRecognizerTests.swift in Sources */,
 				FBF8A3761BBB44ADA589043B /* WindowGestureResolverTests.swift in Sources */,
