@@ -188,7 +188,7 @@ struct AudioDevicePickerView: View {
                     .truncationMode(.tail)
 
                 Image(systemName: "chevron.up.chevron.down")
-                    .font(.system(size: 10))
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
             .foregroundStyle(.primary)

@@ -24,18 +24,18 @@ struct MediaControlsSkeleton: View {
                     .frame(width: MediaControlsLayout.embeddedArtworkSize, height: MediaControlsLayout.embeddedArtworkSize)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: PreviewRadius.xs)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .frame(height: 13)
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: PreviewRadius.xs)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                         .frame(maxWidth: 70, alignment: .leading)
                         .frame(height: 11)
                 }
             }
 
-            RoundedRectangle(cornerRadius: 5)
+            RoundedRectangle(cornerRadius: PreviewRadius.sm)
                 .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                 .frame(height: 6)
                 .frame(height: 10)
@@ -61,10 +61,10 @@ struct MediaControlsSkeleton: View {
                     .frame(width: MediaControlsLayout.artworkSize, height: MediaControlsLayout.artworkSize)
 
                 VStack(alignment: .leading, spacing: 6) {
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: PreviewRadius.xs)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                         .frame(width: 120, height: 16)
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: PreviewRadius.xs)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                         .frame(width: 80, height: 14)
                 }
@@ -72,16 +72,16 @@ struct MediaControlsSkeleton: View {
             }
 
             HStack(spacing: 8) {
-                RoundedRectangle(cornerRadius: 3)
+                RoundedRectangle(cornerRadius: PreviewRadius.xs)
                     .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                     .frame(width: 35, height: 12)
 
-                RoundedRectangle(cornerRadius: 3)
+                RoundedRectangle(cornerRadius: PreviewRadius.xs)
                     .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                     .frame(height: MediaControlsLayout.progressBarHeight)
                     .frame(maxWidth: .infinity)
 
-                RoundedRectangle(cornerRadius: 3)
+                RoundedRectangle(cornerRadius: PreviewRadius.xs)
                     .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                     .frame(width: 35, height: 12)
             }
@@ -90,7 +90,7 @@ struct MediaControlsSkeleton: View {
             HStack(spacing: MediaControlsLayout.mediaButtonsSpacing) {
                 Spacer()
                 ForEach(0 ..< 5, id: \.self) { _ in
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    RoundedRectangle(cornerRadius: PreviewRadius.md, style: .continuous)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                         .frame(width: 28, height: 28)
                 }

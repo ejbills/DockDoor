@@ -125,7 +125,7 @@ struct FolderWidgetPanelView: View {
                 SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             } label: {
                 Image(systemName: "arrow.up.forward.square")
-                    .font(.system(size: 15, weight: .medium))
+                    .font(PreviewTypography.toolbarIcon)
                     .frame(width: 30, height: 30)
                     .contentShape(Rectangle())
             }
@@ -142,7 +142,7 @@ struct FolderWidgetPanelView: View {
                     navigateBack()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(PreviewTypography.toolbarIcon)
                         .frame(width: 30, height: 28)
                         .contentShape(Rectangle())
                 }
@@ -179,7 +179,7 @@ struct FolderWidgetPanelView: View {
                 setSortReversed(!isSortReversed)
             } label: {
                 Image(systemName: isSortReversed ? "arrow.down" : "arrow.up")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(PreviewTypography.toolbarIcon)
                     .frame(width: 30, height: 28)
                     .contentShape(Rectangle())
             }
@@ -188,7 +188,7 @@ struct FolderWidgetPanelView: View {
 
             Toggle(isOn: $showHiddenFiles) {
                 Image(systemName: showHiddenFiles ? "eye" : "eye.slash")
-                    .font(.system(size: 13, weight: .medium))
+                    .font(PreviewTypography.toolbarIcon)
                     .frame(width: 30, height: 28)
             }
             .toggleStyle(.button)
@@ -198,7 +198,7 @@ struct FolderWidgetPanelView: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
         .background(Color.gray.opacity(0.12))
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: PreviewRadius.lg, style: .continuous))
     }
 
     private func setSortOrder(_ order: FolderWidgetSortOrder) {
@@ -372,7 +372,7 @@ private struct FolderWidgetListView: View {
         .frame(height: contentHeight)
         .padding(.horizontal, 14)
         .background(Color.gray.opacity(0.12))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: PreviewRadius.xl, style: .continuous))
     }
 
     private func reload() async {
@@ -479,7 +479,7 @@ private struct FolderWidgetItemRow: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(item.name)
-                        .font(.system(size: 13, weight: .medium))
+                        .font(PreviewTypography.itemTitle)
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -507,9 +507,9 @@ private struct FolderWidgetItemRow: View {
         }
         .buttonStyle(.plain)
         .background(Color.gray.opacity(isHovering ? 0.24 : 0.14))
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: PreviewRadius.md, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: PreviewRadius.md, style: .continuous)
                 .strokeBorder(Color.primary.opacity(isHovering ? 0.14 : 0.08), lineWidth: 1)
         }
         .onHover { hovering in

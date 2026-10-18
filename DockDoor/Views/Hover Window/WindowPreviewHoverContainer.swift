@@ -1082,7 +1082,7 @@ struct WindowPreviewHoverContainer: View {
     private func noResultsView() -> some View {
         VStack(spacing: 16) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 48, weight: .light))
+                .font(PreviewTypography.emptyStateIcon)
                 .foregroundStyle(.secondary)
 
             VStack(spacing: 4) {

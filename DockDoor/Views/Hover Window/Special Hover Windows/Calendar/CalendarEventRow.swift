@@ -41,7 +41,7 @@ struct CalendarEventRow: View {
         .padding(.vertical, 4)
         .frame(maxWidth: .infinity, minHeight: CalendarLayout.embeddedEventHeight, alignment: .leading)
         .background(Color.gray.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: PreviewRadius.md, style: .continuous))
     }
 
     @ViewBuilder

@@ -51,11 +51,11 @@ struct KeyCap: View {
             .padding(.vertical, 4)
             .padding(.horizontal, 8)
             .background(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                RoundedRectangle(cornerRadius: PreviewRadius.sm, style: .continuous)
                     .fill(titleColor.opacity(0.12))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                RoundedRectangle(cornerRadius: PreviewRadius.sm, style: .continuous)
                     .strokeBorder(titleColor.opacity(0.35), lineWidth: 1)
             )
             .foregroundStyle(titleColor)

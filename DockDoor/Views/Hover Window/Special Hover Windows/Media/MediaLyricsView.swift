@@ -23,7 +23,7 @@ struct MediaLyricsView: View {
         .frame(width: width)
         .frame(maxHeight: maxHeight)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+            RoundedRectangle(cornerRadius: PreviewRadius.lg, style: .continuous)
                 .fill(.ultraThinMaterial)
                 .opacity(0.2)
         )
@@ -110,7 +110,7 @@ struct MediaLyricsView: View {
         }
         .padding(.horizontal, 4)
         .overlay {
-            RoundedRectangle(cornerRadius: 19, style: .continuous)
+            RoundedRectangle(cornerRadius: PreviewRadius.lg, style: .continuous)
                 .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
         }
 

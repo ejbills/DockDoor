@@ -18,4 +18,17 @@ enum PreviewTypography {
     static let appTitleSize: CGFloat = 13
     static let appTitle = Font.system(size: appTitleSize, weight: .medium)
     static let appTitleMeasureWeight: NSFont.Weight = .medium
+    static let itemTitle = Font.system(size: 13, weight: .medium)
+    static let toolbarIcon = Font.system(size: 13, weight: .semibold)
+    static let searchIcon = Font.system(size: 14, weight: .medium)
+    static let emptyStateIcon = Font.system(size: 48, weight: .light)
+}
+
+/// Fixed radii for hover chrome that doesn't follow the user's card radius.
+enum PreviewRadius {
+    static let xs: CGFloat = 3
+    static let sm: CGFloat = 6
+    static let md: CGFloat = 8
+    static let lg: CGFloat = 12
+    static let xl: CGFloat = 16
 }

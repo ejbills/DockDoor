@@ -235,8 +235,8 @@ struct SharedHoverAppTitle<Trailing: View>: View {
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 10)
-            .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 10)
-            .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: PreviewRadius.lg)
+            .contentShape(RoundedRectangle(cornerRadius: PreviewRadius.lg, style: .continuous))
             .onHover { hover in onIconHover?(hover) }
             Spacer()
         }

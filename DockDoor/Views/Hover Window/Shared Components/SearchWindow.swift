@@ -14,7 +14,7 @@ struct SearchFieldView: View {
 
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
-                    .font(.system(size: 14, weight: .medium))
+                    .font(PreviewTypography.searchIcon)
                     .foregroundStyle(.secondary)
 
                 SearchTextFieldRepresentable(textField: searchField)
