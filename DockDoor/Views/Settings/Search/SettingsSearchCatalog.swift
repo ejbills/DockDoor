@@ -42,6 +42,15 @@ enum SettingsSearchCatalog {
             icon: "figure.roll"
         ),
         SettingsSearchItem(
+            id: "general.dockDoorPro",
+            title: String(localized: "Get DockDoor Pro"),
+            description: String(localized: "Replace the Dock entirely with the paid app from the same developer"),
+            keywords: ["pro", "premium", "upgrade", "paid", "dock replacement"],
+            tab: "General",
+            section: String(localized: "Support & Contributions"),
+            icon: "sparkles"
+        ),
+        SettingsSearchItem(
             id: "general.showSettingDescriptions",
             title: String(localized: "Show setting descriptions"),
             description: String(localized: "Explain what each setting does underneath its row."),
@@ -1924,6 +1933,14 @@ enum SettingsSearchCatalog {
             tab: "Support",
             section: String(localized: "Updates"),
             icon: "clock.arrow.2.circlepath"
+        ),
+        SettingsSearchItem(
+            id: "gestures.switcherGestures",
+            title: String(localized: "Enable gestures in window switcher"),
+            description: String(localized: "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode."),
+            keywords: ["swipe", "trackpad", "gesture", "switcher", "vertical"],
+            tab: "Gestures",
+            icon: "rectangle.3.group"
         ),
         SettingsSearchItem(
             id: "support.debugLogging",
