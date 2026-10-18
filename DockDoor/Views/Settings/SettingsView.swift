@@ -214,10 +214,10 @@ struct SettingsView: View {
     }
 
     private var searchField: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 12))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
 
             TextField(
                 String(localized: "Search settings…", comment: "Settings search placeholder"),
@@ -239,7 +239,10 @@ struct SettingsView: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 5)
+        .background(Capsule().fill(Color.primary.opacity(0.07)))
+        .padding(.horizontal, 10)
         .padding(.vertical, 8)
     }
 
