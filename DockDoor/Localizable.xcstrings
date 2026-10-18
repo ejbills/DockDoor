@@ -1642,7 +1642,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@, %2$lld px"
           }
         },
@@ -1714,7 +1714,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@, %2$lld px"
           }
         },
@@ -18990,7 +18990,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "App"
           }
         },
@@ -19062,7 +19062,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "App"
           }
         },
@@ -26675,8 +26675,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backup & Restore"
+            "state" : "translated",
+            "value" : "备份 & 恢复"
           }
         },
         "zh-Hant" : {
@@ -29076,8 +29076,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom"
+            "state" : "translated",
+            "value" : "Onderaan"
           }
         },
         "no" : {
@@ -29148,8 +29148,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom"
+            "state" : "translated",
+            "value" : "底部"
           }
         },
         "zh-Hant" : {
@@ -32126,8 +32126,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancelled"
+            "state" : "translated",
+            "value" : "Geannuleerd"
           }
         },
         "no" : {
@@ -32198,8 +32198,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancelled"
+            "state" : "translated",
+            "value" : "已取消"
           }
         },
         "zh-Hant" : {
@@ -39168,8 +39168,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close Tab"
+            "state" : "translated",
+            "value" : "Tabblad sluiten"
           }
         },
         "no" : {
@@ -39240,8 +39240,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close Tab"
+            "state" : "translated",
+            "value" : "关闭标签"
           }
         },
         "zh-Hant" : {
@@ -57258,8 +57258,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock edge"
+            "state" : "translated",
+            "value" : "Rand van het Dock"
           }
         },
         "no" : {
@@ -57330,7 +57330,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Dock edge"
           }
         },
@@ -57639,8 +57639,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Height"
+            "state" : "translated",
+            "value" : "Dock hoogte"
           }
         },
         "no" : {
@@ -57711,8 +57711,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Height"
+            "state" : "translated",
+            "value" : "Dock 高度"
           }
         },
         "zh-Hant" : {
@@ -62018,8 +62018,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Width"
+            "state" : "translated",
+            "value" : "Dock breedte"
           }
         },
         "no" : {
@@ -62090,8 +62090,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Width"
+            "state" : "translated",
+            "value" : "Dock 宽度"
           }
         },
         "zh-Hant" : {
@@ -64492,8 +64492,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Double-tap a title bar to center the window at its earlier size."
+            "state" : "translated",
+            "value" : "Tik twee keer op een titelbalk om het venster op zijn oorspronkelijke grootte in het midden te plaatsen."
           }
         },
         "no" : {
@@ -64564,8 +64564,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Double-tap a title bar to center the window at its earlier size."
+            "state" : "translated",
+            "value" : "轻点两下标题栏，将窗口以其先前大小居中。"
           }
         },
         "zh-Hant" : {
@@ -64682,8 +64682,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Double-taps need \"Smart zoom\" turned on in Trackpad settings."
+            "state" : "translated",
+            "value" : "Voor dubbeltikken moet 'Slim zoomen' zijn ingeschakeld in de trackpad-instellingen."
           }
         },
         "no" : {
@@ -64754,8 +64754,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Double-taps need \"Smart zoom\" turned on in Trackpad settings."
+            "state" : "translated",
+            "value" : "轻点两下需要在“触控板”设置中开启“智能缩放”。"
           }
         },
         "zh-Hant" : {
@@ -73511,8 +73511,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Export DockDoor Settings"
+            "state" : "translated",
+            "value" : "导出 DockDoor 设置"
           }
         },
         "zh-Hant" : {
@@ -73891,8 +73891,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Export Settings…"
+            "state" : "translated",
+            "value" : "导出设置……"
           }
         },
         "zh-Hant" : {
@@ -75736,8 +75736,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Screen"
+            "state" : "translated",
+            "value" : "Scherm vullen"
           }
         },
         "no" : {
@@ -75808,8 +75808,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Screen"
+            "state" : "translated",
+            "value" : "填满屏幕"
           }
         },
         "zh-Hant" : {
@@ -80881,8 +80881,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Full Screen"
+            "state" : "translated",
+            "value" : "Schermvullend"
           }
         },
         "no" : {
@@ -80953,8 +80953,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Full Screen"
+            "state" : "translated",
+            "value" : "全屏幕"
           }
         },
         "zh-Hant" : {
@@ -82595,8 +82595,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gestures"
+            "state" : "translated",
+            "value" : "Gebaren"
           }
         },
         "no" : {
@@ -82667,8 +82667,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gestures"
+            "state" : "translated",
+            "value" : "手势操作"
           }
         },
         "zh-Hant" : {
@@ -85642,8 +85642,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Haptic feedback"
+            "state" : "translated",
+            "value" : "Haptische feedback"
           }
         },
         "no" : {
@@ -85714,8 +85714,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Haptic feedback"
+            "state" : "translated",
+            "value" : "触感反馈"
           }
         },
         "zh-Hant" : {
@@ -90402,8 +90402,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Higher values open the switcher and change the selection with shorter swipes."
+            "state" : "translated",
+            "value" : "Een hogere waarde opent de wisselaar eerder en verandert de selectie sneller met kortere veegbewegingen."
           }
         },
         "no" : {
@@ -90474,8 +90474,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Higher values open the switcher and change the selection with shorter swipes."
+            "state" : "translated",
+            "value" : "数值越高，用更短的轻扫即可打开切换器并更改选择。"
           }
         },
         "zh-Hant" : {
@@ -94853,8 +94853,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Import DockDoor Settings"
+            "state" : "translated",
+            "value" : "导入 DockDoor 设置"
           }
         },
         "zh-Hant" : {
@@ -95043,8 +95043,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Import Settings"
+            "state" : "translated",
+            "value" : "导入设置"
           }
         },
         "zh-Hant" : {
@@ -95233,8 +95233,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Import Settings…"
+            "state" : "translated",
+            "value" : "导入设置……"
           }
         },
         "zh-Hant" : {
@@ -98783,8 +98783,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep a strip of the screen free so snapped windows don't cover a custom dock."
+            "state" : "translated",
+            "value" : "Houd een strook van het scherm vrij, zodat vastgeklikte vensters een alternatief Dock niet bedekken."
           }
         },
         "no" : {
@@ -98855,8 +98855,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep a strip of the screen free so snapped windows don't cover a custom dock."
+            "state" : "translated",
+            "value" : "保留一条屏幕空白区域，使贴靠的窗口不会覆盖自定义程序坞。"
           }
         },
         "zh-Hant" : {
@@ -100305,8 +100305,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keybinds"
+            "state" : "translated",
+            "value" : "Toetsencombinaties"
           }
         },
         "no" : {
@@ -100377,8 +100377,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keybinds"
+            "state" : "translated",
+            "value" : "快捷键"
           }
         },
         "zh-Hant" : {
@@ -102594,8 +102594,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left"
+            "state" : "translated",
+            "value" : "Links"
           }
         },
         "no" : {
@@ -102666,8 +102666,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left"
+            "state" : "translated",
+            "value" : "左侧"
           }
         },
         "zh-Hant" : {
@@ -107353,8 +107353,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar."
+            "state" : "translated",
+            "value" : "Beheer vensters en apps met veegbewegingen met twee vingers, knijpbewegingen en tikken op titelbalken, Dock-pictogrammen en de menubalk."
           }
         },
         "no" : {
@@ -107425,8 +107425,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar."
+            "state" : "translated",
+            "value" : "通过双指轻扫、捏合，以及在标题栏、程序坞图标和菜单栏上轻点来管理窗口和 App。"
           }
         },
         "zh-Hant" : {
@@ -112309,8 +112309,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All Windows"
+            "state" : "translated",
+            "value" : "Alle vensters minimaliseren"
           }
         },
         "no" : {
@@ -112381,8 +112381,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All Windows"
+            "state" : "translated",
+            "value" : "最小化所有窗口"
           }
         },
         "zh-Hant" : {
@@ -112882,8 +112882,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize Windows"
+            "state" : "translated",
+            "value" : "Vensters minimaliseren"
           }
         },
         "no" : {
@@ -112954,8 +112954,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize Windows"
+            "state" : "translated",
+            "value" : "最小化窗口"
           }
         },
         "zh-Hant" : {
@@ -114213,8 +114213,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "More Gestures"
+            "state" : "translated",
+            "value" : "Meer gebaren"
           }
         },
         "no" : {
@@ -114285,8 +114285,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "More Gestures"
+            "state" : "translated",
+            "value" : "更多手势"
           }
         },
         "zh-Hant" : {
@@ -117452,8 +117452,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next App"
+            "state" : "translated",
+            "value" : "Volgende app"
           }
         },
         "no" : {
@@ -117524,8 +117524,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next App"
+            "state" : "translated",
+            "value" : "下一个 App"
           }
         },
         "zh-Hant" : {
@@ -122974,8 +122974,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Off"
+            "state" : "translated",
+            "value" : "Uit"
           }
         },
         "no" : {
@@ -123046,8 +123046,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Off"
+            "state" : "translated",
+            "value" : "关闭"
           }
         },
         "zh-Hant" : {
@@ -123545,8 +123545,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a Dock icon"
+            "state" : "translated",
+            "value" : "op een Dock-pictogram"
           }
         },
         "no" : {
@@ -123617,8 +123617,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a Dock icon"
+            "state" : "translated",
+            "value" : "在 Dock 图标上"
           }
         },
         "zh-Hant" : {
@@ -123735,8 +123735,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On a Dock Icon"
+            "state" : "translated",
+            "value" : "Op een Dock-pictogram"
           }
         },
         "no" : {
@@ -123807,8 +123807,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On a Dock Icon"
+            "state" : "translated",
+            "value" : "在 Dock 图标上"
           }
         },
         "zh-Hant" : {
@@ -123926,8 +123926,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a tab"
+            "state" : "translated",
+            "value" : "op een tabblad"
           }
         },
         "no" : {
@@ -123998,8 +123998,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a tab"
+            "state" : "translated",
+            "value" : "在标签页上"
           }
         },
         "zh-Hant" : {
@@ -124117,8 +124117,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a title bar"
+            "state" : "translated",
+            "value" : "op een titelbalk"
           }
         },
         "no" : {
@@ -124189,8 +124189,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a title bar"
+            "state" : "translated",
+            "value" : "在标题栏上"
           }
         },
         "zh-Hant" : {
@@ -124307,8 +124307,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On a Window's Title Bar"
+            "state" : "translated",
+            "value" : "Op een titelbalk van een venster"
           }
         },
         "no" : {
@@ -124379,8 +124379,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On a Window's Title Bar"
+            "state" : "translated",
+            "value" : "在窗口的标题栏上"
           }
         },
         "zh-Hant" : {
@@ -124498,8 +124498,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on the menu bar"
+            "state" : "translated",
+            "value" : "op de menubalk"
           }
         },
         "no" : {
@@ -124570,8 +124570,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on the menu bar"
+            "state" : "translated",
+            "value" : "在菜单栏上"
           }
         },
         "zh-Hant" : {
@@ -124688,8 +124688,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On the Menu Bar"
+            "state" : "translated",
+            "value" : "Op de menubalk"
           }
         },
         "no" : {
@@ -124760,8 +124760,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On the Menu Bar"
+            "state" : "translated",
+            "value" : "在菜单栏上"
           }
         },
         "zh-Hant" : {
@@ -129068,8 +129068,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Trackpad Settings"
+            "state" : "translated",
+            "value" : "Open trackpad instellingen"
           }
         },
         "no" : {
@@ -129140,8 +129140,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Trackpad Settings"
+            "state" : "translated",
+            "value" : "打开触控板设置"
           }
         },
         "zh-Hant" : {
@@ -130209,8 +130209,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Options"
+            "state" : "translated",
+            "value" : "Opties"
           }
         },
         "no" : {
@@ -130281,8 +130281,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Options"
+            "state" : "translated",
+            "value" : "选项"
           }
         },
         "zh-Hant" : {
@@ -133827,8 +133827,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a running app's Dock icon to quit it."
+            "state" : "translated",
+            "value" : "Knijp naar binnen op het Dock-pictogram van een actieve app om deze af te sluiten."
           }
         },
         "no" : {
@@ -133899,8 +133899,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a running app's Dock icon to quit it."
+            "state" : "translated",
+            "value" : "在正在运行的 App 的 Dock 图标上捏合，即可退出该 App。"
           }
         },
         "zh-Hant" : {
@@ -134018,8 +134018,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a tab to close just that tab."
+            "state" : "translated",
+            "value" : "Knijp naar binnen op een tabblad om alleen dat tabblad te sluiten."
           }
         },
         "no" : {
@@ -134090,8 +134090,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a tab to close just that tab."
+            "state" : "translated",
+            "value" : "在标签页上捏合，即可仅关闭该标签页。"
           }
         },
         "zh-Hant" : {
@@ -134209,8 +134209,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a title bar."
+            "state" : "translated",
+            "value" : "Knijp naar binnen op een titelbalk."
           }
         },
         "no" : {
@@ -134281,8 +134281,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a title bar."
+            "state" : "translated",
+            "value" : "在标题栏上捏合。"
           }
         },
         "zh-Hant" : {
@@ -134400,8 +134400,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch out on a title bar to enter or leave full screen."
+            "state" : "translated",
+            "value" : "Knijp naar buiten op een titelbalk om de volledig-schermmodus te openen of te verlaten."
           }
         },
         "no" : {
@@ -134472,8 +134472,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch out on a title bar to enter or leave full screen."
+            "state" : "translated",
+            "value" : "在标题栏上张开，即可进入或退出全屏幕。"
           }
         },
         "zh-Hant" : {
@@ -134590,8 +134590,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinches need \"Zoom in or out\" turned on in Trackpad settings."
+            "state" : "translated",
+            "value" : "Voor knijpbewegingen moet 'In- of uitzoomen' zijn ingeschakeld in de trackpad-instellingen."
           }
         },
         "no" : {
@@ -134662,8 +134662,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinches need \"Zoom in or out\" turned on in Trackpad settings."
+            "state" : "translated",
+            "value" : "捏合需要在“触控板”设置中开启“放大或缩小”。"
           }
         },
         "zh-Hant" : {
@@ -143923,8 +143923,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous App"
+            "state" : "translated",
+            "value" : "Vorige app"
           }
         },
         "no" : {
@@ -143995,8 +143995,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous App"
+            "state" : "translated",
+            "value" : "上一个 App"
           }
         },
         "zh-Hant" : {
@@ -145065,8 +145065,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit %@"
+            "state" : "translated",
+            "value" : "%@ stoppen"
           }
         },
         "no" : {
@@ -145137,8 +145137,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit %@"
+            "state" : "translated",
+            "value" : "退出 %@"
           }
         },
         "zh-Hant" : {
@@ -150772,8 +150772,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reported by Apps"
+            "state" : "translated",
+            "value" : "Gemeld door apps"
           }
         },
         "no" : {
@@ -150844,8 +150844,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reported by Apps"
+            "state" : "translated",
+            "value" : "由 App 报告"
           }
         },
         "zh-Hant" : {
@@ -154009,8 +154009,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore All"
+            "state" : "translated",
+            "value" : "Alles herstellen"
           }
         },
         "no" : {
@@ -154081,8 +154081,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore All"
+            "state" : "translated",
+            "value" : "全部恢复"
           }
         },
         "zh-Hant" : {
@@ -154390,8 +154390,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore All Windows"
+            "state" : "translated",
+            "value" : "Alle vensters herstellen"
           }
         },
         "no" : {
@@ -154462,8 +154462,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore All Windows"
+            "state" : "translated",
+            "value" : "恢复所有窗口"
           }
         },
         "zh-Hant" : {
@@ -154581,8 +154581,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore Minimized"
+            "state" : "translated",
+            "value" : "Geminimaliseerd herstellen"
           }
         },
         "no" : {
@@ -154653,8 +154653,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore Minimized"
+            "state" : "translated",
+            "value" : "恢复最小化的窗口"
           }
         },
         "zh-Hant" : {
@@ -154963,8 +154963,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore Window"
+            "state" : "translated",
+            "value" : "Venster herstellen"
           }
         },
         "no" : {
@@ -155035,8 +155035,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore Window"
+            "state" : "translated",
+            "value" : "恢复窗口"
           }
         },
         "zh-Hant" : {
@@ -155724,8 +155724,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right"
+            "state" : "translated",
+            "value" : "Rechts"
           }
         },
         "no" : {
@@ -155796,8 +155796,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right"
+            "state" : "translated",
+            "value" : "右侧"
           }
         },
         "zh-Hant" : {
@@ -160674,8 +160674,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scrolling on Dock icons and title bars, swipes on previews, and a trackpad swipe for the window switcher."
+            "state" : "translated",
+            "value" : "Scrollen over Dock-pictogrammen en titelbalken, vegen over voorbeelden en een veegbeweging op het trackpad voor de vensterwisselaar."
           }
         },
         "no" : {
@@ -160746,8 +160746,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scrolling on Dock icons and title bars, swipes on previews, and a trackpad swipe for the window switcher."
+            "state" : "translated",
+            "value" : "在 Dock 图标和标题栏上滚动，在预览上轻扫，以及用于窗口切换器的触控板轻扫。"
           }
         },
         "zh-Hant" : {
@@ -166386,8 +166386,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sensitivity"
+            "state" : "translated",
+            "value" : "Gevoeligheid"
           }
         },
         "no" : {
@@ -166458,8 +166458,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sensitivity"
+            "state" : "translated",
+            "value" : "灵敏度"
           }
         },
         "zh-Hant" : {
@@ -167721,8 +167721,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+            "state" : "translated",
+            "value" : "De instellingen worden opgeslagen als een JSON-bestand dat je kunt bewaren in iCloud Drive of in een dotfiles-repository. Als je het bestand importeert, worden je huidige instellingen overschreven en wordt DockDoor opnieuw opgestart."
           }
         },
         "no" : {
@@ -167793,8 +167793,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+            "state" : "translated",
+            "value" : "设置会保存为 JSON 文件，你可以将其保存在 iCloud 云盘或 dotfiles 仓库中。导入会替换你当前的设置并重新启动 DockDoor。"
           }
         },
         "zh-Hant" : {
@@ -167911,8 +167911,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings Backup Failed"
+            "state" : "translated",
+            "value" : "Back-up van instellingen mislukt"
           }
         },
         "no" : {
@@ -167983,8 +167983,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings Backup Failed"
+            "state" : "translated",
+            "value" : "设置备份失败"
           }
         },
         "zh-Hant" : {
@@ -176092,8 +176092,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show where the window will land"
+            "state" : "translated",
+            "value" : "Laat zien waar het venster terechtkomt"
           }
         },
         "no" : {
@@ -176164,8 +176164,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show where the window will land"
+            "state" : "translated",
+            "value" : "显示窗口将落到的位置"
           }
         },
         "zh-Hant" : {
@@ -182001,8 +182001,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap Left or Right"
+            "state" : "translated",
+            "value" : "Links of rechts vastklikken"
           }
         },
         "no" : {
@@ -182073,8 +182073,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap Left or Right"
+            "state" : "translated",
+            "value" : "向左或向右贴靠"
           }
         },
         "zh-Hant" : {
@@ -182192,8 +182192,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap to a Corner"
+            "state" : "translated",
+            "value" : "In een hoek vastklikken"
           }
         },
         "no" : {
@@ -182264,8 +182264,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap to a Corner"
+            "state" : "translated",
+            "value" : "贴靠到角落"
           }
         },
         "zh-Hant" : {
@@ -182382,8 +182382,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap, minimize and close windows with two fingers on your trackpad. Swipe or pinch on a window's title bar, a Dock icon or the menu bar."
+            "state" : "translated",
+            "value" : "Klik vensters vast, minimaliseer ze of sluit ze met twee vingers op je trackpad. Veeg of knijp op de titelbalk van een venster, een Dock-pictogram of de menubalk."
           }
         },
         "no" : {
@@ -182454,8 +182454,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap, minimize and close windows with two fingers on your trackpad. Swipe or pinch on a window's title bar, a Dock icon or the menu bar."
+            "state" : "translated",
+            "value" : "用触控板上的双指贴靠、最小化和关闭窗口。在窗口的标题栏、Dock 图标或菜单栏上轻扫或捏合。"
           }
         },
         "zh-Hant" : {
@@ -182574,7 +182574,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vlug"
+            "value" : "Vlot"
           }
         },
         "no" : {
@@ -183905,8 +183905,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Space for a Custom Dock"
+            "state" : "translated",
+            "value" : "Ruimte voor een alternatief Dock"
           }
         },
         "no" : {
@@ -183977,8 +183977,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Space for a Custom Dock"
+            "state" : "translated",
+            "value" : "为自定义 Dock 留出空间"
           }
         },
         "zh-Hant" : {
@@ -188671,8 +188671,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on a running app's Dock icon to minimize its front window."
+            "state" : "translated",
+            "value" : "Veeg omlaag over het Dock-pictogram van een actieve app om het voorste venster te minimaliseren."
           }
         },
         "no" : {
@@ -188743,8 +188743,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on a running app's Dock icon to minimize its front window."
+            "state" : "translated",
+            "value" : "在正在运行的 App 的程序坞图标上向下轻扫，以最小化其最前面的窗口。"
           }
         },
         "zh-Hant" : {
@@ -188862,8 +188862,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on a title bar."
+            "state" : "translated",
+            "value" : "Veeg omlaag op een titelbalk."
           }
         },
         "no" : {
@@ -188934,8 +188934,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on a title bar."
+            "state" : "translated",
+            "value" : "在标题栏上向下轻扫。"
           }
         },
         "zh-Hant" : {
@@ -189053,8 +189053,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on an empty part of the menu bar to minimize every window on that display."
+            "state" : "translated",
+            "value" : "Veeg omlaag op een leeg gedeelte van de menubalk om alle vensters op dat scherm te minimaliseren."
           }
         },
         "no" : {
@@ -189125,8 +189125,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on an empty part of the menu bar to minimize every window on that display."
+            "state" : "translated",
+            "value" : "在菜单栏的空白处向下轻扫，以最小化该显示器上的所有窗口。"
           }
         },
         "zh-Hant" : {
@@ -189244,8 +189244,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe left or right on a title bar to fill that half of the screen."
+            "state" : "translated",
+            "value" : "Veeg naar links of rechts op een titelbalk om die helft van het scherm te vullen."
           }
         },
         "no" : {
@@ -189316,8 +189316,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe left or right on a title bar to fill that half of the screen."
+            "state" : "translated",
+            "value" : "在标题栏上向左或向右轻扫，以填满屏幕的该半部分。"
           }
         },
         "zh-Hant" : {
@@ -189435,8 +189435,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe left or right on an empty part of the menu bar to go to the previous or next app."
+            "state" : "translated",
+            "value" : "Veeg naar links of rechts over een leeg gedeelte van de menubalk om naar de vorige of volgende app te gaan."
           }
         },
         "no" : {
@@ -189507,8 +189507,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe left or right on an empty part of the menu bar to go to the previous or next app."
+            "state" : "translated",
+            "value" : "在菜单栏的空白处向左或向右轻扫，以切换到上一个或下一个 App。"
           }
         },
         "zh-Hant" : {
@@ -189815,8 +189815,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe Sensitivity"
+            "state" : "translated",
+            "value" : "Veeggevoeligheid"
           }
         },
         "no" : {
@@ -189887,8 +189887,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe Sensitivity"
+            "state" : "translated",
+            "value" : "轻扫灵敏度"
           }
         },
         "zh-Hant" : {
@@ -190006,8 +190006,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe sideways, then up or down, to fill a corner."
+            "state" : "translated",
+            "value" : "Veeg opzij en daarna omhoog of omlaag om een hoek op te vullen."
           }
         },
         "no" : {
@@ -190078,8 +190078,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe sideways, then up or down, to fill a corner."
+            "state" : "translated",
+            "value" : "先向侧面轻扫，再向上或向下轻扫，以填满角落。"
           }
         },
         "zh-Hant" : {
@@ -190770,8 +190770,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on a Dock icon to bring back its last minimized window."
+            "state" : "translated",
+            "value" : "Veeg omhoog op een Dock-pictogram om het laatst geminimaliseerde venster terug te brengen."
           }
         },
         "no" : {
@@ -190842,8 +190842,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on a Dock icon to bring back its last minimized window."
+            "state" : "translated",
+            "value" : "在 Dock 图标上向上轻扫，以恢复其最近最小化的窗口。"
           }
         },
         "zh-Hant" : {
@@ -190961,8 +190961,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on a title bar to fill the screen."
+            "state" : "translated",
+            "value" : "Veeg omhoog op een titelbalk om het scherm te vullen."
           }
         },
         "no" : {
@@ -191033,8 +191033,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on a title bar to fill the screen."
+            "state" : "translated",
+            "value" : "在标题栏上向上轻扫，以填满屏幕。"
           }
         },
         "zh-Hant" : {
@@ -191152,8 +191152,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on an empty part of the menu bar to bring those windows back."
+            "state" : "translated",
+            "value" : "Veeg omhoog op een leeg deel van de menubalk om deze vensters terug te brengen."
           }
         },
         "no" : {
@@ -191224,8 +191224,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on an empty part of the menu bar to bring those windows back."
+            "state" : "translated",
+            "value" : "在菜单栏的空白处向上轻扫，以恢复那些窗口。"
           }
         },
         "zh-Hant" : {
@@ -191533,8 +191533,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch Apps"
+            "state" : "translated",
+            "value" : "Apps wisselen"
           }
         },
         "no" : {
@@ -191605,8 +191605,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch Apps"
+            "state" : "translated",
+            "value" : "切换 App"
           }
         },
         "zh-Hant" : {
@@ -195035,8 +195035,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup could not be read: %@"
+            "state" : "translated",
+            "value" : "无法读取备份：%@"
           }
         },
         "zh-Hant" : {
@@ -195225,8 +195225,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup could not be saved: %@"
+            "state" : "translated",
+            "value" : "无法存储备份：%@"
           }
         },
         "zh-Hant" : {
@@ -195343,8 +195343,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+            "state" : "translated",
+            "value" : "De back-up is gemaakt met DockDoor %@. Instellingen die niet meer bestaan, worden genegeerd. Voor nieuwe instellingen worden de standaardwaarden gebruikt."
           }
         },
         "no" : {
@@ -195415,8 +195415,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+            "state" : "translated",
+            "value" : "此备份由 DockDoor %@ 创建。已不存在的设置将被忽略，任何新设置将保留其默认值。"
           }
         },
         "zh-Hant" : {
@@ -196555,8 +196555,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected file is not a DockDoor settings backup."
+            "state" : "translated",
+            "value" : "所选文件不是 DockDoor 设置备份。"
           }
         },
         "zh-Hant" : {
@@ -198960,8 +198960,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+            "state" : "translated",
+            "value" : "Hiermee worden alle huidige DockDoor-instellingen vervangen door de %lld-instellingen uit de back-up. DockDoor wordt opnieuw opgestart om deze instellingen toe te passen."
           }
         },
         "no" : {
@@ -199032,8 +199032,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+            "state" : "translated",
+            "value" : "这将用备份中的 %lld 项设置替换当前所有 DockDoor 设置。DockDoor 将重新启动以应用它们。"
           }
         },
         "zh-Hant" : {
@@ -201437,8 +201437,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top"
+            "state" : "translated",
+            "value" : "Bovenaan"
           }
         },
         "no" : {
@@ -201509,8 +201509,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top"
+            "state" : "translated",
+            "value" : "顶部"
           }
         },
         "zh-Hant" : {
@@ -204677,8 +204677,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn this up if gestures need too much finger movement."
+            "state" : "translated",
+            "value" : "Zet dit hoger als gebaren te veel vingerbewegingen vereisen."
           }
         },
         "no" : {
@@ -204749,8 +204749,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn this up if gestures need too much finger movement."
+            "state" : "translated",
+            "value" : "如果手势需要过多的手指移动，请调高此项。"
           }
         },
         "zh-Hant" : {
@@ -211918,8 +211918,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Using a dock other than the macOS Dock? Keep a strip of the screen free so snapped windows don't cover it."
+            "state" : "translated",
+            "value" : "Gebruik je een ander Dock dan het macOS-Dock? Houd dan een strook van het scherm vrij, zodat vastgeklikte vensters het niet bedekken."
           }
         },
         "no" : {
@@ -211990,8 +211990,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Using a dock other than the macOS Dock? Keep a strip of the screen free so snapped windows don't cover it."
+            "state" : "translated",
+            "value" : "使用的是 macOS Dock 以外的 Dock？请保留一条屏幕空白区域，使贴靠的窗口不会覆盖它。"
           }
         },
         "zh-Hant" : {
@@ -219546,8 +219546,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures."
+            "state" : "translated",
+            "value" : "Als ‘Venstergebaren’ is ingeschakeld, kunnen deze gebaren worden gebruikt door met twee vingers te scrollen over titelbalken, actieve Dock-pictogrammen en de menubalk."
           }
         },
         "no" : {
@@ -219618,8 +219618,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures."
+            "state" : "translated",
+            "value" : "当“窗口手势”开启时，在标题栏、正在运行的 Dock 图标和菜单栏上的双指滚动将用于这些手势。"
           }
         },
         "zh-Hant" : {
@@ -222405,8 +222405,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Gestures"
+            "state" : "translated",
+            "value" : "Venstergebaren"
           }
         },
         "no" : {
@@ -222477,8 +222477,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Gestures"
+            "state" : "translated",
+            "value" : "窗口手势"
           }
         },
         "zh-Hant" : {
@@ -222595,8 +222595,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Gestures handles scrolling on Dock icons and title bars, so these two are off while it's on."
+            "state" : "translated",
+            "value" : "Venstergebaren regelen het scrollen op Dock-pictogrammen en titelbalken. Deze twee functies zijn uitgeschakeld zolang deze functie is ingeschakeld."
           }
         },
         "no" : {
@@ -222667,8 +222667,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Gestures handles scrolling on Dock icons and title bars, so these two are off while it's on."
+            "state" : "translated",
+            "value" : "“窗口手势”会处理 Dock 图标和标题栏上的滚动，因此当它开启时，这两项将关闭。"
           }
         },
         "zh-Hant" : {
