@@ -9,10 +9,12 @@ struct AppearanceSettingsView: View {
     var body: some View {
         SettingsFormView {
             if !permissionsChecker.screenRecordingPermission {
-                CompactModeWarningBanner(
-                    hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission,
-                    disableImagePreview: disableImagePreview
-                )
+                Section {
+                    CompactModeWarningBanner(
+                        hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission,
+                        disableImagePreview: disableImagePreview
+                    )
+                }
             }
 
             WindowSizeSettingsSection()

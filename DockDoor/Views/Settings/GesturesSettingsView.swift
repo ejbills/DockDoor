@@ -69,35 +69,26 @@ struct GesturesSettingsView: View {
     }
 
     private var requirementsBanner: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            if !requirements.pinchEnabled {
-                Label("Pinches need \"Zoom in or out\" turned on in Trackpad settings.", systemImage: "exclamationmark.triangle.fill")
-            }
-            if !requirements.smartZoomEnabled {
-                Label("Double-taps need \"Smart zoom\" turned on in Trackpad settings.", systemImage: "exclamationmark.triangle.fill")
-            }
-            Button("Open Trackpad Settings") {
-                if let url = URL(string: "x-apple.systempreferences:com.apple.Trackpad-Settings.extension") {
-                    NSWorkspace.shared.open(url)
-                }
-            }
-            .controlSize(.small)
-            .buttonStyle(.plain)
+        var lines: [Text] = []
+        if !requirements.pinchEnabled {
+            lines.append(Text("Pinches need \"Zoom in or out\" turned on in Trackpad settings."))
         }
-        .font(.caption)
-        .foregroundStyle(.orange)
-        .padding(10)
-        .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Color.orange.opacity(0.1)))
+        if !requirements.smartZoomEnabled {
+            lines.append(Text("Double-taps need \"Smart zoom\" turned on in Trackpad settings."))
+        }
+        let message = lines.dropFirst().reduce(lines.first ?? Text(verbatim: "")) { $0 + Text(verbatim: "\n") + $1 }
+        return SettingsCallout(tone: .warning, message: message, actionTitle: "Open Trackpad Settings") {
+            if let url = URL(string: "x-apple.systempreferences:com.apple.Trackpad-Settings.extension") {
+                NSWorkspace.shared.open(url)
+            }
+        }
     }
 
     // MARK: - Gestures
 
     private func gestureGroup(title: LocalizedStringKey, gestures: [WindowGesture]) -> some View {
         SettingsSection(title) {
-            ForEach(Array(gestures.enumerated()), id: \.element) { index, gesture in
-                if index > 0 {
-                    Divider()
-                }
+            ForEach(gestures, id: \.self) { gesture in
                 WindowGestureRow(gesture: gesture, isOn: binding(for: gesture))
                     .settingsSearchTarget("windowGestures.\(gesture.rawValue)")
             }
