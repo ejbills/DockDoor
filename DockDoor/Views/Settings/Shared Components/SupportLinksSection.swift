@@ -10,7 +10,7 @@ struct SupportLinksSection: View {
                 destination: DockDoorPro.url,
                 iconColor: .mint
             )
-            .settingsSearchTarget("general.dockDoorPro")
+            .settingsSearchTarget("support.dockDoorPro")
 
             Divider().padding(.leading, 40)
 
@@ -31,7 +31,7 @@ struct SupportLinksSection: View {
                 destination: URL(string: "https://www.producthunt.com/products/dockdoor/reviews")!,
                 iconColor: .orange
             )
-            .settingsSearchTarget("general.leaveReview")
+            .settingsSearchTarget("support.leaveReview")
 
             Divider().padding(.leading, 40)
 

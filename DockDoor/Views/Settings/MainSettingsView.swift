@@ -13,19 +13,10 @@ struct MainSettingsView: View {
     var body: some View {
         SettingsFormView {
             DockDoorProBanner()
-            supportAndContributionsSection
             applicationBasicsSection
             activeAppIndicatorSection
             backupAndRestoreSection
             resetAndQuitSection
-        }
-    }
-
-    // MARK: - Support & Contributions
-
-    private var supportAndContributionsSection: some View {
-        SettingsSection("Support & contributions") {
-            SupportLinksSection()
         }
     }
 

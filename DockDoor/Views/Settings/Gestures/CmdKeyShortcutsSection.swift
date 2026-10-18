@@ -10,65 +10,49 @@ struct CmdKeyShortcutsSection: View {
     @Default(.cmdShortcut3Action) var cmdShortcut3Action
 
     var body: some View {
-        SettingsSection("Window preview keyboard shortcuts") {
-            Text("Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode.")
-                .font(.caption)
-                .foregroundColor(.secondary)
+        Section {
+            cmdShortcutRow(keyBinding: $cmdShortcut1Key, actionBinding: $cmdShortcut1Action)
+                .settingsSearchTarget("gestures.cmdShortcuts")
+            cmdShortcutRow(keyBinding: $cmdShortcut2Key, actionBinding: $cmdShortcut2Action)
+            cmdShortcutRow(keyBinding: $cmdShortcut3Key, actionBinding: $cmdShortcut3Action)
 
-            Divider()
-
-            cmdShortcutRow(
-                slot: 1,
-                keyBinding: $cmdShortcut1Key,
-                actionBinding: $cmdShortcut1Action
-            )
-
-            cmdShortcutRow(
-                slot: 2,
-                keyBinding: $cmdShortcut2Key,
-                actionBinding: $cmdShortcut2Action
-            )
-
-            cmdShortcutRow(
-                slot: 3,
-                keyBinding: $cmdShortcut3Key,
-                actionBinding: $cmdShortcut3Action
-            )
-
-            Button("Reset to Defaults") {
-                cmdShortcut1Key = Defaults.Keys.cmdShortcut1Key.defaultValue
-                cmdShortcut1Action = Defaults.Keys.cmdShortcut1Action.defaultValue
-                cmdShortcut2Key = Defaults.Keys.cmdShortcut2Key.defaultValue
-                cmdShortcut2Action = Defaults.Keys.cmdShortcut2Action.defaultValue
-                cmdShortcut3Key = Defaults.Keys.cmdShortcut3Key.defaultValue
-                cmdShortcut3Action = Defaults.Keys.cmdShortcut3Action.defaultValue
+            HStack {
+                Spacer()
+                Button("Reset to Defaults") {
+                    cmdShortcut1Key = Defaults.Keys.cmdShortcut1Key.defaultValue
+                    cmdShortcut1Action = Defaults.Keys.cmdShortcut1Action.defaultValue
+                    cmdShortcut2Key = Defaults.Keys.cmdShortcut2Key.defaultValue
+                    cmdShortcut2Action = Defaults.Keys.cmdShortcut2Action.defaultValue
+                    cmdShortcut3Key = Defaults.Keys.cmdShortcut3Key.defaultValue
+                    cmdShortcut3Action = Defaults.Keys.cmdShortcut3Action.defaultValue
+                }
+                .buttonStyle(.settings)
             }
-            .buttonStyle(AccentButtonStyle(small: true))
-            .padding(.top, 4)
-            .settingsSearchTarget("gestures.cmdShortcuts")
+        } header: {
+            Text("Window preview keyboard shortcuts")
+        } footer: {
+            Text("Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
-    private func cmdShortcutRow(slot: Int, keyBinding: Binding<UInt16>, actionBinding: Binding<WindowAction>) -> some View {
-        HStack(spacing: 12) {
-            HStack(spacing: 4) {
-                Text("⌘")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.secondary)
-                KeyCaptureButton(keyCode: keyBinding)
-            }
-            .frame(minWidth: 80, alignment: .leading)
-
-            Picker("", selection: actionBinding) {
+    private func cmdShortcutRow(keyBinding: Binding<UInt16>, actionBinding: Binding<WindowAction>) -> some View {
+        LabeledContent {
+            Picker("Action", selection: actionBinding) {
                 ForEach(WindowAction.gestureActions, id: \.self) { windowAction in
-                    HStack(spacing: 6) {
-                        Image(systemName: windowAction.iconName)
-                        Text(windowAction.localizedName)
-                    }
-                    .tag(windowAction)
+                    Label(windowAction.localizedName, systemImage: windowAction.iconName)
+                        .tag(windowAction)
                 }
             }
             .labelsHidden()
+            .fixedSize()
+        } label: {
+            HStack(spacing: 4) {
+                Text(verbatim: "⌘")
+                    .foregroundStyle(.secondary)
+                KeyCaptureButton(keyCode: keyBinding)
+            }
         }
     }
 }

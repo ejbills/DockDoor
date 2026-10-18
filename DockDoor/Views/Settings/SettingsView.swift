@@ -300,7 +300,6 @@ struct SettingsView: View {
         case .gestures: GesturesSettingsView()
         case .cmdTab: CmdTabSettingsView()
         case .appearance: AppearanceSettingsView()
-        case .keybinds: KeybindsSettingsView()
         case .filters: FiltersSettingsView()
         case .widgets: WidgetSettingsView()
         case .advanced: AdvancedSettingsView()

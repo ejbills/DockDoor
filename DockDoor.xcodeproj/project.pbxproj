@@ -179,7 +179,6 @@
 		BB709B3D2EF21E9E007809A2 /* VolumeScrollModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB709B3C2EF21E9E007809A2 /* VolumeScrollModifier.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
 		BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */; };
-		BB7CD3CD2EE66EE800412546 /* KeybindsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */; };
 		BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */; };
 		BB918BB52CF7613400931236 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB918BB42CF7613200931236 /* CGRect.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
@@ -426,7 +425,6 @@
 		BB709B3C2EF21E9E007809A2 /* VolumeScrollModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeScrollModifier.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
 		BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadGestureModifier.swift; sourceTree = "<group>"; };
-		BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindsSettingsView.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarInfo.swift; sourceTree = "<group>"; };
 		BB918BB42CF7613200931236 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -1035,7 +1033,6 @@
 				0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */,
 				BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */,
 				BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */,
-				BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */,
 				BB709B3A2EF21493007809A2 /* WidgetSettingsView.swift */,
 				DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */,
 				AE9C7D8765A140F0A595DD16 /* GesturesSettingsView.swift */,
@@ -1258,7 +1255,6 @@
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
 				BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
-				BB7CD3CD2EE66EE800412546 /* KeybindsSettingsView.swift in Sources */,
 				BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */,
 				BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */,
 				BB2106782E834F46002F87D6 /* KeyHintRow.swift in Sources */,

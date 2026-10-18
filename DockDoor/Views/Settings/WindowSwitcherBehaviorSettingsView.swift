@@ -4,6 +4,7 @@ import SwiftUI
 
 struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
+    @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.instantWindowSwitcher) var instantWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.focusSearchOnWindowSwitcherOpen) var focusSearchOnWindowSwitcherOpen
@@ -34,15 +35,25 @@ struct WindowSwitcherBehaviorSettingsView: View {
             headerSection
 
             if enableWindowSwitcher {
+                appearanceSection
+                WindowSwitcherKeybindSection()
                 behaviorSection
                 windowDisplaySection
                 searchAndInputSection
                 sortingAndGroupingSection
                 placementSection
+            }
 
-                SettingsMockPreview(context: .windowSwitcher)
+            if enableWindowSwitcher || enableCmdTabEnhancements {
+                CmdKeyShortcutsSection()
+            }
 
-                appearanceSection
+            if enableWindowSwitcher {
+                TrackpadSwitcherSwipeSection()
+            }
+        } pinnedHeader: {
+            if enableWindowSwitcher {
+                SettingsMockPreview(context: .windowSwitcher, maxHeight: 170)
             }
         }
         .sheet(isPresented: $showGroupedAppsSheet) {

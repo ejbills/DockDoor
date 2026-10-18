@@ -17,19 +17,29 @@ struct GesturesSettingsView: View {
 
     var body: some View {
         SettingsFormView {
-            VStack(alignment: .leading, spacing: 20) {
-                heroSection
+            heroSection
+
+            if enableWindowGestures {
                 gestureGroup(title: "On a Window's Title Bar", gestures: WindowGestureArea.titleBar.gestures)
                 gestureGroup(title: "On a Dock Icon", gestures: WindowGestureArea.dock.gestures)
                 gestureGroup(title: "On the Menu Bar", gestures: WindowGestureArea.menuBar.gestures)
                 optionsSection
                 dockSpaceSection
-                SettingsNote(
-                    icon: "info.circle",
-                    text: "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures."
-                )
-                moreGesturesSection
+                Section {
+                    SettingsNote(
+                        icon: "info.circle",
+                        text: "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures."
+                    )
+                }
+            } else {
+                // Window Gestures owns scrolling on Dock icons and title bars.
+                DockScrollGestureSection()
+                TitleBarScrollGestureSection()
             }
+
+            DockPreviewGesturesSection()
+            GestureSettingsSection()
+            MouseActionsSection()
         }
         .onAppear {
             requirements = .current()
@@ -130,39 +140,6 @@ struct GesturesSettingsView: View {
 
             Toggle("Haptic feedback", isOn: $haptics)
                 .settingsSearchTarget("windowGestures.haptics")
-        }
-    }
-
-    // MARK: - More Gestures
-
-    private var moreGesturesSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("More Gestures")
-                    .font(.title3.weight(.semibold))
-                Text("Scrolling on Dock icons and title bars, swipes on previews, and a trackpad swipe for the window switcher.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(.top, 8)
-
-            if enableWindowGestures {
-                SettingsNote(
-                    icon: "info.circle",
-                    text: "Window Gestures handles scrolling on Dock icons and title bars, so these two are off while it's on."
-                )
-            }
-            Group {
-                DockScrollGestureSection()
-                TitleBarScrollGestureSection()
-            }
-            .disabled(enableWindowGestures)
-            .opacity(enableWindowGestures ? 0.45 : 1)
-
-            DockPreviewGesturesSection()
-            GestureSettingsSection()
-            TrackpadSwitcherSwipeSection()
         }
     }
 

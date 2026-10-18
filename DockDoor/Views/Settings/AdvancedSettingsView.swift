@@ -36,13 +36,14 @@ struct AdvancedSettingsView: View {
             performanceTuningSection
             previewQualitySection
             livePreviewSection
-            dockLockingSection
 
             if enableLivePreview {
                 dockLivePreviewSection
                 switcherLivePreviewSection
                 streamManagementSection
             }
+
+            dockLockingSection
         }
         .onAppear {
             if livePreviewStreamKeepAlive > 0 {

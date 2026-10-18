@@ -14,6 +14,7 @@ struct SupportSettingsView: View {
             DockDoorProBanner()
             permissionsSection
             updatesSection
+            supportLinksSection
             acknowledgmentsSection
         }
     }
@@ -171,6 +172,14 @@ struct SupportSettingsView: View {
                 .font(.caption2)
                 .foregroundColor(.red)
                 .lineLimit(1)
+        }
+    }
+
+    // MARK: - Support & Contributions
+
+    private var supportLinksSection: some View {
+        SettingsSection("Support & Contributions") {
+            SupportLinksSection()
         }
     }
 
