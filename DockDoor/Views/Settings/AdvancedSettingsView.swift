@@ -58,7 +58,7 @@ struct AdvancedSettingsView: View {
     private var performanceTuningSection: some View {
         SettingsSection("Performance tuning") {
             SettingsSliderRow(
-                title: "Window Processing Debounce Interval",
+                title: "Window processing debounce",
                 value: $windowProcessingDebounceInterval,
                 range: 0 ... 3,
                 unit: " s",
@@ -102,7 +102,7 @@ struct AdvancedSettingsView: View {
 
     private var previewQualitySection: some View {
         SettingsSection("Preview quality") {
-            Picker("Window Image Capture Quality", selection: $windowImageCaptureQuality) {
+            Picker("Capture quality", selection: $windowImageCaptureQuality) {
                 ForEach(WindowImageCaptureQuality.allCases, id: \.self) { quality in
                     Text(quality.localizedName).tag(quality)
                 }
@@ -110,7 +110,7 @@ struct AdvancedSettingsView: View {
             .settingsSearchTarget("advanced.captureQuality")
 
             SettingsSliderRow(
-                title: "Window Image Cache Lifespan",
+                title: "Image cache lifespan",
                 value: $screenCaptureCacheLifespan,
                 range: 0 ... 60,
                 unit: " s",
@@ -118,7 +118,7 @@ struct AdvancedSettingsView: View {
             )
             .settingsSearchTarget("advanced.cacheLifespan")
             SettingsSliderRow(
-                title: "Window Image Resolution Scale (1=Best)",
+                title: "Image resolution scale",
                 value: $windowPreviewImageScale,
                 range: 1 ... 4,
                 step: 1
@@ -131,7 +131,7 @@ struct AdvancedSettingsView: View {
 
     private var livePreviewSection: some View {
         SettingsSection("Live preview") {
-            Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+            Toggle(isOn: $enableLivePreview) { Text("Enable live preview") }
                 .settingsSearchTarget("advanced.livePreview")
                 .onChange(of: enableLivePreview) { newValue in
                     if !newValue {
@@ -149,7 +149,7 @@ struct AdvancedSettingsView: View {
 
     private var dockLivePreviewSection: some View {
         SettingsSection("Dock live preview") {
-            Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock Preview") }
+            Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock previews") }
                 .settingsSearchTarget("advanced.livePreviewDock")
 
             if enableLivePreviewForDock {
@@ -159,7 +159,7 @@ struct AdvancedSettingsView: View {
                     }
                 }
 
-                Picker("Frame Rate", selection: $dockLivePreviewFrameRate) {
+                Picker("Frame rate", selection: $dockLivePreviewFrameRate) {
                     ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
                         Text(fps.localizedName).tag(fps)
                     }
@@ -172,7 +172,7 @@ struct AdvancedSettingsView: View {
 
     private var switcherLivePreviewSection: some View {
         SettingsSection("Switcher live preview") {
-            Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for Window Switcher") }
+            Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for window switcher") }
                 .settingsSearchTarget("advanced.livePreviewSwitcher")
 
             if enableLivePreviewForWindowSwitcher {
@@ -182,7 +182,7 @@ struct AdvancedSettingsView: View {
                     }
                 }
 
-                Picker("Frame Rate", selection: $windowSwitcherLivePreviewFrameRate) {
+                Picker("Frame rate", selection: $windowSwitcherLivePreviewFrameRate) {
                     ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
                         Text(fps.localizedName).tag(fps)
                     }
@@ -353,7 +353,7 @@ struct AdvancedSettingsView: View {
 
     private var dockLockingSection: some View {
         SettingsSection("Dock locking") {
-            Toggle(isOn: $enableDockLocking) { Text("Lock Dock to Screen") }
+            Toggle(isOn: $enableDockLocking) { Text("Lock Dock to screen") }
                 .settingsSearchTarget("dockLocking.enable")
                 .settingsAnnotation("Prevent the Dock from jumping to other monitors when your cursor reaches the screen edge.")
                 .onChange(of: enableDockLocking) { isOn in

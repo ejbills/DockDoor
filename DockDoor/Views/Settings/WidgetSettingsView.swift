@@ -41,7 +41,7 @@ struct WidgetSettingsView: View {
                 .settingsAnnotation("Preview a folder's contents when hovering it in the Dock.")
 
             if enableFolderWidget {
-                Picker("Default sort:", selection: $folderWidgetDefaultSortOrder) {
+                Picker("Default sort", selection: $folderWidgetDefaultSortOrder) {
                     ForEach(FolderWidgetSortOrder.allCases, id: \.self) { order in
                         Text(order.localizedName).tag(order)
                     }
@@ -116,7 +116,7 @@ struct WidgetSettingsView: View {
                     .settingsAnnotation("Show now playing controls when hovering the active media source's Dock icon. Works with any app.")
 
                     if enableMediaWidget {
-                        Picker("Detection mode:", selection: $mediaDetectionMode) {
+                        Picker("Detection mode", selection: $mediaDetectionMode) {
                             ForEach(MediaDetectionMode.allCases, id: \.self) { mode in
                                 Text(mode.localizedName).tag(mode)
                             }
@@ -166,7 +166,7 @@ struct WidgetSettingsView: View {
 
                 if enableMediaWidget {
                     SettingsSection("Media widget scroll") {
-                        Picker("Behavior:", selection: $mediaWidgetScrollBehavior) {
+                        Picker("Behavior", selection: $mediaWidgetScrollBehavior) {
                             ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
                                 Text(behavior.localizedName).tag(behavior)
                             }
@@ -174,7 +174,7 @@ struct WidgetSettingsView: View {
                         .settingsSearchTarget("widgets.scrollBehavior")
                         .settingsAnnotation("Controls what happens when you scroll on the media widget preview.")
 
-                        Picker("Direction:", selection: $mediaWidgetScrollDirection) {
+                        Picker("Direction", selection: $mediaWidgetScrollDirection) {
                             ForEach(MediaWidgetScrollDirection.allCases, id: \.self) { direction in
                                 Text(direction.localizedName).tag(direction)
                             }

@@ -17,7 +17,7 @@ struct CompactModeSection: View {
     }
 
     var body: some View {
-        SettingsSection("Compact mode (Titles only)", footer: "Compact mode displays windows as a streamlined vertical list with app icons and titles.") {
+        SettingsSection("Compact mode (titles only)", footer: "Compact mode displays windows as a streamlined vertical list with app icons and titles.") {
             Toggle(isOn: Binding(
                 get: { !hasScreenRecordingPermission || disableImagePreview },
                 set: { disableImagePreview = $0 }
@@ -58,21 +58,21 @@ struct CompactModeSection: View {
         }
 
         SettingsSection("Compact list appearance") {
-            Picker("Item Size", selection: $compactModeItemSize) {
+            Picker("Item size", selection: $compactModeItemSize) {
                 ForEach(CompactModeItemSize.allCases) { size in
                     Text(size.localizedName).tag(size)
                 }
             }
             .settingsSearchTarget("appearance.compactItemSize")
 
-            Picker("Title Format", selection: $compactModeTitleFormat) {
+            Picker("Title format", selection: $compactModeTitleFormat) {
                 ForEach(CompactModeTitleFormat.allCases) { format in
                     Text(format.localizedName).tag(format)
                 }
             }
             .settingsSearchTarget("appearance.compactTitleFormat")
 
-            Toggle("Hide Traffic Lights", isOn: $compactModeHideTrafficLights)
+            Toggle("Hide traffic lights", isOn: $compactModeHideTrafficLights)
                 .settingsSearchTarget("appearance.hideTrafficLights")
                 .settingsAnnotation("Hides the close, minimize, and other window control buttons in compact mode to provide more room for window titles.")
         }

@@ -70,7 +70,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
 
     private var headerSection: some View {
         SettingsSection("Window switcher") {
-            Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
+            Toggle(isOn: $enableWindowSwitcher) { Text("Enable window switcher") }
                 .settingsSearchTarget("windowSwitcher.enable")
                 .settingsAnnotation("The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut.")
                 .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
@@ -81,7 +81,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
 
     private var behaviorSection: some View {
         SettingsSection("Behavior") {
-            Toggle(isOn: $instantWindowSwitcher) { Text("Show Window Switcher instantly") }
+            Toggle(isOn: $instantWindowSwitcher) { Text("Show window switcher instantly") }
                 .settingsSearchTarget("windowSwitcher.instant")
                 .settingsAnnotation("May feel snappier but can cause flickering if you quickly release the key.")
 
@@ -141,7 +141,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .settingsAnnotation("Automatically focus the search bar when the window switcher opens.")
 
                 SettingsSliderRow(
-                    title: "Search Fuzziness",
+                    title: "Search fuzziness",
                     value: Binding(get: { Double(searchFuzziness) }, set: { searchFuzziness = Int($0) }),
                     range: 1 ... 5
                 )

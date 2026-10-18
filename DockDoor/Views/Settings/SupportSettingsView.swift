@@ -173,7 +173,7 @@ struct SupportSettingsView: View {
     // MARK: - Support & Contributions
 
     private var supportLinksSection: some View {
-        SettingsSection("Support & Contributions") {
+        SettingsSection("Support & contributions") {
             SupportLinksSection()
         }
     }

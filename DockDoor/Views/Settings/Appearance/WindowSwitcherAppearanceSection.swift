@@ -34,7 +34,7 @@ struct WindowSwitcherAppearanceSection: View {
 
     var body: some View {
         SettingsSection("Appearance") {
-            Toggle("Show App Header", isOn: $switcherShowAppHeader)
+            Toggle("Show app header", isOn: $switcherShowAppHeader)
                 .settingsSearchTarget("appearance.switcherShowAppHeader")
 
             if switcherShowAppHeader {
@@ -85,7 +85,7 @@ struct WindowSwitcherAppearanceSection: View {
                 EnabledButtonsPicker(enabledButtons: $switcherEnabledTrafficLightButtons) {
                     switcherTrafficLightButtonsVisibility = .never
                 }
-                Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
+                Toggle("Use monochrome colors", isOn: $switcherUseMonochromeTrafficLights)
                     .settingsSearchTarget("appearance.switcherMonochrome")
 
                 Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
@@ -103,7 +103,7 @@ struct WindowSwitcherAppearanceSection: View {
             .settingsSearchTarget("appearance.switcherEmbedControls")
             .settingsAnnotation("Places traffic light buttons and window titles directly inside the window switcher preview frames.")
 
-            Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
+            Picker("Scroll direction", selection: $windowSwitcherScrollDirection) {
                 ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in
                     Text(direction.localizedName).tag(direction)
                 }

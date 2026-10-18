@@ -37,12 +37,12 @@ struct WindowSwitcherKeybindSection: View {
             .settingsAnnotation("The key used to navigate backward in the window switcher.")
 
             Toggle(isOn: $requireShiftTabToGoBack) {
-                Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
+                Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in the switcher")
             }
             .settingsSearchTarget("gestures.requireShiftTab")
             .settingsAnnotation("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
 
-            LabeledContent("Selection Key") {
+            LabeledContent("Selection key") {
                 HStack(spacing: 8) {
                     KeyCaptureButton(keyCode: $selectionKeyCode)
                     SettingsResetButton(isModified: selectionKeyCode != UInt16(kVK_Return)) { selectionKeyCode = UInt16(kVK_Return) }
@@ -52,7 +52,7 @@ struct WindowSwitcherKeybindSection: View {
             .settingsAnnotation("The key used to select and bring to front the highlighted window in the switcher.")
 
             if enableWindowSwitcherSearch {
-                LabeledContent("Search Trigger Key") {
+                LabeledContent("Search trigger key") {
                     HStack(spacing: 6) {
                         Text(verbatim: "\(modifierConverter.toString(keybindModel.modifierKey)) +")
                             .foregroundStyle(.secondary)

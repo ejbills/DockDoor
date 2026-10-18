@@ -33,7 +33,7 @@ struct CmdTabSettingsView: View {
 
     private var headerSection: some View {
         SettingsSection("Cmd+Tab enhancements") {
-            Toggle(isOn: $enableCmdTabEnhancements) { Text("Enable Cmd+Tab Enhancements") }
+            Toggle(isOn: $enableCmdTabEnhancements) { Text("Enable Cmd+Tab enhancements") }
                 .settingsSearchTarget("cmdTab.enable")
                 .settingsAnnotation(
                     "Show previews while holding Cmd+Tab.",

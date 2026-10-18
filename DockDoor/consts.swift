@@ -408,9 +408,9 @@ enum WindowImageCaptureQuality: String, CaseIterable, Defaults.Serializable {
     var localizedName: String {
         switch self {
         case .nominal:
-            String(localized: "Improved performance (nominal)", comment: "Window image capture quality option")
+            String(localized: "Faster", comment: "Window image capture quality option")
         case .best:
-            String(localized: "Best quality (full resolution)", comment: "Window image capture quality option")
+            String(localized: "Best quality", comment: "Window image capture quality option")
         }
     }
 }
@@ -512,13 +512,13 @@ enum TrafficLightButtonsVisibility: String, CaseIterable, Defaults.Serializable 
     var localizedName: String {
         switch self {
         case .never:
-            String(localized: "Never visible", comment: "Traffic light buttons visibility option")
+            String(localized: "Never", comment: "Traffic light buttons visibility option")
         case .dimmedOnPreviewHover:
-            String(localized: "On window hover; Dimmed until button hover", comment: "Traffic light buttons visibility option")
+            String(localized: "On hover, dimmed", comment: "Traffic light buttons visibility option")
         case .fullOpacityOnPreviewHover:
-            String(localized: "On window hover; Full opacity", comment: "Traffic light buttons visibility option")
+            String(localized: "On hover", comment: "Traffic light buttons visibility option")
         case .alwaysVisible:
-            String(localized: "Always visible; Full opacity", comment: "Traffic light buttons visibility option")
+            String(localized: "Always", comment: "Traffic light buttons visibility option")
         }
     }
 }
@@ -596,25 +596,25 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     var localizedName: String {
         switch self {
         case .topLeading:
-            String(localized: "At top - Title on left, controls on right")
+            String(localized: "Top: title left, controls right")
         case .topTrailing:
-            String(localized: "At top - Controls on left, title on right")
+            String(localized: "Top: controls left, title right")
         case .bottomLeading:
-            String(localized: "At bottom - Title on left, controls on right")
+            String(localized: "Bottom: title left, controls right")
         case .bottomTrailing:
-            String(localized: "At bottom - Controls on left, title on right")
+            String(localized: "Bottom: controls left, title right")
         case .centeredTitleTopControlsBottom:
-            String(localized: "Centered - Title top, controls bottom")
+            String(localized: "Centered: title top, controls bottom")
         case .centeredControlsTopTitleBottom:
-            String(localized: "Centered - Controls top, title bottom")
+            String(localized: "Centered: controls top, title bottom")
         case .diagonalTopLeftBottomRight:
-            String(localized: "Diagonal - Title top left, controls bottom right")
+            String(localized: "Diagonal: title top left, controls bottom right")
         case .diagonalTopRightBottomLeft:
-            String(localized: "Diagonal - Title top right, controls bottom left")
+            String(localized: "Diagonal: title top right, controls bottom left")
         case .diagonalBottomLeftTopRight:
-            String(localized: "Diagonal - Title bottom left, controls top right")
+            String(localized: "Diagonal: title bottom left, controls top right")
         case .diagonalBottomRightTopLeft:
-            String(localized: "Diagonal - Title bottom right, controls top left")
+            String(localized: "Diagonal: title bottom right, controls top left")
         case .parallelTopLeftBottomLeft:
             String(localized: "Parallel - Title top left, controls bottom left")
         case .parallelTopRightBottomRight:
@@ -913,7 +913,7 @@ enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
         case .adjustVolume:
             String(localized: "Adjust volume", comment: "Media widget scroll option")
         case .seekPlayback:
-            String(localized: "Seek playback (scrub through track)", comment: "Media widget scroll option")
+            String(localized: "Seek playback", comment: "Media widget scroll option")
         }
     }
 }
@@ -1162,11 +1162,11 @@ enum CompactModeTitleFormat: String, CaseIterable, Defaults.Serializable, Identi
     var localizedName: String {
         switch self {
         case .appNameAndTitle:
-            String(localized: "App Name + Window Title")
+            String(localized: "App name and window title")
         case .titleOnly:
-            String(localized: "Window Title Only")
+            String(localized: "Window title only")
         case .appNameOnly:
-            String(localized: "App Name Only")
+            String(localized: "App name only")
         }
     }
 }

@@ -20,9 +20,9 @@ struct GesturesSettingsView: View {
             heroSection
 
             if enableWindowGestures {
-                gestureGroup(title: "On a Window's Title Bar", gestures: WindowGestureArea.titleBar.gestures)
-                gestureGroup(title: "On a Dock Icon", gestures: WindowGestureArea.dock.gestures)
-                gestureGroup(title: "On the Menu Bar", gestures: WindowGestureArea.menuBar.gestures)
+                gestureGroup(title: "On a window's title bar", gestures: WindowGestureArea.titleBar.gestures)
+                gestureGroup(title: "On a Dock icon", gestures: WindowGestureArea.dock.gestures)
+                gestureGroup(title: "On the menu bar", gestures: WindowGestureArea.menuBar.gestures)
                 optionsSection
                 dockSpaceSection
                 Section {

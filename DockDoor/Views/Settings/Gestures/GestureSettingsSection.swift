@@ -11,7 +11,7 @@ struct GestureSettingsSection: View {
                 set: { gestureSwipeThreshold = CGFloat($0) }
             )
             SettingsSliderRow(
-                title: "Gesture Sensitivity",
+                title: "Gesture sensitivity",
                 value: thresholdBinding,
                 range: 20 ... 100,
                 unit: " px",

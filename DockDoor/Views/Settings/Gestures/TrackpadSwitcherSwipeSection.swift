@@ -39,7 +39,7 @@ struct TrackpadSwitcherSwipeSection: View {
                         set: { trackpadSwitcherSwipeSensitivity = CGFloat($0) }
                     )
                     SettingsSliderRow(
-                        title: "Swipe Sensitivity",
+                        title: "Swipe sensitivity",
                         value: sensitivityBinding,
                         range: Double(TrackpadSwipeDetector.sensitivityRange.lowerBound) ... Double(TrackpadSwipeDetector.sensitivityRange.upperBound),
                         step: 0.1

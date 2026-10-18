@@ -72,7 +72,7 @@ struct TitleBarScrollGestureSection: View {
                     set: { titleBarScrollRestoreWindowInterval = CGFloat($0) }
                 )
 
-                Picker("Centered Window Sizing", selection: $titleBarScrollCenteredWindowSizingMode) {
+                Picker("Centered window sizing", selection: $titleBarScrollCenteredWindowSizingMode) {
                     ForEach(TitleBarCenteredWindowSizingMode.allCases, id: \.self) { mode in
                         Text(mode.localizedName).tag(mode)
                     }
@@ -83,7 +83,7 @@ struct TitleBarScrollGestureSection: View {
                     switch titleBarScrollCenteredWindowSizingMode {
                     case .uniform:
                         SettingsSliderRow(
-                            title: "Centered Window Size",
+                            title: "Centered window size",
                             value: centeredWindowScaleBinding,
                             range: 0.5 ... 1,
                             step: 0.05
@@ -99,11 +99,11 @@ struct TitleBarScrollGestureSection: View {
                         if titleBarScrollCenteredWindowLockAspectRatio {
                             Text(String(localized: "When enabled, the current window keeps its aspect ratio. The width and height percentages are treated as maximum bounds; if they differ, the result often matches uniform scaling to the smaller bound.", comment: "Explanation for lock aspect ratio behavior in title bar scroll centered window sizing"))
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
 
                         SettingsSliderRow(
-                            title: "Centered Window Width",
+                            title: "Centered window width",
                             value: centeredWindowWidthBinding,
                             range: 0.5 ... 1,
                             step: 0.05
@@ -111,7 +111,7 @@ struct TitleBarScrollGestureSection: View {
                         .settingsSearchTarget("gestures.centeredWidth")
 
                         SettingsSliderRow(
-                            title: "Centered Window Height",
+                            title: "Centered window height",
                             value: centeredWindowHeightBinding,
                             range: 0.5 ... 1,
                             step: 0.05
@@ -121,7 +121,7 @@ struct TitleBarScrollGestureSection: View {
                 }
 
                 SettingsSliderRow(
-                    title: "Restore Window Time",
+                    title: "Restore window time",
                     value: restoreIntervalBinding,
                     range: 0.5 ... 3,
                     unit: " s",

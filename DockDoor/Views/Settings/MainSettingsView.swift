@@ -85,7 +85,7 @@ struct MainSettingsView: View {
 
     private var resetAndQuitSection: some View {
         SettingsSection("Reset and quit") {
-            LabeledContent("Reset All Settings to Defaults") {
+            LabeledContent("Reset all settings") {
                 Button("Reset…", role: .destructive) { showResetConfirmation() }
                     .buttonStyle(.settings)
             }

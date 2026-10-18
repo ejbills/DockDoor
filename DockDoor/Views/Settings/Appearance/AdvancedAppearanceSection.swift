@@ -10,9 +10,9 @@ struct AdvancedAppearanceSection: View {
 
     var body: some View {
         SettingsSection("Window background") {
-            LabeledContent("Custom Hover Highlight Color") {
+            LabeledContent("Hover highlight color") {
                 HStack(spacing: 8) {
-                    ColorPicker("Custom Hover Highlight Color", selection: Binding(
+                    ColorPicker("Hover highlight color", selection: Binding(
                         get: { hoverHighlightColor ?? Color(nsColor: .controlAccentColor) },
                         set: { hoverHighlightColor = $0 }
                     ))
@@ -26,7 +26,7 @@ struct AdvancedAppearanceSection: View {
             .settingsAnnotation("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
 
             SettingsSliderRow(
-                title: "Background Opacity",
+                title: "Highlight opacity",
                 value: $selectionOpacity,
                 range: 0 ... 1,
                 step: 0.05
@@ -46,7 +46,7 @@ struct AdvancedAppearanceSection: View {
             switch backgroundChoice.wrappedValue {
             case .blurred:
                 SettingsSliderRow(
-                    title: "Background Opacity",
+                    title: "Background opacity",
                     value: $dockPreviewBackgroundOpacity,
                     range: 0 ... 1.0,
                     step: 0.05
@@ -56,7 +56,7 @@ struct AdvancedAppearanceSection: View {
             case .solid:
                 EmptyView()
             case .custom:
-                ColorPicker("Custom Background Color", selection: Binding(
+                ColorPicker("Custom background color", selection: Binding(
                     get: { customBackgroundColor ?? Color(nsColor: .windowBackgroundColor) },
                     set: { customBackgroundColor = $0 }
                 ))

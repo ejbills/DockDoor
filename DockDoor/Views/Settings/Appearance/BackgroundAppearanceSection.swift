@@ -86,7 +86,7 @@ struct BackgroundAppearanceSection: View {
                         )
 
                         SettingsSliderRow(
-                            title: "Blur Radius",
+                            title: "Blur radius",
                             value: $blurRadius,
                             range: 0 ... 80,
                             unit: " pt",
@@ -101,21 +101,21 @@ struct BackgroundAppearanceSection: View {
                         )
 
                         SettingsSliderRow(
-                            title: "Tint Intensity",
+                            title: "Tint intensity",
                             value: $tintOpacity,
                             range: 0 ... 1.0,
                             step: 0.05
                         )
 
                         SettingsSliderRow(
-                            title: "Border Opacity",
+                            title: "Border opacity",
                             value: $borderOpacity,
                             range: 0 ... 1.0,
                             step: 0.05
                         )
 
                         SettingsSliderRow(
-                            title: "Border Width",
+                            title: "Border width",
                             value: $borderWidth,
                             range: 0 ... 4.0,
                             unit: " pt",
@@ -151,7 +151,7 @@ struct BackgroundAppearanceSection: View {
 
             if showPreviewShadow {
                 SettingsSliderRow(
-                    title: "Shadow Size",
+                    title: "Shadow size",
                     value: $previewShadowRadius,
                     range: 2 ... 10,
                     unit: " pt",
@@ -159,7 +159,7 @@ struct BackgroundAppearanceSection: View {
                 )
 
                 SettingsSliderRow(
-                    title: "Shadow Opacity",
+                    title: "Shadow opacity",
                     value: $previewShadowOpacity,
                     range: 0.05 ... 1.0,
                     step: 0.05

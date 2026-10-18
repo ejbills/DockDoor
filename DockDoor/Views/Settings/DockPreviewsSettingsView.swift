@@ -46,7 +46,7 @@ struct DockPreviewsSettingsView: View {
     var body: some View {
         SettingsFormView {
             SettingsSection("Dock previews") {
-                Toggle(isOn: $enableDockPreviews) { Text("Enable Dock Previews") }
+                Toggle(isOn: $enableDockPreviews) { Text("Enable Dock previews") }
                     .settingsSearchTarget("dockPreviews.enable")
                     .settingsAnnotation("Show window previews for Dock icons.")
                     .onChange(of: enableDockPreviews) { _ in askUserToRestartApplication() }
@@ -144,7 +144,7 @@ struct DockPreviewsSettingsView: View {
 
     @ViewBuilder
     private var dockInteractionRows: some View {
-        Picker("Dock Preview Trigger", selection: $dockPreviewActivationMode) {
+        Picker("Preview trigger", selection: $dockPreviewActivationMode) {
             ForEach(DockPreviewActivationMode.allCases, id: \.self) {
                 Text($0.localizedName).tag($0)
             }
@@ -153,7 +153,7 @@ struct DockPreviewsSettingsView: View {
         .settingsAnnotation("Show previews automatically on hover, or require a click trigger on the Dock icon.")
 
         if dockPreviewActivationMode == .modifierClick {
-            Picker("Dock Preview Modifier", selection: $dockPreviewActivationModifier) {
+            Picker("Trigger modifier", selection: $dockPreviewActivationModifier) {
                 ForEach(DockPreviewActivationModifier.allCases, id: \.self) {
                     Text($0.localizedName).tag($0)
                 }
@@ -161,7 +161,7 @@ struct DockPreviewsSettingsView: View {
             .settingsSearchTarget("dockPreviews.activationModifier")
         }
 
-        Picker("Dock Preview Hover Action", selection: $previewHoverAction) {
+        Picker("Hover action", selection: $previewHoverAction) {
             ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) }
         }
         .settingsSearchTarget("dockPreviews.hoverAction")
@@ -176,7 +176,7 @@ struct DockPreviewsSettingsView: View {
 
         if previewHoverAction != .none {
             SettingsSliderRow(
-                title: "Preview Hover Action Delay",
+                title: "Hover action delay",
                 value: $tapEquivalentInterval,
                 range: 0 ... 2,
                 defaultValue: 1.5,
@@ -200,7 +200,7 @@ struct DockPreviewsSettingsView: View {
                 .settingsSearchTarget("dockPreviews.restoreAllMinimizedOnClick")
         }
 
-        Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
+        Toggle(isOn: $enableCmdRightClickQuit) { Text("Cmd-right-click a Dock icon to quit the app") }
             .settingsSearchTarget("dockPreviews.cmdRightClickQuit")
 
         Toggle(isOn: $quitAppOnWindowClose) { Text("Quit app when closing its last window") }
@@ -208,7 +208,7 @@ struct DockPreviewsSettingsView: View {
             .settingsAnnotation("When an app has only one window left, closing it will quit the app. Useful as a replacement for Swift Quit.")
 
         SettingsSliderRow(
-            title: "Window Buffer from Dock (pixels)",
+            title: "Distance from Dock",
             value: $bufferFromDock,
             range: -100 ... 100,
             unit: " px",
@@ -217,7 +217,7 @@ struct DockPreviewsSettingsView: View {
         .settingsSearchTarget("dockPreviews.buffer")
 
         SettingsSliderRow(
-            title: "Preview Window Open Delay",
+            title: "Open delay",
             value: $hoverWindowOpenDelay,
             range: 0 ... 2,
             defaultValue: 0.2,
@@ -234,7 +234,7 @@ struct DockPreviewsSettingsView: View {
         .settingsAnnotation("Switching between dock icons while a preview is already open will show previews instantly.")
 
         SettingsSliderRow(
-            title: "Preview Window Fade Out Duration",
+            title: "Fade-out duration",
             value: $fadeOutDuration,
             range: 0 ... 2,
             defaultValue: 0.4,
@@ -245,7 +245,7 @@ struct DockPreviewsSettingsView: View {
         .settingsSearchTarget("advanced.fadeOut")
 
         SettingsSliderRow(
-            title: "Preview Window Inactivity Timer",
+            title: "Inactivity timer",
             value: $inactivityTimeout,
             range: 0 ... 3,
             defaultValue: 0.2,
@@ -274,7 +274,7 @@ struct DockPreviewsSettingsView: View {
         .settingsSearchTarget("appearance.dockAppHeader")
         .settingsAnnotation("Show the app name and icon above dock previews. Shared with widget headers.")
 
-        Picker("Position Dock Preview Controls", selection: $dockPreviewControlPosition) {
+        Picker("Controls position", selection: $dockPreviewControlPosition) {
             ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
                 Text(position.localizedName)
                     .tag(position)
@@ -294,7 +294,7 @@ struct DockPreviewsSettingsView: View {
                 .settingsSearchTarget("appearance.dockDisableTitleStyling")
                 .settingsAnnotation("Removes the pill-shaped background styling from window titles in dock previews for a cleaner look.")
 
-            Picker("Window Title Font Size", selection: $windowTitleFontSize) {
+            Picker("Window title font size", selection: $windowTitleFontSize) {
                 ForEach(WindowTitleFontSize.allCases) { size in
                     Text(size.localizedName)
                         .tag(size)

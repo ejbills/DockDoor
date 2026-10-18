@@ -36,7 +36,7 @@ struct WindowSizeSliderView: View {
         .settingsAnnotation("Scale previews to match actual window proportions instead of using fixed dimensions.")
 
         SettingsSliderRow(
-            title: "Preview Width",
+            title: "Preview width",
             value: $previewWidth,
             range: 100.0 ... 600.0,
             unit: " px",
@@ -52,7 +52,7 @@ struct WindowSizeSliderView: View {
         }
 
         SettingsSliderRow(
-            title: "Preview Height",
+            title: "Preview height",
             value: $previewHeight,
             range: 60.0 ... 400.0,
             unit: " px",

@@ -27,9 +27,9 @@ struct ActiveAppIndicatorSettingsView: View {
             .settingsAnnotation("Displays a colored line below the currently active application's dock icon.")
 
             if showActiveAppIndicator {
-                LabeledContent("Indicator Color") {
+                LabeledContent("Indicator color") {
                     HStack(spacing: 8) {
-                        ColorPicker("Indicator Color", selection: $activeAppIndicatorColor)
+                        ColorPicker("Indicator color", selection: $activeAppIndicatorColor)
                             .labelsHidden()
                         SettingsResetButton(isModified: true) {
                             Defaults.reset(.activeAppIndicatorColor)
@@ -38,7 +38,7 @@ struct ActiveAppIndicatorSettingsView: View {
                 }
                 .settingsSearchTarget("general.indicatorColor")
 
-                Picker("Indicator Style", selection: $activeAppIndicatorStyle) {
+                Picker("Indicator style", selection: $activeAppIndicatorStyle) {
                     ForEach(ActiveAppIndicatorStyle.allCases, id: \.self) { style in
                         Text(style.localizedName).tag(style)
                     }
@@ -61,7 +61,7 @@ struct ActiveAppIndicatorSettingsView: View {
                 .settingsSearchTarget("general.indicatorAutoSize")
 
                 if !activeAppIndicatorAutoSize {
-                    LabeledContent("Current Dock Size:") {
+                    LabeledContent("Current Dock size") {
                         HStack(spacing: 6) {
                             Text(verbatim: "\(Int(currentDockSize)) px")
                                 .monospacedDigit()
@@ -79,7 +79,7 @@ struct ActiveAppIndicatorSettingsView: View {
 
                     if activeAppIndicatorStyle == .bar {
                         SettingsSliderRow(
-                            title: "Indicator Height",
+                            title: "Indicator height",
                             value: $activeAppIndicatorHeight,
                             range: 1.0 ... 15.0,
                             unit: " px",
@@ -90,7 +90,7 @@ struct ActiveAppIndicatorSettingsView: View {
                     }
 
                     SettingsSliderRow(
-                        title: "Position Offset",
+                        title: "Position offset",
                         value: $activeAppIndicatorOffset,
                         range: -30.0 ... 30.0,
                         unit: " px",
@@ -108,7 +108,7 @@ struct ActiveAppIndicatorSettingsView: View {
 
                     if !activeAppIndicatorAutoLength {
                         SettingsSliderRow(
-                            title: "Indicator Length",
+                            title: "Indicator length",
                             value: $activeAppIndicatorLength,
                             range: 1.0 ... 110.0,
                             unit: " px",
@@ -120,7 +120,7 @@ struct ActiveAppIndicatorSettingsView: View {
                 }
 
                 SettingsSliderRow(
-                    title: "Shift Indicator",
+                    title: "Indicator shift",
                     value: $activeAppIndicatorShift,
                     range: -2.0 ... 2.0,
                     unit: " px",

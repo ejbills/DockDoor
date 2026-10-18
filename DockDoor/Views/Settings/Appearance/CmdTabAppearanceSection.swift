@@ -65,7 +65,7 @@ struct CmdTabAppearanceSection: View {
                 EnabledButtonsPicker(enabledButtons: $cmdTabEnabledTrafficLightButtons) {
                     cmdTabTrafficLightButtonsVisibility = .never
                 }
-                Toggle("Use Monochrome Colors", isOn: $cmdTabUseMonochromeTrafficLights)
+                Toggle("Use monochrome colors", isOn: $cmdTabUseMonochromeTrafficLights)
                     .settingsSearchTarget("appearance.cmdTabMonochrome")
 
                 Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {

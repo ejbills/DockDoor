@@ -6,7 +6,7 @@ struct MouseActionsSection: View {
 
     var body: some View {
         SettingsSection("Mouse actions") {
-            Picker("Middle Click", selection: $middleClickAction) {
+            Picker("Middle click", selection: $middleClickAction) {
                 ForEach(WindowAction.middleClickActions, id: \.self) { windowAction in
                     Label(windowAction.localizedName, systemImage: windowAction.iconName)
                         .tag(windowAction)

@@ -29,7 +29,7 @@ struct GeneralAppearanceSection: View {
             }
 
             SettingsSliderRow(
-                title: "Spacing Scale",
+                title: "Spacing scale",
                 value: $globalPaddingMultiplier,
                 range: 0.5 ... 2.0,
                 unit: "×",
@@ -38,7 +38,7 @@ struct GeneralAppearanceSection: View {
             .settingsSearchTarget("appearance.spacingScale")
 
             SettingsSliderRow(
-                title: "Unselected Content Opacity",
+                title: "Unselected content opacity",
                 value: $unselectedContentOpacity,
                 range: 0 ... 1,
                 step: 0.05
@@ -53,7 +53,7 @@ struct GeneralAppearanceSection: View {
 
             if uniformCardRadius {
                 SettingsSliderRow(
-                    title: "Corner Radius",
+                    title: "Corner radius",
                     value: $previewCornerRadius,
                     range: 0 ... 40,
                     unit: " pt",
