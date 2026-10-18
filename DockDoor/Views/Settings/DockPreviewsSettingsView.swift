@@ -303,7 +303,7 @@ struct DockPreviewsSettingsView: View {
             .settingsSearchTarget("appearance.dockWindowTitleFontSize")
         }
 
-        AppearanceSettingsView.TrafficLightButtonsSettingsView()
+        TrafficLightButtonsSettingsView()
 
         Toggle(isOn: $disableDockStyleTrafficLights) { Text("Disable dock styling on traffic light buttons") }
             .settingsSearchTarget("appearance.dockDisableTrafficLightStyling")

@@ -1928,7 +1928,7 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "support.automaticUpdates",
-            title: String(localized: "Automatic Updates"),
+            title: String(localized: "Automatic updates"),
             description: String(localized: "Automatically check for updates in the background"),
             keywords: ["update", "automatic", "background", "check"],
             tab: "Support",
@@ -1936,16 +1936,8 @@ enum SettingsSearchCatalog {
             icon: "clock.arrow.2.circlepath"
         ),
         SettingsSearchItem(
-            id: "gestures.switcherGestures",
-            title: String(localized: "Enable gestures in window switcher"),
-            description: String(localized: "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode."),
-            keywords: ["swipe", "trackpad", "gesture", "switcher", "vertical"],
-            tab: "Gestures",
-            icon: "rectangle.3.group"
-        ),
-        SettingsSearchItem(
             id: "support.debugLogging",
-            title: String(localized: "Debug Logging"),
+            title: String(localized: "Debug logging"),
             description: String(localized: "Capture performance metrics for troubleshooting"),
             keywords: ["debug", "log", "logging", "performance", "troubleshoot"],
             tab: "Support",

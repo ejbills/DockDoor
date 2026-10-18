@@ -44,6 +44,42 @@ struct SettingsStyleDriftTests {
         "AccentButtonStyle(",
     ]
 
+    /// Search jumps by id, so catalog entries and `.settingsSearchTarget`s must match both ways.
+    @Test func searchCatalogMatchesSearchTargets() throws {
+        let appRoot = sourceRoot.deletingLastPathComponent().deletingLastPathComponent()
+        let catalog = try String(contentsOf: sourceRoot.appendingPathComponent("Search/SettingsSearchCatalog.swift"), encoding: .utf8)
+        let ids = Set(Self.matches(of: #"\bid: "([^"]+)""#, in: catalog))
+
+        var targets = Set<String>()
+        var prefixes = Set<String>()
+        let enumerator = FileManager.default.enumerator(at: appRoot, includingPropertiesForKeys: nil)
+        for case let file as URL in enumerator?.allObjects ?? [] where file.pathExtension == "swift" {
+            let source = try String(contentsOf: file, encoding: .utf8)
+            // Literal targets, plus ids handed to shared rows through `…Target:` parameters.
+            let found = Self.matches(of: #"settingsSearchTarget\("((?:[^"\\]|\\.)*)"\)"#, in: source)
+                + Self.matches(of: #"\w+Target: "([^"]+)""#, in: source)
+            for target in found {
+                if let interpolation = target.range(of: "\\(") {
+                    prefixes.insert(String(target[..<interpolation.lowerBound]))
+                } else {
+                    targets.insert(target)
+                }
+            }
+        }
+
+        let idsWithoutTarget = ids.filter { id in !targets.contains(id) && !prefixes.contains { id.hasPrefix($0) } }
+        #expect(idsWithoutTarget.isEmpty, "Catalog ids with no settingsSearchTarget: \(idsWithoutTarget.sorted())")
+        let targetsWithoutEntry = targets.subtracting(ids)
+        #expect(targetsWithoutEntry.isEmpty, "settingsSearchTargets with no catalog entry: \(targetsWithoutEntry.sorted())")
+    }
+
+    private static func matches(of pattern: String, in source: String) -> [String] {
+        let regex = try! NSRegularExpression(pattern: pattern)
+        return regex.matches(in: source, range: NSRange(source.startIndex..., in: source)).compactMap {
+            Range($0.range(at: 1), in: source).map { String(source[$0]) }
+        }
+    }
+
     @Test func convertedPanesExist() {
         for pane in convertedPanes {
             let file = sourceRoot.appendingPathComponent(pane)
