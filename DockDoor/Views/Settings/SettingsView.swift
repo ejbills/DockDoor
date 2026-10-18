@@ -151,6 +151,7 @@ struct SettingsView: View {
     @State private var selectedTab = SettingsTab.general
     @StateObject private var searchEngine = SettingsSearchEngine()
     @State private var scrollTarget: String?
+    @FocusState private var isSearchFieldFocused: Bool
     @ObservedObject var updaterState: UpdaterState
 
     init(updaterState: UpdaterState) {
@@ -177,32 +178,69 @@ struct SettingsView: View {
         }, detail: {
             detail
         })
-        .searchable(
-            text: $searchEngine.query,
-            placement: .toolbar,
-            prompt: String(localized: "Search settings…", comment: "Settings search placeholder")
-        )
+        .background {
+            // ⌘F from anywhere in the window lands in the sidebar field.
+            Button("Find") {
+                isSearchFieldFocused = true
+            }
+            .keyboardShortcut("f", modifiers: .command)
+            .hidden()
+        }
     }
 
-    /// The sidebar is navigation only; search lives in the toolbar and takes
-    /// over the detail column while it is active.
     private var sidebar: some View {
-        List(selection: $selectedTab) {
-            sidebarRow(.general)
+        VStack(spacing: 0) {
+            searchField
 
-            ForEach(SettingsTab.Section.allCases) { section in
-                Section {
-                    ForEach(SettingsTab.tabs(in: section)) { tab in
-                        sidebarRow(tab)
+            Divider()
+
+            List(selection: $selectedTab) {
+                sidebarRow(.general)
+
+                ForEach(SettingsTab.Section.allCases) { section in
+                    Section {
+                        ForEach(SettingsTab.tabs(in: section)) { tab in
+                            sidebarRow(tab)
+                        }
+                    } header: {
+                        Text(verbatim: section.localizedTitle)
                     }
-                } header: {
-                    Text(verbatim: section.localizedTitle)
                 }
             }
+            .listStyle(.sidebar)
         }
-        .listStyle(.sidebar)
         .frame(minWidth: 230, maxWidth: 230)
         .modifier(HideSidebarToggleModifier())
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 12))
+                .foregroundStyle(.tertiary)
+
+            TextField(
+                String(localized: "Search settings…", comment: "Settings search placeholder"),
+                text: $searchEngine.query
+            )
+            .textFieldStyle(.plain)
+            .font(.system(size: 12))
+            .focused($isSearchFieldFocused)
+
+            if !searchEngine.query.isEmpty {
+                Button {
+                    searchEngine.query = ""
+                    isSearchFieldFocused = false
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
     }
 
     private func sidebarRow(_ tab: SettingsTab) -> some View {
