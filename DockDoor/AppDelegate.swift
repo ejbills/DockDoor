@@ -241,9 +241,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func openDonationPage() {
-        if let url = URL(string: "https://dockdoor.net/donate") {
-            NSWorkspace.shared.open(url)
-        }
+        NSWorkspace.shared.open(Links.donate)
     }
 
     @objc private func openProPage() {
@@ -251,9 +249,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func openReviewPage() {
-        if let url = URL(string: "https://www.producthunt.com/products/dockdoor/reviews") {
-            NSWorkspace.shared.open(url)
-        }
+        NSWorkspace.shared.open(Links.review)
     }
 
     private var wakeRecoveryTask: Task<Void, Never>?

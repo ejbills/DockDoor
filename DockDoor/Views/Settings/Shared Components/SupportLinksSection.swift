@@ -7,7 +7,7 @@ struct SupportLinksSection: View {
                 title: "Get DockDoor Pro",
                 description: "Replace the Dock entirely with the paid app from the same developer",
                 icon: "sparkles",
-                destination: DockDoorPro.url,
+                destination: Links.dockDoorPro,
                 iconColor: .mint
             )
             .settingsSearchTarget("support.dockDoorPro")
