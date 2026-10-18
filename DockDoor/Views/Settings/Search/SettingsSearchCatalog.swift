@@ -800,7 +800,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Lock Dock to Screen"),
             description: String(localized: "Prevent the Dock from jumping to other monitors when your cursor reaches the screen edge."),
             keywords: ["lock", "pin", "monitor", "screen", "multi"],
-            tab: "DockLocking",
+            tab: "Advanced",
             section: "",
             icon: "lock.fill"
         ),
@@ -808,7 +808,7 @@ enum SettingsSearchCatalog {
             id: "dockLocking.screen",
             title: String(localized: "Lock Dock to"),
             keywords: ["screen", "display", "which"],
-            tab: "DockLocking",
+            tab: "Advanced",
             section: String(localized: "Configuration"),
             icon: "display"
         ),
@@ -817,7 +817,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Bypass modifier key"),
             description: String(localized: "Hold this key to temporarily allow the Dock to move freely."),
             keywords: ["bypass", "override", "modifier", "temporarily"],
-            tab: "DockLocking",
+            tab: "Advanced",
             section: String(localized: "Configuration"),
             icon: "key"
         ),

@@ -12,26 +12,12 @@ final class SettingsSearchEngine: ObservableObject {
 
     private let items: [SettingsSearchItem]
 
-    private static let tabDisplayOrder = [
-        "General", "DockPreviews", "WindowSwitcher", "Gestures", "CmdTab",
-        "DockLocking", "Appearance", "Keybinds", "Filters",
-        "Widgets", "Advanced", "Support",
-    ]
+    /// Derived from SettingsTab so search and the sidebar agree on pane order and names.
+    private static let tabDisplayOrder = SettingsTab.allCases.map(\.rawValue)
 
-    static let tabDisplayNames: [String: String] = [
-        "General": String(localized: "General", comment: "Settings tab title"),
-        "DockPreviews": String(localized: "Dock Previews", comment: "Settings tab title"),
-        "WindowSwitcher": String(localized: "Window Switcher", comment: "Settings tab title"),
-        "Gestures": String(localized: "Gestures", comment: "Settings tab title"),
-        "CmdTab": String(localized: "Cmd+Tab", comment: "Settings tab title"),
-        "DockLocking": String(localized: "Dock Locking", comment: "Settings tab title"),
-        "Appearance": String(localized: "Appearance", comment: "Settings Tab"),
-        "Keybinds": String(localized: "Keybinds", comment: "Settings tab title"),
-        "Filters": String(localized: "Filters", comment: "Filters tab title"),
-        "Widgets": String(localized: "Widgets", comment: "Widget settings tab title"),
-        "Advanced": String(localized: "Advanced", comment: "Settings tab title"),
-        "Support": String(localized: "Support", comment: "Settings tab title"),
-    ]
+    static let tabDisplayNames: [String: String] = Dictionary(
+        uniqueKeysWithValues: SettingsTab.allCases.map { ($0.rawValue, $0.localizedTitle) }
+    )
 
     init(items: [SettingsSearchItem] = SettingsSearchCatalog.items) {
         self.items = items

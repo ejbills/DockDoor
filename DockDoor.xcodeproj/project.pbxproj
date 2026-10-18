@@ -85,7 +85,7 @@
 		A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */; };
 		A4C2F91474874A3A9CE0FBA825CC44EC /* FolderWidgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CF9A1A6F9A48AABC07761494454213 /* FolderWidgetModel.swift */; };
 		AA11001122334455AA110022 /* DockLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110011 /* DockLocker.swift */; };
-		AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110033 /* DockLockingSettingsView.swift */; };
+		2256F83C6A79407BB1FA5F33675A3463 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */; };
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
 		B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */; };
 		80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */; };
@@ -340,7 +340,7 @@
 		A63C0725F7FB46D3B6850352B3493FA8 /* SettingsSearchTargetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchTargetModifier.swift; sourceTree = "<group>"; };
 		A669E7D8E433434AB00E292C6BC49062 /* SettingsSearchCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchCatalog.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
-		AA11001122334455AA110033 /* DockLockingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockingSettingsView.swift; sourceTree = "<group>"; };
+		DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
 		857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTitlePresentationTests.swift; sourceTree = "<group>"; };
 		EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackupManagerTests.swift; sourceTree = "<group>"; };
@@ -1061,7 +1061,7 @@
 				BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */,
 				BB7CD3CC2EE66EE800412546 /* KeybindsSettingsView.swift */,
 				BB709B3A2EF21493007809A2 /* WidgetSettingsView.swift */,
-				AA11001122334455AA110033 /* DockLockingSettingsView.swift */,
+				DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */,
 				AE9C7D8765A140F0A595DD16 /* GesturesSettingsView.swift */,
 				42B9B5D70B7648AF97FC591B /* WindowGestures */,
 			);
@@ -1420,7 +1420,7 @@
 				B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */,
 				AA11001122334455AA110022 /* DockLocker.swift in Sources */,
 				DBFD0B5445DD4F01BD0FBBAB /* DockDoorPro.swift in Sources */,
-				AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */,
+				2256F83C6A79407BB1FA5F33675A3463 /* SettingsTab.swift in Sources */,
 				64CFB895E75142028A938986 /* WindowGestureTypes.swift in Sources */,
 				55FCF34F93B7487D989A978E /* WindowGestureRecognizer.swift in Sources */,
 				DBFEE8524DF44512829C9C90 /* WindowGestureResolver.swift in Sources */,
