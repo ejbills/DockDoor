@@ -1146,28 +1146,13 @@ enum SettingsSearchCatalog {
         ),
         // Dock Preview Appearance
         SettingsSearchItem(
-            id: "appearance.dockShowAppHeader",
-            title: String(localized: "Show App Header"),
-            keywords: ["app", "header", "name", "dock"],
+            id: "appearance.dockAppHeader",
+            title: String(localized: "App header"),
+            description: String(localized: "Show the app name and icon above dock previews. Shared with widget headers."),
+            keywords: ["app", "header", "name", "icon", "style", "shadowed", "popover", "dock"],
             tab: "DockPreviews",
             section: String(localized: "Dock Preview Appearance"),
-            icon: "textformat"
-        ),
-        SettingsSearchItem(
-            id: "appearance.dockAppHeaderStyle",
-            title: String(localized: "App Header Style"),
-            keywords: ["header", "style", "dock"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Preview Appearance"),
-            icon: "textformat"
-        ),
-        SettingsSearchItem(
-            id: "appearance.dockShowAppIconOnly",
-            title: String(localized: "Show App Icon Only"),
-            keywords: ["icon", "only", "header", "dock"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Preview Appearance"),
-            icon: "app.badge"
+            icon: "text.below.photo"
         ),
         SettingsSearchItem(
             id: "appearance.dockControlPosition",

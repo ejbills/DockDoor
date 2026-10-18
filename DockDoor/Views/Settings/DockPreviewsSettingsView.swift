@@ -1,6 +1,31 @@
 import Defaults
 import SwiftUI
 
+/// The three header knobs (visibility, style, icon-only) collapse into one
+/// picker: these write the shared showAppName / appNameStyle /
+/// showAppIconOnly keys, which also drive widget headers.
+private enum AppHeaderMode: String, CaseIterable, Identifiable {
+    case hidden
+    case iconOnly
+    case nameAndIcon
+    case shadowed
+    case popover
+
+    var id: Self {
+        self
+    }
+
+    var localizedName: String {
+        switch self {
+        case .hidden: String(localized: "Hidden", comment: "App header option")
+        case .iconOnly: String(localized: "Icon only", comment: "App header option")
+        case .nameAndIcon: String(localized: "Name and icon", comment: "App header option")
+        case .shadowed: String(localized: "Name and icon (shadowed)", comment: "App header option")
+        case .popover: String(localized: "Popover", comment: "App header option")
+        }
+    }
+}
+
 struct DockPreviewsSettingsView: View {
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
@@ -68,6 +93,42 @@ struct DockPreviewsSettingsView: View {
     }
 
     // MARK: - Window Display
+
+    private var appHeaderMode: Binding<AppHeaderMode> {
+        Binding(
+            get: {
+                if !showAppName {
+                    return .hidden
+                }
+                if showAppIconOnly {
+                    return .iconOnly
+                }
+                switch appNameStyle {
+                case .default: return .nameAndIcon
+                case .shadowed: return .shadowed
+                case .popover: return .popover
+                }
+            },
+            set: { mode in
+                switch mode {
+                case .hidden:
+                    showAppName = false
+                    showAppIconOnly = false
+                case .iconOnly:
+                    showAppName = true
+                    showAppIconOnly = true
+                case .nameAndIcon, .shadowed, .popover:
+                    showAppName = true
+                    showAppIconOnly = false
+                    appNameStyle = switch mode {
+                    case .nameAndIcon: .default
+                    case .shadowed: .shadowed
+                    default: .popover
+                    }
+                }
+            }
+        )
+    }
 
     @ViewBuilder
     private var windowDisplayRows: some View {
@@ -191,21 +252,13 @@ struct DockPreviewsSettingsView: View {
 
     @ViewBuilder
     private var appearanceRows: some View {
-        Toggle(isOn: $showAppName) { Text("Show App Header") }
-            .settingsSearchTarget("appearance.dockShowAppHeader")
-
-        if showAppName {
-            Picker(String(localized: "App Header Style"), selection: $appNameStyle) {
-                ForEach(AppNameStyle.allCases, id: \.self) { style in
-                    Text(style.localizedName)
-                        .tag(style)
-                }
+        Picker("App header", selection: appHeaderMode) {
+            ForEach(AppHeaderMode.allCases) { mode in
+                Text(mode.localizedName).tag(mode)
             }
-            .settingsSearchTarget("appearance.dockAppHeaderStyle")
-
-            Toggle(isOn: $showAppIconOnly) { Text("Show App Icon Only") }
-                .settingsSearchTarget("appearance.dockShowAppIconOnly")
         }
+        .settingsSearchTarget("appearance.dockAppHeader")
+        .settingsAnnotation("Show the app name and icon above dock previews. Shared with widget headers.")
 
         Picker("Position Dock Preview Controls", selection: $dockPreviewControlPosition) {
             ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
