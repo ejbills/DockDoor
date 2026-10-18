@@ -44,6 +44,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // A test-host copy would prompt for permissions and fight the running copy for the event tap.
+        guard !Self.isRunningAsTestHost else { return }
+        terminateOlderInstances()
         applyAppearanceMode(Defaults[.appAppearanceMode])
 
         reconcileImagePreviewWithPermission()
@@ -314,6 +317,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func quitApp() {
         NSApplication.shared.terminate(nil)
+    }
+
+    /// Two copies fight over the event tap, so the newest launch quits any older one.
+    private func terminateOlderInstances() {
+        guard let bundleID = Bundle.main.bundleIdentifier else { return }
+        let current = NSRunningApplication.current
+        let launchDate = current.launchDate ?? Date()
+        let older = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).filter {
+            $0.processIdentifier != current.processIdentifier && ($0.launchDate ?? .distantPast) < launchDate
+        }
+        for app in older {
+            app.terminate()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                if !app.isTerminated {
+                    app.forceTerminate()
+                }
+            }
+        }
+    }
+
+    private static var isRunningAsTestHost: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
     func restartApp() {
