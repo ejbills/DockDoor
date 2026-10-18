@@ -8,6 +8,7 @@ struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.showAnimations) var showAnimations
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
+    @Default(.showSettingsDescriptions) var showSettingsDescriptions
 
     var body: some View {
         BaseSettingsView {
@@ -59,6 +60,10 @@ struct MainSettingsView: View {
                     Text("Reduce motion")
                 }
                 .settingsSearchTarget("general.reduceMotion")
+
+                Toggle(isOn: $showSettingsDescriptions, label: { Text("Show setting descriptions") })
+                    .settingsSearchTarget("general.showSettingDescriptions")
+                    .settingsAnnotation("Explain what each setting does underneath its row.")
 
                 VStack(alignment: .leading, spacing: 0) {
                     Toggle(isOn: $sortMinimizedToEnd, label: {

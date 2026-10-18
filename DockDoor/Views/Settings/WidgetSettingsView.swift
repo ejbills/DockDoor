@@ -24,10 +24,51 @@ struct WidgetSettingsView: View {
     @Default(.filteredCalendarIdentifiers) var filteredCalendarIdentifiers
     @Default(.mediaWidgetScrollBehavior) var mediaWidgetScrollBehavior
     @Default(.mediaWidgetScrollDirection) var mediaWidgetScrollDirection
+    @Default(.enableFolderWidget) var enableFolderWidget
+    @Default(.folderWidgetDefaultSortOrder) var folderWidgetDefaultSortOrder
+    @Default(.folderWidgetDefaultSortReversed) var folderWidgetDefaultSortReversed
+    @Default(.folderWidgetRememberSortPerFolder) var folderWidgetRememberSortPerFolder
+    @Default(.folderWidgetShowHiddenFiles) var folderWidgetShowHiddenFiles
 
     @State private var availableCalendars: [CalendarItem] = []
     @State private var isLoadingCalendars = true
     @State private var authorizationStatus: EKAuthorizationStatus = .notDetermined
+
+    private var folderWidgetSection: some View {
+        SettingsGroup(header: "Folder Previews") {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $enableFolderWidget) { Text("Show folder contents on hover") }
+                    .settingsSearchTarget("widgets.folder")
+                Text("Preview a folder's contents when hovering it in the Dock.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                if enableFolderWidget {
+                    Picker("Default sort:", selection: $folderWidgetDefaultSortOrder) {
+                        ForEach(FolderWidgetSortOrder.allCases, id: \.self) { order in
+                            Text(order.localizedName).tag(order)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .settingsSearchTarget("widgets.folderSort")
+                    .padding(.leading, 20)
+
+                    Toggle(isOn: $folderWidgetDefaultSortReversed) { Text("Sort descending by default") }
+                        .settingsSearchTarget("widgets.folderSortDirection")
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $folderWidgetRememberSortPerFolder) { Text("Remember sorting per folder") }
+                        .settingsSearchTarget("widgets.folderRememberSort")
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $folderWidgetShowHiddenFiles) { Text("Show hidden files") }
+                        .settingsSearchTarget("widgets.folderHiddenFiles")
+                        .padding(.leading, 20)
+                }
+            }
+        }
+    }
 
     private static let eventStore = EKEventStore()
 
@@ -105,6 +146,8 @@ struct WidgetSettingsView: View {
                         }
                     }
                 }
+
+                folderWidgetSection
 
                 if showSpecialAppControls {
                     SettingsGroup(header: "Display") {

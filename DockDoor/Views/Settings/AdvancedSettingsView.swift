@@ -453,9 +453,7 @@ struct AdvancedSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             } else if isLockedScreenEdgeCovered {
-                Text("macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free.")
-                    .font(.caption)
-                    .foregroundColor(.orange)
+                SettingsWarningBanner(text: "macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free.")
             } else {
                 Text("System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge.")
                     .font(.caption)
