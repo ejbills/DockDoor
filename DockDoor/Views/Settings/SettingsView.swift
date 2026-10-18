@@ -30,7 +30,6 @@ class SettingsManager: NSObject, ObservableObject {
             window.isReleasedWhenClosed = true
 
             window.delegate = self
-            window.titlebarAppearsTransparent = true
             window.title = ""
             window.toolbarStyle = .unified
 
@@ -189,25 +188,24 @@ struct SettingsView: View {
     }
 
     private var sidebar: some View {
-        VStack(spacing: 0) {
-            searchField
+        List(selection: $selectedTab) {
+            sidebarRow(.general)
 
-            Divider()
-
-            List(selection: $selectedTab) {
-                sidebarRow(.general)
-
-                ForEach(SettingsTab.Section.allCases) { section in
-                    Section {
-                        ForEach(SettingsTab.tabs(in: section)) { tab in
-                            sidebarRow(tab)
-                        }
-                    } header: {
-                        Text(verbatim: section.localizedTitle)
+            ForEach(SettingsTab.Section.allCases) { section in
+                Section {
+                    ForEach(SettingsTab.tabs(in: section)) { tab in
+                        sidebarRow(tab)
                     }
+                } header: {
+                    Text(verbatim: section.localizedTitle)
                 }
             }
-            .listStyle(.sidebar)
+        }
+        .listStyle(.sidebar)
+        // Medium rows regardless of the system sidebar size; Large crowds this window.
+        .environment(\.sidebarRowSize, .medium)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            searchField
         }
         .frame(minWidth: 230, maxWidth: 230)
         .modifier(HideSidebarToggleModifier())
@@ -251,14 +249,16 @@ struct SettingsView: View {
             }
         }
         .padding(.horizontal, 10)
-        .padding(.vertical, 8)
+        .padding(.top, 2)
+        .padding(.bottom, 8)
     }
 
     private func sidebarRow(_ tab: SettingsTab) -> some View {
         Label {
             Text(verbatim: tab.localizedTitle)
+                .font(.callout)
         } icon: {
-            SettingsTabIconTile(tab: tab)
+            Image(systemName: tab.systemImage)
         }
         .tag(tab)
     }

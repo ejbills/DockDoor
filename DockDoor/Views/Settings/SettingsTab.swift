@@ -86,15 +86,6 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         }
     }
 
-    var tileColor: Color {
-        switch self {
-        case .general: .teal
-        case .dockPreviews, .windowSwitcher, .gestures, .cmdTab: .blue
-        case .appearance, .keybinds, .filters, .widgets: .indigo
-        case .advanced, .support: .gray
-        }
-    }
-
     var section: Section? {
         switch self {
         case .general: nil
@@ -106,26 +97,5 @@ enum SettingsTab: String, CaseIterable, Identifiable {
 
     static func tabs(in section: Section) -> [SettingsTab] {
         allCases.filter { $0.section == section }
-    }
-}
-
-/// System Settings-style icon tile: a continuous-corner square filled with
-/// the pane's hue behind a white glyph.
-struct SettingsTabIconTile: View {
-    let tab: SettingsTab
-    var side: CGFloat = 20
-
-    var body: some View {
-        RoundedRectangle(cornerRadius: side * 0.28, style: .continuous)
-            .fill(tab.tileColor.gradient)
-            .frame(width: side, height: side)
-            .overlay {
-                Image(systemName: tab.systemImage)
-                    .resizable()
-                    .scaledToFit()
-                    .fontWeight(.medium)
-                    .foregroundStyle(.white)
-                    .frame(width: side * 0.58, height: side * 0.58)
-            }
     }
 }
