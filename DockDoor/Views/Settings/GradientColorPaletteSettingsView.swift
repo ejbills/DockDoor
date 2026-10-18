@@ -46,24 +46,26 @@ struct GradientColorPaletteSettingsView: View {
         }
         .settingsSearchTarget("appearance.gradientColors")
 
-        sliderSetting(title: "Animation speed",
-                      value: $storedSettings.speed,
-                      range: 0.1 ... 1.0,
-                      step: 0.05,
-                      unit: "seconds",
-                      formatter: NumberFormatter.twoDecimalFormatter)
-            .settingsSearchTarget("appearance.gradientSpeed")
+        SettingsSliderRow(
+            title: "Animation speed",
+            value: $storedSettings.speed,
+            range: 0.1 ... 1.0,
+            unit: " s",
+            step: 0.05
+        )
+        .settingsSearchTarget("appearance.gradientSpeed")
 
-        sliderSetting(title: "Blur amount",
-                      value: $storedSettings.blur,
-                      range: 0 ... 1.0,
-                      step: 0.05,
-                      unit: "amount",
-                      formatter: NumberFormatter.twoDecimalFormatter)
-            .settingsSearchTarget("appearance.gradientBlur")
-            .onAppear {
-                setupColorDebounce()
-            }
+        SettingsSliderRow(
+            title: "Blur amount",
+            value: $storedSettings.blur,
+            range: 0 ... 1.0,
+            unit: "amount",
+            step: 0.05
+        )
+        .settingsSearchTarget("appearance.gradientBlur")
+        .onAppear {
+            setupColorDebounce()
+        }
     }
 
     private func colorShape(for hexColor: String, index: Int) -> some View {

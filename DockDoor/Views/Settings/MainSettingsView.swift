@@ -11,7 +11,7 @@ struct MainSettingsView: View {
     @Default(.showSettingsDescriptions) var showSettingsDescriptions
 
     var body: some View {
-        BaseSettingsView {
+        SettingsFormView {
             VStack(alignment: .leading, spacing: 24) {
                 DockDoorProBanner()
                 supportAndContributionsSection
@@ -22,7 +22,9 @@ struct MainSettingsView: View {
                 HStack {
                     Spacer()
                     Button("Reset All Settings to Defaults") { showResetConfirmation() }
+                        .buttonStyle(.plain)
                     Button("Quit DockDoor") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
+                        .buttonStyle(.plain)
                     Spacer()
                 }
                 .padding(.top, 5)
@@ -33,7 +35,7 @@ struct MainSettingsView: View {
     // MARK: - Support & Contributions
 
     private var supportAndContributionsSection: some View {
-        SettingsGroup(header: "Support & Contributions", compact: true) {
+        SettingsSection("Support & contributions") {
             SupportLinksSection()
         }
     }
@@ -41,48 +43,47 @@ struct MainSettingsView: View {
     // MARK: - Application Basics
 
     private var applicationBasicsSection: some View {
-        SettingsGroup(header: "Application Basics") {
-            VStack(alignment: .leading, spacing: 10) {
-                LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
-                    .settingsSearchTarget("general.launchAtLogin")
+        SettingsSection("Application basics") {
+            LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
+                .settingsSearchTarget("general.launchAtLogin")
 
-                Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
-                    .settingsSearchTarget("general.menuBarIcon")
-                    .onChange(of: showMenuBarIcon) { isOn in
-                        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-                        if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
+            Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
+                .settingsSearchTarget("general.menuBarIcon")
+                .onChange(of: showMenuBarIcon) { isOn in
+                    let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                    if isOn {
+                        appDelegate.setupMenuBar()
+                    } else {
+                        appDelegate.removeMenuBar()
                     }
-
-                Toggle(isOn: Binding(
-                    get: { !showAnimations },
-                    set: { showAnimations = !$0 }
-                )) {
-                    Text("Reduce motion")
                 }
-                .settingsSearchTarget("general.reduceMotion")
 
-                Toggle(isOn: $showSettingsDescriptions, label: { Text("Show setting descriptions") })
-                    .settingsSearchTarget("general.showSettingDescriptions")
-                    .settingsAnnotation("Explain what each setting does underneath its row.")
-
-                VStack(alignment: .leading, spacing: 0) {
-                    Toggle(isOn: $sortMinimizedToEnd, label: {
-                        Text("Sort minimized/hidden windows to end")
-                    })
-                    Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                }
-                .settingsSearchTarget("general.sortMinimized")
+            Toggle(isOn: Binding(
+                get: { !showAnimations },
+                set: { showAnimations = !$0 }
+            )) {
+                Text("Reduce motion")
             }
+            .settingsSearchTarget("general.reduceMotion")
+
+            Toggle(isOn: $showSettingsDescriptions, label: { Text("Show setting descriptions") })
+                .settingsSearchTarget("general.showSettingDescriptions")
+                .settingsAnnotation("Explain what each setting does underneath its row.")
+
+            VStack(alignment: .leading, spacing: 0) {
+                Toggle(isOn: $sortMinimizedToEnd, label: {
+                    Text("Sort minimized/hidden windows to end")
+                })
+                .settingsAnnotation("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
+            }
+            .settingsSearchTarget("general.sortMinimized")
         }
     }
 
     // MARK: - Active App Indicator
 
     private var activeAppIndicatorSection: some View {
-        SettingsGroup(header: "Active App Indicator") {
+        SettingsSection("Active app indicator") {
             ActiveAppIndicatorSettingsView()
         }
     }
@@ -90,17 +91,17 @@ struct MainSettingsView: View {
     // MARK: - Backup & Restore
 
     private var backupAndRestoreSection: some View {
-        SettingsGroup(header: "Backup & Restore") {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 12) {
-                    Button("Export Settings…") { SettingsBackupManager.exportSettings() }
-                        .settingsSearchTarget("general.exportSettings")
-                    Button("Import Settings…") { SettingsBackupManager.importSettings() }
-                        .settingsSearchTarget("general.importSettings")
-                }
-
-                SettingsNote(icon: "arrow.up.arrow.down.circle", text: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
+        SettingsSection("Backup & restore") {
+            HStack(spacing: 12) {
+                Button("Export Settings…") { SettingsBackupManager.exportSettings() }
+                    .settingsSearchTarget("general.exportSettings")
+                    .buttonStyle(.plain)
+                Button("Import Settings…") { SettingsBackupManager.importSettings() }
+                    .settingsSearchTarget("general.importSettings")
+                    .buttonStyle(.plain)
             }
+
+            SettingsNote(icon: "arrow.up.arrow.down.circle", text: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
         }
     }
 
@@ -224,8 +225,10 @@ struct AddBlacklistAppSheet: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
+                    .background(Color.secondary.opacity(0.12), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .contentShape(Rectangle())
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.plain)
                 .disabled(isLoadingAppInfo)
 
                 if isLoadingAppInfo {
@@ -263,6 +266,7 @@ struct AddBlacklistAppSheet: View {
                 Button("Cancel") {
                     resetState()
                     isPresented = false
+                        .buttonStyle(.plain)
                 }
                 .keyboardShortcut(.escape)
 

@@ -10,89 +10,81 @@ struct AdvancedAppearanceSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SettingsGroup(header: "Window Background") {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+            SettingsSection("Window background") {
+                Text("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
 
-                    HStack {
-                        ColorPicker("Custom Hover Highlight Color", selection: Binding(
-                            get: { hoverHighlightColor ?? Color(nsColor: .controlAccentColor) },
-                            set: { hoverHighlightColor = $0 }
-                        ))
-                        Button(action: {
-                            Defaults.reset(.hoverHighlightColor)
-                        }) {
-                            Text("Reset")
-                        }
-                        .buttonStyle(AccentButtonStyle(small: true))
+                HStack {
+                    ColorPicker("Custom Hover Highlight Color", selection: Binding(
+                        get: { hoverHighlightColor ?? Color(nsColor: .controlAccentColor) },
+                        set: { hoverHighlightColor = $0 }
+                    ))
+                    Button(action: {
+                        Defaults.reset(.hoverHighlightColor)
+                    }) {
+                        Text("Reset")
                     }
-                    .settingsSearchTarget("appearance.hoverHighlightColor")
-
-                    sliderSetting(
-                        title: "Background Opacity",
-                        value: $selectionOpacity,
-                        range: 0 ... 1,
-                        step: 0.05,
-                        unit: "",
-                        formatter: NumberFormatter.percentFormatter
-                    )
-                    .settingsSearchTarget("appearance.selectionOpacity")
+                    .buttonStyle(AccentButtonStyle(small: true))
                 }
+                .settingsSearchTarget("appearance.hoverHighlightColor")
+
+                SettingsSliderRow(
+                    title: "Background Opacity",
+                    value: $selectionOpacity,
+                    range: 0 ... 1,
+                    step: 0.05
+                )
+                .settingsSearchTarget("appearance.selectionOpacity")
             }
 
-            SettingsGroup(header: "Dock Preview Transparency") {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        ColorPicker("Custom Background Color", selection: Binding(
-                            get: { customBackgroundColor ?? Color(nsColor: .windowBackgroundColor) },
-                            set: { customBackgroundColor = $0 }
-                        ))
-                        Button(action: {
-                            Defaults.reset(.customBackgroundColor)
-                        }) {
-                            Text("Reset")
-                        }
-                        .buttonStyle(AccentButtonStyle(small: true))
+            SettingsSection("Dock preview transparency") {
+                HStack {
+                    ColorPicker("Custom Background Color", selection: Binding(
+                        get: { customBackgroundColor ?? Color(nsColor: .windowBackgroundColor) },
+                        set: { customBackgroundColor = $0 }
+                    ))
+                    Button(action: {
+                        Defaults.reset(.customBackgroundColor)
+                    }) {
+                        Text("Reset")
                     }
-                    .settingsSearchTarget("appearance.customBackgroundColor")
-                    Text("Override the default blurred background with a solid custom color.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    .buttonStyle(AccentButtonStyle(small: true))
+                }
+                .settingsSearchTarget("appearance.customBackgroundColor")
+                Text("Override the default blurred background with a solid custom color.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
 
-                    if customBackgroundColor == nil {
-                        VStack(alignment: .leading) {
-                            Toggle(isOn: $useOpaquePreviewBackground) {
-                                Text("Use opaque background")
-                            }
-                            .settingsSearchTarget("appearance.opaqueBackground")
-                            Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                                .padding(.leading, 20)
+                if customBackgroundColor == nil {
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $useOpaquePreviewBackground) {
+                            Text("Use opaque background")
                         }
+                        .settingsSearchTarget("appearance.opaqueBackground")
+                        Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
 
-                        if !useOpaquePreviewBackground {
-                            Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                    if !useOpaquePreviewBackground {
+                        Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
 
-                            sliderSetting(
-                                title: "Background Opacity",
-                                value: $dockPreviewBackgroundOpacity,
-                                range: 0 ... 1.0,
-                                step: 0.05,
-                                unit: "",
-                                formatter: NumberFormatter.percentFormatter
-                            )
-                            .settingsSearchTarget("appearance.dockPreviewOpacity")
-                        }
+                        SettingsSliderRow(
+                            title: "Background Opacity",
+                            value: $dockPreviewBackgroundOpacity,
+                            range: 0 ... 1.0,
+                            step: 0.05
+                        )
+                        .settingsSearchTarget("appearance.dockPreviewOpacity")
                     }
                 }
             }
 
-            SettingsGroup(header: "Color Customization") {
+            SettingsSection("Color customization") {
                 GradientColorPaletteSettingsView()
             }
         }

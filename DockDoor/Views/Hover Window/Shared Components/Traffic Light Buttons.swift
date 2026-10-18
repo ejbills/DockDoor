@@ -16,57 +16,55 @@ struct TrafficLightButtons: View {
     @State private var isHovering = false
 
     var body: some View {
-        Group {
-            if displayMode != .never {
-                HStack(spacing: 6) {
-                    if enabledButtons.contains(.quit) {
-                        buttonFor(action: .quit, symbol: "power",
-                                  color: Color(red: 0.29, green: 0.01, blue: 0.10),
-                                  fillColor: Color(red: 0.88, green: 0.22, blue: 0.42))
-                    }
-                    if enabledButtons.contains(.close) {
-                        buttonFor(action: .close, symbol: "xmark",
-                                  color: Color(red: 0.49, green: 0.02, blue: 0.04),
-                                  fillColor: Color(red: 1.00, green: 0.30, blue: 0.28))
-                    }
-                    if enabledButtons.contains(.minimize) {
-                        buttonFor(action: .minimize, symbol: "minus",
-                                  color: Color(red: 0.60, green: 0.34, blue: 0.07),
-                                  fillColor: Color(red: 1.00, green: 0.80, blue: 0.20))
-                    }
-                    if enabledButtons.contains(.toggleFullScreen) {
-                        buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right",
-                                  color: Color(red: 0.05, green: 0.40, blue: 0.05),
-                                  fillColor: Color(red: 0.26, green: 0.84, blue: 0.36))
-                    }
-                    if enabledButtons.contains(.maximize) {
-                        buttonFor(action: .maximize, symbol: "arrow.up.to.line",
-                                  color: Color(red: 0.07, green: 0.22, blue: 0.32),
-                                  fillColor: Color(red: 0.25, green: 0.52, blue: 0.72))
-                    }
-                    if enabledButtons.contains(.bringToCurrentSpace) {
-                        buttonFor(action: .bringToCurrentSpace, symbol: "arrow.right",
-                                  color: Color(red: 0.02, green: 0.24, blue: 0.32),
-                                  fillColor: Color(red: 0.08, green: 0.62, blue: 0.86))
-                    }
-                    if enabledButtons.contains(.openNewWindow) {
-                        buttonFor(action: .openNewWindow, symbol: "plus",
-                                  color: Color(red: 0.04, green: 0.16, blue: 0.40),
-                                  fillColor: Color(red: 0.42, green: 0.60, blue: 0.98))
-                    }
+        if displayMode != .never {
+            HStack(spacing: 6) {
+                if enabledButtons.contains(.quit) {
+                    buttonFor(action: .quit, symbol: "power",
+                              color: Color(red: 0.29, green: 0.01, blue: 0.10),
+                              fillColor: Color(red: 0.88, green: 0.22, blue: 0.42))
                 }
-                .padding(4)
-                .opacity(opacity)
-                .if(pillStyling && opacity > 0 && enabledButtons.count > 0) { view in
-                    view.materialPill(backgroundAppearance: backgroundAppearance)
+                if enabledButtons.contains(.close) {
+                    buttonFor(action: .close, symbol: "xmark",
+                              color: Color(red: 0.49, green: 0.02, blue: 0.04),
+                              fillColor: Color(red: 1.00, green: 0.30, blue: 0.28))
                 }
-                .allowsHitTesting(opacity != 0)
-                .contentShape(Rectangle())
-                .simultaneousGesture(TapGesture())
-                .onHover { isHovering in
-                    withAnimation(.snappy(duration: 0.175)) {
-                        self.isHovering = isHovering
-                    }
+                if enabledButtons.contains(.minimize) {
+                    buttonFor(action: .minimize, symbol: "minus",
+                              color: Color(red: 0.60, green: 0.34, blue: 0.07),
+                              fillColor: Color(red: 1.00, green: 0.80, blue: 0.20))
+                }
+                if enabledButtons.contains(.toggleFullScreen) {
+                    buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right",
+                              color: Color(red: 0.05, green: 0.40, blue: 0.05),
+                              fillColor: Color(red: 0.26, green: 0.84, blue: 0.36))
+                }
+                if enabledButtons.contains(.maximize) {
+                    buttonFor(action: .maximize, symbol: "arrow.up.to.line",
+                              color: Color(red: 0.07, green: 0.22, blue: 0.32),
+                              fillColor: Color(red: 0.25, green: 0.52, blue: 0.72))
+                }
+                if enabledButtons.contains(.bringToCurrentSpace) {
+                    buttonFor(action: .bringToCurrentSpace, symbol: "arrow.right",
+                              color: Color(red: 0.02, green: 0.24, blue: 0.32),
+                              fillColor: Color(red: 0.08, green: 0.62, blue: 0.86))
+                }
+                if enabledButtons.contains(.openNewWindow) {
+                    buttonFor(action: .openNewWindow, symbol: "plus",
+                              color: Color(red: 0.04, green: 0.16, blue: 0.40),
+                              fillColor: Color(red: 0.42, green: 0.60, blue: 0.98))
+                }
+            }
+            .padding(4)
+            .opacity(opacity)
+            .if(pillStyling && opacity > 0 && enabledButtons.count > 0) { view in
+                view.materialPill(backgroundAppearance: backgroundAppearance)
+            }
+            .allowsHitTesting(opacity != 0)
+            .contentShape(Rectangle())
+            .simultaneousGesture(TapGesture())
+            .onHover { isHovering in
+                withAnimation(.snappy(duration: 0.175)) {
+                    self.isHovering = isHovering
                 }
             }
         }
@@ -237,13 +235,12 @@ extension AppearanceSettingsView {
                     Toggle("Use Monochrome Colors", isOn: $useMonochrome)
                         .padding(.top, 4)
 
-                    sliderSetting(
+                    SettingsSliderRow(
                         title: "Button Scale",
                         value: $buttonScale,
                         range: 0.75 ... 2.0,
-                        step: 0.05,
                         unit: "×",
-                        formatter: NumberFormatter.twoDecimalFormatter
+                        step: 0.05
                     )
                 }
             }

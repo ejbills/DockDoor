@@ -55,7 +55,6 @@ struct ActiveAppIndicatorSettingsView: View {
                             Text(style.localizedName).tag(style)
                         }
                     }
-                    .pickerStyle(.segmented)
                     .fixedSize()
                     .settingsSearchTarget("general.indicatorStyle")
                     .padding(.leading, 20)
@@ -105,36 +104,25 @@ struct ActiveAppIndicatorSettingsView: View {
 
                     if !activeAppIndicatorAutoSize {
                         if activeAppIndicatorStyle == .bar {
-                            sliderSetting(
+                            SettingsSliderRow(
                                 title: "Indicator Height",
                                 value: $activeAppIndicatorHeight,
                                 range: 1.0 ... 15.0,
+                                unit: " px",
                                 step: 1,
-                                unit: "px",
-                                formatter: {
-                                    let f = NumberFormatter()
-                                    f.minimumFractionDigits = 0
-                                    f.maximumFractionDigits = 0
-                                    return f
-                                }()
+                                decimals: 0
                             )
                             .settingsSearchTarget("general.indicatorHeight")
                             .padding(.leading, 40)
                         }
 
-                        sliderSetting(
+                        SettingsSliderRow(
                             title: "Position Offset",
                             value: $activeAppIndicatorOffset,
                             range: -30.0 ... 30.0,
+                            unit: " px",
                             step: 1.0,
-                            unit: "px",
-                            formatter: {
-                                let f = NumberFormatter()
-                                f.minimumFractionDigits = 0
-                                f.maximumFractionDigits = 0
-                                f.positivePrefix = "+"
-                                return f
-                            }()
+                            decimals: 0
                         )
                         .settingsSearchTarget("general.indicatorOffset")
                         .padding(.leading, 40)
@@ -148,37 +136,26 @@ struct ActiveAppIndicatorSettingsView: View {
                         .padding(.leading, 20)
 
                         if !activeAppIndicatorAutoLength {
-                            sliderSetting(
+                            SettingsSliderRow(
                                 title: "Indicator Length",
                                 value: $activeAppIndicatorLength,
                                 range: 1.0 ... 110.0,
+                                unit: " px",
                                 step: 1.0,
-                                unit: "px",
-                                formatter: {
-                                    let f = NumberFormatter()
-                                    f.minimumFractionDigits = 0
-                                    f.maximumFractionDigits = 0
-                                    return f
-                                }()
+                                decimals: 0
                             )
                             .settingsSearchTarget("general.indicatorLength")
                             .padding(.leading, 40)
                         }
                     }
 
-                    sliderSetting(
+                    SettingsSliderRow(
                         title: "Shift Indicator",
                         value: $activeAppIndicatorShift,
                         range: -2.0 ... 2.0,
+                        unit: " px",
                         step: 1.0,
-                        unit: "px",
-                        formatter: {
-                            let f = NumberFormatter()
-                            f.minimumFractionDigits = 0
-                            f.maximumFractionDigits = 0
-                            f.positivePrefix = "+"
-                            return f
-                        }()
+                        decimals: 0
                     )
                     .settingsSearchTarget("general.indicatorShift")
                     .padding(.leading, 20)

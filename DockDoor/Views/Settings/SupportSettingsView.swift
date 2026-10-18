@@ -10,7 +10,7 @@ struct SupportSettingsView: View {
     }
 
     var body: some View {
-        BaseSettingsView {
+        SettingsFormView {
             VStack(alignment: .leading, spacing: 20) {
                 DockDoorProBanner()
                 permissionsSection
@@ -23,7 +23,7 @@ struct SupportSettingsView: View {
     // MARK: - Permissions Section
 
     private var permissionsSection: some View {
-        SettingsGroup(header: "Permissions", compact: true) {
+        SettingsSection("Permissions") {
             VStack(alignment: .leading, spacing: 0) {
                 PermissionRow(
                     title: "Accessibility",
@@ -56,105 +56,104 @@ struct SupportSettingsView: View {
     // MARK: - Updates Section
 
     private var updatesSection: some View {
-        SettingsGroup(header: "Updates") {
-            VStack(alignment: .leading, spacing: 12) {
-                // Current version
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
+        SettingsSection("Updates") {
+            // Current version
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Current Version")
-                            .font(.body)
-                        Text("Version \(updaterState.currentVersion)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    updateStatusBadge
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Current Version")
+                        .font(.body)
+                    Text("Version \(updaterState.currentVersion)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
 
-                Divider().padding(.leading, 40)
+                Spacer()
 
-                // Update channel
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Update Channel")
-                            .font(.body)
-                        Text("Choose between stable releases and beta versions")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Picker("", selection: $updaterState.updateChannel) {
-                        ForEach(UpdateChannel.allCases, id: \.self) { channel in
-                            Text(channel.displayName).tag(channel)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 100)
-                }
-                .settingsSearchTarget("support.updateChannel")
-
-                Divider().padding(.leading, 40)
-
-                // Check for updates
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Check for Updates")
-                            .font(.body)
-                        Text(lastCheckDescription)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Button("Check Now") {
-                        updaterState.checkForUpdates()
-                    }
-                    .buttonStyle(AccentButtonStyle(small: true))
-                    .disabled(!updaterState.canCheckForUpdates)
-                }
-                .settingsSearchTarget("support.checkForUpdates")
-
-                Divider().padding(.leading, 40)
-
-                // Automatic updates toggle
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Automatic Updates")
-                            .font(.body)
-                        Text("Automatically check for updates in the background")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Toggle("", isOn: Binding(
-                        get: { updaterState.isAutomaticChecksEnabled },
-                        set: { _ in updaterState.toggleAutomaticChecks() }
-                    ))
-                    .labelsHidden()
-                }
-                .settingsSearchTarget("support.automaticUpdates")
-
-                Divider().padding(.leading, 40)
-
-                // Debug logging
-                DebugLoggingRow()
-                    .settingsSearchTarget("support.debugLogging")
+                updateStatusBadge
             }
+
+            Divider().padding(.leading, 40)
+
+            // Update channel
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Update Channel")
+                        .font(.body)
+                    Text("Choose between stable releases and beta versions")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Picker("", selection: $updaterState.updateChannel) {
+                    ForEach(UpdateChannel.allCases, id: \.self) { channel in
+                        Text(channel.displayName).tag(channel)
+                    }
+                }
+                .labelsHidden()
+                .frame(width: 100)
+            }
+            .settingsSearchTarget("support.updateChannel")
+
+            Divider().padding(.leading, 40)
+
+            // Check for updates
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Check for Updates")
+                        .font(.body)
+                    Text(lastCheckDescription)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Button("Check Now") {
+                    updaterState.checkForUpdates()
+                        .buttonStyle(.plain)
+                }
+                .buttonStyle(AccentButtonStyle(small: true))
+                .disabled(!updaterState.canCheckForUpdates)
+            }
+            .settingsSearchTarget("support.checkForUpdates")
+
+            Divider().padding(.leading, 40)
+
+            // Automatic updates toggle
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Automatic Updates")
+                        .font(.body)
+                    Text("Automatically check for updates in the background")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Toggle("", isOn: Binding(
+                    get: { updaterState.isAutomaticChecksEnabled },
+                    set: { _ in updaterState.toggleAutomaticChecks() }
+                ))
+                .labelsHidden()
+            }
+            .settingsSearchTarget("support.automaticUpdates")
+
+            Divider().padding(.leading, 40)
+
+            // Debug logging
+            DebugLoggingRow()
+                .settingsSearchTarget("support.debugLogging")
         }
     }
 
@@ -193,54 +192,52 @@ struct SupportSettingsView: View {
     // MARK: - Acknowledgments Section
 
     private var acknowledgmentsSection: some View {
-        SettingsGroup(header: "Acknowledgments") {
-            VStack(alignment: .leading, spacing: 12) {
-                // Community Contributors
-                Text("Community Contributors")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
+        SettingsSection("Acknowledgments") {
+            // Community Contributors
+            Text("Community Contributors")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
 
-                ContributorRow(
-                    name: "illavoluntas",
-                    detail: "Website, documentation, Discord moderation",
-                    icon: "person.fill"
-                )
+            ContributorRow(
+                name: "illavoluntas",
+                detail: "Website, documentation, Discord moderation",
+                icon: "person.fill"
+            )
 
-                Divider()
+            Divider()
 
-                // Translation Contributors
-                Text("Translation Contributors")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
+            // Translation Contributors
+            Text("Translation Contributors")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
 
-                VStack(spacing: 2) {
-                    TranslatorRow(name: "Rocco 'Roccobot' Casadei", language: "Italian", profile: "Roccobot")
-                    TranslatorRow(name: "favorsjewelry5", language: "Chinese Traditional", profile: "favorsjewelry5")
-                    TranslatorRow(name: "Денис Єгоров", language: "Ukrainian", profile: "makedonsky47")
-                    TranslatorRow(name: "HuangxinDong", language: "Chinese Simplified", profile: "HuangxinDong")
-                    TranslatorRow(name: "don.julien.7", language: "German", profile: "JuGro1332")
-                    TranslatorRow(name: "awaustin", language: "Chinese Simplified", profile: "awaustin")
-                    TranslatorRow(name: "illavoluntas", language: "French", profile: "illavoluntas")
-                    TranslatorRow(name: "Diamant", language: "French", profile: "Diamant")
-                }
-
-                Divider()
-
-                // Audio Assets
-                Text("Audio Assets")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
-
-                AudioAssetRow(
-                    name: "Magic Glow",
-                    author: "IENBA",
-                    sourceURL: "https://freesound.org/s/752274/",
-                    license: "CC0"
-                )
+            VStack(spacing: 2) {
+                TranslatorRow(name: "Rocco 'Roccobot' Casadei", language: "Italian", profile: "Roccobot")
+                TranslatorRow(name: "favorsjewelry5", language: "Chinese Traditional", profile: "favorsjewelry5")
+                TranslatorRow(name: "Денис Єгоров", language: "Ukrainian", profile: "makedonsky47")
+                TranslatorRow(name: "HuangxinDong", language: "Chinese Simplified", profile: "HuangxinDong")
+                TranslatorRow(name: "don.julien.7", language: "German", profile: "JuGro1332")
+                TranslatorRow(name: "awaustin", language: "Chinese Simplified", profile: "awaustin")
+                TranslatorRow(name: "illavoluntas", language: "French", profile: "illavoluntas")
+                TranslatorRow(name: "Diamant", language: "French", profile: "Diamant")
             }
+
+            Divider()
+
+            // Audio Assets
+            Text("Audio Assets")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+
+            AudioAssetRow(
+                name: "Magic Glow",
+                author: "IENBA",
+                sourceURL: "https://freesound.org/s/752274/",
+                license: "CC0"
+            )
         }
     }
 }
@@ -276,6 +273,7 @@ private struct PermissionRow: View {
                 if !isGranted {
                     Button("Grant") {
                         action()
+                            .buttonStyle(.plain)
                     }
                     .buttonStyle(AccentButtonStyle(small: true))
                 }
@@ -313,11 +311,13 @@ private struct DebugLoggingRow: View {
                         if let url = DebugLogger.exportLogs() {
                             NSWorkspace.shared.activateFileViewerSelecting([url])
                         }
+                        .buttonStyle(.plain)
                     }
                     .buttonStyle(AccentButtonStyle(small: true))
 
                     Button("Clear Logs") {
                         DebugLogger.clearLogs()
+                            .buttonStyle(.plain)
                     }
                     .buttonStyle(AccentButtonStyle(small: true))
                 }

@@ -21,125 +21,114 @@ struct WindowSwitcherKeybindSection: View {
     @State private var newBlacklistApp = ""
 
     var body: some View {
-        SettingsGroup(header: "Window Switcher Shortcuts") {
-            VStack(alignment: .leading, spacing: 12) {
-                if !enableWindowSwitcher {
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.yellow)
-                        Text("Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(8)
-                    .background(Color.yellow.opacity(0.1))
-                    .cornerRadius(8)
-                }
-
-                keyboardShortcutSection
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Backward Key")
-                        Spacer()
-                        KeyCaptureButton(keyCode: $switcherBackwardKeyCode, captureModifiers: true)
-                        Button("Reset") { switcherBackwardKeyCode = 56 }
-                            .buttonStyle(.bordered)
-                    }
-                    .settingsSearchTarget("gestures.backwardKey")
-                    Text("The key used to navigate backward in the window switcher.")
+        SettingsSection("Window switcher shortcuts") {
+            if !enableWindowSwitcher {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.yellow)
+                    Text("Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts.")
                         .font(.caption)
                         .foregroundColor(.secondary)
-
-                    Toggle(isOn: $requireShiftTabToGoBack) {
-                        Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
-                    }
-                    .settingsSearchTarget("gestures.requireShiftTab")
-                    Text("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
                 }
-                .disabled(!enableWindowSwitcher)
-                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                selectionKeySection
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Toggle(isOn: $enableVimMotions) {
-                        Text("Enable Vim Motions")
-                    }
-                    .settingsSearchTarget("gestures.vimMotions")
-                    Text("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                    Toggle(isOn: $passArrowsThroughToSystem) {
-                        Text("Pass Arrow Keys Through to System")
-                    }
-                    .settingsSearchTarget("gestures.arrowPassthrough")
-                    Text("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                }
-                .disabled(!enableWindowSwitcher)
-                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                alternateShortcutsSection
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                if enableWindowSwitcherSearch {
-                    Divider()
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Search Trigger Key").font(.headline)
-                        Text("The key that activates search while the window switcher is open.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-
-                        HStack(spacing: 12) {
-                            Text(modifierConverter.toString(keybindModel.modifierKey))
-                                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                                .foregroundColor(.secondary)
-                            Text("+")
-                                .font(.system(size: 12))
-                                .foregroundColor(.secondary)
-
-                            KeyCaptureButton(keyCode: $searchTriggerKey)
-                        }
-                    }
-                    .settingsSearchTarget("gestures.searchTriggerKey")
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-                }
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Fullscreen App Blacklist").font(.headline)
-                    Text("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                    fullscreenAppBlacklistView
-                }
-                .settingsSearchTarget("gestures.fullscreenBlacklist")
+                .padding(8)
+                .background(Color.yellow.opacity(0.1))
+                .cornerRadius(8)
             }
+
+            keyboardShortcutSection
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Backward Key")
+                    Spacer()
+                    KeyCaptureButton(keyCode: $switcherBackwardKeyCode, captureModifiers: true)
+                    Button("Reset") { switcherBackwardKeyCode = 56 }
+                        .buttonStyle(.bordered)
+                }
+                .settingsSearchTarget("gestures.backwardKey")
+                Text("The key used to navigate backward in the window switcher.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Toggle(isOn: $requireShiftTabToGoBack) {
+                    Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
+                }
+                .settingsSearchTarget("gestures.requireShiftTab")
+                .settingsAnnotation("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
+            }
+            .disabled(!enableWindowSwitcher)
+            .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+            Divider()
+
+            selectionKeySection
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle(isOn: $enableVimMotions) {
+                    Text("Enable Vim Motions")
+                }
+                .settingsSearchTarget("gestures.vimMotions")
+                .settingsAnnotation("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
+
+                Toggle(isOn: $passArrowsThroughToSystem) {
+                    Text("Pass Arrow Keys Through to System")
+                }
+                .settingsSearchTarget("gestures.arrowPassthrough")
+                .settingsAnnotation("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
+            }
+            .disabled(!enableWindowSwitcher)
+            .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+            Divider()
+
+            alternateShortcutsSection
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+            if enableWindowSwitcherSearch {
+                Divider()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Search Trigger Key").font(.headline)
+                    Text("The key that activates search while the window switcher is open.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    HStack(spacing: 12) {
+                        Text(modifierConverter.toString(keybindModel.modifierKey))
+                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                            .foregroundColor(.secondary)
+                        Text("+")
+                            .font(.system(size: 12))
+                            .foregroundColor(.secondary)
+
+                        KeyCaptureButton(keyCode: $searchTriggerKey)
+                    }
+                }
+                .settingsSearchTarget("gestures.searchTriggerKey")
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+            }
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Fullscreen App Blacklist").font(.headline)
+                Text("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                fullscreenAppBlacklistView
+            }
+            .settingsSearchTarget("gestures.fullscreenBlacklist")
             .settingsSearchTarget("gestures.switcherKeybind")
         }
         .onAppear {
@@ -171,7 +160,6 @@ struct WindowSwitcherKeybindSection: View {
                     Text("Command ⌘").tag(Defaults[.Int64maskCommand])
                 }
                 .labelsHidden()
-                .pickerStyle(.segmented)
                 .onChange(of: keybindModel.modifierKey) { newValue in
                     if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
                         let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
@@ -247,7 +235,6 @@ struct WindowSwitcherKeybindSection: View {
                     Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
                     Text("Command ⌘").tag(Defaults[.Int64maskCommand])
                 }
-                .pickerStyle(.menu)
                 .labelsHidden()
                 .fixedSize()
                 Text("+")
@@ -271,7 +258,6 @@ struct WindowSwitcherKeybindSection: View {
                         Text(mode.localizedName).tag(mode)
                     }
                 }
-                .pickerStyle(.menu)
                 .labelsHidden()
                 .frame(maxWidth: 200)
             }

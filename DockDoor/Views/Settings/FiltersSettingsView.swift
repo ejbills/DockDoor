@@ -20,278 +20,276 @@ struct FiltersSettingsView: View {
     }
 
     var body: some View {
-        BaseSettingsView {
-            VStack(alignment: .leading, spacing: 16) {
-                // Custom App Directories Section
-                SettingsGroup(header: "Custom Application Directories") {
+        SettingsFormView {
+            // Custom App Directories Section
+            SettingsSection("Custom application directories") {
+                Text("Add additional directories to scan for applications. This is useful if you keep apps outside standard locations.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+
+                ScrollView {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Add additional directories to scan for applications. This is useful if you keep apps outside standard locations.")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 4)
-
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 8) {
-                                if customAppDirectories.isEmpty {
-                                    Text("No custom directories added")
-                                        .foregroundColor(.secondary)
-                                        .padding(.vertical, 4)
-                                } else {
-                                    ForEach(customAppDirectories, id: \.self) { directory in
-                                        HStack {
-                                            Text(directory)
-                                                .lineLimit(1)
-                                                .truncationMode(.middle)
-
-                                            Spacer()
-
-                                            Button(action: {
-                                                customAppDirectories.removeAll { $0 == directory }
-                                            }) {
-                                                Image(systemName: "trash")
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            .buttonStyle(.plain)
-                                        }
-                                        .padding(.vertical, 4)
-                                    }
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(8)
-                        }
-                        .frame(maxHeight: 100)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                        )
-                        HStack {
-                            Button("Add Directory") {
-                                showingDirectoryPicker = true
-                            }
-                            .fileImporter(
-                                isPresented: $showingDirectoryPicker,
-                                allowedContentTypes: [.folder],
-                                allowsMultipleSelection: false
-                            ) { result in
-                                switch result {
-                                case let .success(urls):
-                                    if let url = urls.first {
-                                        let path = url.path
-                                        if !customAppDirectories.contains(path) {
-                                            customAppDirectories.append(path)
-                                        }
-                                    }
-                                case let .failure(error):
-                                    print("Error selecting directory: \(error.localizedDescription)")
-                                }
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .accentColor))
-
-                            Spacer()
-
-                            if !customAppDirectories.isEmpty {
-                                DangerButton(action: {
-                                    customAppDirectories.removeAll()
-                                }) {
-                                    Text("Remove All")
-                                }
-                            }
-                        }
-                    }
-                }
-                .settingsSearchTarget("filters.appDirectories")
-
-                // App Filters Section
-                SettingsGroup(header: "Application Filters") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Hide specific applications from DockDoor previews.")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 4)
-
-                        if appNameFilters.isEmpty {
-                            Text("No apps hidden")
+                        if customAppDirectories.isEmpty {
+                            Text("No custom directories added")
                                 .foregroundColor(.secondary)
-                                .padding(.vertical, 8)
+                                .padding(.vertical, 4)
                         } else {
-                            ScrollView {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    ForEach(appNameFilters, id: \.self) { filter in
-                                        HStack {
-                                            Text(filter)
-                                                .lineLimit(1)
+                            ForEach(customAppDirectories, id: \.self) { directory in
+                                HStack {
+                                    Text(directory)
+                                        .lineLimit(1)
+                                        .truncationMode(.middle)
 
-                                            Spacer()
+                                    Spacer()
 
-                                            Button(action: {
-                                                appNameFilters.removeAll { $0 == filter }
-                                            }) {
-                                                Image(systemName: "xmark.circle.fill")
-                                                    .foregroundColor(.secondary)
-                                            }
+                                    Button(action: {
+                                        customAppDirectories.removeAll { $0 == directory }
                                             .buttonStyle(.plain)
-                                        }
-                                        .padding(.vertical, 2)
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.secondary)
                                     }
+                                    .buttonStyle(.plain)
                                 }
-                                .padding(8)
-                            }
-                            .frame(maxHeight: 120)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                            )
-                        }
-
-                        HStack {
-                            Button("Select Apps to Hide...") {
-                                showingAppPickerSheet = true
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .accentColor))
-
-                            Spacer()
-
-                            if !appNameFilters.isEmpty {
-                                DangerButton(action: {
-                                    appNameFilters.removeAll()
-                                }) {
-                                    Text("Clear All")
-                                }
+                                .padding(.vertical, 4)
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding(8)
                 }
-                .settingsSearchTarget("filters.appFilters")
-
-                // Window Title Filters Section
-                SettingsGroup(header: "Window Title Filters") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Exclude windows from capture by filtering specific text in their titles (case-insensitive).")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 4)
-
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 8) {
-                                if !windowTitleFilters.isEmpty {
-                                    ForEach(windowTitleFilters, id: \.self) { filter in
-                                        HStack {
-                                            Text(filter)
-                                                .foregroundColor(.primary)
-
-                                            Spacer()
-
-                                            Button(action: {
-                                                windowTitleFilters.removeAll { $0 == filter }
-                                            }) {
-                                                Image(systemName: "trash")
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            .buttonStyle(.plain)
-                                        }
-                                        .padding(.vertical, 4)
-
-                                        if filter != windowTitleFilters.last {
-                                            Divider()
-                                        }
-                                    }
-                                } else {
-                                    Text("No window title filters added")
-                                        .foregroundColor(.secondary)
-                                        .padding(.vertical, 8)
+                .frame(maxHeight: 100)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                )
+                HStack {
+                    Button("Add Directory") {
+                        showingDirectoryPicker = true
+                            .buttonStyle(.plain)
+                    }
+                    .fileImporter(
+                        isPresented: $showingDirectoryPicker,
+                        allowedContentTypes: [.folder],
+                        allowsMultipleSelection: false
+                    ) { result in
+                        switch result {
+                        case let .success(urls):
+                            if let url = urls.first {
+                                let path = url.path
+                                if !customAppDirectories.contains(path) {
+                                    customAppDirectories.append(path)
                                 }
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding(8)
+                        case let .failure(error):
+                            print("Error selecting directory: \(error.localizedDescription)")
                         }
-                        .frame(maxHeight: 150)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                        )
-                        HStack {
-                            Button(action: { showingAddFilterSheet.toggle() }) {
-                                Text("Add Filter")
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .accentColor))
+                    }
+                    .buttonStyle(AccentButtonStyle(color: .accentColor))
 
-                            Spacer()
+                    Spacer()
 
-                            if !windowTitleFilters.isEmpty {
-                                DangerButton(action: {
-                                    windowTitleFilters.removeAll()
-                                }) {
-                                    Text("Remove All")
-                                }
-                            }
+                    if !customAppDirectories.isEmpty {
+                        DangerButton(action: {
+                            customAppDirectories.removeAll()
+                        }) {
+                            Text("Remove All")
                         }
                     }
                 }
-                .settingsSearchTarget("filters.windowTitle")
-
-                // Widget App Filters Section
-                SettingsGroup(header: "Widget App Filters") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Disable dock hover widgets for selected apps while keeping their regular previews. Useful for browsers that expose media sessions like YouTube.")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 4)
-
-                        if widgetAppFilters.isEmpty {
-                            Text("Widgets enabled for all apps")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical, 8)
-                        } else {
-                            ScrollView {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    ForEach(widgetAppFilters, id: \.self) { filter in
-                                        HStack {
-                                            Text(filter)
-                                                .lineLimit(1)
-
-                                            Spacer()
-
-                                            Button(action: {
-                                                widgetAppFilters.removeAll { $0 == filter }
-                                            }) {
-                                                Image(systemName: "xmark.circle.fill")
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            .buttonStyle(.plain)
-                                        }
-                                        .padding(.vertical, 2)
-                                    }
-                                }
-                                .padding(8)
-                            }
-                            .frame(maxHeight: 120)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                            )
-                        }
-
-                        HStack {
-                            Button("Select Apps to Disable Widgets For...") {
-                                showingWidgetAppPickerSheet = true
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .accentColor))
-
-                            Spacer()
-
-                            if !widgetAppFilters.isEmpty {
-                                DangerButton(action: {
-                                    widgetAppFilters.removeAll()
-                                }) {
-                                    Text("Clear All")
-                                }
-                            }
-                        }
-                    }
-                }
-                .settingsSearchTarget("filters.widgetApps")
             }
+            .settingsSearchTarget("filters.appDirectories")
+
+            // App Filters Section
+            SettingsSection("Application filters") {
+                Text("Hide specific applications from DockDoor previews.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+
+                if appNameFilters.isEmpty {
+                    Text("No apps hidden")
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 8)
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(appNameFilters, id: \.self) { filter in
+                                HStack {
+                                    Text(filter)
+                                        .lineLimit(1)
+
+                                    Spacer()
+
+                                    Button(action: {
+                                        appNameFilters.removeAll { $0 == filter }
+                                            .buttonStyle(.plain)
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .padding(.vertical, 2)
+                            }
+                        }
+                        .padding(8)
+                    }
+                    .frame(maxHeight: 120)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                    )
+                }
+
+                HStack {
+                    Button("Select Apps to Hide...") {
+                        showingAppPickerSheet = true
+                            .buttonStyle(.plain)
+                    }
+                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                    Spacer()
+
+                    if !appNameFilters.isEmpty {
+                        DangerButton(action: {
+                            appNameFilters.removeAll()
+                        }) {
+                            Text("Clear All")
+                        }
+                    }
+                }
+            }
+            .settingsSearchTarget("filters.appFilters")
+
+            // Window Title Filters Section
+            SettingsSection("Window title filters") {
+                Text("Exclude windows from capture by filtering specific text in their titles (case-insensitive).")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if !windowTitleFilters.isEmpty {
+                            ForEach(windowTitleFilters, id: \.self) { filter in
+                                HStack {
+                                    Text(filter)
+                                        .foregroundColor(.primary)
+
+                                    Spacer()
+
+                                    Button(action: {
+                                        windowTitleFilters.removeAll { $0 == filter }
+                                            .buttonStyle(.plain)
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .padding(.vertical, 4)
+
+                                if filter != windowTitleFilters.last {
+                                    Divider()
+                                }
+                            }
+                        } else {
+                            Text("No window title filters added")
+                                .foregroundColor(.secondary)
+                                .padding(.vertical, 8)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(8)
+                }
+                .frame(maxHeight: 150)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                )
+                HStack {
+                    Button(action: { showingAddFilterSheet.toggle() }) {
+                        Text("Add Filter")
+                            .buttonStyle(.plain)
+                    }
+                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                    Spacer()
+
+                    if !windowTitleFilters.isEmpty {
+                        DangerButton(action: {
+                            windowTitleFilters.removeAll()
+                        }) {
+                            Text("Remove All")
+                        }
+                    }
+                }
+            }
+            .settingsSearchTarget("filters.windowTitle")
+
+            // Widget App Filters Section
+            SettingsSection("Widget app filters") {
+                Text("Disable dock hover widgets for selected apps while keeping their regular previews. Useful for browsers that expose media sessions like YouTube.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+
+                if widgetAppFilters.isEmpty {
+                    Text("Widgets enabled for all apps")
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 8)
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(widgetAppFilters, id: \.self) { filter in
+                                HStack {
+                                    Text(filter)
+                                        .lineLimit(1)
+
+                                    Spacer()
+
+                                    Button(action: {
+                                        widgetAppFilters.removeAll { $0 == filter }
+                                            .buttonStyle(.plain)
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .padding(.vertical, 2)
+                            }
+                        }
+                        .padding(8)
+                    }
+                    .frame(maxHeight: 120)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                    )
+                }
+
+                HStack {
+                    Button("Select Apps to Disable Widgets For...") {
+                        showingWidgetAppPickerSheet = true
+                            .buttonStyle(.plain)
+                    }
+                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                    Spacer()
+
+                    if !widgetAppFilters.isEmpty {
+                        DangerButton(action: {
+                            widgetAppFilters.removeAll()
+                        }) {
+                            Text("Clear All")
+                        }
+                    }
+                }
+            }
+            .settingsSearchTarget("filters.widgetApps")
             .sheet(isPresented: $showingAddFilterSheet) {
                 AddFilterSheet(
                     isPresented: $showingAddFilterSheet,
@@ -340,6 +338,7 @@ struct AddFilterSheet: View {
             HStack(spacing: 16) {
                 Button("Cancel") {
                     isPresented = false
+                        .buttonStyle(.plain)
                 }
                 .keyboardShortcut(.escape)
 
@@ -349,6 +348,7 @@ struct AddFilterSheet: View {
                     onAdd(filterToAdd)
                     filterToAdd = FiltersSettingsView.FilterEntry(text: "")
                     isPresented = false
+                        .buttonStyle(.plain)
                 }
                 .keyboardShortcut(.return)
                 .disabled(filterToAdd.text.isEmpty)

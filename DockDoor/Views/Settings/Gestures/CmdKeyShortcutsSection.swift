@@ -10,43 +10,41 @@ struct CmdKeyShortcutsSection: View {
     @Default(.cmdShortcut3Action) var cmdShortcut3Action
 
     var body: some View {
-        SettingsGroup(header: "Window Preview Keyboard Shortcuts") {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+        SettingsSection("Window preview keyboard shortcuts") {
+            Text("Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode.")
+                .font(.caption)
+                .foregroundColor(.secondary)
 
-                Divider()
+            Divider()
 
-                cmdShortcutRow(
-                    slot: 1,
-                    keyBinding: $cmdShortcut1Key,
-                    actionBinding: $cmdShortcut1Action
-                )
+            cmdShortcutRow(
+                slot: 1,
+                keyBinding: $cmdShortcut1Key,
+                actionBinding: $cmdShortcut1Action
+            )
 
-                cmdShortcutRow(
-                    slot: 2,
-                    keyBinding: $cmdShortcut2Key,
-                    actionBinding: $cmdShortcut2Action
-                )
+            cmdShortcutRow(
+                slot: 2,
+                keyBinding: $cmdShortcut2Key,
+                actionBinding: $cmdShortcut2Action
+            )
 
-                cmdShortcutRow(
-                    slot: 3,
-                    keyBinding: $cmdShortcut3Key,
-                    actionBinding: $cmdShortcut3Action
-                )
+            cmdShortcutRow(
+                slot: 3,
+                keyBinding: $cmdShortcut3Key,
+                actionBinding: $cmdShortcut3Action
+            )
 
-                Button("Reset to Defaults") {
-                    cmdShortcut1Key = Defaults.Keys.cmdShortcut1Key.defaultValue
-                    cmdShortcut1Action = Defaults.Keys.cmdShortcut1Action.defaultValue
-                    cmdShortcut2Key = Defaults.Keys.cmdShortcut2Key.defaultValue
-                    cmdShortcut2Action = Defaults.Keys.cmdShortcut2Action.defaultValue
-                    cmdShortcut3Key = Defaults.Keys.cmdShortcut3Key.defaultValue
-                    cmdShortcut3Action = Defaults.Keys.cmdShortcut3Action.defaultValue
-                }
-                .buttonStyle(AccentButtonStyle(small: true))
-                .padding(.top, 4)
+            Button("Reset to Defaults") {
+                cmdShortcut1Key = Defaults.Keys.cmdShortcut1Key.defaultValue
+                cmdShortcut1Action = Defaults.Keys.cmdShortcut1Action.defaultValue
+                cmdShortcut2Key = Defaults.Keys.cmdShortcut2Key.defaultValue
+                cmdShortcut2Action = Defaults.Keys.cmdShortcut2Action.defaultValue
+                cmdShortcut3Key = Defaults.Keys.cmdShortcut3Key.defaultValue
+                cmdShortcut3Action = Defaults.Keys.cmdShortcut3Action.defaultValue
             }
+            .buttonStyle(AccentButtonStyle(small: true))
+            .padding(.top, 4)
             .settingsSearchTarget("gestures.cmdShortcuts")
         }
     }
@@ -70,7 +68,6 @@ struct CmdKeyShortcutsSection: View {
                     .tag(windowAction)
                 }
             }
-            .pickerStyle(.menu)
             .labelsHidden()
         }
     }

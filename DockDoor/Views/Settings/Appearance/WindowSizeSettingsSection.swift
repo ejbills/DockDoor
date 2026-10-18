@@ -3,14 +3,12 @@ import SwiftUI
 
 struct WindowSizeSettingsSection: View {
     var body: some View {
-        SettingsGroup(header: "Window Preview Size") {
-            VStack(alignment: .leading, spacing: 10) {
-                WindowSizeSliderView()
+        SettingsSection("Window preview size") {
+            WindowSizeSliderView()
 
-                Text("Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+            Text("Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions.")
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
     }
 }
@@ -44,18 +42,13 @@ struct WindowSizeSliderView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            sliderSetting(
+            SettingsSliderRow(
                 title: "Preview Width",
                 value: $previewWidth,
                 range: 100.0 ... 600.0,
+                unit: " px",
                 step: 10.0,
-                unit: "px",
-                formatter: {
-                    let f = NumberFormatter()
-                    f.minimumFractionDigits = 0
-                    f.maximumFractionDigits = 0
-                    return f
-                }()
+                decimals: 0
             )
             .settingsSearchTarget("appearance.previewWidth")
             .onChange(of: previewWidth) { _ in
@@ -65,18 +58,13 @@ struct WindowSizeSliderView: View {
                 updateWindowSize()
             }
 
-            sliderSetting(
+            SettingsSliderRow(
                 title: "Preview Height",
                 value: $previewHeight,
                 range: 60.0 ... 400.0,
+                unit: " px",
                 step: 10.0,
-                unit: "px",
-                formatter: {
-                    let f = NumberFormatter()
-                    f.minimumFractionDigits = 0
-                    f.maximumFractionDigits = 0
-                    return f
-                }()
+                decimals: 0
             )
             .settingsSearchTarget("appearance.previewHeight")
             .disabled(lockAspectRatio)

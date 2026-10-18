@@ -14,7 +14,19 @@ struct SettingsStyleDriftTests {
         .deletingLastPathComponent() // repo root
         .appendingPathComponent("DockDoor/Views/Settings", isDirectory: true)
 
-    private static let convertedPanes = ["DockPreviewsSettingsView.swift"]
+    private static let convertedPanes = [
+        "DockPreviewsSettingsView.swift",
+        "MainSettingsView.swift",
+        "WindowSwitcherBehaviorSettingsView.swift",
+        "GesturesSettingsView.swift",
+        "CmdTabSettingsView.swift",
+        "AppearanceSettingsView.swift",
+        "KeybindsSettingsView.swift",
+        "FiltersSettingsView.swift",
+        "WidgetSettingsView.swift",
+        "AdvancedSettingsView.swift",
+        "SupportSettingsView.swift",
+    ]
 
     private static let bannedPickerStyles = [
         ".pickerStyle(.segmented",
@@ -42,7 +54,11 @@ struct SettingsStyleDriftTests {
         for pane in convertedPanes {
             let source = try String(contentsOf: sourceRoot.appendingPathComponent(pane), encoding: .utf8)
             #expect(source.contains("SettingsFormView"), "\(pane) should be built on SettingsFormView")
-            #expect(source.contains("SettingsSection("), "\(pane) should use SettingsSection for groups")
+            // Some panes compose section views that carry their own SettingsSections.
+            #expect(
+                source.contains("SettingsSection(") || source.contains("Section()"),
+                "\(pane) should use SettingsSection for groups"
+            )
         }
     }
 
@@ -99,9 +115,8 @@ struct SettingsStyleDriftTests {
         }
     }
 
-    /// Collects the lines of the statement that starts at `startLine`: the
-    /// contiguous run of lines at the same or deeper indentation, so a
-    /// modifier chain like `.buttonStyle(...)` counts as part of the call.
+    /// The statement starting at `startLine`, following its modifier chain past the
+    /// label closure, so a `.buttonStyle(...)` after the label still counts.
     private static func contiguousStatement(in lines: [String], from startLine: Int, atIndent: Int) -> String {
         var collected = [lines[startLine]]
         var index = startLine + 1
@@ -115,7 +130,10 @@ struct SettingsStyleDriftTests {
                 continue
             }
             let leading = line.count - line.drop(while: { $0 == " " || $0 == "\t" }).count
-            if leading > atIndent || (leading == atIndent && trimmed.hasPrefix(".")) {
+            if leading > atIndent {
+                collected.append(line)
+                index += 1
+            } else if leading == atIndent, trimmed.hasPrefix(".") || trimmed == "}" {
                 collected.append(line)
                 index += 1
             } else {
