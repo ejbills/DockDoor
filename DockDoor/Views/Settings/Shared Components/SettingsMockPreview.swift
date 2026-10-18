@@ -109,6 +109,11 @@ struct SettingsMockPreview: View {
     @Default(.previewMaxColumns) private var previewMaxColumns
     @Default(.switcherMaxRows) private var switcherMaxRows
 
+    @State private var wallpaperImage: NSImage? = {
+        guard let screen = NSScreen.main ?? NSScreen.screens.first else { return nil }
+        return NSWorkspace.shared.desktopImage(for: screen)
+    }()
+
     init(context: SettingsMockPreviewContext) {
         self.context = context
         let windows = Self.generateMockWindows()
@@ -250,6 +255,24 @@ struct SettingsMockPreview: View {
                 appearanceOverride: resolvedAppearance
             )
             .allowsHitTesting(false)
+            .background {
+                GeometryReader { proxy in
+                    if let wallpaperImage {
+                        Image(nsImage: wallpaperImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                            .clipped()
+                    } else {
+                        LinearGradient(
+                            colors: [Color(nsColor: .controlAccentColor).opacity(0.35), .teal.opacity(0.35)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    }
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
     }
 
