@@ -1,8 +1,9 @@
 import Combine
+import Defaults
 import Sparkle
 import SwiftUI
 
-enum UpdateChannel: String, CaseIterable {
+enum UpdateChannel: String, CaseIterable, Defaults.Serializable {
     case stable
     case beta
 
@@ -74,12 +75,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     override init() {
         currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown"
 
-        // Load saved update channel preference
-        if let savedChannelRaw = UserDefaults.standard.string(forKey: "updateChannel"),
-           let savedChannel = UpdateChannel(rawValue: savedChannelRaw)
-        {
-            updateChannel = savedChannel
-        }
+        updateChannel = Defaults[.updateChannel]
 
         super.init()
     }
@@ -116,8 +112,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     }
 
     private func switchUpdateChannel(to channel: UpdateChannel) {
-        // Save the channel preference
-        UserDefaults.standard.set(channel.rawValue, forKey: "updateChannel")
+        Defaults[.updateChannel] = channel
 
         // Reset update status when switching channels
         updateStatus = .noUpdates

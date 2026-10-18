@@ -27,6 +27,7 @@ let finderAppIdentifier = "com.apple.finder"
 }
 
 extension Defaults.Keys {
+    static let updateChannel = Key<UpdateChannel>("updateChannel", default: .stable)
     static let previewWidth = Key<CGFloat>("previewWidth", default: 300)
     static let previewHeight = Key<CGFloat>("previewHeight", default: 187.5)
     static let lockAspectRatio = Key<Bool>("lockAspectRatio", default: true)
