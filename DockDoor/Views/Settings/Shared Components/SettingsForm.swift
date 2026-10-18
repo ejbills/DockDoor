@@ -35,6 +35,11 @@ struct SettingsSection<Content: View>: View {
     let title: LocalizedStringKey
     @ViewBuilder let content: Content
 
+    init(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.content = content()
+    }
+
     var body: some View {
         Section {
             content
