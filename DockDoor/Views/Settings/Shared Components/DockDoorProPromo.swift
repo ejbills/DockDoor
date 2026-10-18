@@ -62,7 +62,7 @@ struct DockDoorProIcon: View {
     var size: CGFloat = 48
 
     var body: some View {
-        AsyncImage(url: DockDoorPro.iconURL) { phase in
+        AsyncImage(url: Links.dockDoorProIcon) { phase in
             switch phase {
             case let .success(image):
                 image.resizable().scaledToFit()

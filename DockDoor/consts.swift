@@ -13,6 +13,8 @@ let roughWidthCap = optimisticScreenSizeWidth / 3
 let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
+let dockAppIdentifier = "com.apple.dock"
+let finderAppIdentifier = "com.apple.finder"
 
 @MainActor func isMediaApp(_ bundleIdentifier: String?) -> Bool {
     guard let bundleId = bundleIdentifier else { return false }
