@@ -126,18 +126,12 @@ struct WindowSwitcherAppearanceSection: View {
                 Divider().padding(.vertical, 2)
                 Text("Window Title").font(.headline).padding(.bottom, -2)
 
-                Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
-                    .settingsSearchTarget("appearance.switcherShowWindowTitle")
-
-                if switcherShowWindowTitle {
-                    Picker("Visibility", selection: $switcherWindowTitleVisibility) {
-                        ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
-                            Text(visibility.localizedName)
-                                .tag(visibility)
-                        }
+                Picker("Window title", selection: WindowTitleMode.binding(showTitle: $switcherShowWindowTitle, visibility: $switcherWindowTitleVisibility)) {
+                    ForEach(WindowTitleMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
                     }
-                    .settingsSearchTarget("appearance.switcherWindowTitleVisibility")
                 }
+                .settingsSearchTarget("appearance.switcherWindowTitle")
             }
             .disabled(!switcherShowAppHeader)
 

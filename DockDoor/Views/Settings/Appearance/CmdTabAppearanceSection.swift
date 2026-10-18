@@ -18,20 +18,12 @@ struct CmdTabAppearanceSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // App Header section
-            Toggle("Show App Header", isOn: $cmdTabShowAppName)
-                .settingsSearchTarget("appearance.cmdTabShowAppHeader")
-
-            if cmdTabShowAppName {
-                Picker("App Header Style", selection: $cmdTabAppNameStyle) {
-                    ForEach(AppNameStyle.allCases, id: \.self) { style in
-                        Text(style.localizedName)
-                            .tag(style)
-                    }
+            Picker("App header", selection: AppHeaderMode.binding(showName: $cmdTabShowAppName, showIconOnly: $cmdTabShowAppIconOnly, style: $cmdTabAppNameStyle)) {
+                ForEach(AppHeaderMode.allCases) { mode in
+                    Text(mode.localizedName).tag(mode)
                 }
-                .settingsSearchTarget("appearance.cmdTabAppHeaderStyle")
-                Toggle("Show App Icon Only", isOn: $cmdTabShowAppIconOnly)
-                    .settingsSearchTarget("appearance.cmdTabShowAppIconOnly")
             }
+            .settingsSearchTarget("appearance.cmdTabAppHeader")
 
             // Toolbar section
             Divider().padding(.vertical, 2)
@@ -46,28 +38,22 @@ struct CmdTabAppearanceSection: View {
             .pickerStyle(MenuPickerStyle())
             .settingsSearchTarget("appearance.cmdTabControlPosition")
 
-            Toggle("Show Window Title", isOn: $cmdTabShowWindowTitle)
-                .settingsSearchTarget("appearance.cmdTabShowWindowTitle")
-
-            if cmdTabShowWindowTitle {
-                Picker("Window Title Visibility", selection: $cmdTabWindowTitleVisibility) {
-                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
-                        Text(visibility.localizedName)
-                            .tag(visibility)
-                    }
+            Picker("Window title", selection: WindowTitleMode.binding(showTitle: $cmdTabShowWindowTitle, visibility: $cmdTabWindowTitleVisibility)) {
+                ForEach(WindowTitleMode.allCases) { mode in
+                    Text(mode.localizedName).tag(mode)
                 }
-                .settingsSearchTarget("appearance.cmdTabWindowTitleVisibility")
+            }
+            .settingsSearchTarget("appearance.cmdTabWindowTitle")
 
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $cmdTabDisableDockStyleTitles) {
-                        Text("Disable dock styling on window titles")
-                    }
-                    .settingsSearchTarget("appearance.cmdTabDisableTitleStyling")
-                    Text("Removes the pill-shaped background styling from window titles.")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 20)
+            VStack(alignment: .leading) {
+                Toggle(isOn: $cmdTabDisableDockStyleTitles) {
+                    Text("Disable dock styling on window titles")
                 }
+                .settingsSearchTarget("appearance.cmdTabDisableTitleStyling")
+                Text("Removes the pill-shaped background styling from window titles.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
             }
 
             // Traffic Light Buttons section

@@ -1163,21 +1163,13 @@ enum SettingsSearchCatalog {
             icon: "rectangle.topthird.inset.filled"
         ),
         SettingsSearchItem(
-            id: "appearance.dockShowWindowTitle",
-            title: String(localized: "Show Window Title"),
+            id: "appearance.dockWindowTitle",
+            title: String(localized: "Window title"),
             description: String(localized: "Show window title in dock previews."),
-            keywords: ["title", "window", "dock", "show"],
+            keywords: ["title", "window", "dock", "show", "visibility", "hover", "always"],
             tab: "DockPreviews",
             section: String(localized: "Dock Preview Appearance"),
             icon: "textformat.abc"
-        ),
-        SettingsSearchItem(
-            id: "appearance.dockWindowTitleVisibility",
-            title: String(localized: "Window Title Visibility"),
-            keywords: ["title", "visibility", "hover", "always", "dock"],
-            tab: "DockPreviews",
-            section: String(localized: "Dock Preview Appearance"),
-            icon: "eye"
         ),
         SettingsSearchItem(
             id: "appearance.dockDisableTitleStyling",
@@ -1295,22 +1287,13 @@ enum SettingsSearchCatalog {
             icon: "minus.circle"
         ),
         SettingsSearchItem(
-            id: "appearance.switcherShowWindowTitle",
-            title: String(localized: "Show Window Title"),
+            id: "appearance.switcherWindowTitle",
+            title: String(localized: "Window title"),
             description: String(localized: "Show window title in the window switcher."),
-            keywords: ["title", "window", "switcher", "show"],
+            keywords: ["title", "window", "switcher", "show", "visibility", "hover", "always"],
             tab: "WindowSwitcher",
             section: String(localized: "Window Switcher Appearance"),
             icon: "textformat.abc"
-        ),
-        SettingsSearchItem(
-            id: "appearance.switcherWindowTitleVisibility",
-            title: String(localized: "Visibility"),
-            description: String(localized: "Controls when window titles appear in the switcher."),
-            keywords: ["title", "visibility", "hover", "always", "switcher"],
-            tab: "WindowSwitcher",
-            section: String(localized: "Window Switcher Appearance"),
-            icon: "eye"
         ),
         SettingsSearchItem(
             id: "appearance.switcherScrollDirection",
@@ -1349,29 +1332,13 @@ enum SettingsSearchCatalog {
         ),
         // Cmd+Tab Appearance
         SettingsSearchItem(
-            id: "appearance.cmdTabShowAppHeader",
-            title: String(localized: "Show App Header"),
+            id: "appearance.cmdTabAppHeader",
+            title: String(localized: "App header"),
             description: String(localized: "Show app header in Cmd+Tab overlay."),
-            keywords: ["app", "header", "name", "cmd tab"],
+            keywords: ["app", "header", "name", "icon", "style", "shadowed", "popover", "cmd tab"],
             tab: "CmdTab",
             section: String(localized: "Cmd+Tab Appearance"),
-            icon: "textformat"
-        ),
-        SettingsSearchItem(
-            id: "appearance.cmdTabAppHeaderStyle",
-            title: String(localized: "App Header Style"),
-            keywords: ["header", "style", "cmd tab"],
-            tab: "CmdTab",
-            section: String(localized: "Cmd+Tab Appearance"),
-            icon: "textformat"
-        ),
-        SettingsSearchItem(
-            id: "appearance.cmdTabShowAppIconOnly",
-            title: String(localized: "Show App Icon Only"),
-            keywords: ["icon", "only", "header", "cmd tab"],
-            tab: "CmdTab",
-            section: String(localized: "Cmd+Tab Appearance"),
-            icon: "app.badge"
+            icon: "text.below.photo"
         ),
         SettingsSearchItem(
             id: "appearance.cmdTabControlPosition",
@@ -1383,21 +1350,13 @@ enum SettingsSearchCatalog {
             icon: "rectangle.topthird.inset.filled"
         ),
         SettingsSearchItem(
-            id: "appearance.cmdTabShowWindowTitle",
-            title: String(localized: "Show Window Title"),
+            id: "appearance.cmdTabWindowTitle",
+            title: String(localized: "Window title"),
             description: String(localized: "Show window title in Cmd+Tab overlay."),
-            keywords: ["title", "window", "cmd tab", "show"],
+            keywords: ["title", "window", "cmd tab", "show", "visibility", "hover", "always"],
             tab: "CmdTab",
             section: String(localized: "Cmd+Tab Appearance"),
             icon: "textformat.abc"
-        ),
-        SettingsSearchItem(
-            id: "appearance.cmdTabWindowTitleVisibility",
-            title: String(localized: "Window Title Visibility"),
-            keywords: ["title", "visibility", "hover", "always", "cmd tab"],
-            tab: "CmdTab",
-            section: String(localized: "Cmd+Tab Appearance"),
-            icon: "eye"
         ),
         SettingsSearchItem(
             id: "appearance.cmdTabDisableTitleStyling",
