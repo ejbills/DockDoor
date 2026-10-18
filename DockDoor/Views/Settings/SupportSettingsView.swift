@@ -22,29 +22,24 @@ struct SupportSettingsView: View {
     // MARK: - Permissions Section
 
     private var permissionsSection: some View {
-        SettingsSection("Permissions") {
-            VStack(alignment: .leading, spacing: 0) {
-                PermissionRow(
-                    title: "Accessibility",
-                    description: "Required for dock hover detection and window switcher hotkeys",
-                    icon: "accessibility",
-                    isGranted: permissionsChecker.accessibilityPermission,
-                    action: { SystemPreferencesHelper.openAccessibilityPreferences() }
-                )
-                .settingsSearchTarget("support.accessibility")
+        SettingsSection("Permissions", footer: "Changes to permissions require an app restart to take effect.") {
+            PermissionRow(
+                title: "Accessibility",
+                description: "Required for dock hover detection and window switcher hotkeys",
+                icon: "accessibility",
+                isGranted: permissionsChecker.accessibilityPermission,
+                action: { SystemPreferencesHelper.openAccessibilityPreferences() }
+            )
+            .settingsSearchTarget("support.accessibility")
 
-                Divider().padding(.leading, 40)
-
-                PermissionRow(
-                    title: "Screen Recording",
-                    description: "Required for capturing window previews. Without this, only compact list view is available.",
-                    icon: "record.circle",
-                    isGranted: permissionsChecker.screenRecordingPermission,
-                    action: { SystemPreferencesHelper.openScreenRecordingPreferences() }
-                )
-                .settingsSearchTarget("support.screenRecording")
-            }
-            .settingsAnnotation("Changes to permissions require an app restart to take effect.")
+            PermissionRow(
+                title: "Screen Recording",
+                description: "Required for capturing window previews. Without this, only compact list view is available.",
+                icon: "record.circle",
+                isGranted: permissionsChecker.screenRecordingPermission,
+                action: { SystemPreferencesHelper.openScreenRecordingPreferences() }
+            )
+            .settingsSearchTarget("support.screenRecording")
         }
     }
 
@@ -57,11 +52,11 @@ struct SupportSettingsView: View {
                 SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Current Version")
+                    Text("Current version")
                         .font(.body)
                     Text("Version \(updaterState.currentVersion)")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
@@ -74,11 +69,11 @@ struct SupportSettingsView: View {
                 SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Update Channel")
+                    Text("Update channel")
                         .font(.body)
                     Text("Choose between stable releases and beta versions")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
@@ -98,11 +93,11 @@ struct SupportSettingsView: View {
                 SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Check for Updates")
+                    Text("Check for updates")
                         .font(.body)
                     Text(lastCheckDescription)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
@@ -120,11 +115,11 @@ struct SupportSettingsView: View {
                 SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Automatic Updates")
+                    Text("Automatic updates")
                         .font(.body)
                     Text("Automatically check for updates in the background")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
@@ -157,20 +152,20 @@ struct SupportSettingsView: View {
         switch updaterState.updateStatus {
         case .noUpdates:
             Label("Up to date", systemImage: "checkmark.circle.fill")
-                .font(.caption)
-                .foregroundColor(.green)
+                .font(.callout)
+                .foregroundStyle(.green)
         case .checking:
             ProgressView()
                 .scaleEffect(0.7)
                 .frame(width: 20, height: 20)
         case let .available(version, _, _):
             Label("v\(version) available", systemImage: "arrow.down.circle.fill")
-                .font(.caption)
-                .foregroundColor(.blue)
+                .font(.callout)
+                .foregroundStyle(.blue)
         case let .error(message):
             Label(message, systemImage: "exclamationmark.triangle.fill")
-                .font(.caption2)
-                .foregroundColor(.red)
+                .font(.callout)
+                .foregroundStyle(.red)
                 .lineLimit(1)
         }
     }
@@ -242,14 +237,14 @@ private struct PermissionRow: View {
                     .font(.body)
                 Text(description)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             HStack(spacing: 8) {
                 Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(isGranted ? .green : .red)
+                    .foregroundStyle(isGranted ? .green : .red)
                     .font(.callout)
 
                 if !isGranted {
@@ -273,11 +268,11 @@ private struct DebugLoggingRow: View {
                 SettingsIcon(systemName: "ant.fill", color: .orange)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Debug Logging")
+                    Text("Debug logging")
                         .font(.body)
                     Text("Capture performance metrics for troubleshooting")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()

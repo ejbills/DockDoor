@@ -53,23 +53,19 @@ struct CmdTabSettingsView: View {
 
     private var configurationSection: some View {
         SettingsSection("Configuration") {
-            HStack(spacing: 8) {
-                Text("Preview cycle key:")
-                HStack(spacing: 4) {
-                    Text("⌘")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.secondary)
+            LabeledContent("Preview cycle key") {
+                HStack(spacing: 6) {
+                    Text(verbatim: "⌘")
+                        .foregroundStyle(.secondary)
                     KeyCaptureButton(keyCode: $cmdTabCycleKey)
                 }
             }
             .settingsSearchTarget("cmdTab.cycleKey")
 
-            HStack(spacing: 8) {
-                Text("Backward cycle key:")
-                HStack(spacing: 4) {
-                    Text("⌘")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.secondary)
+            LabeledContent("Backward cycle key") {
+                HStack(spacing: 6) {
+                    Text(verbatim: "⌘")
+                        .foregroundStyle(.secondary)
                     KeyCaptureButton(keyCode: $cmdTabBackwardCycleKey)
                 }
             }

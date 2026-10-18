@@ -50,12 +50,10 @@ struct MainSettingsView: View {
                 .settingsSearchTarget("general.showSettingDescriptions")
                 .settingsAnnotation("Explain what each setting does underneath its row.")
 
-            VStack(alignment: .leading, spacing: 0) {
-                Toggle(isOn: $sortMinimizedToEnd, label: {
-                    Text("Sort minimized/hidden windows to end")
-                })
-                .settingsAnnotation("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
-            }
+            Toggle(isOn: $sortMinimizedToEnd, label: {
+                Text("Sort minimized/hidden windows to end")
+            })
+            .settingsAnnotation("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
             .settingsSearchTarget("general.sortMinimized")
         }
     }

@@ -9,24 +9,20 @@ struct DockScrollGestureSection: View {
     var body: some View {
         SettingsSection("Dock icon scroll gesture") {
             Toggle(isOn: $enableDockScrollGesture) {
-                HStack(spacing: 8) {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .foregroundColor(.accentColor)
-                    Text("Enable scroll gestures on dock icons")
-                }
+                Text("Enable scroll gestures on dock icons")
             }
             .settingsSearchTarget("gestures.dockScroll")
             .settingsAnnotation("Choose what happens when scrolling directly on a dock icon.")
 
             if enableDockScrollGesture {
-                Picker("Dock icon scroll:", selection: $dockIconScrollBehavior) {
+                Picker("Dock icon scroll", selection: $dockIconScrollBehavior) {
                     ForEach(DockIconScrollBehavior.allCases, id: \.self) { behavior in
                         Text(behavior.localizedName).tag(behavior)
                     }
                 }
                 .settingsSearchTarget("gestures.dockIconScroll")
 
-                Picker("Music & Spotify dock icon scroll:", selection: $dockIconMediaScrollBehavior) {
+                Picker("Music and Spotify icon scroll", selection: $dockIconMediaScrollBehavior) {
                     ForEach(DockIconMediaScrollBehavior.allCases, id: \.self) { behavior in
                         Text(behavior.localizedName).tag(behavior)
                     }
@@ -50,11 +46,7 @@ struct TitleBarScrollGestureSection: View {
     var body: some View {
         SettingsSection("Title bar scroll gesture") {
             Toggle(isOn: $enableTitleBarScrollGesture) {
-                HStack(spacing: 8) {
-                    Image(systemName: "rectangle.tophalf.inset.filled")
-                        .foregroundColor(.accentColor)
-                    Text("Enable scroll gestures on active window title bars")
-                }
+                Text("Enable scroll gestures on active window title bars")
             }
             .settingsSearchTarget("gestures.titleBarScroll")
             .settingsAnnotation("Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size.")

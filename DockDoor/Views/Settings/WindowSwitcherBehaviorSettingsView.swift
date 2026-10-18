@@ -174,22 +174,20 @@ struct WindowSwitcherBehaviorSettingsView: View {
             }
             .settingsSearchTarget("windowSwitcher.sortOrder")
 
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text("Group windows by app")
-                    Spacer()
-                    if !groupedAppsInSwitcher.isEmpty {
-                        Text("\(groupedAppsInSwitcher.count) app\(groupedAppsInSwitcher.count == 1 ? "" : "s")")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    Button("Select...") {
-                        showGroupedAppsSheet = true
-                    }
-                    .buttonStyle(.settings)
+            HStack {
+                Text("Group windows by app")
+                Spacer()
+                if !groupedAppsInSwitcher.isEmpty {
+                    Text("\(groupedAppsInSwitcher.count) app\(groupedAppsInSwitcher.count == 1 ? "" : "s")")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                .settingsAnnotation("Selected apps show only their most recent window. All windows shown in active-app-only mode.")
+                Button("Select...") {
+                    showGroupedAppsSheet = true
+                }
+                .buttonStyle(.settings)
             }
+            .settingsAnnotation("Selected apps show only their most recent window. All windows shown in active-app-only mode.")
             .settingsSearchTarget("windowSwitcher.groupByApp")
         }
     }

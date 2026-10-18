@@ -52,10 +52,17 @@ struct WindowSwitcherAppearanceSection: View {
                     )
                 }
             }
-        }
 
-        SettingsSection("Toolbar") {
-            Picker("Position Window Controls", selection: $windowSwitcherControlPosition) {
+            if switcherShowAppHeader {
+                Picker("Window title", selection: WindowTitleMode.binding(showTitle: $switcherShowWindowTitle, visibility: $switcherWindowTitleVisibility)) {
+                    ForEach(WindowTitleMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
+                    }
+                }
+                .settingsSearchTarget("appearance.switcherWindowTitle")
+            }
+
+            Picker("Controls position", selection: $windowSwitcherControlPosition) {
                 ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
                     Text(position.localizedName)
                         .tag(position)
@@ -81,35 +88,20 @@ struct WindowSwitcherAppearanceSection: View {
                 Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
                     .settingsSearchTarget("appearance.switcherMonochrome")
 
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
-                        Text("Disable dock styling on traffic light buttons")
-                    }
-                    .settingsSearchTarget("appearance.switcherDisableTrafficLightStyling")
-                    .settingsAnnotation("Removes the pill-shaped background styling from traffic light buttons.")
+                Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
+                    Text("Disable dock styling on traffic light buttons")
                 }
-            }
-        }
-
-        if switcherShowAppHeader {
-            SettingsSection("Window title") {
-                Picker("Window title", selection: WindowTitleMode.binding(showTitle: $switcherShowWindowTitle, visibility: $switcherWindowTitleVisibility)) {
-                    ForEach(WindowTitleMode.allCases) { mode in
-                        Text(mode.localizedName).tag(mode)
-                    }
-                }
-                .settingsSearchTarget("appearance.switcherWindowTitle")
+                .settingsSearchTarget("appearance.switcherDisableTrafficLightStyling")
+                .settingsAnnotation("Removes the pill-shaped background styling from traffic light buttons.")
             }
         }
 
         SettingsSection("Layout") {
-            VStack(alignment: .leading) {
-                Toggle(isOn: $switcherUseEmbeddedDockPreviewElements) {
-                    Text("Embed controls in preview frames")
-                }
-                .settingsSearchTarget("appearance.switcherEmbedControls")
-                .settingsAnnotation("Places traffic light buttons and window titles directly inside the window switcher preview frames.")
+            Toggle(isOn: $switcherUseEmbeddedDockPreviewElements) {
+                Text("Embed controls in preview frames")
             }
+            .settingsSearchTarget("appearance.switcherEmbedControls")
+            .settingsAnnotation("Places traffic light buttons and window titles directly inside the window switcher preview frames.")
 
             Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
                 ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in

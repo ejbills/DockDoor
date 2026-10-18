@@ -120,11 +120,9 @@ struct AddFilterSheet: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 8) {
-                TextField("Enter text to filter", text: $filterToAdd.text)
-                    .textFieldStyle(.roundedBorder)
-            }
-            .padding(.vertical)
+            TextField("Enter text to filter", text: $filterToAdd.text)
+                .textFieldStyle(.roundedBorder)
+                .padding(.vertical)
 
             HStack(spacing: 16) {
                 Button("Cancel") {

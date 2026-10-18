@@ -56,24 +56,19 @@ struct GesturesSettingsView: View {
 
     private var heroSection: some View {
         SettingsSection("Window gestures") {
-            HStack(alignment: .top, spacing: 20) {
-                VStack(alignment: .leading, spacing: 12) {
-                    Toggle(isOn: $enableWindowGestures) {
-                        Text("Window Gestures")
-                    }
-                    .toggleStyle(.switch)
-                    .onChange(of: enableWindowGestures) { _ in askUserToRestartApplication() }
-                    .settingsSearchTarget("windowGestures.enable")
-                    .settingsAnnotation("Snap, minimize and close windows with two fingers on your trackpad. Swipe or pinch on a window's title bar, a Dock icon or the menu bar.")
+            GestureDemoCarousel(gestures: Self.heroGestures)
+                .frame(width: 240, height: 170)
+                .frame(maxWidth: .infinity)
 
-                    if enableWindowGestures, !requirements.isSatisfied {
-                        requirementsBanner
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+            Toggle(isOn: $enableWindowGestures) {
+                Text("Enable window gestures")
+            }
+            .onChange(of: enableWindowGestures) { _ in askUserToRestartApplication() }
+            .settingsSearchTarget("windowGestures.enable")
+            .settingsAnnotation("Snap, minimize and close windows with two fingers on your trackpad. Swipe or pinch on a window's title bar, a Dock icon or the menu bar.")
 
-                GestureDemoCarousel(gestures: Self.heroGestures)
-                    .frame(width: 240, height: 170)
+            if enableWindowGestures, !requirements.isSatisfied {
+                requirementsBanner
             }
         }
     }
@@ -88,9 +83,7 @@ struct GesturesSettingsView: View {
         }
         let message = lines.dropFirst().reduce(lines.first ?? Text(verbatim: "")) { $0 + Text(verbatim: "\n") + $1 }
         return SettingsCallout(tone: .warning, message: message, actionTitle: "Open Trackpad Settings") {
-            if let url = URL(string: "x-apple.systempreferences:com.apple.Trackpad-Settings.extension") {
-                NSWorkspace.shared.open(url)
-            }
+            SystemPreferencesHelper.openTrackpadPreferences()
         }
     }
 

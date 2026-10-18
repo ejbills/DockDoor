@@ -24,6 +24,17 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
         return String(format: "%.\(effectiveDecimals)f", Double(value)) + unit
     }
 
+    private var snappedValue: Binding<T> {
+        Binding {
+            value
+        } set: { newValue in
+            let stepSize = T(step)
+            guard stepSize > 0 else { return value = newValue }
+            let snapped = range.lowerBound + ((newValue - range.lowerBound) / stepSize).rounded() * stepSize
+            value = min(max(snapped, range.lowerBound), range.upperBound)
+        }
+    }
+
     private var isModified: Bool {
         guard let defaultValue else { return false }
         return abs(Double(value) - Double(defaultValue)) > 0.01
@@ -32,7 +43,8 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
     var body: some View {
         LabeledContent {
             HStack(spacing: 8) {
-                Slider(value: $value, in: range, step: step) { isEditing in
+                // No `step:`: macOS draws a tick per step, so the binding snaps instead.
+                Slider(value: snappedValue, in: range) { isEditing in
                     onEditingChanged?(isEditing)
                 }
                 .labelsHidden()

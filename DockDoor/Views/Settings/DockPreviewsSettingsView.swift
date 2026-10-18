@@ -317,32 +317,25 @@ struct DockPreviewsSettingsView: View {
             .settingsSearchTarget("appearance.dockEmbedControls")
             .settingsAnnotation("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
 
-        VStack(alignment: .leading, spacing: 4) {
-            SettingsSliderRow(
-                title: "Max Rows (Bottom Dock)",
-                value: Binding<Double>(
-                    get: { Double(previewMaxRows) },
-                    set: { previewMaxRows = Int($0) }
-                ),
-                range: 1.0 ... 8.0,
-                defaultValue: 1,
-                step: 1
-            )
-            .settingsSearchTarget("appearance.dockMaxRows")
+        SettingsSliderRow(
+            title: "Max rows",
+            value: Binding<Double>(get: { Double(previewMaxRows) }, set: { previewMaxRows = Int($0) }),
+            range: 1.0 ... 8.0,
+            defaultValue: 1,
+            step: 1
+        )
+        .settingsSearchTarget("appearance.dockMaxRows")
+        .settingsAnnotation("Used when the Dock is at the bottom of the screen.")
 
-            SettingsSliderRow(
-                title: "Max Columns (Left/Right Dock)",
-                value: Binding<Double>(
-                    get: { Double(previewMaxColumns) },
-                    set: { previewMaxColumns = Int($0) }
-                ),
-                range: 1.0 ... 8.0,
-                defaultValue: 2,
-                step: 1
-            )
-            .settingsSearchTarget("appearance.dockMaxColumns")
-        }
-        .settingsAnnotation("Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position.")
+        SettingsSliderRow(
+            title: "Max columns",
+            value: Binding<Double>(get: { Double(previewMaxColumns) }, set: { previewMaxColumns = Int($0) }),
+            range: 1.0 ... 8.0,
+            defaultValue: 2,
+            step: 1
+        )
+        .settingsSearchTarget("appearance.dockMaxColumns")
+        .settingsAnnotation("Used when the Dock is on the left or right of the screen.")
     }
 }
 

@@ -21,11 +21,13 @@ struct WindowSwitcherKeybindSection: View {
 
     var body: some View {
         SettingsSection("Window switcher shortcuts") {
-            shortcutRow
+            initializerRow
                 .settingsSearchTarget("gestures.switcherKeybind")
                 .settingsAnnotation("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
 
-            LabeledContent("Backward Key") {
+            triggerKeyRow
+
+            LabeledContent("Backward key") {
                 HStack(spacing: 8) {
                     KeyCaptureButton(keyCode: $switcherBackwardKeyCode, captureModifiers: true)
                     SettingsResetButton(isModified: switcherBackwardKeyCode != 56) { switcherBackwardKeyCode = 56 }
@@ -67,26 +69,24 @@ struct WindowSwitcherKeybindSection: View {
         }
 
         SettingsSection("Alternate shortcut") {
-            LabeledContent("Alternate Shortcut") {
-                HStack(spacing: 6) {
-                    Picker("Modifier", selection: $alternateKeybindModifierFlags) {
-                        Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
-                        Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                        Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                        Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-                    }
-                    .labelsHidden()
-                    .fixedSize()
-                    Text(verbatim: "+")
-                        .foregroundStyle(.secondary)
+            LabeledContent("Key") {
+                HStack(spacing: 8) {
                     KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set", allowsEscape: true)
                     SettingsResetButton(isModified: alternateKeybindKey != 0) { alternateKeybindKey = 0 }
+                        .frame(width: 16)
                 }
             }
             .settingsSearchTarget("gestures.alternateShortcut")
             .settingsAnnotation("An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode.")
 
             if alternateKeybindKey != 0 {
+                Picker("Modifier", selection: $alternateKeybindModifierFlags) {
+                    Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
+                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
+                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
+                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
+                }
+
                 Picker("Mode", selection: $alternateKeybindMode) {
                     ForEach(SwitcherInvocationMode.allCases) { mode in
                         Text(mode.localizedName).tag(mode)
@@ -97,48 +97,63 @@ struct WindowSwitcherKeybindSection: View {
 
         SettingsSection("Navigation") {
             Toggle(isOn: $enableVimMotions) {
-                Text("Enable Vim Motions")
+                Text("Enable Vim motions")
             }
             .settingsSearchTarget("gestures.vimMotions")
             .settingsAnnotation("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
 
             Toggle(isOn: $passArrowsThroughToSystem) {
-                Text("Pass Arrow Keys Through to System")
+                Text("Pass arrow keys to the system")
             }
             .settingsSearchTarget("gestures.arrowPassthrough")
             .settingsAnnotation("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
         }
 
-        SettingsSection("Fullscreen app blacklist") {
-            fullscreenAppBlacklistView
-                .settingsSearchTarget("gestures.fullscreenBlacklist")
-                .settingsAnnotation("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
+        SettingsListSection(
+            title: "Fullscreen app blacklist",
+            footer: "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.",
+            items: fullscreenAppBlacklist,
+            itemIcon: "app",
+            emptyText: "No apps in blacklist",
+            addTitle: "Add App…",
+            onAdd: { showingAddBlacklistAppSheet = true },
+            onRemove: { appName in fullscreenAppBlacklist.removeAll { $0 == appName } },
+            onRemoveAll: { fullscreenAppBlacklist.removeAll() }
+        )
+        .settingsSearchTarget("gestures.fullscreenBlacklist")
+        .sheet(isPresented: $showingAddBlacklistAppSheet) {
+            AddBlacklistAppSheet(
+                isPresented: $showingAddBlacklistAppSheet,
+                appNameToAdd: $newBlacklistApp,
+                onAdd: { appName in
+                    if !appName.isEmpty, !fullscreenAppBlacklist.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame }) {
+                        fullscreenAppBlacklist.append(appName)
+                    }
+                }
+            )
         }
     }
 
     // MARK: - Shortcut
 
-    private var shortcutRow: some View {
-        LabeledContent("Initializer") {
-            HStack(spacing: 6) {
-                Picker("Initializer", selection: $keybindModel.modifierKey) {
-                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-                }
-                .labelsHidden()
-                .fixedSize()
-                .onChange(of: keybindModel.modifierKey) { newValue in
-                    if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
-                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
-                        Defaults[.UserKeybind] = updatedKeybind
-                        keybindModel.currentKeybind = updatedKeybind
-                    }
-                }
+    private var initializerRow: some View {
+        Picker("Initializer", selection: $keybindModel.modifierKey) {
+            Text("Control ⌃").tag(Defaults[.Int64maskControl])
+            Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
+            Text("Command ⌘").tag(Defaults[.Int64maskCommand])
+        }
+        .onChange(of: keybindModel.modifierKey) { newValue in
+            if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
+                let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
+                Defaults[.UserKeybind] = updatedKeybind
+                keybindModel.currentKeybind = updatedKeybind
+            }
+        }
+    }
 
-                Text(verbatim: "+")
-                    .foregroundStyle(.secondary)
-
+    private var triggerKeyRow: some View {
+        LabeledContent("Trigger key") {
+            HStack(spacing: 8) {
                 if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
                     KeyCapView(text: KeyboardLabel.localizedKey(for: keybind.keyCode), symbol: nil)
                 } else {
@@ -156,6 +171,7 @@ struct WindowSwitcherKeybindSection: View {
                     keybindModel.currentKeybind = Self.defaultKeybind
                     keybindModel.modifierKey = Self.defaultKeybind.modifierFlags
                 }
+                .frame(width: 16)
             }
         }
         .background(
@@ -174,78 +190,5 @@ struct WindowSwitcherKeybindSection: View {
     private var isDefaultShortcut: Bool {
         keybindModel.currentKeybind?.keyCode == Self.defaultKeybind.keyCode
             && keybindModel.currentKeybind?.modifierFlags == Self.defaultKeybind.modifierFlags
-    }
-
-    // MARK: - Fullscreen App Blacklist
-
-    private var fullscreenAppBlacklistView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 8) {
-                    if !fullscreenAppBlacklist.isEmpty {
-                        ForEach(fullscreenAppBlacklist, id: \.self) { appName in
-                            HStack {
-                                Text(appName)
-                                    .foregroundColor(.primary)
-
-                                Spacer()
-
-                                Button(action: {
-                                    fullscreenAppBlacklist.removeAll { $0 == appName }
-                                }) {
-                                    Image(systemName: "trash")
-                                        .foregroundColor(.secondary)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            .padding(.vertical, 4)
-
-                            if appName != fullscreenAppBlacklist.last {
-                                Divider()
-                            }
-                        }
-                    } else {
-                        Text("No apps in blacklist")
-                            .foregroundColor(.secondary)
-                            .padding(.vertical, 8)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(8)
-            }
-            .frame(maxHeight: 120)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-            )
-
-            HStack {
-                Button(action: { showingAddBlacklistAppSheet.toggle() }) {
-                    Text("Add App")
-                }
-                .buttonStyle(.settings)
-
-                Spacer()
-
-                if !fullscreenAppBlacklist.isEmpty {
-                    DangerButton(action: {
-                        fullscreenAppBlacklist.removeAll()
-                    }) {
-                        Text("Remove All")
-                    }
-                }
-            }
-        }
-        .sheet(isPresented: $showingAddBlacklistAppSheet) {
-            AddBlacklistAppSheet(
-                isPresented: $showingAddBlacklistAppSheet,
-                appNameToAdd: $newBlacklistApp,
-                onAdd: { appName in
-                    if !appName.isEmpty, !fullscreenAppBlacklist.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame }) {
-                        fullscreenAppBlacklist.append(appName)
-                    }
-                }
-            )
-        }
     }
 }

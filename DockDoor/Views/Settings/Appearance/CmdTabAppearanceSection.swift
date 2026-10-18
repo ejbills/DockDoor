@@ -23,10 +23,8 @@ struct CmdTabAppearanceSection: View {
                 }
             }
             .settingsSearchTarget("appearance.cmdTabAppHeader")
-        }
 
-        SettingsSection("Toolbar") {
-            Picker("Position Window Controls", selection: $cmdTabControlPosition) {
+            Picker("Controls position", selection: $cmdTabControlPosition) {
                 ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
                     Text(position.localizedName)
                         .tag(position)
@@ -41,13 +39,17 @@ struct CmdTabAppearanceSection: View {
             }
             .settingsSearchTarget("appearance.cmdTabWindowTitle")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $cmdTabDisableDockStyleTitles) {
-                    Text("Disable dock styling on window titles")
-                }
-                .settingsSearchTarget("appearance.cmdTabDisableTitleStyling")
-                .settingsAnnotation("Removes the pill-shaped background styling from window titles.")
+            Toggle(isOn: $cmdTabDisableDockStyleTitles) {
+                Text("Disable dock styling on window titles")
             }
+            .settingsSearchTarget("appearance.cmdTabDisableTitleStyling")
+            .settingsAnnotation("Removes the pill-shaped background styling from window titles.")
+
+            Toggle(isOn: $cmdTabUseEmbeddedDockPreviewElements) {
+                Text("Embed controls in preview frames")
+            }
+            .settingsSearchTarget("appearance.cmdTabEmbedControls")
+            .settingsAnnotation("Places traffic light buttons and window titles directly inside the preview frames.")
         }
 
         SettingsSection("Traffic light buttons") {
@@ -66,23 +68,11 @@ struct CmdTabAppearanceSection: View {
                 Toggle("Use Monochrome Colors", isOn: $cmdTabUseMonochromeTrafficLights)
                     .settingsSearchTarget("appearance.cmdTabMonochrome")
 
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {
-                        Text("Disable dock styling on traffic light buttons")
-                    }
-                    .settingsSearchTarget("appearance.cmdTabDisableTrafficLightStyling")
-                    .settingsAnnotation("Removes the pill-shaped background styling from traffic light buttons.")
+                Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {
+                    Text("Disable dock styling on traffic light buttons")
                 }
-            }
-        }
-
-        SettingsSection("Layout") {
-            VStack(alignment: .leading) {
-                Toggle(isOn: $cmdTabUseEmbeddedDockPreviewElements) {
-                    Text("Embed controls in preview frames")
-                }
-                .settingsSearchTarget("appearance.cmdTabEmbedControls")
-                .settingsAnnotation("Places traffic light buttons and window titles directly inside the preview frames.")
+                .settingsSearchTarget("appearance.cmdTabDisableTrafficLightStyling")
+                .settingsAnnotation("Removes the pill-shaped background styling from traffic light buttons.")
             }
         }
     }

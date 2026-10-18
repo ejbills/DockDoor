@@ -23,14 +23,17 @@ struct EnabledButtonsPicker: View {
     }
 
     var body: some View {
-        LabeledContent("Enabled Buttons") {
+        LabeledContent("Enabled buttons") {
             Menu {
                 ForEach(Self.actions, id: \.0) { action, label in
                     Toggle(label, isOn: binding(for: action))
                 }
             } label: {
-                Text(summary)
+                // Drawn like a picker's value so it matches the menus around it.
+                Text("\(summary) \(Image(systemName: "chevron.up.chevron.down"))")
             }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
             .fixedSize()
         }
     }

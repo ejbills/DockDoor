@@ -18,14 +18,12 @@ struct GradientColorPaletteSettingsView: View {
             Text("Highlight Gradient Colors")
                 .layoutPriority(1)
 
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 4) {
-                    ForEach(storedSettings.colors.indices, id: \.self) { index in
-                        colorShape(for: storedSettings.colors[index], index: index)
-                    }
+            HStack(spacing: 4) {
+                ForEach(storedSettings.colors.indices, id: \.self) { index in
+                    colorShape(for: storedSettings.colors[index], index: index)
                 }
-                .settingsAnnotation("Right click a color to remove it.")
             }
+            .settingsAnnotation("Right click a color to remove it.")
 
             Spacer()
 

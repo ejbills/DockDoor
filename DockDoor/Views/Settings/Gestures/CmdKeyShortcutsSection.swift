@@ -11,10 +11,10 @@ struct CmdKeyShortcutsSection: View {
 
     var body: some View {
         Section {
-            cmdShortcutRow(keyBinding: $cmdShortcut1Key, actionBinding: $cmdShortcut1Action)
+            cmdShortcutRow(slot: 1, keyBinding: $cmdShortcut1Key, actionBinding: $cmdShortcut1Action)
                 .settingsSearchTarget("gestures.cmdShortcuts")
-            cmdShortcutRow(keyBinding: $cmdShortcut2Key, actionBinding: $cmdShortcut2Action)
-            cmdShortcutRow(keyBinding: $cmdShortcut3Key, actionBinding: $cmdShortcut3Action)
+            cmdShortcutRow(slot: 2, keyBinding: $cmdShortcut2Key, actionBinding: $cmdShortcut2Action)
+            cmdShortcutRow(slot: 3, keyBinding: $cmdShortcut3Key, actionBinding: $cmdShortcut3Action)
 
             HStack {
                 Spacer()
@@ -37,21 +37,22 @@ struct CmdKeyShortcutsSection: View {
         }
     }
 
-    private func cmdShortcutRow(keyBinding: Binding<UInt16>, actionBinding: Binding<WindowAction>) -> some View {
-        LabeledContent {
-            Picker("Action", selection: actionBinding) {
-                ForEach(WindowAction.gestureActions, id: \.self) { windowAction in
-                    Label(windowAction.localizedName, systemImage: windowAction.iconName)
-                        .tag(windowAction)
-                }
-            }
-            .labelsHidden()
-            .fixedSize()
-        } label: {
-            HStack(spacing: 4) {
+    private func cmdShortcutRow(slot: Int, keyBinding: Binding<UInt16>, actionBinding: Binding<WindowAction>) -> some View {
+        LabeledContent(String(localized: "Shortcut \(slot)", comment: "Numbered Cmd+key preview shortcut")) {
+            HStack(spacing: 6) {
                 Text(verbatim: "⌘")
                     .foregroundStyle(.secondary)
                 KeyCaptureButton(keyCode: keyBinding)
+                Image(systemName: "arrow.right")
+                    .foregroundStyle(.tertiary)
+                Picker("Action", selection: actionBinding) {
+                    ForEach(WindowAction.gestureActions, id: \.self) { windowAction in
+                        Label(windowAction.localizedName, systemImage: windowAction.iconName)
+                            .tag(windowAction)
+                    }
+                }
+                .labelsHidden()
+                .fixedSize()
             }
         }
     }

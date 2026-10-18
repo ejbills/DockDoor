@@ -62,6 +62,18 @@ struct WidgetSettingsView: View {
 
     private static let eventStore = EKEventStore()
 
+    private func calendarBinding(for identifier: String) -> Binding<Bool> {
+        Binding {
+            !filteredCalendarIdentifiers.contains(identifier)
+        } set: { isShown in
+            if isShown {
+                filteredCalendarIdentifiers.removeAll { $0 == identifier }
+            } else if !filteredCalendarIdentifiers.contains(identifier) {
+                filteredCalendarIdentifiers.append(identifier)
+            }
+        }
+    }
+
     private func loadCalendars() async -> [CalendarItem] {
         await Task.detached(priority: .userInitiated) {
             let eventStore = EKEventStore()
@@ -179,118 +191,60 @@ struct WidgetSettingsView: View {
             if showSpecialAppControls, enableCalendarWidget {
                 SettingsSection("Calendar", footer: "Select which calendars appear in the dock preview when hovering over the Calendar app.") {
                     if authorizationStatus == .denied || authorizationStatus == .restricted {
-                        VStack(spacing: 12) {
-                            Image(systemName: "calendar.badge.exclamationmark")
-                                .font(.largeTitle)
-                                .foregroundColor(.secondary)
-
-                            Text("Calendar Access Required")
-                                .font(.headline)
-
-                            Text("DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars.")
-                                .font(.footnote)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.center)
-
-                            Button("Open System Settings") {
-                                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
-                                    NSWorkspace.shared.open(url)
+                        SettingsCallout(
+                            title: Text("Calendar Access Required"),
+                            message: Text("DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars."),
+                            actionTitle: "Open System Settings"
+                        ) {
+                            SystemPreferencesHelper.openCalendarPreferences()
+                        }
+                    } else if isLoadingCalendars {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                                .controlSize(.small)
+                            Text("Loading calendars...")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if availableCalendars.isEmpty {
+                        SettingsCallout(
+                            tone: .info,
+                            icon: "calendar",
+                            title: Text("No calendars found"),
+                            message: Text("Make sure you have calendars set up in the Calendar app.")
+                        )
+                    } else {
+                        ForEach(availableCalendars) { calendar in
+                            Toggle(isOn: calendarBinding(for: calendar.calendarIdentifier)) {
+                                HStack(spacing: 8) {
+                                    Circle()
+                                        .fill(Color(cgColor: calendar.color))
+                                        .frame(width: 10, height: 10)
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text(calendar.title)
+                                            .lineLimit(1)
+                                        Text(calendar.accountName)
+                                            .font(.footnote)
+                                            .foregroundStyle(.secondary)
+                                            .lineLimit(1)
+                                    }
                                 }
+                            }
+                        }
+
+                        HStack {
+                            Button("Show All") {
+                                filteredCalendarIdentifiers.removeAll()
                             }
                             .buttonStyle(.settings)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                    } else {
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 4) {
-                                if isLoadingCalendars {
-                                    HStack {
-                                        Spacer()
-                                        ProgressView()
-                                            .scaleEffect(0.8)
-                                        Text("Loading calendars...")
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                } else if availableCalendars.isEmpty {
-                                    VStack(spacing: 8) {
-                                        Text("No calendars found")
-                                            .foregroundColor(.secondary)
-                                        Text("Make sure you have calendars set up in the Calendar app.")
-                                            .font(.footnote)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                } else {
-                                    ForEach(availableCalendars) { calendar in
-                                        HStack(spacing: 8) {
-                                            Toggle(isOn: Binding(
-                                                get: {
-                                                    !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier)
-                                                },
-                                                set: { isEnabled in
-                                                    if isEnabled {
-                                                        filteredCalendarIdentifiers.removeAll { $0 == calendar.calendarIdentifier }
-                                                    } else {
-                                                        if !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier) {
-                                                            filteredCalendarIdentifiers.append(calendar.calendarIdentifier)
-                                                        }
-                                                    }
-                                                }
-                                            )) { EmptyView() }
+                            .disabled(filteredCalendarIdentifiers.isEmpty)
 
-                                            Circle()
-                                                .fill(Color(cgColor: calendar.color))
-                                                .frame(width: 12, height: 12)
+                            Spacer()
 
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                Text(calendar.title)
-                                                    .lineLimit(1)
-
-                                                Text(calendar.accountName)
-                                                    .font(.caption)
-                                                    .foregroundColor(.secondary)
-                                                    .lineLimit(1)
-                                            }
-
-                                            Spacer()
-                                        }
-                                        .padding(.vertical, 4)
-                                    }
-                                }
+                            Button("Hide All") {
+                                filteredCalendarIdentifiers = availableCalendars.map(\.calendarIdentifier)
                             }
-                            .padding(8)
-                        }
-                        .frame(height: 200)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                        )
-
-                        if !availableCalendars.isEmpty {
-                            HStack {
-                                Button("Show All") {
-                                    filteredCalendarIdentifiers.removeAll()
-                                }
-                                .buttonStyle(.settings)
-                                .disabled(filteredCalendarIdentifiers.isEmpty)
-
-                                Spacer()
-
-                                DangerButton(action: {
-                                    for calendar in availableCalendars {
-                                        if !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier) {
-                                            filteredCalendarIdentifiers.append(calendar.calendarIdentifier)
-                                        }
-                                    }
-                                }) {
-                                    Text("Hide All")
-                                }
-                                .disabled(filteredCalendarIdentifiers.count == availableCalendars.count)
-                            }
+                            .buttonStyle(.settings)
+                            .disabled(filteredCalendarIdentifiers.count == availableCalendars.count)
                         }
                     }
                 }
