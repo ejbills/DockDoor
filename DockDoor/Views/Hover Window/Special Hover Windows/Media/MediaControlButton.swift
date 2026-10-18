@@ -14,6 +14,19 @@ struct MediaControlButton: View {
 
     private var backgroundRadius: CGFloat { buttonDimension * 0.3 }
 
+    private var label: String {
+        switch systemName {
+        case "play.fill": String(localized: "Play", comment: "Media control")
+        case "pause.fill": String(localized: "Pause", comment: "Media control")
+        case "backward.fill": String(localized: "Previous track", comment: "Media control")
+        case "forward.fill": String(localized: "Next track", comment: "Media control")
+        case "gobackward.15": String(localized: "Back 15 seconds", comment: "Media control")
+        case "goforward.15": String(localized: "Forward 15 seconds", comment: "Media control")
+        case let name where name.hasPrefix("quote.bubble"): String(localized: "Lyrics", comment: "Media control")
+        default: ""
+        }
+    }
+
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
@@ -25,6 +38,8 @@ struct MediaControlButton: View {
                 .symbolReplaceTransition()
         }
         .buttonStyle(.plain)
+        .help(label)
+        .accessibilityLabel(label)
         .background(
             RoundedRectangle(cornerRadius: backgroundRadius, style: .continuous)
                 .fill(Color.primary.opacity(isHovering ? 0.06 : 0))

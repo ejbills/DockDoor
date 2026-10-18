@@ -392,7 +392,7 @@ struct WindowPreview: View, Equatable {
                       appearance.showMinimizedHiddenLabels,
                       appearance.trafficLightVisibility != .never
             {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                Text(windowInfo.isMinimized ? String(localized: "Minimized", comment: "Window state badge") : String(localized: "Hidden", comment: "Window state badge"))
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
@@ -653,7 +653,7 @@ struct WindowPreview: View, Equatable {
                       appearance.showMinimizedHiddenLabels,
                       appearance.trafficLightVisibility != .never
             {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                Text(windowInfo.isMinimized ? String(localized: "Minimized", comment: "Window state badge") : String(localized: "Hidden", comment: "Window state badge"))
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
@@ -744,7 +744,7 @@ struct WindowPreview: View, Equatable {
                       appearance.showMinimizedHiddenLabels,
                       appearance.trafficLightVisibility != .never
             {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                Text(windowInfo.isMinimized ? String(localized: "Minimized", comment: "Window state badge") : String(localized: "Hidden", comment: "Window state badge"))
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)

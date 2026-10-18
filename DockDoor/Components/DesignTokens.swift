@@ -2,15 +2,19 @@ import SwiftUI
 
 enum PreviewMotion {
     static func hover(enabled: Bool) -> Animation? {
-        enabled ? .snappy(duration: 0.175) : nil
+        animates(enabled) ? .snappy(duration: 0.175) : nil
     }
 
     static func content(enabled: Bool) -> Animation? {
-        enabled ? .smooth(duration: 0.25) : nil
+        animates(enabled) ? .smooth(duration: 0.25) : nil
     }
 
     static func emphasis(enabled: Bool) -> Animation? {
-        enabled ? .spring(response: 0.45, dampingFraction: 0.8) : nil
+        animates(enabled) ? .spring(response: 0.45, dampingFraction: 0.8) : nil
+    }
+
+    private static func animates(_ enabled: Bool) -> Bool {
+        enabled && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
     }
 }
 
