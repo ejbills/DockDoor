@@ -103,7 +103,7 @@ struct MediaControlsFullView: View {
                         startDelay: 1
                     )
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .opacity(mediaInfo.artist.isEmpty ? 0 : 1)
                     .id("compact-full-artist-\(mediaInfo.artist)")
                 }
@@ -154,7 +154,7 @@ struct MediaControlsFullView: View {
                             startDelay: 1
                         )
                         .font(.callout)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .id("expanded-full-artist-\(mediaInfo.artist)")
                     }
                 }

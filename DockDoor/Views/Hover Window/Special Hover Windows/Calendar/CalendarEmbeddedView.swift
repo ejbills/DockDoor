@@ -25,7 +25,7 @@ struct CalendarEmbeddedView: View {
                         Text("Today")
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
 
                         LazyVStack(alignment: .leading, spacing: CalendarLayout.embeddedEventRowSpacing) {
                             ForEach(calendarInfo.events.prefix(3)) { event in
@@ -35,7 +35,7 @@ struct CalendarEmbeddedView: View {
                             if calendarInfo.events.count > 3 {
                                 Text("+\(calendarInfo.events.count - 3) more")
                                     .font(.caption2)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                                     .padding(.leading, 8)
                             }
                         }

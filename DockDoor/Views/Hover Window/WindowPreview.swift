@@ -262,7 +262,7 @@ struct WindowPreview: View, Equatable {
             if inactive, appearance.showMinimizedHiddenLabels {
                 Image(systemName: "eye.slash")
                     .font(.largeTitle)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                     .shadow(radius: 2)
                     .transition(.opacity)
             }

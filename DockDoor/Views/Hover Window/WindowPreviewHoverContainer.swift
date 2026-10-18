@@ -1083,16 +1083,16 @@ struct WindowPreviewHoverContainer: View {
         VStack(spacing: 16) {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 48, weight: .light))
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             VStack(spacing: 4) {
                 Text("No Results")
                     .font(.headline)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
 
                 Text("No windows match your search")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .frame(minWidth: previewWidth, maxWidth: previewWidth, minHeight: 120)

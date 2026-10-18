@@ -61,7 +61,7 @@ struct MediaControlsEmbeddedView: View {
                                 startDelay: 1
                             )
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .id("compact-artist-\(mediaInfo.artist)")
                         }
                     }

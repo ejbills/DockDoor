@@ -39,7 +39,7 @@ struct MediaLyricsView: View {
             Text("Loading lyrics...")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .opacity(0.8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -51,11 +51,11 @@ struct MediaLyricsView: View {
             Image(systemName: "music.note.list")
                 .font(.title)
                 .fontWeight(.medium)
-                .foregroundColor(.secondary.opacity(0.7))
+                .foregroundStyle(.secondary.opacity(0.7))
             Text("No lyrics available")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -124,15 +124,15 @@ struct MediaLyricsView: View {
                     Text("Loading lyrics...")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 } else {
                     Image(systemName: "music.note")
                         .font(.title3)
-                        .foregroundColor(.secondary.opacity(0.6))
+                        .foregroundStyle(.secondary.opacity(0.6))
                     Text("No lyrics available")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

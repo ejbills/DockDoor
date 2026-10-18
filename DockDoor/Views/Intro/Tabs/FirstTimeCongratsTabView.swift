@@ -30,7 +30,7 @@ struct FirstTimeCongratsTabView: View {
                 SquiggleDivider()
                 Text("The changes to permissions will take effect after restarting.")
                     .font(.callout)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 

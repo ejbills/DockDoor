@@ -15,18 +15,18 @@ struct FirstTimePermissionsTabView: View {
             VStack(spacing: 4) {
                 Text("Click each button below to open System Settings.")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 Text("No data ever leaves your device.")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 HStack(spacing: 4) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(.orange)
+                        .foregroundStyle(.orange)
                         .font(.caption)
                     Text("When macOS asks to quit, click \"Later\" — we'll restart at the end")
                         .font(.caption)
-                        .foregroundColor(.orange)
+                        .foregroundStyle(.orange)
                 }
             }
 
@@ -55,11 +55,11 @@ struct FirstTimePermissionsTabView: View {
             VStack(spacing: 8) {
                 HStack(spacing: 4) {
                     Image(systemName: "info.circle.fill")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .font(.caption)
                     Text("Permission changes may not appear here until the app restarts")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Button(action: continueToNextTab) {

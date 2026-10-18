@@ -180,7 +180,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 if !groupedAppsInSwitcher.isEmpty {
                     Text("\(groupedAppsInSwitcher.count) app\(groupedAppsInSwitcher.count == 1 ? "" : "s")")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 Button("Select...") {
                     showGroupedAppsSheet = true

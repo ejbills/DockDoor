@@ -214,7 +214,7 @@ struct SettingsView: View {
     private var searchField: some View {
         HStack(spacing: 6) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 11))
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             TextField(
@@ -222,7 +222,7 @@ struct SettingsView: View {
                 text: $searchEngine.query
             )
             .textFieldStyle(.plain)
-            .font(.system(size: 12))
+            .font(.callout)
             .focused($isSearchFieldFocused)
 
             if !searchEngine.query.isEmpty {
@@ -231,7 +231,7 @@ struct SettingsView: View {
                     isSearchFieldFocused = false
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 12))
+                        .font(.callout)
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)

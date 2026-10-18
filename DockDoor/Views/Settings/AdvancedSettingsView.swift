@@ -196,7 +196,7 @@ struct AdvancedSettingsView: View {
 
                 Text(windowSwitcherLivePreviewScope.localizedDescription)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -219,7 +219,7 @@ struct AdvancedSettingsView: View {
                 }
                 .buttonStyle(.plain)
                 .background(livePreviewStreamKeepAlive == 0 ? Color.accentColor : Color.secondary.opacity(0.15))
-                .foregroundColor(livePreviewStreamKeepAlive == 0 ? .white : .primary)
+                .foregroundStyle(livePreviewStreamKeepAlive == 0 ? .white : .primary)
                 .contentShape(Rectangle())
 
                 HStack(spacing: 4) {
@@ -242,7 +242,7 @@ struct AdvancedSettingsView: View {
                             }
                         }
                     Text("seconds")
-                        .foregroundColor(livePreviewStreamKeepAlive > 0 ? .white : .primary)
+                        .foregroundStyle(livePreviewStreamKeepAlive > 0 ? .white : .primary)
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
@@ -262,7 +262,7 @@ struct AdvancedSettingsView: View {
                 }
                 .buttonStyle(.plain)
                 .background(livePreviewStreamKeepAlive == -1 ? Color.accentColor : Color.secondary.opacity(0.15))
-                .foregroundColor(livePreviewStreamKeepAlive == -1 ? .white : .primary)
+                .foregroundStyle(livePreviewStreamKeepAlive == -1 ? .white : .primary)
                 .contentShape(Rectangle())
             }
             .cornerRadius(6)

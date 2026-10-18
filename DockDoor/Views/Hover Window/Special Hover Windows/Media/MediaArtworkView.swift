@@ -24,7 +24,7 @@ struct MediaArtworkView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: iconSize, height: iconSize)
-                                .foregroundColor(Color.secondary.opacity(0.7))
+                                .foregroundStyle(Color.secondary.opacity(0.7))
                         )
                 } else {
                     Image(nsImage: artwork)
@@ -43,7 +43,7 @@ struct MediaArtworkView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: iconSize, height: iconSize)
-                            .foregroundColor(Color.secondary.opacity(0.7))
+                            .foregroundStyle(Color.secondary.opacity(0.7))
                     )
             }
         }
