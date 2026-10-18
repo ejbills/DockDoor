@@ -118,36 +118,23 @@ struct WindowSwitcherBehaviorSettingsView: View {
     private var windowDisplaySection: some View {
         SettingsGroup(header: "Window Display") {
             VStack(alignment: .leading, spacing: 10) {
-                Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
-                    .settingsSearchTarget("windowSwitcher.currentSpaceOnly")
-                Text("Only display windows that are in the current virtual desktop/Space.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
-
-                Toggle(isOn: $showWindowsFromCurrentMonitorOnlyInSwitcher) { Text("Show windows from current monitor only") }
-                    .settingsSearchTarget("windowSwitcher.currentMonitorOnly")
-                Text("Only display windows that are on the same display as the mouse cursor.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
+                SharedWindowDisplayRows(
+                    currentSpaceOnly: $showWindowsFromCurrentSpaceOnlyInSwitcher,
+                    currentSpaceOnlyTarget: "windowSwitcher.currentSpaceOnly",
+                    monitorCaption: "Only display windows that are on the same display as the mouse cursor.",
+                    currentMonitorOnly: $showWindowsFromCurrentMonitorOnlyInSwitcher,
+                    currentMonitorOnlyTarget: "windowSwitcher.currentMonitorOnly",
+                    includeHidden: $includeHiddenWindowsInSwitcher,
+                    includeHiddenTarget: "windowSwitcher.includeHidden",
+                    showWindowless: $showWindowlessAppsInSwitcher,
+                    showWindowlessTarget: "windowSwitcher.showWindowless",
+                    windowlessTitle: "Show running apps with no open windows",
+                    windowlessCaption: "Dock-visible apps without any windows will appear as icon-only entries at the end."
+                )
 
                 Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit to active app only") }
                     .settingsSearchTarget("windowSwitcher.limitToFrontmost")
-                Text("Only show windows from the currently active/frontmost application.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
-
-                Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows") }
-                    .settingsSearchTarget("windowSwitcher.includeHidden")
-
-                Toggle(isOn: $showWindowlessAppsInSwitcher) { Text("Show running apps with no open windows") }
-                    .settingsSearchTarget("windowSwitcher.showWindowless")
-                Text("Dock-visible apps without any windows will appear as icon-only entries at the end.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
+                    .settingsAnnotation("Only show windows from the currently active/frontmost application.")
             }
         }
     }

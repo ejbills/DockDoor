@@ -1729,8 +1729,8 @@ enum SettingsSearchCatalog {
             id: "advanced.openDelay",
             title: String(localized: "Preview Window Open Delay"),
             keywords: ["delay", "open", "hover", "timer"],
-            tab: "Advanced",
-            section: String(localized: "Performance Tuning"),
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
             icon: "timer"
         ),
         SettingsSearchItem(
@@ -1738,24 +1738,24 @@ enum SettingsSearchCatalog {
             title: String(localized: "Only use delay for initial window opening"),
             description: String(localized: "Switching between dock icons while a preview is already open will show previews instantly."),
             keywords: ["delay", "initial", "instant"],
-            tab: "Advanced",
-            section: String(localized: "Performance Tuning"),
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
             icon: "bolt"
         ),
         SettingsSearchItem(
             id: "advanced.fadeOut",
             title: String(localized: "Preview Window Fade Out Duration"),
             keywords: ["fade", "duration", "close", "animation"],
-            tab: "Advanced",
-            section: String(localized: "Performance Tuning"),
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
             icon: "rectangle.portrait.and.arrow.right"
         ),
         SettingsSearchItem(
             id: "advanced.inactivity",
             title: String(localized: "Preview Window Inactivity Timer"),
             keywords: ["inactivity", "timeout", "idle", "timer"],
-            tab: "Advanced",
-            section: String(localized: "Performance Tuning"),
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
             icon: "clock"
         ),
         SettingsSearchItem(
@@ -1805,8 +1805,8 @@ enum SettingsSearchCatalog {
             title: String(localized: "Prevent preview reappearance during fade-out"),
             description: String(localized: "Moving the mouse back over the preview during fade-out will not reactivate it."),
             keywords: ["reentry", "fade", "reappear", "prevent"],
-            tab: "Advanced",
-            section: String(localized: "Performance Tuning"),
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
             icon: "arrow.uturn.backward"
         ),
         SettingsSearchItem(

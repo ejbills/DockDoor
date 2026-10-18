@@ -23,6 +23,11 @@ struct DockPreviewsSettingsView: View {
     @Default(.quitAppOnWindowClose) var quitAppOnWindowClose
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
+    @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
+    @Default(.useDelayOnlyForInitialOpen) var useDelayOnlyForInitialOpen
+    @Default(.fadeOutDuration) var fadeOutDuration
+    @Default(.inactivityTimeout) var inactivityTimeout
+    @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
 
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
@@ -79,13 +84,22 @@ struct DockPreviewsSettingsView: View {
 
     @ViewBuilder
     private var windowDisplayRows: some View {
-        Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { Text("Show windows from current Space only") }
-            .settingsSearchTarget("dockPreviews.currentSpaceOnly")
-            .settingsAnnotation("Only display windows that are in the current virtual desktop/Space.")
-
-        Toggle(isOn: $showWindowsFromCurrentMonitorOnly) { Text("Show windows from current monitor only") }
-            .settingsSearchTarget("dockPreviews.currentMonitorOnly")
-            .settingsAnnotation("Only display windows that are on the same display as the Dock icon you're hovering.")
+        SharedWindowDisplayRows(
+            currentSpaceOnly: $showWindowsFromCurrentSpaceOnly,
+            currentSpaceOnlyTarget: "dockPreviews.currentSpaceOnly",
+            monitorCaption: "Only display windows that are on the same display as the Dock icon you're hovering.",
+            currentMonitorOnly: $showWindowsFromCurrentMonitorOnly,
+            currentMonitorOnlyTarget: "dockPreviews.currentMonitorOnly",
+            includeHidden: $includeHiddenWindowsInDockPreview,
+            includeHiddenTarget: "dockPreviews.includeHidden",
+            showWindowless: $showWindowlessAppsInDockPreview,
+            showWindowlessTarget: "dockPreviews.showWindowless",
+            windowlessTitle: "Show preview for apps with no open windows",
+            windowlessCaption: "Show a placeholder preview when hovering dock apps that have no windows.",
+            ignoreSingleWindow: $ignoreAppsWithSingleWindow,
+            ignoreSingleWindowTarget: "dockPreviews.ignoreSingleWindow",
+            ignoreSingleWindowCaption: "Prevents apps that only ever have a single window from appearing in previews."
+        )
 
         Picker("Window sort order", selection: $windowPreviewSortOrder) {
             ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in
@@ -93,13 +107,6 @@ struct DockPreviewsSettingsView: View {
             }
         }
         .settingsSearchTarget("dockPreviews.sortOrder")
-
-        Toggle(isOn: $includeHiddenWindowsInDockPreview) { Text("Include hidden/minimized windows") }
-            .settingsSearchTarget("dockPreviews.includeHidden")
-
-        Toggle(isOn: $showWindowlessAppsInDockPreview) { Text("Show preview for apps with no open windows") }
-            .settingsSearchTarget("dockPreviews.showWindowless")
-            .settingsAnnotation("Show a placeholder preview when hovering dock apps that have no windows.")
 
         Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
             .settingsSearchTarget("dockPreviews.keepOnTerminate")
@@ -112,10 +119,6 @@ struct DockPreviewsSettingsView: View {
         Toggle(isOn: $collapseNativeTabsIntoSingleWindow) { Text("Collapse native tabs into a single window") }
             .settingsSearchTarget("dockPreviews.collapseNativeTabs")
             .settingsAnnotation("Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab.", more: "Restart the app for this to take effect.")
-
-        Toggle(isOn: $ignoreAppsWithSingleWindow) { Text("Ignore apps with one window") }
-            .settingsSearchTarget("dockPreviews.ignoreSingleWindow")
-            .settingsAnnotation("Prevents apps that only ever have a single window from appearing in previews.")
     }
 
     // MARK: - Dock Interaction
@@ -193,6 +196,51 @@ struct DockPreviewsSettingsView: View {
             step: 5
         )
         .settingsSearchTarget("dockPreviews.buffer")
+
+        SettingsSliderRow(
+            title: "Preview Window Open Delay",
+            value: $hoverWindowOpenDelay,
+            range: 0 ... 2,
+            defaultValue: 0.2,
+            unit: " s",
+            step: 0.1,
+            decimals: 1
+        )
+        .settingsSearchTarget("advanced.openDelay")
+
+        Toggle(isOn: $useDelayOnlyForInitialOpen) {
+            Text("Only use delay for initial window opening")
+        }
+        .settingsSearchTarget("advanced.delayOnlyInitial")
+        .settingsAnnotation("Switching between dock icons while a preview is already open will show previews instantly.")
+
+        SettingsSliderRow(
+            title: "Preview Window Fade Out Duration",
+            value: $fadeOutDuration,
+            range: 0 ... 2,
+            defaultValue: 0.4,
+            unit: " s",
+            step: 0.1,
+            decimals: 1
+        )
+        .settingsSearchTarget("advanced.fadeOut")
+
+        SettingsSliderRow(
+            title: "Preview Window Inactivity Timer",
+            value: $inactivityTimeout,
+            range: 0 ... 3,
+            defaultValue: 0.2,
+            unit: " s",
+            step: 0.1,
+            decimals: 1
+        )
+        .settingsSearchTarget("advanced.inactivity")
+
+        Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
+            Text("Prevent preview reappearance during fade-out")
+        }
+        .settingsSearchTarget("advanced.preventReentry")
+        .settingsAnnotation("Moving the mouse back over the preview during fade-out will not reactivate it.")
     }
 
     // MARK: - Appearance

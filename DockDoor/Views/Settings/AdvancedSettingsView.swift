@@ -2,11 +2,6 @@ import Defaults
 import SwiftUI
 
 struct AdvancedSettingsView: View {
-    @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
-    @Default(.useDelayOnlyForInitialOpen) var useDelayOnlyForInitialOpen
-    @Default(.fadeOutDuration) var fadeOutDuration
-    @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
-    @Default(.inactivityTimeout) var inactivityTimeout
     @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
     @Default(.anchorDockPreviewPosition) var anchorDockPreviewPosition
     @Default(.preventDockHide) var preventDockHide
@@ -64,22 +59,6 @@ struct AdvancedSettingsView: View {
     private var performanceTuningSection: some View {
         SettingsGroup(header: "Performance Tuning") {
             VStack(alignment: .leading, spacing: 10) {
-                sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    .settingsSearchTarget("advanced.openDelay")
-
-                Toggle(isOn: $useDelayOnlyForInitialOpen) {
-                    Text("Only use delay for initial window opening")
-                }
-                .settingsSearchTarget("advanced.delayOnlyInitial")
-                Text("Switching between dock icons while a preview is already open will show previews instantly.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
-
-                sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    .settingsSearchTarget("advanced.fadeOut")
-                sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    .settingsSearchTarget("advanced.inactivity")
                 sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
                     if !isEditing {
                         askUserToRestartApplication()
@@ -107,15 +86,6 @@ struct AdvancedSettingsView: View {
                 }
                 .settingsSearchTarget("advanced.smallWindows")
                 Text("Includes small windows like Finder's copy progress dialog in previews.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
-
-                Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
-                    Text("Prevent preview reappearance during fade-out")
-                }
-                .settingsSearchTarget("advanced.preventReentry")
-                Text("Moving the mouse back over the preview during fade-out will not reactivate it.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

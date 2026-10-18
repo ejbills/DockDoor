@@ -91,6 +91,7 @@
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
 		D08DB215A9314ACB99CBCEF594DB09BD /* SettingsForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7CDB8B974D4FA1B5BA825FC34D383F /* SettingsForm.swift */; };
 		5C8136954A20424993F24EFDCEC2263A /* SettingsBindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F0E15405E498B95B00C407A36B265 /* SettingsBindings.swift */; };
+		4CB232998DEA4BC180E92DB067882D54 /* WindowDisplayRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF968A1428248C89BA83468AA848127 /* WindowDisplayRows.swift */; };
 		5516A9780E0A44ABADA8CE15661596FC /* SettingsAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265AABDC31C430993DAF29CAE69234A /* SettingsAnnotation.swift */; };
 		912347D4DF76470C99B2FDEE637866E8 /* SettingsWarningBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB72D2E13B3943DD83A6CEAF544D9E39 /* SettingsWarningBanner.swift */; };
 		9F19F8FDAF9741BC9438398B4FF73B7B /* SettingsStyleDriftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF1A5A4CD24965A0E7030ED069ECB7 /* SettingsStyleDriftTests.swift */; };
@@ -496,6 +497,7 @@
 		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
 		9C7CDB8B974D4FA1B5BA825FC34D383F /* SettingsForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsForm.swift; sourceTree = "<group>"; };
 		609F0E15405E498B95B00C407A36B265 /* SettingsBindings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBindings.swift; sourceTree = "<group>"; };
+		7EF968A1428248C89BA83468AA848127 /* WindowDisplayRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDisplayRows.swift; sourceTree = "<group>"; };
 		C265AABDC31C430993DAF29CAE69234A /* SettingsAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAnnotation.swift; sourceTree = "<group>"; };
 		FB72D2E13B3943DD83A6CEAF544D9E39 /* SettingsWarningBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWarningBanner.swift; sourceTree = "<group>"; };
 		94CF1A5A4CD24965A0E7030ED069ECB7 /* SettingsStyleDriftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStyleDriftTests.swift; sourceTree = "<group>"; };
@@ -865,6 +867,7 @@
 				BB2885002E81B5B60048A09B /* SettingsIllustratedRow.swift */,
 				9C7CDB8B974D4FA1B5BA825FC34D383F /* SettingsForm.swift */,
 				609F0E15405E498B95B00C407A36B265 /* SettingsBindings.swift */,
+				7EF968A1428248C89BA83468AA848127 /* WindowDisplayRows.swift */,
 				C265AABDC31C430993DAF29CAE69234A /* SettingsAnnotation.swift */,
 				FB72D2E13B3943DD83A6CEAF544D9E39 /* SettingsWarningBanner.swift */,
 				BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */,
@@ -1380,6 +1383,7 @@
 				B84941090B484695B105D967 /* SettingsGroup.swift in Sources */,
 				D08DB215A9314ACB99CBCEF594DB09BD /* SettingsForm.swift in Sources */,
 				5C8136954A20424993F24EFDCEC2263A /* SettingsBindings.swift in Sources */,
+				4CB232998DEA4BC180E92DB067882D54 /* WindowDisplayRows.swift in Sources */,
 				5516A9780E0A44ABADA8CE15661596FC /* SettingsAnnotation.swift in Sources */,
 				912347D4DF76470C99B2FDEE637866E8 /* SettingsWarningBanner.swift in Sources */,
 				BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */,
