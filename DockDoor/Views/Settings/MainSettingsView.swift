@@ -12,23 +12,12 @@ struct MainSettingsView: View {
 
     var body: some View {
         SettingsFormView {
-            VStack(alignment: .leading, spacing: 24) {
-                DockDoorProBanner()
-                supportAndContributionsSection
-                applicationBasicsSection
-                activeAppIndicatorSection
-                backupAndRestoreSection
-
-                HStack {
-                    Spacer()
-                    Button("Reset All Settings to Defaults") { showResetConfirmation() }
-                        .buttonStyle(.plain)
-                    Button("Quit DockDoor") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
-                        .buttonStyle(.plain)
-                    Spacer()
-                }
-                .padding(.top, 5)
-            }
+            DockDoorProBanner()
+            supportAndContributionsSection
+            applicationBasicsSection
+            activeAppIndicatorSection
+            backupAndRestoreSection
+            resetAndQuitSection
         }
     }
 
@@ -92,16 +81,32 @@ struct MainSettingsView: View {
 
     private var backupAndRestoreSection: some View {
         SettingsSection("Backup & restore") {
-            HStack(spacing: 12) {
-                Button("Export Settings…") { SettingsBackupManager.exportSettings() }
-                    .buttonStyle(.settings)
-                    .settingsSearchTarget("general.exportSettings")
-                Button("Import Settings…") { SettingsBackupManager.importSettings() }
-                    .buttonStyle(.settings)
-                    .settingsSearchTarget("general.importSettings")
+            LabeledContent("Settings file") {
+                HStack(spacing: 8) {
+                    Button("Export Settings…") { SettingsBackupManager.exportSettings() }
+                        .buttonStyle(.settings)
+                        .settingsSearchTarget("general.exportSettings")
+                    Button("Import Settings…") { SettingsBackupManager.importSettings() }
+                        .buttonStyle(.settings)
+                        .settingsSearchTarget("general.importSettings")
+                }
             }
+            .settingsAnnotation("Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
+        }
+    }
 
-            SettingsNote(icon: "arrow.up.arrow.down.circle", text: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
+    private var resetAndQuitSection: some View {
+        SettingsSection("Reset and quit") {
+            LabeledContent("Reset All Settings to Defaults") {
+                Button("Reset…", role: .destructive) { showResetConfirmation() }
+                    .buttonStyle(.settings)
+            }
+            .settingsAnnotation("Every setting goes back to its default. This can't be undone.")
+
+            LabeledContent("Quit DockDoor") {
+                Button("Quit") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
+                    .buttonStyle(.settings)
+            }
         }
     }
 

@@ -33,10 +33,12 @@ struct SettingsFormView<Content: View>: View {
 
 struct SettingsSection<Content: View>: View {
     let title: LocalizedStringKey
+    var footer: LocalizedStringKey?
     @ViewBuilder let content: Content
 
-    init(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) {
+    init(_ title: LocalizedStringKey, footer: LocalizedStringKey? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
+        self.footer = footer
         self.content = content()
     }
 
@@ -45,6 +47,12 @@ struct SettingsSection<Content: View>: View {
             content
         } header: {
             Text(title)
+        } footer: {
+            if let footer {
+                Text(footer)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }

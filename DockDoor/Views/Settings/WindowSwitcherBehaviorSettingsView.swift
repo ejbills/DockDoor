@@ -129,15 +129,11 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .settingsSearchTarget("windowSwitcher.focusSearch")
                     .settingsAnnotation("Automatically focus the search bar when the window switcher opens.")
 
-                HStack {
-                    Text("Search Fuzziness")
-                    Slider(value: Binding(
-                        get: { Double(searchFuzziness) },
-                        set: { searchFuzziness = Int($0) }
-                    ), in: 1 ... 5, step: 1)
-                    Text("\(searchFuzziness)")
-                        .frame(width: 20)
-                }
+                SettingsSliderRow(
+                    title: "Search Fuzziness",
+                    value: Binding(get: { Double(searchFuzziness) }, set: { searchFuzziness = Int($0) }),
+                    range: 1 ... 5
+                )
                 .settingsAnnotation("Level 1 is exact match, level 5 is most lenient fuzzy matching.")
             }
 
@@ -146,13 +142,12 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 .settingsAnnotation("Select and scroll to windows when hovering with mouse.")
 
             if enableMouseHoverInSwitcher {
-                HStack {
-                    Text("Auto-scroll speed:")
-                    Slider(value: $mouseHoverAutoScrollSpeed, in: 1 ... 10, step: 0.5)
-                    Text(String(format: "%.1f", mouseHoverAutoScrollSpeed))
-                        .frame(width: 30)
-                        .foregroundColor(.secondary)
-                }
+                SettingsSliderRow(
+                    title: "Auto-scroll speed",
+                    value: $mouseHoverAutoScrollSpeed,
+                    range: 1 ... 10,
+                    step: 0.5
+                )
             }
         }
     }
@@ -220,9 +215,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 if !pinnedScreenIdentifier.isEmpty,
                    NSScreen.findScreen(byIdentifier: pinnedScreenIdentifier) == nil
                 {
-                    Text("This display is currently disconnected.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    SettingsCallout(message: Text("This display is currently disconnected."))
                 }
             }
 
@@ -237,25 +230,21 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 }
                 .settingsAnnotation("Top edge stays fixed regardless of switcher size.")
 
-                HStack {
-                    Image(systemName: "arrow.up")
-                        .foregroundColor(.secondary)
-                        .frame(width: 16)
-                    Slider(value: $windowSwitcherVerticalOffsetPercent, in: -80 ... 80)
-                    Text("\(Int(windowSwitcherVerticalOffsetPercent))%")
-                        .monospacedDigit()
-                        .frame(width: 45, alignment: .trailing)
-                }
+                SettingsSliderRow(
+                    title: "Vertical offset",
+                    value: $windowSwitcherVerticalOffsetPercent,
+                    range: -80 ... 80,
+                    defaultValue: 0,
+                    unit: "%"
+                )
 
-                HStack {
-                    Image(systemName: "arrow.right")
-                        .foregroundColor(.secondary)
-                        .frame(width: 16)
-                    Slider(value: $windowSwitcherHorizontalOffsetPercent, in: -80 ... 80)
-                    Text("\(Int(windowSwitcherHorizontalOffsetPercent))%")
-                        .monospacedDigit()
-                        .frame(width: 45, alignment: .trailing)
-                }
+                SettingsSliderRow(
+                    title: "Horizontal offset",
+                    value: $windowSwitcherHorizontalOffsetPercent,
+                    range: -80 ... 80,
+                    defaultValue: 0,
+                    unit: "%"
+                )
             }
         }
     }
@@ -263,8 +252,6 @@ struct WindowSwitcherBehaviorSettingsView: View {
     // MARK: - Appearance
 
     private var appearanceSection: some View {
-        SettingsSection("Appearance") {
-            WindowSwitcherAppearanceSection()
-        }
+        WindowSwitcherAppearanceSection()
     }
 }

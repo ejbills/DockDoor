@@ -21,267 +21,65 @@ struct FiltersSettingsView: View {
 
     var body: some View {
         SettingsFormView {
-            // Custom App Directories Section
-            SettingsSection("Custom application directories") {
-                Text("Add additional directories to scan for applications. This is useful if you keep apps outside standard locations.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 8) {
-                        if customAppDirectories.isEmpty {
-                            Text("No custom directories added")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical, 4)
-                        } else {
-                            ForEach(customAppDirectories, id: \.self) { directory in
-                                HStack {
-                                    Text(directory)
-                                        .lineLimit(1)
-                                        .truncationMode(.middle)
-
-                                    Spacer()
-
-                                    Button(action: {
-                                        customAppDirectories.removeAll { $0 == directory }
-                                    }) {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.vertical, 4)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(8)
-                }
-                .frame(maxHeight: 100)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                )
-                HStack {
-                    Button("Add Directory") {
-                        showingDirectoryPicker = true
-                    }
-                    .buttonStyle(.settings)
-                    .fileImporter(
-                        isPresented: $showingDirectoryPicker,
-                        allowedContentTypes: [.folder],
-                        allowsMultipleSelection: false
-                    ) { result in
-                        switch result {
-                        case let .success(urls):
-                            if let url = urls.first {
-                                let path = url.path
-                                if !customAppDirectories.contains(path) {
-                                    customAppDirectories.append(path)
-                                }
-                            }
-                        case let .failure(error):
-                            print("Error selecting directory: \(error.localizedDescription)")
-                        }
-                    }
-                    .buttonStyle(.settings)
-
-                    Spacer()
-
-                    if !customAppDirectories.isEmpty {
-                        DangerButton(action: {
-                            customAppDirectories.removeAll()
-                        }) {
-                            Text("Remove All")
-                        }
-                    }
-                }
-            }
+            SettingsListSection(
+                title: "Custom application directories",
+                footer: "Add additional directories to scan for applications. This is useful if you keep apps outside standard locations.",
+                items: customAppDirectories,
+                itemIcon: "folder",
+                emptyText: "No custom directories added",
+                addTitle: "Add Directory…",
+                onAdd: { showingDirectoryPicker = true },
+                onRemove: { directory in customAppDirectories.removeAll { $0 == directory } },
+                onRemoveAll: { customAppDirectories.removeAll() }
+            )
             .settingsSearchTarget("filters.appDirectories")
-
-            // App Filters Section
-            SettingsSection("Application filters") {
-                Text("Hide specific applications from DockDoor previews.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
-                if appNameFilters.isEmpty {
-                    Text("No apps hidden")
-                        .foregroundColor(.secondary)
-                        .padding(.vertical, 8)
-                } else {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 4) {
-                            ForEach(appNameFilters, id: \.self) { filter in
-                                HStack {
-                                    Text(filter)
-                                        .lineLimit(1)
-
-                                    Spacer()
-
-                                    Button(action: {
-                                        appNameFilters.removeAll { $0 == filter }
-                                    }) {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.vertical, 2)
-                            }
-                        }
-                        .padding(8)
-                    }
-                    .frame(maxHeight: 120)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                    )
-                }
-
-                HStack {
-                    Button("Select Apps to Hide...") {
-                        showingAppPickerSheet = true
-                    }
-                    .buttonStyle(.settings)
-
-                    Spacer()
-
-                    if !appNameFilters.isEmpty {
-                        DangerButton(action: {
-                            appNameFilters.removeAll()
-                        }) {
-                            Text("Clear All")
-                        }
-                    }
+            .fileImporter(
+                isPresented: $showingDirectoryPicker,
+                allowedContentTypes: [.folder],
+                allowsMultipleSelection: false
+            ) { result in
+                if case let .success(urls) = result, let path = urls.first?.path, !customAppDirectories.contains(path) {
+                    customAppDirectories.append(path)
                 }
             }
+
+            SettingsListSection(
+                title: "Application filters",
+                footer: "Hide specific applications from DockDoor previews.",
+                items: appNameFilters,
+                itemIcon: "app",
+                emptyText: "No apps hidden",
+                addTitle: "Select Apps to Hide...",
+                onAdd: { showingAppPickerSheet = true },
+                onRemove: { filter in appNameFilters.removeAll { $0 == filter } },
+                onRemoveAll: { appNameFilters.removeAll() }
+            )
             .settingsSearchTarget("filters.appFilters")
 
-            // Window Title Filters Section
-            SettingsSection("Window title filters") {
-                Text("Exclude windows from capture by filtering specific text in their titles (case-insensitive).")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 8) {
-                        if !windowTitleFilters.isEmpty {
-                            ForEach(windowTitleFilters, id: \.self) { filter in
-                                HStack {
-                                    Text(filter)
-                                        .foregroundColor(.primary)
-
-                                    Spacer()
-
-                                    Button(action: {
-                                        windowTitleFilters.removeAll { $0 == filter }
-                                    }) {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.vertical, 4)
-
-                                if filter != windowTitleFilters.last {
-                                    Divider()
-                                }
-                            }
-                        } else {
-                            Text("No window title filters added")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical, 8)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(8)
-                }
-                .frame(maxHeight: 150)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                )
-                HStack {
-                    Button(action: { showingAddFilterSheet.toggle() }) {
-                        Text("Add Filter")
-                    }
-                    .buttonStyle(.settings)
-
-                    Spacer()
-
-                    if !windowTitleFilters.isEmpty {
-                        DangerButton(action: {
-                            windowTitleFilters.removeAll()
-                        }) {
-                            Text("Remove All")
-                        }
-                    }
-                }
-            }
+            SettingsListSection(
+                title: "Window title filters",
+                footer: "Exclude windows from capture by filtering specific text in their titles (case-insensitive).",
+                items: windowTitleFilters,
+                itemIcon: "textformat",
+                emptyText: "No window title filters added",
+                addTitle: "Add Filter…",
+                onAdd: { showingAddFilterSheet = true },
+                onRemove: { filter in windowTitleFilters.removeAll { $0 == filter } },
+                onRemoveAll: { windowTitleFilters.removeAll() }
+            )
             .settingsSearchTarget("filters.windowTitle")
 
-            // Widget App Filters Section
-            SettingsSection("Widget app filters") {
-                Text("Disable dock hover widgets for selected apps while keeping their regular previews. Useful for browsers that expose media sessions like YouTube.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
-                if widgetAppFilters.isEmpty {
-                    Text("Widgets enabled for all apps")
-                        .foregroundColor(.secondary)
-                        .padding(.vertical, 8)
-                } else {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 4) {
-                            ForEach(widgetAppFilters, id: \.self) { filter in
-                                HStack {
-                                    Text(filter)
-                                        .lineLimit(1)
-
-                                    Spacer()
-
-                                    Button(action: {
-                                        widgetAppFilters.removeAll { $0 == filter }
-                                    }) {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.vertical, 2)
-                            }
-                        }
-                        .padding(8)
-                    }
-                    .frame(maxHeight: 120)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                    )
-                }
-
-                HStack {
-                    Button("Select Apps to Disable Widgets For...") {
-                        showingWidgetAppPickerSheet = true
-                    }
-                    .buttonStyle(.settings)
-
-                    Spacer()
-
-                    if !widgetAppFilters.isEmpty {
-                        DangerButton(action: {
-                            widgetAppFilters.removeAll()
-                        }) {
-                            Text("Clear All")
-                        }
-                    }
-                }
-            }
+            SettingsListSection(
+                title: "Widget app filters",
+                footer: "Disable dock hover widgets for selected apps while keeping their regular previews. Useful for browsers that expose media sessions like YouTube.",
+                items: widgetAppFilters,
+                itemIcon: "square.grid.2x2",
+                emptyText: "Widgets enabled for all apps",
+                addTitle: "Select Apps to Disable Widgets For...",
+                onAdd: { showingWidgetAppPickerSheet = true },
+                onRemove: { filter in widgetAppFilters.removeAll { $0 == filter } },
+                onRemoveAll: { widgetAppFilters.removeAll() }
+            )
             .settingsSearchTarget("filters.widgetApps")
             .sheet(isPresented: $showingAddFilterSheet) {
                 AddFilterSheet(

@@ -8,13 +8,20 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
     var unit = ""
     var step: T.Stride = 1
     var decimals = 0
+    var valueText: ((T) -> String)?
     var onEditingChanged: ((Bool) -> Void)?
 
+    /// Fractional steps need digits even at `decimals` 0, or a 0.5…2 range reads "0×".
+    private var effectiveDecimals: Int {
+        guard decimals == 0, Double(step) < 1 else { return decimals }
+        return Double(step) < 0.1 ? 2 : 1
+    }
+
     private var displayValue: String {
-        if decimals > 0 {
-            return String(format: "%.\(decimals)f", Double(value))
+        if let valueText {
+            return valueText(value)
         }
-        return "\(Int(value))"
+        return String(format: "%.\(effectiveDecimals)f", Double(value)) + unit
     }
 
     private var isModified: Bool {
@@ -23,39 +30,31 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
     }
 
     var body: some View {
-        HStack(spacing: 16) {
-            Text(title)
-                .font(.body)
-                .frame(width: 180, alignment: .leading)
-
-            Slider(value: $value, in: range, step: step) { isEditing in
-                onEditingChanged?(isEditing)
-            }
-            .controlSize(.small)
-
-            HStack(spacing: 4) {
-                Text(displayValue + unit)
-                    .font(.system(.body, design: .monospaced))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 60, alignment: .trailing)
-
-                if let defaultValue {
-                    Button {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            value = defaultValue
-                        }
-                    } label: {
-                        Image(systemName: "arrow.counterclockwise")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .opacity(isModified ? 1 : 0)
-                    .frame(width: 20)
+        LabeledContent {
+            HStack(spacing: 8) {
+                Slider(value: $value, in: range, step: step) { isEditing in
+                    onEditingChanged?(isEditing)
                 }
+                .labelsHidden()
+                .frame(width: 180)
+
+                Text(displayValue)
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .frame(width: 72, alignment: .trailing)
+
+                // The reset slot is always reserved so every slider in a pane lines up.
+                SettingsResetButton(isModified: isModified) {
+                    guard let defaultValue else { return }
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        value = defaultValue
+                    }
+                }
+                .frame(width: 16)
             }
+        } label: {
+            Text(title)
         }
-        .padding(.vertical, 6)
-        .padding(.leading, 40)
     }
 }

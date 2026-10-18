@@ -45,9 +45,7 @@ struct CmdTabSettingsView: View {
     // MARK: - Appearance
 
     private var appearanceSection: some View {
-        SettingsSection("Appearance") {
-            CmdTabAppearanceSection()
-        }
+        CmdTabAppearanceSection()
     }
 
     // MARK: - Configuration

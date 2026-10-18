@@ -110,9 +110,7 @@ struct WidgetSettingsView: View {
                             }
                         }
                         .settingsSearchTarget("widgets.detectionMode")
-                        Text(mediaDetectionMode.localizedDescription)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        .settingsAnnotation(verbatim: mediaDetectionMode.localizedDescription)
                     }
 
                     Toggle(isOn: $enableCalendarWidget) {
@@ -185,12 +183,7 @@ struct WidgetSettingsView: View {
                 }
             }
 
-            SettingsSection("Calendar") {
-                Text("Select which calendars appear in the dock preview when hovering over the Calendar app.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
+            SettingsSection("Calendar", footer: "Select which calendars appear in the dock preview when hovering over the Calendar app.") {
                 if authorizationStatus == .denied || authorizationStatus == .restricted {
                     VStack(spacing: 12) {
                         Image(systemName: "calendar.badge.exclamationmark")

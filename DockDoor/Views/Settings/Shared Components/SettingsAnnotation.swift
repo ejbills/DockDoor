@@ -4,7 +4,7 @@ import SwiftUI
 /// A grey caption under a row, with the full text in an ⓘ popover.
 /// "Show setting descriptions" hides the caption but keeps the ⓘ.
 struct SettingsAnnotationModifier: ViewModifier {
-    let summary: LocalizedStringKey
+    let summary: Text
     let more: LocalizedStringKey?
     @Default(.showSettingsDescriptions) private var showDescriptions
     @State private var isShowingMore = false
@@ -15,7 +15,7 @@ struct SettingsAnnotationModifier: ViewModifier {
 
             if showDescriptions {
                 HStack(alignment: .top, spacing: 4) {
-                    Text(summary)
+                    summary
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.leading)
@@ -46,6 +46,10 @@ struct SettingsAnnotationModifier: ViewModifier {
 
 extension View {
     func settingsAnnotation(_ summary: LocalizedStringKey, more: LocalizedStringKey? = nil) -> some View {
-        modifier(SettingsAnnotationModifier(summary: summary, more: more))
+        modifier(SettingsAnnotationModifier(summary: Text(summary), more: more))
+    }
+
+    func settingsAnnotation(verbatim summary: String) -> some View {
+        modifier(SettingsAnnotationModifier(summary: Text(verbatim: summary), more: nil))
     }
 }

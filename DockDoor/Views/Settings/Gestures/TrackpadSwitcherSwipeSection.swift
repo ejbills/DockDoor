@@ -20,15 +20,9 @@ struct TrackpadSwitcherSwipeSection: View {
                 }
                 .settingsSearchTarget("gestures.trackpadSwitcherSwipe")
                 .onChange(of: enableTrackpadSwitcherSwipe) { _ in askUserToRestartApplication() }
+                .settingsAnnotation("Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch.")
 
                 if enableTrackpadSwitcherSwipe {
-                    Text("Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 4)
-
-                    Divider()
-
                     Picker("Fingers:", selection: $trackpadSwitcherSwipeFingers) {
                         Text("3").tag(3)
                         Text("4").tag(4)
@@ -55,18 +49,13 @@ struct TrackpadSwitcherSwipeSection: View {
                         step: 0.1
                     )
                     .settingsSearchTarget("gestures.trackpadSwitcherSwipeSensitivity")
-
-                    Text("Higher values open the switcher and change the selection with shorter swipes.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    .settingsAnnotation("Higher values open the switcher and change the selection with shorter swipes.")
 
                     Text("If macOS uses the same swipe for Mission Control, App Exposé or switching between full-screen apps, turn that gesture off in System Settings > Trackpad > More Gestures.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            .disabled(!enableWindowSwitcher)
-            .opacity(enableWindowSwitcher ? 1.0 : 0.5)
         }
     }
 }

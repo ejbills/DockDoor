@@ -17,15 +17,9 @@ struct DockPreviewGesturesSection: View {
                 }
             }
             .settingsSearchTarget("gestures.dockPreview")
+            .settingsAnnotation("Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left).")
 
             if enableDockPreviewGestures {
-                Text("Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left).")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
-                Divider()
-
                 GestureDirectionRow(
                     direction: "Towards Dock",
                     icon: "arrow.down.to.line",
@@ -41,8 +35,6 @@ struct DockPreviewGesturesSection: View {
                     action: $dockSwipeAwayFromDockAction
                 )
                 .settingsSearchTarget("gestures.swipeAwayFromDock")
-
-                Divider()
 
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {

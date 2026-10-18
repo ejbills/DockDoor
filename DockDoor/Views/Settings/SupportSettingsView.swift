@@ -11,12 +11,10 @@ struct SupportSettingsView: View {
 
     var body: some View {
         SettingsFormView {
-            VStack(alignment: .leading, spacing: 20) {
-                DockDoorProBanner()
-                permissionsSection
-                updatesSection
-                acknowledgmentsSection
-            }
+            DockDoorProBanner()
+            permissionsSection
+            updatesSection
+            acknowledgmentsSection
         }
     }
 
@@ -45,11 +43,7 @@ struct SupportSettingsView: View {
                 )
                 .settingsSearchTarget("support.screenRecording")
             }
-
-            Text("Changes to permissions require an app restart to take effect.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.top, 8)
+            .settingsAnnotation("Changes to permissions require an app restart to take effect.")
         }
     }
 
@@ -74,8 +68,6 @@ struct SupportSettingsView: View {
                 updateStatusBadge
             }
 
-            Divider().padding(.leading, 40)
-
             // Update channel
             HStack(spacing: 12) {
                 SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
@@ -99,8 +91,6 @@ struct SupportSettingsView: View {
                 .frame(width: 100)
             }
             .settingsSearchTarget("support.updateChannel")
-
-            Divider().padding(.leading, 40)
 
             // Check for updates
             HStack(spacing: 12) {
@@ -146,8 +136,6 @@ struct SupportSettingsView: View {
             }
             .settingsSearchTarget("support.automaticUpdates")
 
-            Divider().padding(.leading, 40)
-
             // Debug logging
             DebugLoggingRow()
                 .settingsSearchTarget("support.debugLogging")
@@ -188,55 +176,43 @@ struct SupportSettingsView: View {
 
     // MARK: - Acknowledgments Section
 
+    @ViewBuilder
     private var acknowledgmentsSection: some View {
-        SettingsSection("Acknowledgments") {
-            // Community Contributors
-            Text("Community Contributors")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
+        SettingsSection("Contributors") {
+            CreditRow(name: "illavoluntas", detail: "Website, documentation, Discord moderation", icon: "person")
+        }
 
-            ContributorRow(
-                name: "illavoluntas",
-                detail: "Website, documentation, Discord moderation",
-                icon: "person.fill"
-            )
-
-            Divider()
-
-            // Translation Contributors
-            Text("Translation Contributors")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
-
-            VStack(spacing: 2) {
-                TranslatorRow(name: "Rocco 'Roccobot' Casadei", language: "Italian", profile: "Roccobot")
-                TranslatorRow(name: "favorsjewelry5", language: "Chinese Traditional", profile: "favorsjewelry5")
-                TranslatorRow(name: "Денис Єгоров", language: "Ukrainian", profile: "makedonsky47")
-                TranslatorRow(name: "HuangxinDong", language: "Chinese Simplified", profile: "HuangxinDong")
-                TranslatorRow(name: "don.julien.7", language: "German", profile: "JuGro1332")
-                TranslatorRow(name: "awaustin", language: "Chinese Simplified", profile: "awaustin")
-                TranslatorRow(name: "illavoluntas", language: "French", profile: "illavoluntas")
-                TranslatorRow(name: "Diamant", language: "French", profile: "Diamant")
+        SettingsSection("Translations") {
+            ForEach(Self.translators, id: \.profile) { translator in
+                CreditRow(
+                    name: translator.name,
+                    detail: translator.language,
+                    icon: "globe",
+                    url: URL(string: "https://crowdin.com/profile/\(translator.profile)")
+                )
             }
+        }
 
-            Divider()
-
-            // Audio Assets
-            Text("Audio Assets")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
-
-            AudioAssetRow(
+        SettingsSection("Sounds") {
+            CreditRow(
                 name: "Magic Glow",
-                author: "IENBA",
-                sourceURL: "https://freesound.org/s/752274/",
-                license: "CC0"
+                detail: "IENBA · CC0",
+                icon: "speaker.wave.2",
+                url: URL(string: "https://freesound.org/s/752274/")
             )
         }
     }
+
+    private static let translators: [(name: String, language: String, profile: String)] = [
+        ("Rocco 'Roccobot' Casadei", "Italian", "Roccobot"),
+        ("favorsjewelry5", "Chinese Traditional", "favorsjewelry5"),
+        ("Денис Єгоров", "Ukrainian", "makedonsky47"),
+        ("HuangxinDong", "Chinese Simplified", "HuangxinDong"),
+        ("don.julien.7", "German", "JuGro1332"),
+        ("awaustin", "Chinese Simplified", "awaustin"),
+        ("illavoluntas", "French", "illavoluntas"),
+        ("Diamant", "French", "Diamant"),
+    ]
 }
 
 // MARK: - Helper Views
@@ -321,93 +297,38 @@ private struct DebugLoggingRow: View {
     }
 }
 
-private struct ContributorRow: View {
+private struct CreditRow: View {
     let name: String
     let detail: String
     let icon: String
+    var url: URL?
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .frame(width: 16)
+                .foregroundStyle(.secondary)
+                .frame(width: 18)
 
-            Text(name)
-                .font(.body)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(verbatim: name)
+                    .lineLimit(1)
+                Text(verbatim: detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
 
             Spacer()
 
-            Text(detail)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .lineLimit(1)
-        }
-        .padding(.vertical, 2)
-    }
-}
-
-private struct TranslatorRow: View {
-    let name: String
-    let language: String
-    let profile: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "globe")
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .frame(width: 16)
-
-            Text(name)
-                .font(.body)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(language)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .frame(width: 120, alignment: .leading)
-
-            Link(destination: URL(string: "https://crowdin.com/profile/\(profile)")!) {
-                Image(systemName: "arrow.up.right.square")
-                    .font(.system(size: 12))
-                    .foregroundColor(.accentColor)
+            if let url {
+                Link(destination: url) {
+                    Image(systemName: "arrow.up.right")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help(url.host() ?? url.absoluteString)
+                .accessibilityLabel("Open \(name)")
             }
         }
-        .padding(.vertical, 2)
-    }
-}
-
-private struct AudioAssetRow: View {
-    let name: String
-    let author: String
-    let sourceURL: String
-    let license: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "speaker.wave.2.fill")
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .frame(width: 16)
-
-            Text(name)
-                .font(.body)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(license)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .frame(width: 40, alignment: .leading)
-
-            Link(destination: URL(string: sourceURL)!) {
-                Image(systemName: "arrow.up.right.square")
-                    .font(.system(size: 12))
-                    .foregroundColor(.accentColor)
-            }
-        }
-        .padding(.vertical, 2)
     }
 }

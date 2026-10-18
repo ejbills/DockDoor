@@ -123,10 +123,7 @@ struct GesturesSettingsView: View {
                 step: 0.1
             )
             .settingsSearchTarget("windowGestures.sensitivity")
-
-            Text("Turn this up if gestures need too much finger movement.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            .settingsAnnotation("Turn this up if gestures need too much finger movement.")
 
             Toggle("Show where the window will land", isOn: $livePreview)
                 .settingsSearchTarget("windowGestures.livePreview")
@@ -172,12 +169,7 @@ struct GesturesSettingsView: View {
     // MARK: - Custom Dock Space
 
     private var dockSpaceSection: some View {
-        SettingsSection("Space for a custom dock") {
-            Text("Using a dock other than the macOS Dock? Keep a strip of the screen free so snapped windows don't cover it.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
+        SettingsSection("Space for a custom dock", footer: "Using a dock other than the macOS Dock? Keep a strip of the screen free so snapped windows don't cover it.") {
             Picker("Dock edge", selection: $reservationEdge) {
                 ForEach(ScreenReservationEdge.allCases) { edge in
                     Text(edge.localizedName).tag(edge)
@@ -202,7 +194,6 @@ struct GesturesSettingsView: View {
             }
 
             if !reports.isEmpty {
-                Divider()
                 Text("Reported by Apps")
                     .font(.caption.weight(.semibold))
                 ForEach(reports, id: \.source) { report in

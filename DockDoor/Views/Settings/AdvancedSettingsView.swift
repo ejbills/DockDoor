@@ -137,13 +137,10 @@ struct AdvancedSettingsView: View {
                         Task { await LiveCaptureManager.shared.stopAllStreams() }
                     }
                 }
-                .settingsAnnotation("Window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
-
-            if enableLivePreview {
-                Text("Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+                .settingsAnnotation(
+                    "Window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.",
+                    more: "Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag."
+                )
         }
     }
 
@@ -281,13 +278,10 @@ struct AdvancedSettingsView: View {
                     Task { await LiveCaptureManager.shared.stopAllStreams() }
                 }
             }
-
-            Text("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .onTapGesture { isKeepAliveFieldFocused = false }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .settingsSearchTarget("advanced.streamKeepAlive")
+            .settingsAnnotation("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
+            .onTapGesture { isKeepAliveFieldFocused = false }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .settingsSearchTarget("advanced.streamKeepAlive")
         }
     }
 
@@ -393,15 +387,11 @@ struct AdvancedSettingsView: View {
             .onAppear { NSScreen.migrateScreenIdentifier(.lockedDockScreenIdentifier) }
 
             if isLockedScreenDisconnected {
-                Text("This display is currently disconnected. Dock locking will be disabled until it reconnects.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                SettingsCallout(message: Text("This display is currently disconnected. Dock locking will be disabled until it reconnects."))
             } else if isLockedScreenEdgeCovered {
                 SettingsWarningBanner(text: "macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free.")
             } else {
-                Text("System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                SettingsCallout(tone: .info, message: Text("System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge."))
             }
 
             Picker("Bypass modifier key", selection: $dockLockOverrideModifier) {
@@ -410,10 +400,7 @@ struct AdvancedSettingsView: View {
                 }
             }
             .settingsSearchTarget("dockLocking.bypass")
-
-            Text("Hold this key to temporarily allow the Dock to move freely.")
-                .font(.caption)
-                .foregroundColor(.secondary)
+            .settingsAnnotation("Hold this key to temporarily allow the Dock to move freely.")
         }
     }
 }

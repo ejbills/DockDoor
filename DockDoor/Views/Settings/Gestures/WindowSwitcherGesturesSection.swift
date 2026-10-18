@@ -23,8 +23,6 @@ struct WindowSwitcherGesturesSection: View {
                     .foregroundColor(.secondary)
                     .padding(.bottom, 4)
 
-                Divider()
-
                 GestureDirectionRow(
                     direction: "Swipe Up",
                     icon: "arrow.up",

@@ -16,15 +16,9 @@ struct DockScrollGestureSection: View {
                 }
             }
             .settingsSearchTarget("gestures.dockScroll")
+            .settingsAnnotation("Choose what happens when scrolling directly on a dock icon.")
 
             if enableDockScrollGesture {
-                Text("Choose what happens when scrolling directly on a dock icon.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 4)
-
-                Divider()
-
                 Picker("Dock icon scroll:", selection: $dockIconScrollBehavior) {
                     ForEach(DockIconScrollBehavior.allCases, id: \.self) { behavior in
                         Text(behavior.localizedName).tag(behavior)
@@ -38,10 +32,7 @@ struct DockScrollGestureSection: View {
                     }
                 }
                 .settingsSearchTarget("gestures.musicScroll")
-
-                Text("Only applies when scrolling directly on Apple Music or Spotify dock icons.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                .settingsAnnotation("Only applies when scrolling directly on Apple Music or Spotify dock icons.")
             }
         }
     }
@@ -66,6 +57,7 @@ struct TitleBarScrollGestureSection: View {
                 }
             }
             .settingsSearchTarget("gestures.titleBarScroll")
+            .settingsAnnotation("Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size.")
 
             if enableTitleBarScrollGesture {
                 let centeredWindowScaleBinding = Binding<Double>(
@@ -87,10 +79,6 @@ struct TitleBarScrollGestureSection: View {
                     get: { Double(titleBarScrollRestoreWindowInterval) },
                     set: { titleBarScrollRestoreWindowInterval = CGFloat($0) }
                 )
-
-                Text("Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
 
                 Picker("Centered Window Sizing", selection: $titleBarScrollCenteredWindowSizingMode) {
                     ForEach(TitleBarCenteredWindowSizingMode.allCases, id: \.self) { mode in

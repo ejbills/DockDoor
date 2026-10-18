@@ -33,20 +33,17 @@ struct WindowSwitcherAppearanceSection: View {
     }
 
     var body: some View {
-        Toggle("Show App Header", isOn: $switcherShowAppHeader)
-            .settingsSearchTarget("appearance.switcherShowAppHeader")
+        SettingsSection("Appearance") {
+            Toggle("Show App Header", isOn: $switcherShowAppHeader)
+                .settingsSearchTarget("appearance.switcherShowAppHeader")
 
-        if switcherShowAppHeader {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text("App Icon Size")
-                    Spacer()
-                    Toggle("Automatic", isOn: automaticAppIconSizeBinding)
-                }
+            if switcherShowAppHeader {
+                Toggle("Automatic app icon size", isOn: automaticAppIconSizeBinding)
+                    .settingsSearchTarget("appearance.switcherAppIconSize")
 
                 if switcherAppIconSize > 0 {
                     SettingsSliderRow(
-                        title: "Size",
+                        title: "App icon size",
                         value: customAppIconSizeBinding,
                         range: 16 ... 64,
                         defaultValue: 35,
@@ -55,117 +52,94 @@ struct WindowSwitcherAppearanceSection: View {
                     )
                 }
             }
-            .settingsSearchTarget("appearance.switcherAppIconSize")
         }
 
-        Divider().padding(.vertical, 2)
-        Text("Window Switcher Toolbar").font(.headline).padding(.bottom, -2)
+        SettingsSection("Toolbar") {
+            Picker("Position Window Controls", selection: $windowSwitcherControlPosition) {
+                ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
+                    Text(position.localizedName)
+                        .tag(position)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+            .settingsSearchTarget("appearance.switcherControlPosition")
+        }
 
-        Picker("Position Window Controls", selection: $windowSwitcherControlPosition) {
-            ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
-                Text(position.localizedName)
-                    .tag(position)
+        SettingsSection("Traffic light buttons") {
+            Picker("Visibility", selection: $switcherTrafficLightButtonsVisibility) {
+                ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                    Text(visibility.localizedName)
+                        .tag(visibility)
+                }
+            }
+            .settingsSearchTarget("appearance.switcherTrafficLightVisibility")
+
+            if switcherTrafficLightButtonsVisibility != .never {
+                EnabledButtonsPicker(enabledButtons: $switcherEnabledTrafficLightButtons) {
+                    switcherTrafficLightButtonsVisibility = .never
+                }
+                Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
+                    .settingsSearchTarget("appearance.switcherMonochrome")
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
+                        Text("Disable dock styling on traffic light buttons")
+                    }
+                    .settingsSearchTarget("appearance.switcherDisableTrafficLightStyling")
+                    .settingsAnnotation("Removes the pill-shaped background styling from traffic light buttons.")
+                }
             }
         }
-        .pickerStyle(MenuPickerStyle())
-        .settingsSearchTarget("appearance.switcherControlPosition")
 
-        Divider().padding(.vertical, 2)
-        Text("Traffic Light Buttons").font(.headline).padding(.bottom, -2)
-
-        Picker("Visibility", selection: $switcherTrafficLightButtonsVisibility) {
-            ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
-                Text(visibility.localizedName)
-                    .tag(visibility)
+        if switcherShowAppHeader {
+            SettingsSection("Window title") {
+                Picker("Window title", selection: WindowTitleMode.binding(showTitle: $switcherShowWindowTitle, visibility: $switcherWindowTitleVisibility)) {
+                    ForEach(WindowTitleMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
+                    }
+                }
+                .settingsSearchTarget("appearance.switcherWindowTitle")
             }
         }
-        .settingsSearchTarget("appearance.switcherTrafficLightVisibility")
 
-        if switcherTrafficLightButtonsVisibility != .never {
-            Text("Enabled Buttons")
+        SettingsSection("Layout") {
             VStack(alignment: .leading) {
-                if !switcherEnabledTrafficLightButtons.isEmpty {
-                    TrafficLightButtons(
-                        displayMode: switcherTrafficLightButtonsVisibility,
-                        hoveringOverParentWindow: true,
-                        onWindowAction: { _ in },
-                        pillStyling: !switcherDisableDockStyleTrafficLights,
-                        mockPreviewActive: false,
-                        enabledButtons: switcherEnabledTrafficLightButtons,
-                        useMonochrome: switcherUseMonochromeTrafficLights,
-                        backgroundAppearance: .resolve()
-                    )
+                Toggle(isOn: $switcherUseEmbeddedDockPreviewElements) {
+                    Text("Embed controls in preview frames")
                 }
-                EnabledButtonsCheckboxes(
-                    enabledButtons: $switcherEnabledTrafficLightButtons,
-                    visibilityBinding: $switcherTrafficLightButtonsVisibility,
-                    useMonochrome: switcherUseMonochromeTrafficLights
-                )
+                .settingsSearchTarget("appearance.switcherEmbedControls")
+                .settingsAnnotation("Places traffic light buttons and window titles directly inside the window switcher preview frames.")
             }
-            Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
-                .settingsSearchTarget("appearance.switcherMonochrome")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
-                    Text("Disable dock styling on traffic light buttons")
-                }
-                .settingsSearchTarget("appearance.switcherDisableTrafficLightStyling")
-                .settingsAnnotation("Removes the pill-shaped background styling from traffic light buttons.")
-            }
-        }
-
-        Group {
-            Divider().padding(.vertical, 2)
-            Text("Window Title").font(.headline).padding(.bottom, -2)
-
-            Picker("Window title", selection: WindowTitleMode.binding(showTitle: $switcherShowWindowTitle, visibility: $switcherWindowTitleVisibility)) {
-                ForEach(WindowTitleMode.allCases) { mode in
-                    Text(mode.localizedName).tag(mode)
+            Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
+                ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in
+                    Text(direction.localizedName).tag(direction)
                 }
             }
-            .settingsSearchTarget("appearance.switcherWindowTitle")
-        }
-        .disabled(!switcherShowAppHeader)
+            .settingsSearchTarget("appearance.switcherScrollDirection")
 
-        Divider().padding(.vertical, 2)
-        Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
+            let switcherMaxRowsBinding = Binding<Double>(
+                get: { Double(switcherMaxRows) },
+                set: { switcherMaxRows = Int($0) }
+            )
+            SettingsSliderRow(
+                title: windowSwitcherScrollDirection == .horizontal
+                    ? "Max Rows"
+                    : "Max Columns",
+                value: switcherMaxRowsBinding,
+                range: 1 ... 8,
+                step: 1
+            )
+            .settingsSearchTarget("appearance.switcherMaxRows")
+            .settingsAnnotation(windowSwitcherScrollDirection == .horizontal
+                ? "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically."
+                : "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically.")
 
-        VStack(alignment: .leading) {
-            Toggle(isOn: $switcherUseEmbeddedDockPreviewElements) {
-                Text("Embed controls in preview frames")
+            Toggle(isOn: $switcherIgnoreScreenLimit) {
+                Text("Ignore screen size limit")
             }
-            .settingsSearchTarget("appearance.switcherEmbedControls")
-            .settingsAnnotation("Places traffic light buttons and window titles directly inside the window switcher preview frames.")
+            .settingsSearchTarget("appearance.switcherIgnoreScreenLimit")
+            .settingsAnnotation("Allow columns/rows to exceed what fits on screen. May cause previews to extend beyond screen edges.")
         }
-
-        Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
-            ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in
-                Text(direction.localizedName).tag(direction)
-            }
-        }
-        .settingsSearchTarget("appearance.switcherScrollDirection")
-
-        let switcherMaxRowsBinding = Binding<Double>(
-            get: { Double(switcherMaxRows) },
-            set: { switcherMaxRows = Int($0) }
-        )
-        SettingsSliderRow(
-            title: windowSwitcherScrollDirection == .horizontal
-                ? "Max Rows"
-                : "Max Columns",
-            value: switcherMaxRowsBinding,
-            range: 1 ... 8,
-            step: 1
-        )
-        .settingsSearchTarget("appearance.switcherMaxRows")
-        .settingsAnnotation(windowSwitcherScrollDirection == .horizontal
-            ? "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically."
-            : "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically.")
-
-        Toggle(isOn: $switcherIgnoreScreenLimit) {
-            Text("Ignore screen size limit")
-        }
-        .settingsSearchTarget("appearance.switcherIgnoreScreenLimit")
-        .settingsAnnotation("Allow columns/rows to exceed what fits on screen. May cause previews to extend beyond screen edges.")
     }
 }

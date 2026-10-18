@@ -152,22 +152,6 @@ extension AppearanceSettingsView {
         @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
         @Default(.trafficLightButtonScale) private var buttonScale
 
-        private let buttonDescriptions: [(WindowAction, String)] = [
-            (.quit, String(localized: "Quit")),
-            (.close, String(localized: "Close")),
-            (.minimize, String(localized: "Minimize")),
-            (.toggleFullScreen, String(localized: "Fullscreen")),
-            (.maximize, String(localized: "Maximize")),
-            (.bringToCurrentSpace, String(localized: "Bring to Current Space")),
-            (.openNewWindow, String(localized: "New Window")),
-        ]
-
-        private var buttonRows: [[(WindowAction, String)]] {
-            stride(from: 0, to: buttonDescriptions.count, by: 3).map { start in
-                Array(buttonDescriptions[start ..< min(start + 3, buttonDescriptions.count)])
-            }
-        }
-
         var body: some View {
             Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
                 ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
@@ -177,72 +161,27 @@ extension AppearanceSettingsView {
             }
 
             if trafficLightButtonsVisibility != .never {
-                Group {
-                    Text("Enabled Buttons")
-                    VStack(alignment: .leading) {
-                        if !enabledButtons.isEmpty {
-                            TrafficLightButtons(
-                                displayMode: trafficLightButtonsVisibility == .never ? .dimmedOnPreviewHover : trafficLightButtonsVisibility,
-                                hoveringOverParentWindow: true,
-                                onWindowAction: { _ in },
-                                pillStyling: true,
-                                mockPreviewActive: false,
-                                enabledButtons: enabledButtons,
-                                useMonochrome: useMonochrome,
-                                buttonScale: buttonScale,
-                                backgroundAppearance: .resolve()
-                            )
-                        }
-
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(buttonRows.indices, id: \.self) { rowIndex in
-                                HStack(spacing: 12) {
-                                    ForEach(buttonRows[rowIndex], id: \.0) { action, label in
-                                        Toggle(isOn: Binding(
-                                            get: { enabledButtons.contains(action) },
-                                            set: { isEnabled in
-                                                if isEnabled {
-                                                    enabledButtons.insert(action)
-                                                } else {
-                                                    enabledButtons.remove(action)
-
-                                                    if enabledButtons.isEmpty {
-                                                        MessageUtil.showAlert(
-                                                            title: String(localized: "All buttons removed"),
-                                                            message: String(localized: "Your traffic lights will be set to disabled automatically."),
-                                                            actions: [.ok, .cancel]
-                                                        ) { action in
-                                                            switch action {
-                                                            case .ok:
-                                                                trafficLightButtonsVisibility = .never
-                                                            case .cancel:
-                                                                break
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        )) {
-                                            Text(label)
-                                        }
-                                        .toggleStyle(CheckboxToggleStyle())
-                                    }
-                                }
-                            }
+                EnabledButtonsPicker(enabledButtons: $enabledButtons) {
+                    MessageUtil.showAlert(
+                        title: String(localized: "All buttons removed"),
+                        message: String(localized: "Your traffic lights will be set to disabled automatically."),
+                        actions: [.ok, .cancel]
+                    ) { action in
+                        if action == .ok {
+                            trafficLightButtonsVisibility = .never
                         }
                     }
-
-                    Toggle("Use Monochrome Colors", isOn: $useMonochrome)
-                        .padding(.top, 4)
-
-                    SettingsSliderRow(
-                        title: "Button Scale",
-                        value: $buttonScale,
-                        range: 0.75 ... 2.0,
-                        unit: "×",
-                        step: 0.05
-                    )
                 }
+
+                Toggle("Use Monochrome Colors", isOn: $useMonochrome)
+
+                SettingsSliderRow(
+                    title: "Button Scale",
+                    value: $buttonScale,
+                    range: 0.75 ... 2.0,
+                    unit: "×",
+                    step: 0.05
+                )
             }
         }
     }

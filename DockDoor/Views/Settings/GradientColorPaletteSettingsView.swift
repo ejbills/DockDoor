@@ -24,10 +24,7 @@ struct GradientColorPaletteSettingsView: View {
                         colorShape(for: storedSettings.colors[index], index: index)
                     }
                 }
-
-                Text("Right click a color to remove it.")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                .settingsAnnotation("Right click a color to remove it.")
             }
 
             Spacer()
@@ -41,8 +38,10 @@ struct GradientColorPaletteSettingsView: View {
             }
             Button(action: addRandomColor) {
                 Image(systemName: "plus")
-                    .frame(width: 30, height: 30)
             }
+            .buttonStyle(.settings)
+            .help("Add color")
+            .accessibilityLabel("Add color")
         }
         .settingsSearchTarget("appearance.gradientColors")
 
@@ -59,7 +58,7 @@ struct GradientColorPaletteSettingsView: View {
             title: "Blur amount",
             value: $storedSettings.blur,
             range: 0 ... 1.0,
-            unit: "amount",
+            unit: "",
             step: 0.05
         )
         .settingsSearchTarget("appearance.gradientBlur")

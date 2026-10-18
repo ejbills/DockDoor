@@ -117,7 +117,7 @@ struct SettingsStyleDriftTests {
             #expect(source.contains("SettingsFormView"), "\(pane) should be built on SettingsFormView")
             // Some panes compose section views that carry their own SettingsSections.
             #expect(
-                source.contains("SettingsSection(") || source.contains("Section()"),
+                source.contains("SettingsSection(") || source.contains("SettingsListSection(") || source.contains("Section()"),
                 "\(pane) should use SettingsSection for groups"
             )
         }

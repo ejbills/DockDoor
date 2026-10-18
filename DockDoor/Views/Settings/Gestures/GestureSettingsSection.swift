@@ -19,9 +19,7 @@ struct GestureSettingsSection: View {
                 decimals: 0
             )
             .settingsSearchTarget("gestures.sensitivity")
-            Text("Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher.")
-                .font(.caption)
-                .foregroundColor(.secondary)
+            .settingsAnnotation("Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher.")
         }
     }
 }

@@ -45,118 +45,72 @@ struct GeneralAppearanceSection: View {
             )
             .settingsSearchTarget("appearance.unselectedOpacity")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $uniformCardRadius) {
-                    Text("Rounded corners")
-                }
-                .settingsSearchTarget("appearance.roundedCorners")
-                Text("Round the corners of window preview images for a modern look.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $uniformCardRadius) {
+                Text("Rounded corners")
+            }
+            .settingsSearchTarget("appearance.roundedCorners")
+            .settingsAnnotation("Round the corners of window preview images for a modern look.")
 
-                if uniformCardRadius {
-                    SettingsSliderRow(
-                        title: "Corner Radius",
-                        value: $previewCornerRadius,
-                        range: 0 ... 40,
-                        unit: " pt",
-                        step: 1
-                    )
-                    .padding(.leading, 20)
-                    .settingsSearchTarget("appearance.cornerRadius")
-                }
+            if uniformCardRadius {
+                SettingsSliderRow(
+                    title: "Corner Radius",
+                    value: $previewCornerRadius,
+                    range: 0 ... 40,
+                    unit: " pt",
+                    step: 1
+                )
+                .settingsSearchTarget("appearance.cornerRadius")
             }
 
-            VStack(alignment: .leading) {
-                Picker("Long title overflow", selection: $titleOverflowStyle) {
-                    ForEach(TitleOverflowStyle.allCases, id: \.self) { style in
-                        Text(style.localizedName).tag(style)
-                    }
+            Picker("Long title overflow", selection: $titleOverflowStyle) {
+                ForEach(TitleOverflowStyle.allCases, id: \.self) { style in
+                    Text(style.localizedName).tag(style)
                 }
-                .settingsSearchTarget("appearance.marquee")
-                Text("How to display window titles that are too long to fit.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
             }
+            .settingsSearchTarget("appearance.marquee")
+            .settingsAnnotation("How to display window titles that are too long to fit.")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $showMinimizedHiddenLabels) {
-                    Text("Distinguish minimized/hidden windows")
-                }
-                .settingsSearchTarget("appearance.distinguishMinimized")
-                Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $showMinimizedHiddenLabels) {
+                Text("Distinguish minimized/hidden windows")
             }
+            .settingsSearchTarget("appearance.distinguishMinimized")
+            .settingsAnnotation("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $showSpaceNumber) {
-                    Text("Show Space number on previews")
-                }
-                .settingsSearchTarget("appearance.spaceNumber")
-                Text("Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $showSpaceNumber) {
+                Text("Show Space number on previews")
             }
+            .settingsSearchTarget("appearance.spaceNumber")
+            .settingsAnnotation("Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop.")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $showWindowlessAppQuitButton) {
-                    Text("Show quit button for apps with no open windows")
-                }
-                .settingsSearchTarget("appearance.windowlessQuitButton")
-                Text("Shows a quit-only control on previews for running apps with no open windows.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $showWindowlessAppQuitButton) {
+                Text("Show quit button for apps with no open windows")
             }
+            .settingsSearchTarget("appearance.windowlessQuitButton")
+            .settingsAnnotation("Shows a quit-only control on previews for running apps with no open windows.")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $hidePreviewCardBackground) {
-                    Text("Hide preview card background")
-                }
-                .settingsSearchTarget("appearance.hidePreviewBackground")
-                Text("Removes the background panel from individual window previews.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $hidePreviewCardBackground) {
+                Text("Hide preview card background")
             }
+            .settingsSearchTarget("appearance.hidePreviewBackground")
+            .settingsAnnotation("Removes the background panel from individual window previews.")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $hideHoverContainerBackground) {
-                    Text("Hide hover container background")
-                }
-                .settingsSearchTarget("appearance.hideContainerBackground")
-                Text("Removes the container background from window preview panels.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $hideHoverContainerBackground) {
+                Text("Hide hover container background")
             }
+            .settingsSearchTarget("appearance.hideContainerBackground")
+            .settingsAnnotation("Removes the container background from window preview panels.")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $hideWidgetContainerBackground) {
-                    Text("Hide widget container background")
-                }
-                .settingsSearchTarget("appearance.hideWidgetBackground")
-                Text("Removes the container background from widget panels (media controls, calendar).")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $hideWidgetContainerBackground) {
+                Text("Hide widget container background")
             }
+            .settingsSearchTarget("appearance.hideWidgetBackground")
+            .settingsAnnotation("Removes the container background from widget panels (media controls, calendar).")
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $showActiveWindowBorder) {
-                    Text("Show active window border")
-                }
-                .settingsSearchTarget("appearance.activeBorder")
-                Text("Highlights the currently focused window with a colored border.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
+            Toggle(isOn: $showActiveWindowBorder) {
+                Text("Show active window border")
             }
+            .settingsSearchTarget("appearance.activeBorder")
+            .settingsAnnotation("Highlights the currently focused window with a colored border.")
         }
     }
 }
