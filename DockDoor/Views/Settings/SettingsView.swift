@@ -241,7 +241,15 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 5)
-        .background(Capsule().fill(Color.primary.opacity(0.07)))
+        .background {
+            if #available(macOS 26.0, *) {
+                Color.clear
+                    .glassEffect(in: Capsule())
+            } else {
+                Capsule()
+                    .fill(Color.primary.opacity(0.07))
+            }
+        }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
     }
