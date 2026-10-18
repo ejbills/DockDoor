@@ -48,3 +48,39 @@ struct SettingsSection<Content: View>: View {
         }
     }
 }
+
+/// Glass on macOS 26, bordered before.
+struct SettingsButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        if #available(macOS 26.0, *) {
+            Button(configuration).buttonStyle(.glass)
+        } else {
+            Button(configuration).buttonStyle(.bordered)
+        }
+    }
+}
+
+extension PrimitiveButtonStyle where Self == SettingsButtonStyle {
+    static var settings: SettingsButtonStyle {
+        SettingsButtonStyle()
+    }
+}
+
+/// Hidden until modified so rows keep their width.
+struct SettingsResetButton: View {
+    let isModified: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "arrow.counterclockwise")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.secondary)
+        }
+        .buttonStyle(.plain)
+        .help("Reset to default")
+        .accessibilityLabel("Reset to default")
+        .opacity(isModified ? 1 : 0)
+        .disabled(!isModified)
+    }
+}

@@ -179,9 +179,8 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     }
                     Button("Select...") {
                         showGroupedAppsSheet = true
-                            .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
                 }
                 .settingsAnnotation("Selected apps show only their most recent window. All windows shown in active-app-only mode.")
             }
@@ -221,7 +220,9 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 if !pinnedScreenIdentifier.isEmpty,
                    NSScreen.findScreen(byIdentifier: pinnedScreenIdentifier) == nil
                 {
-                    .settingsAnnotation("This display is currently disconnected.")
+                    Text("This display is currently disconnected.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
             }
 

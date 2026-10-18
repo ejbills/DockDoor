@@ -209,7 +209,6 @@ struct WidgetSettingsView: View {
                             if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
                                 NSWorkspace.shared.open(url)
                             }
-                            .buttonStyle(.plain)
                         }
                         .buttonStyle(AccentButtonStyle(color: .accentColor))
                     }
@@ -288,7 +287,6 @@ struct WidgetSettingsView: View {
                         HStack {
                             Button("Show All") {
                                 filteredCalendarIdentifiers.removeAll()
-                                    .buttonStyle(.plain)
                             }
                             .buttonStyle(AccentButtonStyle(color: .accentColor))
                             .disabled(filteredCalendarIdentifiers.isEmpty)

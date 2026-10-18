@@ -80,7 +80,6 @@ struct GesturesSettingsView: View {
                 if let url = URL(string: "x-apple.systempreferences:com.apple.Trackpad-Settings.extension") {
                     NSWorkspace.shared.open(url)
                 }
-                .buttonStyle(.plain)
             }
             .controlSize(.small)
             .buttonStyle(.plain)
@@ -249,7 +248,6 @@ private struct WindowGestureRow: View {
 
             Toggle("", isOn: $isOn)
                 .toggleStyle(.switch)
-                .controlSize(.small)
                 .labelsHidden()
         }
         .padding(.vertical, 8)

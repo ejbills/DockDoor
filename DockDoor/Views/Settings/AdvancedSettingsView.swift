@@ -213,7 +213,6 @@ struct AdvancedSettingsView: View {
             HStack(spacing: 0) {
                 Button(action: {
                     setKeepAliveMode(0)
-                        .buttonStyle(.plain)
                 }) {
                     Text("Immediately close")
                         .padding(.horizontal, 12)
@@ -257,7 +256,6 @@ struct AdvancedSettingsView: View {
 
                 Button(action: {
                     setKeepAliveMode(-1)
-                        .buttonStyle(.plain)
                 }) {
                     Text("Keep Open")
                         .padding(.horizontal, 12)

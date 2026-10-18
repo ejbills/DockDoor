@@ -43,7 +43,7 @@ struct WindowSwitcherGesturesSection: View {
                     switcherSwipeUpAction = Defaults.Keys.switcherSwipeUpAction.defaultValue
                     switcherSwipeDownAction = Defaults.Keys.switcherSwipeDownAction.defaultValue
                 }
-                .buttonStyle(AccentButtonStyle(small: true))
+                .buttonStyle(.settings)
                 .padding(.top, 4)
             }
         }

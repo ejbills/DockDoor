@@ -94,11 +94,11 @@ struct MainSettingsView: View {
         SettingsSection("Backup & restore") {
             HStack(spacing: 12) {
                 Button("Export Settings…") { SettingsBackupManager.exportSettings() }
+                    .buttonStyle(.settings)
                     .settingsSearchTarget("general.exportSettings")
-                    .buttonStyle(.plain)
                 Button("Import Settings…") { SettingsBackupManager.importSettings() }
+                    .buttonStyle(.settings)
                     .settingsSearchTarget("general.importSettings")
-                    .buttonStyle(.plain)
             }
 
             SettingsNote(icon: "arrow.up.arrow.down.circle", text: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
@@ -266,8 +266,8 @@ struct AddBlacklistAppSheet: View {
                 Button("Cancel") {
                     resetState()
                     isPresented = false
-                        .buttonStyle(.plain)
                 }
+                .buttonStyle(.automatic)
                 .keyboardShortcut(.escape)
 
                 Spacer()

@@ -45,7 +45,6 @@ struct FiltersSettingsView: View {
 
                                     Button(action: {
                                         customAppDirectories.removeAll { $0 == directory }
-                                            .buttonStyle(.plain)
                                     }) {
                                         Image(systemName: "trash")
                                             .foregroundColor(.secondary)
@@ -67,8 +66,8 @@ struct FiltersSettingsView: View {
                 HStack {
                     Button("Add Directory") {
                         showingDirectoryPicker = true
-                            .buttonStyle(.plain)
                     }
+                    .buttonStyle(.settings)
                     .fileImporter(
                         isPresented: $showingDirectoryPicker,
                         allowedContentTypes: [.folder],
@@ -86,7 +85,7 @@ struct FiltersSettingsView: View {
                             print("Error selecting directory: \(error.localizedDescription)")
                         }
                     }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+                    .buttonStyle(.settings)
 
                     Spacer()
 
@@ -124,7 +123,6 @@ struct FiltersSettingsView: View {
 
                                     Button(action: {
                                         appNameFilters.removeAll { $0 == filter }
-                                            .buttonStyle(.plain)
                                     }) {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.secondary)
@@ -146,9 +144,8 @@ struct FiltersSettingsView: View {
                 HStack {
                     Button("Select Apps to Hide...") {
                         showingAppPickerSheet = true
-                            .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+                    .buttonStyle(.settings)
 
                     Spacer()
 
@@ -182,7 +179,6 @@ struct FiltersSettingsView: View {
 
                                     Button(action: {
                                         windowTitleFilters.removeAll { $0 == filter }
-                                            .buttonStyle(.plain)
                                     }) {
                                         Image(systemName: "trash")
                                             .foregroundColor(.secondary)
@@ -212,9 +208,8 @@ struct FiltersSettingsView: View {
                 HStack {
                     Button(action: { showingAddFilterSheet.toggle() }) {
                         Text("Add Filter")
-                            .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+                    .buttonStyle(.settings)
 
                     Spacer()
 
@@ -252,7 +247,6 @@ struct FiltersSettingsView: View {
 
                                     Button(action: {
                                         widgetAppFilters.removeAll { $0 == filter }
-                                            .buttonStyle(.plain)
                                     }) {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.secondary)
@@ -274,9 +268,8 @@ struct FiltersSettingsView: View {
                 HStack {
                     Button("Select Apps to Disable Widgets For...") {
                         showingWidgetAppPickerSheet = true
-                            .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+                    .buttonStyle(.settings)
 
                     Spacer()
 
@@ -338,8 +331,8 @@ struct AddFilterSheet: View {
             HStack(spacing: 16) {
                 Button("Cancel") {
                     isPresented = false
-                        .buttonStyle(.plain)
                 }
+                .buttonStyle(.automatic)
                 .keyboardShortcut(.escape)
 
                 Spacer()
@@ -348,8 +341,8 @@ struct AddFilterSheet: View {
                     onAdd(filterToAdd)
                     filterToAdd = FiltersSettingsView.FilterEntry(text: "")
                     isPresented = false
-                        .buttonStyle(.plain)
                 }
+                .buttonStyle(.automatic)
                 .keyboardShortcut(.return)
                 .disabled(filterToAdd.text.isEmpty)
             }

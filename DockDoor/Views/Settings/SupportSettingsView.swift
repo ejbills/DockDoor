@@ -118,14 +118,11 @@ struct SupportSettingsView: View {
 
                 Button("Check Now") {
                     updaterState.checkForUpdates()
-                        .buttonStyle(.plain)
                 }
-                .buttonStyle(AccentButtonStyle(small: true))
+                .buttonStyle(.settings)
                 .disabled(!updaterState.canCheckForUpdates)
             }
             .settingsSearchTarget("support.checkForUpdates")
-
-            Divider().padding(.leading, 40)
 
             // Automatic updates toggle
             HStack(spacing: 12) {
@@ -273,9 +270,8 @@ private struct PermissionRow: View {
                 if !isGranted {
                     Button("Grant") {
                         action()
-                            .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
                 }
             }
         }
@@ -311,15 +307,13 @@ private struct DebugLoggingRow: View {
                         if let url = DebugLogger.exportLogs() {
                             NSWorkspace.shared.activateFileViewerSelecting([url])
                         }
-                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
 
                     Button("Clear Logs") {
                         DebugLogger.clearLogs()
-                            .buttonStyle(.plain)
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
                 }
                 .padding(.leading, 40)
             }

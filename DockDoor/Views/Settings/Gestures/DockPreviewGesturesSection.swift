@@ -74,7 +74,7 @@ struct DockPreviewGesturesSection: View {
                     dockSwipeAwayFromDockAction = Defaults.Keys.dockSwipeAwayFromDockAction.defaultValue
                     aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
                 }
-                .buttonStyle(AccentButtonStyle(small: true))
+                .buttonStyle(.settings)
                 .padding(.top, 4)
             }
         }

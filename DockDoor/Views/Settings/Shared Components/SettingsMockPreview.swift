@@ -1,4 +1,5 @@
 import Defaults
+import ImageIO
 import SwiftUI
 
 enum SettingsMockPreviewContext {
@@ -109,10 +110,7 @@ struct SettingsMockPreview: View {
     @Default(.previewMaxColumns) private var previewMaxColumns
     @Default(.switcherMaxRows) private var switcherMaxRows
 
-    @State private var wallpaperImage: NSImage? = {
-        guard let screen = NSScreen.main ?? NSScreen.screens.first else { return nil }
-        return NSWorkspace.shared.desktopImage(for: screen)
-    }()
+    @State private var wallpaperImage: NSImage? = SettingsWallpaper.cached
 
     init(context: SettingsMockPreviewContext) {
         self.context = context
@@ -273,6 +271,9 @@ struct SettingsMockPreview: View {
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .onAppear {
+                SettingsWallpaper.load { wallpaperImage = $0 }
+            }
         }
     }
 
@@ -332,5 +333,42 @@ struct SettingsMockPreview: View {
             coordinator.setIndex(to: 0)
         }
         return coordinator
+    }
+}
+
+/// Decoded once off the main thread as a thumbnail; a full-size decode takes ~0.6s.
+@MainActor
+private enum SettingsWallpaper {
+    private static var cachedURL: URL?
+    private(set) static var cached: NSImage?
+
+    static func load(completion: @escaping (NSImage?) -> Void) {
+        guard let screen = NSScreen.main ?? NSScreen.screens.first,
+              let url = NSWorkspace.shared.desktopImageURL(for: screen)
+        else { return completion(nil) }
+        if url == cachedURL, let cached {
+            return completion(cached)
+        }
+
+        // Utility: ImageIO decodes on default-QoS threads, and waiting on them from higher is an inversion.
+        DispatchQueue.global(qos: .utility).async {
+            let image = thumbnail(at: url, maxPixelSize: 1200)
+            DispatchQueue.main.async {
+                cachedURL = url
+                cached = image
+                completion(image)
+            }
+        }
+    }
+
+    private nonisolated static func thumbnail(at url: URL, maxPixelSize: Int) -> NSImage? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+        ]
+        guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { return nil }
+        return NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
     }
 }
