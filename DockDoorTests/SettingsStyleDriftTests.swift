@@ -50,6 +50,64 @@ struct SettingsStyleDriftTests {
         }
     }
 
+    /// A modifier after a control-flow block's `}` has no base view and fails to build.
+    /// Checked in every settings source, not only the converted panes.
+    @Test func settingsSourcesDoNotChainModifiersOntoControlFlow() throws {
+        for file in try settingsSourceFiles() {
+            let lines = try String(contentsOf: file, encoding: .utf8).components(separatedBy: .newlines)
+            for index in lines.indices {
+                let trimmed = lines[index].trimmingCharacters(in: .whitespaces)
+                guard trimmed.hasPrefix("."), Self.modifierChainPattern.firstMatch(in: trimmed) != nil else { continue }
+
+                var previous = index - 1
+                while previous >= 0, lines[previous].trimmingCharacters(in: .whitespaces).isEmpty {
+                    previous -= 1
+                }
+                guard previous >= 0, lines[previous].trimmingCharacters(in: .whitespaces) == "}", let openerIndex = blockOpenerIndex(in: lines, closingAt: previous) else { continue }
+                let openerText = lines[openerIndex].trimmingCharacters(in: .whitespaces)
+                let isControlFlow = openerText.hasPrefix("if ")
+                    || openerText.hasPrefix("if(")
+                    || openerText.hasPrefix("ForEach")
+                    || openerText.hasPrefix("switch ")
+                    || openerText.hasSuffix("else {")
+
+                #expect(
+                    !isControlFlow,
+                    "\(file.lastPathComponent):\(index + 1) chains \(trimmed) onto the block opened at line \(openerIndex + 1) (\(openerText.prefix(50))); wrap the block in a Group"
+                )
+            }
+        }
+    }
+
+    private static let modifierChainPattern = try! NSRegularExpression(
+        pattern: #"^\.(disabled|opacity|animation|onChange|onHover|padding|frame|help|controlSize|background|fixedSize|foregroundColor|hidden)\("#
+    )
+
+    private func settingsSourceFiles() throws -> [URL] {
+        let enumerator = FileManager.default.enumerator(at: Self.sourceRoot, includingPropertiesForKeys: nil)
+        return ((enumerator?.allObjects as? [URL]) ?? []).filter { $0.pathExtension == "swift" }
+    }
+
+    /// Index of the line that opened the block closed on `closingAt`.
+    private func blockOpenerIndex(in lines: [String], closingAt closeIndex: Int) -> Int? {
+        var depth = 0
+        var index = closeIndex
+        while index >= 0 {
+            for character in lines[index].reversed() {
+                if character == "}" {
+                    depth += 1
+                } else if character == "{" {
+                    depth -= 1
+                    if depth == 0 {
+                        return index
+                    }
+                }
+            }
+            index -= 1
+        }
+        return nil
+    }
+
     @Test func convertedPanesUseTheFormKit() throws {
         for pane in convertedPanes {
             let source = try String(contentsOf: sourceRoot.appendingPathComponent(pane), encoding: .utf8)
