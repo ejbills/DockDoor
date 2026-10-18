@@ -53,6 +53,10 @@ struct DockPreviewsSettingsView: View {
             }
 
             if enableDockPreviews {
+                SettingsSection("Appearance") {
+                    appearanceRows
+                }
+
                 SettingsSection("Window display") {
                     windowDisplayRows
                 }
@@ -60,14 +64,10 @@ struct DockPreviewsSettingsView: View {
                 SettingsSection("Dock interaction") {
                     dockInteractionRows
                 }
-
-                SettingsSection("Appearance") {
-                    appearanceRows
-                }
-
-                SettingsSection("Preview") {
-                    SettingsMockPreview(context: .dock)
-                }
+            }
+        } pinnedHeader: {
+            if enableDockPreviews {
+                SettingsMockPreview(context: .dock, maxHeight: 170)
             }
         }
     }

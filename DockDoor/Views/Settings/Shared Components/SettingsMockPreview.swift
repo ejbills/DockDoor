@@ -25,6 +25,7 @@ enum SettingsMockPreviewContext {
 
 struct SettingsMockPreview: View {
     let context: SettingsMockPreviewContext
+    let maxHeight: CGFloat
 
     @StateObject private var coordinator: PreviewStateCoordinator
 
@@ -112,11 +113,12 @@ struct SettingsMockPreview: View {
 
     @State private var wallpaperImage: NSImage? = SettingsWallpaper.cached
 
-    init(context: SettingsMockPreviewContext) {
+    init(context: SettingsMockPreviewContext, maxHeight: CGFloat = 200) {
         self.context = context
-        let windows = Self.generateMockWindows()
+        self.maxHeight = maxHeight
+        // Inside the autoclosure so the mock windows are built once, not on every redraw.
         _coordinator = StateObject(wrappedValue: Self.makeCoordinator(
-            windows: windows,
+            windows: Self.generateMockWindows(),
             context: context
         ))
     }
@@ -253,6 +255,7 @@ struct SettingsMockPreview: View {
                 appearanceOverride: resolvedAppearance
             )
             .allowsHitTesting(false)
+            .modifier(ScaledToFit(maxHeight: maxHeight))
             .background {
                 GeometryReader { proxy in
                     if let wallpaperImage {
@@ -333,6 +336,46 @@ struct SettingsMockPreview: View {
             coordinator.setIndex(to: 0)
         }
         return coordinator
+    }
+}
+
+/// Sizes come from GeometryReader: preference keys don't update inside a grouped Form row.
+private struct ScaledToFit: ViewModifier {
+    let maxHeight: CGFloat
+    @State private var contentSize: CGSize = .zero
+    @State private var availableWidth: CGFloat = 0
+
+    private var scale: CGFloat {
+        guard contentSize.width > 0, contentSize.height > 0, availableWidth > 0 else { return 1 }
+        return min(1, availableWidth / contentSize.width, maxHeight / contentSize.height)
+    }
+
+    func body(content: Content) -> some View {
+        Color.clear
+            .frame(height: contentSize == .zero ? maxHeight : contentSize.height * scale)
+            .frame(maxWidth: .infinity)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { availableWidth = proxy.size.width }
+                        .onChange(of: proxy.size.width) { availableWidth = $0 }
+                }
+            }
+            .overlay {
+                content
+                    // The container draws its header and cards slightly past its own bounds.
+                    .padding(.vertical, 24)
+                    .padding(.horizontal, 16)
+                    .fixedSize()
+                    .background {
+                        GeometryReader { proxy in
+                            Color.clear
+                                .onAppear { contentSize = proxy.size }
+                                .onChange(of: proxy.size) { contentSize = $0 }
+                        }
+                    }
+                    .scaleEffect(scale)
+            }
     }
 }
 

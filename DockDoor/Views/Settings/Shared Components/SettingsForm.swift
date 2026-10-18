@@ -1,8 +1,14 @@
 import SwiftUI
 
-struct SettingsFormView<Content: View>: View {
+struct SettingsFormView<Content: View, Header: View>: View {
     @Environment(\.settingsScrollTarget) private var scrollTarget
-    @ViewBuilder let content: Content
+    let content: Content
+    let header: Header
+
+    init(@ViewBuilder content: () -> Content, @ViewBuilder pinnedHeader: () -> Header) {
+        self.content = content()
+        header = pinnedHeader()
+    }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -10,6 +16,16 @@ struct SettingsFormView<Content: View>: View {
                 content
             }
             .formStyle(.grouped)
+            .modifier(SoftTopScrollEdge())
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if Header.self != EmptyView.self {
+                    header
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
+                        .padding(.bottom, 6)
+                        .background(Color(nsColor: .windowBackgroundColor))
+                }
+            }
             .onChange(of: scrollTarget) { target in
                 guard let target else { return }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
@@ -28,6 +44,22 @@ struct SettingsFormView<Content: View>: View {
             }
         }
         .frame(minWidth: 650, idealWidth: 700, minHeight: 650)
+    }
+}
+
+extension SettingsFormView where Header == EmptyView {
+    init(@ViewBuilder content: () -> Content) {
+        self.init(content: content, pinnedHeader: { EmptyView() })
+    }
+}
+
+private struct SoftTopScrollEdge: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            content.scrollEdgeEffectStyle(.soft, for: .top)
+        } else {
+            content
+        }
     }
 }
 

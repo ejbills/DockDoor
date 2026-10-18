@@ -18,12 +18,13 @@ struct CmdTabSettingsView: View {
             headerSection
 
             if enableCmdTabEnhancements {
+                appearanceSection
                 configurationSection
                 windowDisplaySection
-
-                SettingsMockPreview(context: .cmdTab)
-
-                appearanceSection
+            }
+        } pinnedHeader: {
+            if enableCmdTabEnhancements {
+                SettingsMockPreview(context: .cmdTab, maxHeight: 170)
             }
         }
     }
