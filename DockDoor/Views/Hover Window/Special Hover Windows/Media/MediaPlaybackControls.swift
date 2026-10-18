@@ -8,7 +8,9 @@ struct MediaPlaybackControls: View {
     @Binding var lyricsMode: Bool
     @Binding var showingLyricsInFull: Bool
 
-    @Default(.showAnimations) var showAnimations
+    @Default(.showAnimations) private var showAnimationsSetting
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
 
     init(mediaInfo: MediaInfo,
          isExpanded: Bool,

@@ -104,7 +104,7 @@ struct PreviewAppearanceSettings: Equatable {
             keepPreviewOnHoverActivation: Defaults[.keepPreviewOnHoverActivation],
             showActiveWindowBorder: Defaults[.showActiveWindowBorder],
             activeAppIndicatorColor: Defaults[.activeAppIndicatorColor],
-            showAnimations: Defaults[.showAnimations],
+            showAnimations: animationsEnabled,
             globalPaddingMultiplier: Defaults[.globalPaddingMultiplier],
             radii: .current(),
             windowTitleFontSize: Defaults[.windowTitleFontSize],
@@ -392,7 +392,7 @@ struct WindowPreview: View, Equatable {
                       appearance.showMinimizedHiddenLabels,
                       appearance.trafficLightVisibility != .never
             {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                Text(windowInfo.isMinimized ? String(localized: "Minimized", comment: "Window state badge") : String(localized: "Hidden", comment: "Window state badge"))
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
@@ -653,7 +653,7 @@ struct WindowPreview: View, Equatable {
                       appearance.showMinimizedHiddenLabels,
                       appearance.trafficLightVisibility != .never
             {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                Text(windowInfo.isMinimized ? String(localized: "Minimized", comment: "Window state badge") : String(localized: "Hidden", comment: "Window state badge"))
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
@@ -744,7 +744,7 @@ struct WindowPreview: View, Equatable {
                       appearance.showMinimizedHiddenLabels,
                       appearance.trafficLightVisibility != .never
             {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                Text(windowInfo.isMinimized ? String(localized: "Minimized", comment: "Window state badge") : String(localized: "Hidden", comment: "Window state badge"))
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)

@@ -8,7 +8,9 @@ struct MediaArtworkView: View {
     let cornerRadius: CGFloat
     let artworkRotation: Double
 
-    @Default(.showAnimations) var showAnimations
+    @Default(.showAnimations) private var showAnimationsSetting
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
 
     var body: some View {
         ZStack {

@@ -325,7 +325,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let currentMouseLocation = CGEvent(source: nil)?.location ?? .zero
         let screen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
 
-        if !Defaults[.showAnimations] || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
+        if !animationsEnabled {
             showOnboardingWindow(on: screen)
             return
         }
