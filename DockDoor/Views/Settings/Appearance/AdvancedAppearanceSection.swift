@@ -9,85 +9,104 @@ struct AdvancedAppearanceSection: View {
     @Default(.customBackgroundColor) var customBackgroundColor
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            SettingsSection("Window background") {
-                Text("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                HStack {
+        SettingsSection("Window background") {
+            LabeledContent("Custom Hover Highlight Color") {
+                HStack(spacing: 8) {
                     ColorPicker("Custom Hover Highlight Color", selection: Binding(
                         get: { hoverHighlightColor ?? Color(nsColor: .controlAccentColor) },
                         set: { hoverHighlightColor = $0 }
                     ))
-                    Button(action: {
+                    .labelsHidden()
+                    SettingsResetButton(isModified: hoverHighlightColor != nil) {
                         Defaults.reset(.hoverHighlightColor)
-                    }) {
-                        Text("Reset")
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
                 }
-                .settingsSearchTarget("appearance.hoverHighlightColor")
+            }
+            .settingsSearchTarget("appearance.hoverHighlightColor")
+            .settingsAnnotation("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
 
+            SettingsSliderRow(
+                title: "Background Opacity",
+                value: $selectionOpacity,
+                range: 0 ... 1,
+                step: 0.05
+            )
+            .settingsSearchTarget("appearance.selectionOpacity")
+        }
+
+        SettingsSection("Dock preview transparency") {
+            Picker("Background", selection: backgroundChoice) {
+                ForEach(PreviewBackgroundChoice.allCases) { choice in
+                    Text(choice.localizedName).tag(choice)
+                }
+            }
+            .settingsSearchTarget("appearance.opaqueBackground")
+            .settingsAnnotation("Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows.")
+
+            switch backgroundChoice.wrappedValue {
+            case .blurred:
                 SettingsSliderRow(
                     title: "Background Opacity",
-                    value: $selectionOpacity,
-                    range: 0 ... 1,
+                    value: $dockPreviewBackgroundOpacity,
+                    range: 0 ... 1.0,
                     step: 0.05
                 )
-                .settingsSearchTarget("appearance.selectionOpacity")
-            }
-
-            SettingsSection("Dock preview transparency") {
-                HStack {
-                    ColorPicker("Custom Background Color", selection: Binding(
-                        get: { customBackgroundColor ?? Color(nsColor: .windowBackgroundColor) },
-                        set: { customBackgroundColor = $0 }
-                    ))
-                    Button(action: {
-                        Defaults.reset(.customBackgroundColor)
-                    }) {
-                        Text("Reset")
-                    }
-                    .buttonStyle(AccentButtonStyle(small: true))
-                }
+                .settingsSearchTarget("appearance.dockPreviewOpacity")
+                .settingsAnnotation("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
+            case .solid:
+                EmptyView()
+            case .custom:
+                ColorPicker("Custom Background Color", selection: Binding(
+                    get: { customBackgroundColor ?? Color(nsColor: .windowBackgroundColor) },
+                    set: { customBackgroundColor = $0 }
+                ))
                 .settingsSearchTarget("appearance.customBackgroundColor")
-                Text("Override the default blurred background with a solid custom color.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                if customBackgroundColor == nil {
-                    VStack(alignment: .leading) {
-                        Toggle(isOn: $useOpaquePreviewBackground) {
-                            Text("Use opaque background")
-                        }
-                        .settingsSearchTarget("appearance.opaqueBackground")
-                        Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .padding(.leading, 20)
-                    }
-
-                    if !useOpaquePreviewBackground {
-                        Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-
-                        SettingsSliderRow(
-                            title: "Background Opacity",
-                            value: $dockPreviewBackgroundOpacity,
-                            range: 0 ... 1.0,
-                            step: 0.05
-                        )
-                        .settingsSearchTarget("appearance.dockPreviewOpacity")
-                    }
-                }
-            }
-
-            SettingsSection("Color customization") {
-                GradientColorPaletteSettingsView()
             }
         }
-        .padding(.top, 10)
+
+        SettingsSection("Color customization") {
+            GradientColorPaletteSettingsView()
+        }
+    }
+
+    /// A custom color wins over opaque; neither means blurred.
+    private var backgroundChoice: Binding<PreviewBackgroundChoice> {
+        Binding {
+            if customBackgroundColor != nil {
+                return .custom
+            }
+            return useOpaquePreviewBackground ? .solid : .blurred
+        } set: { choice in
+            switch choice {
+            case .blurred:
+                customBackgroundColor = nil
+                useOpaquePreviewBackground = false
+            case .solid:
+                customBackgroundColor = nil
+                useOpaquePreviewBackground = true
+            case .custom:
+                if customBackgroundColor == nil {
+                    customBackgroundColor = Color(nsColor: .windowBackgroundColor)
+                }
+            }
+        }
+    }
+}
+
+private enum PreviewBackgroundChoice: CaseIterable, Identifiable {
+    case blurred
+    case solid
+    case custom
+
+    var id: Self {
+        self
+    }
+
+    var localizedName: String {
+        switch self {
+        case .blurred: String(localized: "Blurred", comment: "Dock preview background option")
+        case .solid: String(localized: "Solid", comment: "Dock preview background option")
+        case .custom: String(localized: "Custom color", comment: "Dock preview background option")
+        }
     }
 }

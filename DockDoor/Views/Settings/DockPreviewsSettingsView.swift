@@ -123,6 +123,25 @@ struct DockPreviewsSettingsView: View {
 
     // MARK: - Dock Interaction
 
+    /// Maps the hide-on-click flag and its action onto one picker.
+    private var dockIconClickChoice: Binding<DockIconClickChoice> {
+        Binding {
+            guard shouldHideOnDockItemClick else { return .nothing }
+            return dockClickAction == .hide ? .hide : .minimize
+        } set: { choice in
+            switch choice {
+            case .nothing:
+                shouldHideOnDockItemClick = false
+            case .minimize:
+                shouldHideOnDockItemClick = true
+                dockClickAction = .minimize
+            case .hide:
+                shouldHideOnDockItemClick = true
+                dockClickAction = .hide
+            }
+        }
+    }
+
     @ViewBuilder
     private var dockInteractionRows: some View {
         Picker("Dock Preview Trigger", selection: $dockPreviewActivationMode) {
@@ -133,52 +152,52 @@ struct DockPreviewsSettingsView: View {
         .settingsSearchTarget("dockPreviews.activationTrigger")
         .settingsAnnotation("Show previews automatically on hover, or require a click trigger on the Dock icon.")
 
-        Picker("Dock Preview Modifier", selection: $dockPreviewActivationModifier) {
-            ForEach(DockPreviewActivationModifier.allCases, id: \.self) {
-                Text($0.localizedName).tag($0)
+        if dockPreviewActivationMode == .modifierClick {
+            Picker("Dock Preview Modifier", selection: $dockPreviewActivationModifier) {
+                ForEach(DockPreviewActivationModifier.allCases, id: \.self) {
+                    Text($0.localizedName).tag($0)
+                }
             }
+            .settingsSearchTarget("dockPreviews.activationModifier")
         }
-        .settingsSearchTarget("dockPreviews.activationModifier")
-        .disabled(dockPreviewActivationMode != .modifierClick)
 
         Picker("Dock Preview Hover Action", selection: $previewHoverAction) {
             ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) }
         }
         .settingsSearchTarget("dockPreviews.hoverAction")
 
-        Toggle(isOn: $keepPreviewOnHoverActivation) {
-            Text("Keep preview open after hover activation")
+        if previewHoverAction == .tap {
+            Toggle(isOn: $keepPreviewOnHoverActivation) {
+                Text("Keep preview open after hover activation")
+            }
+            .settingsSearchTarget("dockPreviews.keepOnHoverActivation")
+            .settingsAnnotation("Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front.")
         }
-        .disabled(previewHoverAction != .tap)
-        .settingsSearchTarget("dockPreviews.keepOnHoverActivation")
-        .settingsAnnotation("Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front.")
 
-        SettingsSliderRow(
-            title: "Preview Hover Action Delay",
-            value: $tapEquivalentInterval,
-            range: 0 ... 2,
-            defaultValue: 1.5,
-            unit: " s",
-            step: 0.1,
-            decimals: 1
-        )
-        .disabled(previewHoverAction == .none)
-        .settingsSearchTarget("dockPreviews.hoverDelay")
+        if previewHoverAction != .none {
+            SettingsSliderRow(
+                title: "Preview Hover Action Delay",
+                value: $tapEquivalentInterval,
+                range: 0 ... 2,
+                defaultValue: 1.5,
+                unit: " s",
+                step: 0.1,
+                decimals: 1
+            )
+            .settingsSearchTarget("dockPreviews.hoverDelay")
+        }
 
-        Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
-            .settingsSearchTarget("dockPreviews.hideOnClick")
-
-        if shouldHideOnDockItemClick {
-            Picker("Dock Click Action", selection: $dockClickAction) {
-                ForEach(DockClickAction.allCases, id: \.self) {
-                    Text($0.localizedName).tag($0)
-                }
+        Picker("Dock icon click", selection: dockIconClickChoice) {
+            ForEach(DockIconClickChoice.allCases) { choice in
+                Text(choice.localizedName).tag(choice)
             }
+        }
+        .settingsSearchTarget("dockPreviews.hideOnClick")
+        .settingsAnnotation("What clicking the icon of an app that is already in front does to its windows.")
 
-            if dockClickAction == .minimize {
-                Toggle(isOn: $restoreAllMinimizedWindowsOnDockClick) { Text("Restore all minimized windows on dock icon click") }
-                    .settingsSearchTarget("dockPreviews.restoreAllMinimizedOnClick")
-            }
+        if shouldHideOnDockItemClick, dockClickAction == .minimize {
+            Toggle(isOn: $restoreAllMinimizedWindowsOnDockClick) { Text("Restore all minimized windows on dock icon click") }
+                .settingsSearchTarget("dockPreviews.restoreAllMinimizedOnClick")
         }
 
         Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
@@ -324,5 +343,23 @@ struct DockPreviewsSettingsView: View {
             .settingsSearchTarget("appearance.dockMaxColumns")
         }
         .settingsAnnotation("Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position.")
+    }
+}
+
+private enum DockIconClickChoice: CaseIterable, Identifiable {
+    case nothing
+    case minimize
+    case hide
+
+    var id: Self {
+        self
+    }
+
+    var localizedName: String {
+        switch self {
+        case .nothing: String(localized: "Do nothing", comment: "Dock icon click option")
+        case .minimize: DockClickAction.minimize.localizedName
+        case .hide: DockClickAction.hide.localizedName
+        }
     }
 }

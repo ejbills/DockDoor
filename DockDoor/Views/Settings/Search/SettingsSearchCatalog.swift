@@ -285,7 +285,8 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "dockPreviews.hideOnClick",
-            title: String(localized: "Hide all app windows on dock icon click"),
+            title: String(localized: "Dock icon click"),
+            description: String(localized: "What clicking the icon of an app that is already in front does to its windows."),
             keywords: ["hide", "click", "minimize"],
             tab: "DockPreviews",
             section: String(localized: "Dock Interaction"),

@@ -131,12 +131,12 @@ struct WidgetSettingsView: View {
                     .settingsSearchTarget("widgets.embedded")
                     .settingsAnnotation("Keeps window previews visible when widget controls are shown.")
 
-                    Toggle(isOn: $showBigControlsWhenNoValidWindows) {
-                        Text("Use full-size controls when all windows are minimized or hidden")
+                    if useEmbeddedMediaControls {
+                        Toggle(isOn: $showBigControlsWhenNoValidWindows) {
+                            Text("Use full-size controls when all windows are minimized or hidden")
+                        }
+                        .settingsSearchTarget("widgets.fullSize")
                     }
-                    .settingsSearchTarget("widgets.fullSize")
-                    .disabled(!useEmbeddedMediaControls)
-                    .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
 
                     if #available(macOS 15.0, *) {
                         Toggle(isOn: $enablePinning) {
@@ -152,173 +152,168 @@ struct WidgetSettingsView: View {
                     }
                 }
 
-                SettingsSection("Media widget scroll") {
-                    Text("Controls what happens when you scroll on the media widget preview.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                    Picker("Behavior:", selection: $mediaWidgetScrollBehavior) {
-                        ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
-                            Text(behavior.localizedName).tag(behavior)
+                if enableMediaWidget {
+                    SettingsSection("Media widget scroll") {
+                        Picker("Behavior:", selection: $mediaWidgetScrollBehavior) {
+                            ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
+                                Text(behavior.localizedName).tag(behavior)
+                            }
                         }
-                    }
-                    .settingsSearchTarget("widgets.scrollBehavior")
+                        .settingsSearchTarget("widgets.scrollBehavior")
+                        .settingsAnnotation("Controls what happens when you scroll on the media widget preview.")
 
-                    Picker("Direction:", selection: $mediaWidgetScrollDirection) {
-                        ForEach(MediaWidgetScrollDirection.allCases, id: \.self) { direction in
-                            Text(direction.localizedName).tag(direction)
+                        Picker("Direction:", selection: $mediaWidgetScrollDirection) {
+                            ForEach(MediaWidgetScrollDirection.allCases, id: \.self) { direction in
+                                Text(direction.localizedName).tag(direction)
+                            }
                         }
-                    }
-                    .settingsSearchTarget("widgets.scrollDirection")
+                        .settingsSearchTarget("widgets.scrollDirection")
 
-                    if mediaWidgetScrollDirection == .horizontal {
-                        HStack(spacing: 6) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.orange)
-                            Text("Horizontal scrolling may interfere with dock preview gestures.")
-                                .font(.caption)
+                        if mediaWidgetScrollDirection == .horizontal {
+                            SettingsCallout(message: Text("Horizontal scrolling may interfere with dock preview gestures."))
                         }
-                        .foregroundColor(.orange)
                     }
                 }
             }
 
-            SettingsSection("Calendar", footer: "Select which calendars appear in the dock preview when hovering over the Calendar app.") {
-                if authorizationStatus == .denied || authorizationStatus == .restricted {
-                    VStack(spacing: 12) {
-                        Image(systemName: "calendar.badge.exclamationmark")
-                            .font(.largeTitle)
-                            .foregroundColor(.secondary)
+            if showSpecialAppControls, enableCalendarWidget {
+                SettingsSection("Calendar", footer: "Select which calendars appear in the dock preview when hovering over the Calendar app.") {
+                    if authorizationStatus == .denied || authorizationStatus == .restricted {
+                        VStack(spacing: 12) {
+                            Image(systemName: "calendar.badge.exclamationmark")
+                                .font(.largeTitle)
+                                .foregroundColor(.secondary)
 
-                        Text("Calendar Access Required")
-                            .font(.headline)
+                            Text("Calendar Access Required")
+                                .font(.headline)
 
-                        Text("DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars.")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
+                            Text("DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars.")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
 
-                        Button("Open System Settings") {
-                            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
-                                NSWorkspace.shared.open(url)
+                            Button("Open System Settings") {
+                                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
+                                    NSWorkspace.shared.open(url)
+                                }
                             }
+                            .buttonStyle(.settings)
                         }
-                        .buttonStyle(AccentButtonStyle(color: .accentColor))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                } else {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 4) {
-                            if isLoadingCalendars {
-                                HStack {
-                                    Spacer()
-                                    ProgressView()
-                                        .scaleEffect(0.8)
-                                    Text("Loading calendars...")
-                                        .foregroundColor(.secondary)
-                                    Spacer()
-                                }
-                                .padding()
-                            } else if availableCalendars.isEmpty {
-                                VStack(spacing: 8) {
-                                    Text("No calendars found")
-                                        .foregroundColor(.secondary)
-                                    Text("Make sure you have calendars set up in the Calendar app.")
-                                        .font(.footnote)
-                                        .foregroundColor(.secondary)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                            } else {
-                                ForEach(availableCalendars) { calendar in
-                                    HStack(spacing: 8) {
-                                        Toggle(isOn: Binding(
-                                            get: {
-                                                !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier)
-                                            },
-                                            set: { isEnabled in
-                                                if isEnabled {
-                                                    filteredCalendarIdentifiers.removeAll { $0 == calendar.calendarIdentifier }
-                                                } else {
-                                                    if !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier) {
-                                                        filteredCalendarIdentifiers.append(calendar.calendarIdentifier)
-                                                    }
-                                                }
-                                            }
-                                        )) { EmptyView() }
-
-                                        Circle()
-                                            .fill(Color(cgColor: calendar.color))
-                                            .frame(width: 12, height: 12)
-
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text(calendar.title)
-                                                .lineLimit(1)
-
-                                            Text(calendar.accountName)
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                                .lineLimit(1)
-                                        }
-
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                    } else {
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 4) {
+                                if isLoadingCalendars {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                            .scaleEffect(0.8)
+                                        Text("Loading calendars...")
+                                            .foregroundColor(.secondary)
                                         Spacer()
                                     }
-                                    .padding(.vertical, 4)
-                                }
-                            }
-                        }
-                        .padding(8)
-                    }
-                    .frame(height: 200)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                    )
+                                    .padding()
+                                } else if availableCalendars.isEmpty {
+                                    VStack(spacing: 8) {
+                                        Text("No calendars found")
+                                            .foregroundColor(.secondary)
+                                        Text("Make sure you have calendars set up in the Calendar app.")
+                                            .font(.footnote)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                } else {
+                                    ForEach(availableCalendars) { calendar in
+                                        HStack(spacing: 8) {
+                                            Toggle(isOn: Binding(
+                                                get: {
+                                                    !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier)
+                                                },
+                                                set: { isEnabled in
+                                                    if isEnabled {
+                                                        filteredCalendarIdentifiers.removeAll { $0 == calendar.calendarIdentifier }
+                                                    } else {
+                                                        if !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier) {
+                                                            filteredCalendarIdentifiers.append(calendar.calendarIdentifier)
+                                                        }
+                                                    }
+                                                }
+                                            )) { EmptyView() }
 
-                    if !availableCalendars.isEmpty {
-                        HStack {
-                            Button("Show All") {
-                                filteredCalendarIdentifiers.removeAll()
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .accentColor))
-                            .disabled(filteredCalendarIdentifiers.isEmpty)
+                                            Circle()
+                                                .fill(Color(cgColor: calendar.color))
+                                                .frame(width: 12, height: 12)
 
-                            Spacer()
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(calendar.title)
+                                                    .lineLimit(1)
 
-                            DangerButton(action: {
-                                for calendar in availableCalendars {
-                                    if !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier) {
-                                        filteredCalendarIdentifiers.append(calendar.calendarIdentifier)
+                                                Text(calendar.accountName)
+                                                    .font(.caption)
+                                                    .foregroundColor(.secondary)
+                                                    .lineLimit(1)
+                                            }
+
+                                            Spacer()
+                                        }
+                                        .padding(.vertical, 4)
                                     }
                                 }
-                            }) {
-                                Text("Hide All")
                             }
-                            .disabled(filteredCalendarIdentifiers.count == availableCalendars.count)
+                            .padding(8)
+                        }
+                        .frame(height: 200)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                        )
+
+                        if !availableCalendars.isEmpty {
+                            HStack {
+                                Button("Show All") {
+                                    filteredCalendarIdentifiers.removeAll()
+                                }
+                                .buttonStyle(.settings)
+                                .disabled(filteredCalendarIdentifiers.isEmpty)
+
+                                Spacer()
+
+                                DangerButton(action: {
+                                    for calendar in availableCalendars {
+                                        if !filteredCalendarIdentifiers.contains(calendar.calendarIdentifier) {
+                                            filteredCalendarIdentifiers.append(calendar.calendarIdentifier)
+                                        }
+                                    }
+                                }) {
+                                    Text("Hide All")
+                                }
+                                .disabled(filteredCalendarIdentifiers.count == availableCalendars.count)
+                            }
                         }
                     }
                 }
-            }
-            .task {
-                authorizationStatus = EKEventStore.authorizationStatus(for: .event)
-
-                if authorizationStatus == .notDetermined {
-                    await withCheckedContinuation { continuation in
-                        Self.eventStore.requestAccess(to: .event) { _, _ in
-                            continuation.resume()
-                        }
-                    }
+                .task {
                     authorizationStatus = EKEventStore.authorizationStatus(for: .event)
-                }
 
-                if authorizationStatus == .authorized {
-                    isLoadingCalendars = true
-                    availableCalendars = await loadCalendars()
-                    cleanupStaleFilters()
-                    isLoadingCalendars = false
-                } else {
-                    isLoadingCalendars = false
+                    if authorizationStatus == .notDetermined {
+                        await withCheckedContinuation { continuation in
+                            Self.eventStore.requestAccess(to: .event) { _, _ in
+                                continuation.resume()
+                            }
+                        }
+                        authorizationStatus = EKEventStore.authorizationStatus(for: .event)
+                    }
+
+                    if authorizationStatus == .authorized {
+                        isLoadingCalendars = true
+                        availableCalendars = await loadCalendars()
+                        cleanupStaleFilters()
+                        isLoadingCalendars = false
+                    } else {
+                        isLoadingCalendars = false
+                    }
                 }
             }
         }
