@@ -50,9 +50,9 @@ enum ActiveAppIndicatorDockDetection {
             return itemBundle.bundleIdentifier == bundleIdentifier
         }
 
-        let runningApps = NSRunningApplication.runningApplications(
-            withBundleIdentifier: bundleIdentifier
-        )
+        let runningApps = bundleMatchingItems.first
+            .flatMap { try? $0.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL }
+            .map { LauncherShortcutResolver.runningApplications(forBundleAt: $0, bundleIdentifier: bundleIdentifier) } ?? []
         let processIdentifiersByDockItem = DockAppInstanceOrdering.shared.processIdentifiers(
             for: runningApps,
             items: bundleMatchingItems,

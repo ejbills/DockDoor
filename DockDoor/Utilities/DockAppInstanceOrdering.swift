@@ -21,11 +21,13 @@ final class DockAppInstanceOrdering {
             queue: .main
         ) { [weak self] notification in
             guard let self, let pending,
-                  let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
+                  let activatedApp = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
             else { return }
             self.pending = nil
+            let app = LauncherShortcutResolver.resolvingInPlaceReexec(activatedApp)
+            let owner = LauncherShortcutResolver.owningShortcutBundleIdentifier(of: app) ?? app.bundleIdentifier
             guard Date() < pending.expires,
-                  app.bundleIdentifier == pending.bundle,
+                  owner == pending.bundle,
                   (try? pending.item.appIsRunning()) == true
             else { return }
             var entries = assignments[pending.bundle] ?? []
@@ -64,7 +66,9 @@ final class DockAppInstanceOrdering {
         if snapshots[bundleIdentifier] != snapshot {
             snapshots[bundleIdentifier] = snapshot
             assignments[bundleIdentifier] = []
-            pending = nil
+            if pending?.bundle == bundleIdentifier {
+                pending = nil
+            }
         }
         let entries = assignments[bundleIdentifier] ?? []
         let known = items.map { item in

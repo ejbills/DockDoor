@@ -24,7 +24,7 @@ struct DockAppInstanceOrderingTests {
         #expect(DockAppInstanceOrdering.resolve(runningPIDs: [202, 303], runningStates: [true, true], knownPIDs: [101, nil]) == [nil, nil])
     }
 
-    @Test func ThreeInstancesRequireMoreEvidence() {
+    @Test func threeInstancesRequireMoreEvidence() {
         #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202, 303], runningStates: [true, true, true], knownPIDs: [202, nil, nil]) == [202, nil, nil])
     }
 
@@ -35,5 +35,13 @@ struct DockAppInstanceOrderingTests {
 
     @Test func conflictingEvidenceDoesNotTargetEitherTile() {
         #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true], knownPIDs: [101, 101]) == [nil, nil])
+    }
+
+    @Test func processOwnedByAnotherShortcutCannotKeepAssignment() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [202], runningStates: [true], knownPIDs: [101]) == [202])
+    }
+
+    @Test func mismatchedEvidenceDoesNotGuess() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true], knownPIDs: [101]) == [nil, nil])
     }
 }

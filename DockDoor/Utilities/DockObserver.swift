@@ -974,7 +974,7 @@ final class DockObserver {
            let item = appUnderMouse.dockItemElement,
            let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
            let bundleIdentifier = Bundle(url: url)?.bundleIdentifier,
-           NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).count > 1,
+           LauncherShortcutResolver.runningApplications(forBundleAt: url, bundleIdentifier: bundleIdentifier).count > 1,
            case .notFound = appUnderMouse.status
         {
             lastHoveredPID = nil
