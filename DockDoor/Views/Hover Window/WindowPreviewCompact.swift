@@ -5,7 +5,6 @@ struct WindowPreviewCompact: View, Equatable {
     let windowInfo: WindowInfo
     let index: Int
     let dockPosition: DockPosition
-    let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
     let isSelected: Bool
     let windowSwitcherActive: Bool
@@ -15,6 +14,7 @@ struct WindowPreviewCompact: View, Equatable {
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
     let focusedWindowID: CGWindowID?
+    var spaceNumber: Int? = nil
 
     @State private var isHovering = false
 
@@ -24,12 +24,12 @@ struct WindowPreviewCompact: View, Equatable {
 
     static func == (l: Self, r: Self) -> Bool {
         l.index == r.index && l.isSelected == r.isSelected
-            && l.uniformCardRadius == r.uniformCardRadius
             && l.windowSwitcherActive == r.windowSwitcherActive
             && l.appearance == r.appearance
             && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
             && l.backgroundAppearance == r.backgroundAppearance
             && l.focusedWindowID == r.focusedWindowID
+            && l.spaceNumber == r.spaceNumber
     }
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
@@ -130,6 +130,14 @@ struct WindowPreviewCompact: View, Equatable {
 
             Spacer(minLength: 0)
 
+            if let spaceNumber {
+                SpaceNumberBadge(
+                    number: spaceNumber,
+                    font: appearance.compactModeItemSize.secondaryFont,
+                    backgroundAppearance: backgroundAppearance
+                )
+            }
+
             // Traffic light buttons
             if shouldShowTrafficLightButtons {
                 TrafficLightButtons(
@@ -149,7 +157,7 @@ struct WindowPreviewCompact: View, Equatable {
         .frame(width: appearance.previewWidth, height: appearance.compactModeItemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
-            let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : CardRadius.fallback
+            let cornerRadius = appearance.radii.card
 
             if !appearance.hidePreviewCardBackground {
                 BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)

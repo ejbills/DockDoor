@@ -16,6 +16,7 @@ struct MainSettingsView: View {
                 supportAndContributionsSection
                 applicationBasicsSection
                 activeAppIndicatorSection
+                backupAndRestoreSection
 
                 HStack {
                     Spacer()
@@ -78,6 +79,23 @@ struct MainSettingsView: View {
     private var activeAppIndicatorSection: some View {
         SettingsGroup(header: "Active App Indicator") {
             ActiveAppIndicatorSettingsView()
+        }
+    }
+
+    // MARK: - Backup & Restore
+
+    private var backupAndRestoreSection: some View {
+        SettingsGroup(header: "Backup & Restore") {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 12) {
+                    Button("Export Settings…") { SettingsBackupManager.exportSettings() }
+                        .settingsSearchTarget("general.exportSettings")
+                    Button("Import Settings…") { SettingsBackupManager.importSettings() }
+                        .settingsSearchTarget("general.importSettings")
+                }
+
+                SettingsNote(icon: "arrow.up.arrow.down.circle", text: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
+            }
         }
     }
 

@@ -38,6 +38,217 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.41.0"></a>
+# [Release 1.41.0](https://github.com/ejbills/DockDoor/releases/tag/1.41.0) - 2026-10-15
+
+## ✨ New Features
+- Trackpad Window Gestures for title bars, Dock icons and the menu bar
+  - Off by default; turn on in Settings > Gestures, then restart DockDoor when prompted
+  - Title bar: swipe left or right to snap to a half, swipe up to fill the screen, swipe sideways then up or down to snap to a corner
+  - Title bar: swipe down to minimize, pinch in to close the window (or just the tab when you pinch a tab), pinch out for full screen, double-tap to center at the earlier size
+  - Running app's Dock icon: swipe down to minimize its front window, swipe up to restore its last minimized window, pinch in to quit
+  - Empty menu bar: swipe left or right to switch apps, swipe down to minimize all windows on that display, swipe up to restore them
+  - Menu bar: tap and hold, then swipe, to open the Window Switcher (requires the Window Switcher to be enabled)
+  - Press Escape mid-gesture to cancel
+  - A tooltip beside the cursor names the action as you gesture
+- New Gestures tab with per-gesture controls
+  - Each gesture has its own on/off switch and an animated demo that plays when you hover over it
+  - Options group: Sensitivity slider, "Show where the window will land" snap-area preview, and Haptic feedback
+  - A banner warns when the needed trackpad settings (Zoom in or out for pinches, Smart zoom for double-taps) are off, with an Open Trackpad Settings button
+- Reserve screen space for a custom dock
+  - Settings > Gestures > Space for a Custom Dock
+  - Choose the edge (Off, Bottom, Left, Right, Top) and a size from 10 to 300 px
+  - Snapped and positioned windows, title bar scroll centering and window positioning commands stay clear of it
+  - Dock apps can report their own reserved space, listed under Reported by Apps
+- AppleScript command to reserve screen edges
+  - Example: `reserve screen edge "bottom" thickness 80 for "com.example.MyDock" on display "main"`
+  - Use "none" to release the space; it is also released when the app quits
+  - Listed in DockDoor's built-in scripting help
+- Export and import settings as a JSON backup
+  - Settings > General > Backup & Restore > Export Settings… or Import Settings…
+
+## 🔧 Improvements & Stability
+- Gestures and keybinds now have separate Settings pages
+  - Settings > Gestures holds all gestures, including Dock and title bar scrolling, dock preview swipes and the trackpad swipe window switcher
+  - Settings > Keybinds holds Mouse Actions, Command-key shortcuts and the Window Switcher keybind
+  - Settings search points to the new locations
+- Adjust trackpad swipe window switcher sensitivity
+  - Find the swipe sensitivity slider under Trackpad Swipe for Window Switcher in Settings > Gestures (50%–200%, default 100%)
+  - Higher values respond to shorter swipes; lower values reduce accidental triggers
+- Dock and title bar scroll gestures pause while Window Gestures is on
+  - Turn Window Gestures off to use them again
+- Snapped windows stay linked
+  - Drag a snapped window's title bar to unsnap it and restore its size
+  - Drag the shared edge between snapped windows to resize them together
+- Snapping and centering account for Stage Manager's side strip automatically
+- Gestures respect reserved screen edges and use the same positioning as DockDoor's window actions
+- Restoring from a Dock icon or the menu bar brings back the most recently minimized window, or every minimized window on that display
+- Window gestures stay out of the way of DockDoor's preview windows, and previews hide when a Dock icon gesture runs
+- Gesture tooltip matches DockDoor's look and sits closer to the cursor on multi-display setups
+- Title bar detection is more reliable, so gestures work on more windows and apps
+- Window switcher ordering is no longer shuffled by background app activity
+- Website has a new Window Gestures section with a trackpad demo
+- Updated translations in supported languages
+
+## 🐛 Bug Fixes
+- DockDoor now launches on macOS versions missing certain glass-effect system features
+- Window switcher returns to the tab you selected in apps with native tabs, such as Finder and Terminal
+- Tabbed windows are matched and shown correctly in previews and the switcher
+- Active app indicator stays in place while a Dock icon bounces on bottom, left and right Docks
+- Dock previews no longer appear for an icon you've already moved past
+- Centering a window larger than the screen now fits it on screen
+- Screen space reserved by other apps is released when they quit
+
+
+[Changes][1.41.0]
+
+
+<a id="1.40.7"></a>
+# [Release 1.40.7](https://github.com/ejbills/DockDoor/releases/tag/1.40.7) - 2026-10-04
+
+## 🐛 Bug Fixes
+- Parall-launched apps that relaunch themselves are recognized
+
+
+[Changes][1.40.7]
+
+
+<a id="1.40.6"></a>
+# [Release 1.40.6](https://github.com/ejbills/DockDoor/releases/tag/1.40.6) - 2026-10-04
+
+## 🐛 Bug Fixes
+- Parall shortcut icons show the right window previews
+
+
+[Changes][1.40.6]
+
+
+<a id="1.40.5"></a>
+# [Release 1.40.5](https://github.com/ejbills/DockDoor/releases/tag/1.40.5) - 2026-10-04
+
+## ✨ New Features
+- Open the window switcher with a trackpad swipe (thanks [@anandghegde](https://github.com/anandghegde))
+  - Swipe with 3 or 4 fingers, move left or right to change the selection, then lift your fingers to switch to the highlighted window
+  - Turn it on in Settings > Gestures & Keybinds > Trackpad Swipe for Window Switcher (off by default, requires the Window Switcher)
+- Add a shadow beneath preview panels
+  - Turn on "Show shadow beneath previews" in Settings > Appearance > Background (off by default)
+
+## 🔧 Improvements & Stability
+- Smoother dock preview slide-in
+- Window switcher closes as soon as you pick a window
+- Window tracking stays responsive with slow or hung apps
+- Parall shortcut instances stay separate
+  - Apps launched from Parall shortcuts keep their windows apart from the original app
+  - The active-app indicator, Cmd+Tab replacement, and "group app instances" recognize each shortcut tile
+- Scrolling over lyrics scrolls the lyrics
+  - Scroll over the lyrics area in the media widget without changing the volume or seeking
+
+## 🐛 Bug Fixes
+- Window switcher no longer freezes when an app is slow to respond
+- DockDoor no longer freezes after waking from sleep when an app is hung
+- Dock previews work for Parall shortcut tiles
+- Preview cards no longer jump in size when window titles are set to show on hover
+- Pinned media and calendar widgets can be dragged on macOS 27
+  - Dragging widget no longer available for < macOS 14
+- Fixed a crash after DockDoor restarts its keyboard, mouse, or Dock-lock monitoring
+  - Could happen after changing certain settings or recovering from a system event
+- Lyrics refresh on every track change
+- Embedded media and calendar widgets no longer get clipped by large card corner radii
+
+
+[Changes][1.40.5]
+
+
+<a id="1.40.4"></a>
+# [Release 1.40.4](https://github.com/ejbills/DockDoor/releases/tag/1.40.4) - 2026-10-02
+
+## 🐛 Bug Fixes
+- Stuck dock and preview clicks now recover on their own
+  - Fixes clicks on the dock or DockDoor previews that stop responding after macOS temporarily blocks DockDoor from sending input
+
+
+[Changes][1.40.4]
+
+
+<a id="1.40.3"></a>
+# [Release 1.40.3](https://github.com/ejbills/DockDoor/releases/tag/1.40.3) - 2026-10-02
+
+## ✨ New Features
+- Adjustable corner radius for previews
+  - Use the Corner Radius slider in Settings > Appearance > General Appearance, from 0 to 40 pt (default 20 pt)
+- Two-color running app dots
+  - Turn "Highlight the frontmost app" on or off in Settings > General > Active App Indicator, available when the style is "Running app dots"
+
+## 🔧 Improvements & Stability
+- Running app dots follow the Dock as it animates
+- Running app dots fade in smoothly
+- Search bar corners fixed
+
+## 🐛 Bug Fixes
+- Mac can dim and sleep normally again
+- Running app dots show when the Dock is summoned over a full-screen app
+- Running app dots stay accurate across Spaces and multiple displays
+- Settings no longer opens by itself when Siri or Apple Intelligence runs in the background
+- Liquid Glass corners no longer look distorted on the search bar or small cards with a large corner radius
+- Search bar hint shows your current search shortcut after you change it
+
+
+[Changes][1.40.3]
+
+
+<a id="1.40.2"></a>
+# [Release 1.40.2](https://github.com/ejbills/DockDoor/releases/tag/1.40.2) - 2026-09-30
+
+## ✨ New Features
+- Liquid Glass background gets a native glass look on macOS 27
+  - Real edge refraction and a bright rim
+  - Find it in Settings > Appearance > Background with the Liquid Glass style (the default style)
+  - New Opacity slider from "Clearer" to "More Opaque"
+  - New Refraction toggle, on by default; turn it off for softer frosted glass that is easier to read over busy backgrounds
+  - Replaces the older Glass Tuning options on macOS 27 and later
+  - macOS 26 keeps Glass Tuning unchanged
+  - Settings search finds Opacity and Refraction on macOS 27 and later
+- Show the Space number on window previews
+  - Turn on "Show Space number on previews" in Settings > Appearance > General Appearance
+  - Off by default, and only shown when you have more than one desktop
+  - Works in the standard and compact layouts
+  - The badge moves to a corner that doesn't overlap the window controls
+- Running app dots for the active app indicator
+  - Choose "Dots (running apps)" under Settings > General > Active App Indicator > Indicator Style
+  - Every running app gets a dot: bright for the frontmost app, dimmed for apps with open windows, black for apps with none
+  - Dots update as windows open and close and as you switch apps
+  - Indicator Height and Length are hidden for Dots; Position Offset and Shift still apply
+  - The default stays the line style
+
+## 🔧 Improvements & Stability
+- Small badges on previews use the same Liquid Glass look on macOS 27 and later
+- Updated translations for supported languages
+- Debug logs record more capture details to help diagnose blank or wrong previews
+
+## 🐛 Bug Fixes
+- Accessibility permission prompt no longer asks to restart too early
+  - OK now only opens System Settings
+  - DockDoor asks you to restart once it detects the permission has been granted
+  - If you grant access later, dock previews start working without reopening DockDoor
+- Clicks no longer stop working system-wide after permission changes
+  - When macOS refuses DockDoor's input access, DockDoor releases its keyboard and mouse monitoring so your clicks go through
+  - It restores monitoring when access returns
+- Invisible helper and phantom windows no longer appear in previews or the switcher
+- Full-size hover previews no longer stick on screen or appear late
+  - Pressing Escape also dismisses a full-size preview
+- Previews no longer turn into a cropped image when switching Spaces
+- Windows of quit or crashed apps no longer linger in the window switcher
+- Dock previews sit next to the hovered icon on a right-side Dock
+- Preview panels stay anchored to their icon and inside the visible screen when they resize
+- Newly opened dock previews show a current window list instead of stale windows
+- Native tabbed windows collapse correctly in dock previews, matching the switcher
+- Active app indicator sits correctly on macOS 27
+- DockDoor Pro icon displays correctly
+
+
+[Changes][1.40.2]
+
+
 <a id="1.40.1"></a>
 # [Release 1.40.1](https://github.com/ejbills/DockDoor/releases/tag/1.40.1) - 2026-09-03
 
@@ -2386,6 +2597,13 @@ v1.0
 [Changes][releases]
 
 
+[1.41.0]: https://github.com/ejbills/DockDoor/compare/1.40.7...1.41.0
+[1.40.7]: https://github.com/ejbills/DockDoor/compare/1.40.6...1.40.7
+[1.40.6]: https://github.com/ejbills/DockDoor/compare/1.40.5...1.40.6
+[1.40.5]: https://github.com/ejbills/DockDoor/compare/1.40.4...1.40.5
+[1.40.4]: https://github.com/ejbills/DockDoor/compare/1.40.3...1.40.4
+[1.40.3]: https://github.com/ejbills/DockDoor/compare/1.40.2...1.40.3
+[1.40.2]: https://github.com/ejbills/DockDoor/compare/1.40.1...1.40.2
 [1.40.1]: https://github.com/ejbills/DockDoor/compare/1.40.0...1.40.1
 [1.40.0]: https://github.com/ejbills/DockDoor/compare/1.39.5...1.40.0
 [1.39.5]: https://github.com/ejbills/DockDoor/compare/1.39.4...1.39.5

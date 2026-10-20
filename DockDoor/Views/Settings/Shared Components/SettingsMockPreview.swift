@@ -83,6 +83,8 @@ struct SettingsMockPreview: View {
     @Default(.activeAppIndicatorColor) private var activeAppIndicatorColor
     @Default(.showAnimations) private var showAnimations
     @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
+    @Default(.uniformCardRadius) private var uniformCardRadius
+    @Default(.previewCornerRadius) private var previewCornerRadius
     @Default(.windowTitleFontSize) private var windowTitleFontSize
     @Default(.trafficLightButtonScale) private var trafficLightButtonScale
 
@@ -217,6 +219,7 @@ struct SettingsMockPreview: View {
             activeAppIndicatorColor: activeAppIndicatorColor,
             showAnimations: showAnimations,
             globalPaddingMultiplier: globalPaddingMultiplier,
+            radii: CardRadius.Resolved(uniform: uniformCardRadius, base: previewCornerRadius, paddingMultiplier: globalPaddingMultiplier),
             windowTitleFontSize: windowTitleFontSize,
             switcherAppIconSize: isWindowSwitcher ? switcherAppIconSize : 0,
             trafficLightButtonScale: trafficLightButtonScale,

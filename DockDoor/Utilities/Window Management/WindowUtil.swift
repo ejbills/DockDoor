@@ -387,8 +387,8 @@ extension WindowUtil {
             return // Skip update
         }
 
+        let windowID = try? element.cgWindowId()
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
-            let windowID = try? element.cgWindowId()
             if let index = windowSet.firstIndex(where: { cachedWindow in
                 if cachedWindow.axElement == element {
                     return true
@@ -539,15 +539,19 @@ extension WindowUtil {
         let connectionID = CGSMainConnectionID()
         var windowIDUInt32 = UInt32(windowID)
         let qualityOption: CGSWindowCaptureOptions = (Defaults[.windowImageCaptureQuality] == .best) ? .bestResolution : .nominalResolution
-        guard let capturedWindows = CGSHWCaptureWindowList(
+        let capturedWindows = CGSHWCaptureWindowList(
             connectionID,
             &windowIDUInt32,
             1,
             [.ignoreGlobalClipShape, .fullSize, qualityOption]
-        ) as? [CGImage],
-            let capturedImage = capturedWindows.first,
-            !isFullyTransparent(capturedImage)
-        else {
+        ) as? [CGImage]
+        let capturedImage = capturedWindows?.first
+        let entry = (CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]])?.first
+        let bounds = (entry?[kCGWindowBounds as String] as? NSDictionary).flatMap { CGRect(dictionaryRepresentation: $0) }
+        let transparent = capturedImage.map(isFullyTransparent) ?? false
+        let clipped = capturedImage.map { isClippedBySpaceTransition($0, bounds: bounds, windowID: windowID) } ?? false
+        logCapture(windowID: windowID, pid: pid, title: windowTitle, image: capturedImage, transparent: transparent, clipped: clipped, entry: entry, quality: qualityOption)
+        guard let capturedImage, !transparent, !clipped else {
             throw captureError
         }
         cgImage = capturedImage
@@ -580,6 +584,27 @@ extension WindowUtil {
         return cgImage
     }
 
+    private static func isClippedBySpaceTransition(_ image: CGImage, bounds: CGRect?, windowID: CGWindowID) -> Bool {
+        guard let bounds, bounds.width > 0, bounds.height > 0, image.height > 0 else { return false }
+        let imageAspect = CGFloat(image.width) / CGFloat(image.height)
+        let boundsAspect = bounds.width / bounds.height
+        guard abs(imageAspect - boundsAspect) / boundsAspect > 0.02 else { return false }
+        let spaces = Set(windowID.cgsSpaces().map { Int($0) })
+        return !spaces.isEmpty && spaces.isDisjoint(with: currentActiveSpaceIDs())
+    }
+
+    private static func logCapture(windowID: CGWindowID, pid: pid_t, title: String?, image: CGImage?, transparent: Bool, clipped: Bool, entry: [String: AnyObject]?, quality: CGSWindowCaptureOptions) {
+        guard Defaults[.debugMode] else { return }
+        let bounds = (entry?[kCGWindowBounds as String] as? [String: AnyObject]).map {
+            "\(($0["Width"] as? NSNumber)?.intValue ?? -1)x\(($0["Height"] as? NSNumber)?.intValue ?? -1)@\(($0["X"] as? NSNumber)?.intValue ?? -1),\(($0["Y"] as? NSNumber)?.intValue ?? -1)"
+        } ?? "none"
+        let onscreen = (entry?[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
+        let spaces = windowID.cgsSpaces()
+        let active = currentActiveSpaceIDs()
+        let result = image.map { "\($0.width)x\($0.height)\(transparent ? " transparent" : "")\(clipped ? " clipped" : "")" } ?? "nil"
+        DebugLogger.log("captureWindowImage", details: "PID: \(pid), window: \(windowID), title: \(title ?? ""), image: \(result), bounds: \(bounds), onscreen: \(onscreen), spaces: \(spaces), activeSpaces: \(active.sorted()), quality: \(quality == .bestResolution ? "best" : "nominal")")
+    }
+
     private static func isFullyTransparent(_ image: CGImage) -> Bool {
         let alphaOffset: Int
         switch image.alphaInfo {
@@ -605,6 +630,10 @@ extension WindowUtil {
             y += stepY
         }
         return true
+    }
+
+    static func cachedWindowElements(for pid: pid_t) -> [AXUIElement] {
+        desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.axElement)
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -705,7 +734,22 @@ extension WindowUtil {
 // MARK: - Window Discovery
 
 extension WindowUtil {
+    static func isProcessAlive(_ pid: pid_t) -> Bool {
+        pid > 0 && (kill(pid, 0) == 0 || errno == EPERM)
+    }
+
+    static func evictTerminatedApps() {
+        let dead = desktopSpaceWindowCacheManager.cachedPIDs().filter { !isProcessAlive($0) }
+        guard !dead.isEmpty else { return }
+        for pid in dead {
+            DebugLogger.log("evictTerminatedApp", details: "PID: \(pid)")
+            purgeAppCache(with: pid)
+        }
+        Task { @MainActor in WindowManipulationObservers.didEvictTerminatedApps(dead) }
+    }
+
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
+        evictTerminatedApps()
         let windows = desktopSpaceWindowCacheManager.getAllWindows()
         var filteredWindows = !Defaults[.includeHiddenWindowsInSwitcher]
             ? windows.filter { !$0.isHidden && !$0.isMinimized }
@@ -720,7 +764,8 @@ extension WindowUtil {
     }
 
     static func getAllWindowsIgnoringSwitcherFilters() -> [WindowInfo] {
-        sortWindowsForSwitcher(desktopSpaceWindowCacheManager.getAllWindows())
+        evictTerminatedApps()
+        return sortWindowsForSwitcher(desktopSpaceWindowCacheManager.getAllWindows())
     }
 
     static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
@@ -737,7 +782,7 @@ extension WindowUtil {
         let pidsWithWindows = Set(existingWindows.map(\.app.processIdentifier))
         let ownBundleId = Bundle.main.bundleIdentifier
 
-        return NSWorkspace.shared.runningApplications
+        return LauncherShortcutResolver.resolvingInPlaceReexecs(NSWorkspace.shared.runningApplications)
             .filter { app in
                 app.activationPolicy == .regular &&
                     !pidsWithWindows.contains(app.processIdentifier) &&
@@ -776,6 +821,25 @@ extension WindowUtil {
         return getWindowsForFrontmostApp(from: allWindows)
             .sorted { $0.lastAccessedTime > $1.lastAccessedTime }
             .first
+    }
+
+    static func windowInfo(for axWindow: AXUIElement, app: NSRunningApplication, windowID: CGWindowID? = nil) -> WindowInfo? {
+        guard let windowID = windowID ?? (try? axWindow.cgWindowId()) else { return nil }
+        if let cached = readCachedWindows(for: app.processIdentifier).first(where: { $0.id == windowID }) {
+            return cached
+        }
+        return WindowInfo(
+            windowProvider: AXFallbackProvider(cgID: windowID),
+            app: app,
+            image: nil,
+            axElement: axWindow,
+            appAxElement: AXUIElementCreateApplication(app.processIdentifier),
+            closeButton: try? axWindow.closeButton(),
+            lastAccessedTime: Date(),
+            isMinimized: (try? axWindow.isMinimized()) ?? false,
+            isHidden: app.isHidden,
+            readsAXTitle: false
+        )
     }
 
     /// Returns whether a single window belongs to one of the given active Spaces.
@@ -1006,7 +1070,7 @@ extension WindowUtil {
                 let windowAppPairs: [(window: SCWindow, displayApp: NSRunningApplication, ownerApp: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
                           !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
-                          let ownerApp = NSRunningApplication(processIdentifier: scApp.processID)
+                          let ownerApp = LauncherShortcutResolver.application(forProcessIdentifier: scApp.processID)
                     else { return nil }
                     let displayApp = displayAppsByOwner[ownerApp.processIdentifier] ?? WindowOwnerResolver.displayApp(forOwner: ownerApp)
                     displayAppsByOwner[ownerApp.processIdentifier] = displayApp
@@ -1039,7 +1103,7 @@ extension WindowUtil {
         }
 
         // AX fallback
-        let runningApps = NSWorkspace.shared.runningApplications.filter {
+        let runningApps = LauncherShortcutResolver.resolvingInPlaceReexecs(NSWorkspace.shared.runningApplications).filter {
             $0.activationPolicy == .regular &&
                 !WindowOwnerResolver.isAuxiliaryOwner($0) &&
                 !filteredBundleIdentifiers.contains($0.bundleIdentifier ?? "") &&
@@ -1269,14 +1333,14 @@ extension WindowUtil {
         var cgID: CGWindowID = 0
         guard _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 else { return }
 
-        createdWindowsInFlightLock.lock()
-        let alreadyInFlight = !createdWindowsInFlight.insert(axWindow).inserted
-        createdWindowsInFlightLock.unlock()
+        let alreadyInFlight = createdWindowsInFlightLock.withLock {
+            !createdWindowsInFlight.insert(axWindow).inserted
+        }
         guard !alreadyInFlight else { return }
         defer {
-            createdWindowsInFlightLock.lock()
-            createdWindowsInFlight.remove(axWindow)
-            createdWindowsInFlightLock.unlock()
+            _ = createdWindowsInFlightLock.withLock {
+                createdWindowsInFlight.remove(axWindow)
+            }
         }
 
         let appAxElement = AXUIElementCreateApplication(pid)
@@ -1405,6 +1469,9 @@ extension WindowUtil {
             isHidden: hiddenState
         )
         info.windowName = windowTitle
+        if let position = attributes.position, let size = attributes.size {
+            info.frame = CGRect(origin: position, size: size)
+        }
         return info
     }
 
@@ -1489,6 +1556,11 @@ extension WindowUtil {
         } else {
             let existingWindowsSet = desktopSpaceWindowCacheManager.readCache(pid: pid)
             if existingWindowsSet.isEmpty {
+                return nil
+            }
+
+            if !isProcessAlive(pid) {
+                evictTerminatedApps()
                 return nil
             }
 
@@ -1812,14 +1884,18 @@ extension WindowUtil {
     }
 
     static func openNewWindow(app: NSRunningApplication) {
-        let source = CGEventSource(stateID: .combinedSessionState)
-        let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: true)
-        keyDown?.flags = .maskCommand
-        keyDown?.postToPid(app.processIdentifier)
+        postCommandShortcut(0x2D, to: app.processIdentifier)
+    }
 
-        let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: false)
+    static func postCommandShortcut(_ keyCode: CGKeyCode, to pid: pid_t) {
+        let source = CGEventSource(stateID: .combinedSessionState)
+        let keyDown = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: true)
+        keyDown?.flags = .maskCommand
+        keyDown?.postToPid(pid)
+
+        let keyUp = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: false)
         keyUp?.flags = .maskCommand
-        keyUp?.postToPid(app.processIdentifier)
+        keyUp?.postToPid(pid)
     }
 
     static func activateAndOpenNewWindow(app: NSRunningApplication) {

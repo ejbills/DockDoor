@@ -121,9 +121,16 @@ typealias SLPSPostEventRecordToType = @convention(c) (
     UnsafeMutablePointer<UInt8>
 ) -> CGError
 
+typealias SLSWindowIsOrderedInType = @convention(c) (
+    CGSConnectionID,
+    CGWindowID,
+    UnsafeMutablePointer<Bool>
+) -> CGError
+
 private var skyLightHandle: UnsafeMutableRawPointer?
 private var setFrontProcessPtr: SLPSSetFrontProcessWithOptionsType?
 private var postEventRecordPtr: SLPSPostEventRecordToType?
+private var windowIsOrderedInPtr: SLSWindowIsOrderedInType?
 
 private func loadSkyLightFunctions() {
     guard skyLightHandle == nil else { return }
@@ -143,6 +150,10 @@ private func loadSkyLightFunctions() {
     if let symbol = dlsym(handle, "SLPSPostEventRecordTo") {
         postEventRecordPtr = unsafeBitCast(symbol, to: SLPSPostEventRecordToType.self)
     }
+
+    if let symbol = dlsym(handle, "SLSWindowIsOrderedIn") {
+        windowIsOrderedInPtr = unsafeBitCast(symbol, to: SLSWindowIsOrderedInType.self)
+    }
 }
 
 func _SLPSSetFrontProcessWithOptions(_ psn: UnsafeMutablePointer<ProcessSerialNumber>, _ wid: CGWindowID, _ mode: SLPSMode.RawValue) -> CGError {
@@ -155,6 +166,14 @@ func SLPSPostEventRecordTo(_ psn: UnsafeMutablePointer<ProcessSerialNumber>, _ b
     loadSkyLightFunctions()
     guard let fn = postEventRecordPtr else { return CGError(rawValue: -1)! }
     return fn(psn, bytes)
+}
+
+func SLSWindowIsOrderedIn(_ wid: CGWindowID) -> Bool? {
+    loadSkyLightFunctions()
+    guard let fn = windowIsOrderedInPtr else { return nil }
+    var isOrderedIn = false
+    guard fn(CGSMainConnectionID(), wid, &isOrderedIn) == .success else { return nil }
+    return isOrderedIn
 }
 
 func SLSMoveWindowsToManagedSpace(_ windowIDs: [CGWindowID], _ spaceID: CGSSpaceID) -> Bool {

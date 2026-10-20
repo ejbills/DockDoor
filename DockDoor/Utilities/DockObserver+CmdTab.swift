@@ -249,7 +249,7 @@ extension DockObserver {
                let bundleIdentifier = bundle.bundleIdentifier
             {
                 resolvedBundleId = bundleIdentifier
-                resolvedApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first
+                resolvedApp = LauncherShortcutResolver.runningApplications(forBundleAt: appURL, bundleIdentifier: bundleIdentifier).first
             }
 
             if resolvedApp == nil {

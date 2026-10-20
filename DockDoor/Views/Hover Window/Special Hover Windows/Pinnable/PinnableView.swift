@@ -30,7 +30,7 @@ struct PinnableViewModifier: ViewModifier {
         content
             .contentShape(Rectangle())
             .contextMenu {
-                if enablePinning {
+                if #available(macOS 15.0, *), enablePinning {
                     contextMenuContent
                 }
             }
@@ -46,6 +46,7 @@ struct PinnableViewModifier: ViewModifier {
         }
     }
 
+    @available(macOS 15.0, *)
     @ViewBuilder
     private var contextMenuContent: some View {
         let currentlyPinned = SharedPreviewWindowCoordinator.activeInstance?.isPinned(bundleIdentifier: bundleIdentifier, type: pinnableType) ?? false
@@ -94,6 +95,7 @@ extension View {
 }
 
 /// View modifier for pinned windows with options to switch mode and close
+@available(macOS 15.0, *)
 private struct PinnableDisabledModifier: ViewModifier {
     let key: String
     let currentType: PinnableViewType
@@ -121,10 +123,12 @@ private struct PinnableDisabledModifier: ViewModifier {
                     Label("Close", systemImage: "xmark.circle")
                 }
             }
+            .gesture(WindowDragGesture())
     }
 }
 
 extension View {
+    @available(macOS 15.0, *)
     func pinnableDisabled(key: String, type: PinnableViewType, isEmbedded: Bool) -> some View {
         modifier(PinnableDisabledModifier(key: key, currentType: type, isEmbedded: isEmbedded))
     }

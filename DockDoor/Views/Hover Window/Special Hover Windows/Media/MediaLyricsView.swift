@@ -27,6 +27,7 @@ struct MediaLyricsView: View {
                 .fill(.ultraThinMaterial)
                 .opacity(0.2)
         )
+        .mediaScrollPassthrough()
     }
 
     @ViewBuilder

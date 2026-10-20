@@ -1,17 +1,29 @@
 import Defaults
 import SwiftUI
 
+struct MediaScrollPassthroughKey: PreferenceKey {
+    static var defaultValue: [CGRect] = []
+    static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
+        value.append(contentsOf: nextValue())
+    }
+}
+
 struct MediaScrollModifier: ViewModifier {
+    static let coordinateSpace = "MediaScrollModifier"
+
     let bundleIdentifier: String
     let handlesSpacebar: Bool
     @ObservedObject var mediaInfo: MediaInfo
     @State private var scrollMonitor: Any?
     @State private var seekDebounceWork: DispatchWorkItem?
     @State private var hitTestView: NSView?
+    @State private var passthroughRects: [CGRect] = []
     @State private var shortcutRegistration: MediaShortcutRegistration?
 
     func body(content: Content) -> some View {
         content
+            .coordinateSpace(name: Self.coordinateSpace)
+            .onPreferenceChange(MediaScrollPassthroughKey.self) { passthroughRects = $0 }
             .background(ScrollHitTestHelper(view: $hitTestView))
             .onAppear {
                 setupMonitor()
@@ -54,6 +66,9 @@ struct MediaScrollModifier: ViewModifier {
 
         let locationInView = hitTestView.convert(event.locationInWindow, from: nil)
         guard hitTestView.bounds.contains(locationInView) else { return false }
+
+        let topLeftLocation = CGPoint(x: locationInView.x, y: hitTestView.bounds.height - locationInView.y)
+        guard !passthroughRects.contains(where: { $0.contains(topLeftLocation) }) else { return false }
 
         let isHorizontal = Defaults[.mediaWidgetScrollDirection] == .horizontal
         let delta: CGFloat = isHorizontal ? event.scrollingDeltaX : event.scrollingDeltaY
@@ -181,5 +196,14 @@ private struct ScrollHitTestHelper: NSViewRepresentable {
 extension View {
     func mediaScrollable(bundleIdentifier: String, mediaInfo: MediaInfo, handlesSpacebar: Bool = true) -> some View {
         modifier(MediaScrollModifier(bundleIdentifier: bundleIdentifier, handlesSpacebar: handlesSpacebar, mediaInfo: mediaInfo))
+    }
+
+    func mediaScrollPassthrough() -> some View {
+        background(GeometryReader { proxy in
+            Color.clear.preference(
+                key: MediaScrollPassthroughKey.self,
+                value: [proxy.frame(in: .named(MediaScrollModifier.coordinateSpace))]
+            )
+        })
     }
 }

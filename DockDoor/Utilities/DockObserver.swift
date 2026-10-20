@@ -2,6 +2,7 @@ import ApplicationServices
 import Carbon.HIToolbox.Events
 import Cocoa
 import Defaults
+import IOKit
 
 struct ApplicationInfo: Sendable {
     let processIdentifier: pid_t
@@ -9,7 +10,7 @@ struct ApplicationInfo: Sendable {
     let localizedName: String?
 
     func app() -> NSRunningApplication? {
-        NSRunningApplication(processIdentifier: processIdentifier)
+        LauncherShortcutResolver.application(forProcessIdentifier: processIdentifier)
     }
 }
 
@@ -65,7 +66,15 @@ final class DockObserver {
 
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
+    private static let postingCanarySubtype: Int16 = 0x0D0D
+    private(set) static var canPostEvents = true
+    private var postingCanaryMonitor: Any?
+    private var postingCanaryPending = false
+    private var postingCanaryMisses = 0
+    private var lastPostingCanaryUptime: TimeInterval = 0
     private var subscribedDockList: AXUIElement?
+    private var accessibilityPromptShown = false
+    private var awaitingAccessibilityGrant = false
 
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
@@ -121,19 +130,15 @@ final class DockObserver {
             (isMediaApp(bundleId) && Defaults[.enableMediaWidget])
     }
 
-    static func isDockVisible() -> Bool {
-        if let frontmostApp = NSWorkspace.shared.frontmostApplication,
-           WindowUtil.isAppInFullscreen(frontmostApp)
-        {
-            return false
-        }
-        return DockUtils.getDockSize() > 0
-    }
-
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         _ = DockAppInstanceOrdering.shared
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
+        postingCanaryMonitor = NSEvent.addLocalMonitorForEvents(matching: .applicationDefined) { [weak self] event in
+            guard event.subtype.rawValue == DockObserver.postingCanarySubtype else { return event }
+            self?.postingCanaryArrived()
+            return nil
+        }
         setupSelectedDockItemObserver()
         startHealthCheckTimer()
         enableDockClickDetection()
@@ -142,6 +147,9 @@ final class DockObserver {
     deinit {
         if DockObserver.activeInstance === self {
             DockObserver.activeInstance = nil
+        }
+        if let postingCanaryMonitor {
+            NSEvent.removeMonitor(postingCanaryMonitor)
         }
         healthCheckTimer?.invalidate()
         teardownObserver()
@@ -166,6 +174,16 @@ final class DockObserver {
     }
 
     private func performHealthCheck() {
+        if awaitingAccessibilityGrant, AXIsProcessTrusted() {
+            awaitingAccessibilityGrant = false
+            askUserToRestartApplication()
+            return
+        }
+
+        if hasInputSinceLastPostingCanary {
+            sendPostingCanary()
+        }
+
         guard let currentDockPID else {
             setupSelectedDockItemObserver()
             return
@@ -211,6 +229,55 @@ final class DockObserver {
         }
     }
 
+    private var hasInputSinceLastPostingCanary: Bool {
+        guard let idle = DockObserver.hidIdleSeconds else { return true }
+        return idle + 0.5 < ProcessInfo.processInfo.systemUptime - lastPostingCanaryUptime
+    }
+
+    private static var hidIdleSeconds: TimeInterval? {
+        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOHIDSystem"))
+        guard service != IO_OBJECT_NULL else { return nil }
+        defer { IOObjectRelease(service) }
+        let idle = IORegistryEntryCreateCFProperty(service, "HIDIdleTime" as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue() as? NSNumber
+        return idle.map { $0.doubleValue / 1_000_000_000 }
+    }
+
+    private func sendPostingCanary() {
+        if postingCanaryPending {
+            postingCanaryMisses += 1
+            if postingCanaryMisses >= 2, DockObserver.canPostEvents {
+                updateCanPostEvents(false)
+            }
+        }
+        postingCanaryPending = true
+        NSEvent.otherEvent(
+            with: .applicationDefined,
+            location: .zero,
+            modifierFlags: [],
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            subtype: DockObserver.postingCanarySubtype,
+            data1: 0,
+            data2: 0
+        )?.cgEvent?.postToPid(getpid())
+        lastPostingCanaryUptime = ProcessInfo.processInfo.systemUptime
+    }
+
+    private func postingCanaryArrived() {
+        postingCanaryPending = false
+        postingCanaryMisses = 0
+        if !DockObserver.canPostEvents {
+            updateCanPostEvents(true)
+        }
+    }
+
+    private func updateCanPostEvents(_ canPostEvents: Bool) {
+        DockObserver.canPostEvents = canPostEvents
+        DebugLogger.log("DockObserver", details: "Event posting \(canPostEvents ? "allowed" : "refused"), rebuilding event taps")
+        (NSApp.delegate as? AppDelegate)?.recoverObserversAndTaps()
+    }
+
     private func teardownObserver() {
         if let observer = axObserver {
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(observer), .commonModes)
@@ -226,22 +293,25 @@ final class DockObserver {
         }
 
         let dockAppPID = dockApp.processIdentifier
-        currentDockPID = dockAppPID
-
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
         guard AXIsProcessTrusted() else {
+            // The health check retries setup every 5 seconds until trusted; show the prompt once per launch.
+            awaitingAccessibilityGrant = true
+            guard !accessibilityPromptShown else { return }
+            accessibilityPromptShown = true
             MessageUtil.showAlert(
                 title: "Accessibility Permissions Required",
                 message: "You need to enable accessibility permissions for DockDoor to function, click OK to open System Preferences. A restart is required after granting permissions.",
                 actions: [.ok, .cancel],
                 completion: { _ in
                     SystemPreferencesHelper.openAccessibilityPreferences()
-                    askUserToRestartApplication()
                 }
             )
             return
         }
+
+        currentDockPID = dockAppPID
 
         guard let children = try? dockAppElement.children(),
               let axList = children.first(where: { element in
@@ -347,19 +417,9 @@ final class DockObserver {
         )
 
         // Build list of apps to fetch windows from
-        var appsToFetchWindowsFrom: [NSRunningApplication] = []
-        if Defaults[.groupAppInstancesInDock],
-           let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
-        {
-            let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
-            if !potentialApps.isEmpty {
-                appsToFetchWindowsFrom = potentialApps
-            } else {
-                appsToFetchWindowsFrom = [currentApp]
-            }
-        } else {
-            appsToFetchWindowsFrom = [currentApp]
-        }
+        let appsToFetchWindowsFrom: [NSRunningApplication] = Defaults[.groupAppInstancesInDock]
+            ? LauncherShortcutResolver.siblingInstances(of: currentApp)
+            : [currentApp]
 
         guard !appsToFetchWindowsFrom.isEmpty else { return }
 
@@ -376,6 +436,8 @@ final class DockObserver {
         if Defaults[.ignoreAppsWithSingleWindow], cachedWindows.count <= 1 {
             cachedWindows = []
         }
+
+        cachedWindows = WindowUtil.collapseNativeTabsIfNeeded(cachedWindows)
 
         // Filter cached windows by current space before showing preview
         if Defaults[.showWindowsFromCurrentSpaceOnly], !cachedWindows.isEmpty {
@@ -623,6 +685,29 @@ final class DockObserver {
         return nil
     }
 
+    private func applicationDockItems() -> [(element: AXUIElement, url: URL, bundleIdentifier: String)] {
+        (getAllDockItemChildren() ?? []).compactMap { item in
+            guard (try? item.subrole()) == "AXApplicationDockItem",
+                  let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+                  let bundleIdentifier = Bundle(url: url)?.bundleIdentifier
+            else { return nil }
+            return (item, url, bundleIdentifier)
+        }
+    }
+
+    func runningApplicationsInDockOrder() -> [NSRunningApplication] {
+        var seen = Set<pid_t>()
+        return applicationDockItems().compactMap { item -> NSRunningApplication? in
+            guard (try? item.element.appIsRunning()) == true else { return nil }
+            let app = LauncherShortcutResolver.runningApplications(forBundleAt: item.url, bundleIdentifier: item.bundleIdentifier)
+                .first { !seen.contains($0.processIdentifier) }
+            if let app {
+                seen.insert(app.processIdentifier)
+            }
+            return app
+        }
+    }
+
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
             return ApplicationReturnType(status: .notFound, dockItemElement: nil)
@@ -646,7 +731,7 @@ final class DockObserver {
                 }
             }
 
-            let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+            let runningApps = LauncherShortcutResolver.runningApplications(forBundleAt: appURL, bundleIdentifier: bundleIdentifier)
 
             // A duplicate persistent tile can be inactive while another tile
             // for the same bundle still has the sole running process.
@@ -772,19 +857,16 @@ final class DockObserver {
 
     private func removeEventTap() {
         if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            if let eventTapRunLoopSource {
-                EventTapThread.shared.remove(eventTapRunLoopSource)
-            }
-            CFMachPortInvalidate(eventTap)
+            EventTapThread.shared.remove(eventTap, source: eventTapRunLoopSource)
         }
         eventTap = nil
         eventTapRunLoopSource = nil
     }
 
-    private static let dockProximityBand: CGFloat = 220
+    static let dockProximityBand: CGFloat = 220
+    private static let dockItemHoverSlop: CGFloat = 8
 
-    private func isPointNearDock(_ point: CGPoint) -> Bool {
+    func isPointNearDock(_ point: CGPoint, band: CGFloat = DockObserver.dockProximityBand) -> Bool {
         let position = DockUtils.getDockPosition()
         var displayCount: UInt32 = 0
         var displays = [CGDirectDisplayID](repeating: 0, count: 16)
@@ -793,18 +875,31 @@ final class DockObserver {
             let bounds = CGDisplayBounds(display)
             guard bounds.contains(point) else { continue }
             switch position {
-            case .left: return point.x - bounds.minX <= Self.dockProximityBand
-            case .right: return bounds.maxX - point.x <= Self.dockProximityBand
-            case .bottom: return bounds.maxY - point.y <= Self.dockProximityBand
-            case .top: return point.y - bounds.minY <= Self.dockProximityBand
+            case .left: return point.x - bounds.minX <= band
+            case .right: return bounds.maxX - point.x <= band
+            case .bottom: return bounds.maxY - point.y <= band
+            case .top: return point.y - bounds.minY <= band
             default: return true
             }
         }
         return false
     }
 
+    func isPointOverDockItem(_ point: CGPoint, item: AXUIElement) -> Bool {
+        guard let position = try? item.position(), let size = try? item.size() else { return true }
+        let frame = CGRect(origin: position, size: size).insetBy(dx: -Self.dockItemHoverSlop, dy: -Self.dockItemHoverSlop)
+        switch DockUtils.getDockPosition() {
+        case .left, .right:
+            return point.y >= frame.minY && point.y <= frame.maxY && isPointNearDock(point, band: frame.width)
+        case .top, .bottom:
+            return point.x >= frame.minX && point.x <= frame.maxX && isPointNearDock(point, band: frame.height)
+        default:
+            return true
+        }
+    }
+
     private func setupEventTap() {
-        guard eventTap == nil else { return }
+        guard eventTap == nil, DockObserver.canPostEvents else { return }
         var eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
             (1 << CGEventType.rightMouseDown.rawValue) |
             (1 << CGEventType.otherMouseDown.rawValue)
@@ -846,11 +941,11 @@ final class DockObserver {
         }
 
         if type == .scrollWheel {
-            if Defaults[.enableTitleBarScrollGesture], handleTitleBarScroll(event) {
+            if Defaults[.enableTitleBarScrollGesture], !Defaults[.enableWindowGestures], handleTitleBarScroll(event) {
                 return nil
             }
 
-            guard Defaults[.enableDockScrollGesture], isPointNearDock(event.location) else {
+            guard Defaults[.enableDockScrollGesture], !Defaults[.enableWindowGestures], isPointNearDock(event.location) else {
                 return Unmanaged.passUnretained(event)
             }
 
