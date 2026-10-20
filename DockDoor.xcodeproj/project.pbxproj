@@ -19,6 +19,7 @@
 		1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */; };
 		204F31BF2B7E46239664231A /* WindowGestureRecognizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFF970DCB649F3BBE19214 /* WindowGestureRecognizerTests.swift */; };
 		2256F83C6A79407BB1FA5F33675A3463 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */; };
+		90F759C96BCD45C7A871F3C0F34B72B4 /* SettingsSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FC57C04580471A92B1269FE98871CE /* SettingsSidebar.swift */; };
 		232B30CAA2B0451CA505C05986A22EA6 /* DockDoor.sdef in Resources */ = {isa = PBXBuildFile; fileRef = A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */; };
 		27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */; };
 		2A8C8DBD14E84871BD3812AB /* WindowActionsMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22877BDC0B154607B25B3A8B /* WindowActionsMenuController.swift */; };
@@ -465,6 +466,7 @@
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
 		D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Glow.wav; sourceTree = "<group>"; };
 		DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
+		56FC57C04580471A92B1269FE98871CE /* SettingsSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSidebar.swift; sourceTree = "<group>"; };
 		DBECBD93A13645B2A46E546AC58BD1A4 /* FolderWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderWidgetView.swift; sourceTree = "<group>"; };
 		DE0A3B3EF43E44C0871AB2E0 /* DebugTestHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTestHarness.swift; sourceTree = "<group>"; };
 		E14867353EB841F785A03D08 /* WindowGestureExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGestureExecutor.swift; sourceTree = "<group>"; };
@@ -1021,6 +1023,7 @@
 				BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */,
 				BB709B3A2EF21493007809A2 /* WidgetSettingsView.swift */,
 				DA97BC625E094A429CF11C26F54C3418 /* SettingsTab.swift */,
+				56FC57C04580471A92B1269FE98871CE /* SettingsSidebar.swift */,
 				AE9C7D8765A140F0A595DD16 /* GesturesSettingsView.swift */,
 				42B9B5D70B7648AF97FC591B /* WindowGestures */,
 			);
@@ -1389,6 +1392,7 @@
 				DBFD0B5445DD4F01BD0FBBAB /* DockDoorPro.swift in Sources */,
 				0B939F007507453EBD11BA0D /* Links.swift in Sources */,
 				2256F83C6A79407BB1FA5F33675A3463 /* SettingsTab.swift in Sources */,
+				90F759C96BCD45C7A871F3C0F34B72B4 /* SettingsSidebar.swift in Sources */,
 				64CFB895E75142028A938986 /* WindowGestureTypes.swift in Sources */,
 				55FCF34F93B7487D989A978E /* WindowGestureRecognizer.swift in Sources */,
 				DBFEE8524DF44512829C9C90 /* WindowGestureResolver.swift in Sources */,

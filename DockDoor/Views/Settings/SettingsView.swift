@@ -188,22 +188,12 @@ struct SettingsView: View {
     }
 
     private var sidebar: some View {
-        List(selection: $selectedTab) {
-            sidebarRow(.general)
-
-            ForEach(SettingsTab.Section.allCases) { section in
-                Section {
-                    ForEach(SettingsTab.tabs(in: section)) { tab in
-                        sidebarRow(tab)
-                    }
-                } header: {
-                    Text(verbatim: section.localizedTitle)
-                }
-            }
+        SettingsSidebar(selectedTab: $selectedTab, isSearching: isSearching) { tab in
+            // Clear the search first: the clicked tab may already be selected,
+            // and a leftover query would keep the detail column on results.
+            searchEngine.query = ""
+            selectedTab = tab
         }
-        .listStyle(.sidebar)
-        // Medium rows regardless of the system sidebar size; Large crowds this window.
-        .environment(\.sidebarRowSize, .medium)
         .safeAreaInset(edge: .top, spacing: 0) {
             searchField
         }
@@ -251,16 +241,6 @@ struct SettingsView: View {
         .padding(.horizontal, 10)
         .padding(.top, 2)
         .padding(.bottom, 8)
-    }
-
-    private func sidebarRow(_ tab: SettingsTab) -> some View {
-        Label {
-            Text(verbatim: tab.localizedTitle)
-                .font(.callout)
-        } icon: {
-            Image(systemName: tab.systemImage)
-        }
-        .tag(tab)
     }
 
     private var detail: some View {
