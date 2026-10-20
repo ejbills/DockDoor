@@ -410,7 +410,7 @@ final class ActiveAppIndicatorCoordinator {
         let visibilityChanged = updateDockVisibilityState(listFrame: currentDockListFrame())
         if !showsRunningAppDots {
             if !visibilityChanged {
-                let isNewApp = previousApp?.bundleIdentifier != app.bundleIdentifier
+                let isNewApp = previousApp?.processIdentifier != app.processIdentifier
                 updateIndicatorPosition(for: app, widenFromCenter: isNewApp)
             }
             scheduleDelayedUpdate()
