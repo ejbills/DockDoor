@@ -1,144 +1,39 @@
 @testable import DockDoor
-import Foundation
 import Testing
 
 struct DockAppInstanceOrderingTests {
-    private let olderLaunchDate = Date(timeIntervalSince1970: 100)
-    private let newerLaunchDate = Date(timeIntervalSince1970: 200)
-
-    @Test func duplicatePersistentItemsUseReverseLaunchOrder() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiers(
-            for: [
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-            ],
-            persistentDockItemCount: 2
-        )
-
-        #expect(processIdentifiers == [202, 101])
+    @Test func unknownDuplicatesAreNotGuessed() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true], knownPIDs: [nil, nil]) == [nil, nil])
     }
 
-    @Test func inputOrderDoesNotAffectPersistentItemOrder() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiers(
-            for: [
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-            ],
-            persistentDockItemCount: 2
-        )
-
-        #expect(processIdentifiers == [202, 101])
+    @Test func nativeActivationResolvesEitherOrder() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true], knownPIDs: [101, nil]) == [101, 202])
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true], knownPIDs: [202, nil]) == [202, 101])
     }
 
-    @Test func transientItemsUseLaunchOrder() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiers(
-            for: [
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-            ],
-            persistentDockItemCount: 0
-        )
-
-        #expect(processIdentifiers == [101, 202])
+    @Test func inputOrderDoesNotChangeObservedIdentity() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [202, 101], runningStates: [true, true], knownPIDs: [101, nil]) == [101, 202])
     }
 
-    @Test func onePersistentItemKeepsLaunchOrder() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiers(
-            for: [
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-            ],
-            persistentDockItemCount: 1
-        )
-
-        #expect(processIdentifiers == [101, 202])
+    @Test func survivingProcessKeepsOccupiedTile() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101], runningStates: [false, true], knownPIDs: [nil, nil]) == [nil, 101])
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101], runningStates: [true, false], knownPIDs: [nil, nil]) == [101, nil])
     }
 
-    @Test func transientItemsFollowTheReversedPersistentPrefix() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiers(
-            for: [
-                (processIdentifier: 303, launchDate: Date(timeIntervalSince1970: 300)),
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-            ],
-            persistentDockItemCount: 2
-        )
-
-        #expect(processIdentifiers == [202, 101, 303])
+    @Test func deadProcessIsDiscarded() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [202, 303], runningStates: [true, true], knownPIDs: [101, nil]) == [nil, nil])
     }
 
-    @Test func missingLaunchDatesUseProcessIdentifiersAsATieBreak() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiers(
-            for: [
-                (processIdentifier: 202, launchDate: nil),
-                (processIdentifier: 101, launchDate: nil),
-            ],
-            persistentDockItemCount: 0
-        )
-
-        #expect(processIdentifiers == [101, 202])
+    @Test func ThreeInstancesRequireMoreEvidence() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202, 303], runningStates: [true, true, true], knownPIDs: [202, nil, nil]) == [202, nil, nil])
     }
 
-    @Test func closedFirstPersistentItemLeavesItsDockPositionEmpty() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
-            for: [
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-            ],
-            persistentDockItemCount: 2,
-            dockItemRunningStates: [false, true]
-        )
-
-        #expect(processIdentifiers == [nil, 101])
+    @Test func incompleteOccupancyDoesNotInfer() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, nil], knownPIDs: [101, nil]) == [101, nil])
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true, true], knownPIDs: [101, nil, nil]) == [101, nil, nil])
     }
 
-    @Test func closedSecondPersistentItemLeavesItsDockPositionEmpty() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
-            for: [
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-            ],
-            persistentDockItemCount: 2,
-            dockItemRunningStates: [true, false]
-        )
-
-        #expect(processIdentifiers == [202, nil])
-    }
-
-    @Test func runningPersistentItemsStillUseReverseLaunchOrder() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
-            for: [
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-            ],
-            persistentDockItemCount: 2,
-            dockItemRunningStates: [true, true]
-        )
-
-        #expect(processIdentifiers == [202, 101])
-    }
-
-    @Test func inactivePersistentItemBeforeTransientItemRemainsEmpty() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
-            for: [
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-            ],
-            persistentDockItemCount: 2,
-            dockItemRunningStates: [true, false, true]
-        )
-
-        #expect(processIdentifiers == [101, nil, 202])
-    }
-
-    @Test func unavailableRunningStatesFallBackToDockPrefix() {
-        let processIdentifiers = DockAppInstanceOrdering.processIdentifiersByDockItem(
-            for: [
-                (processIdentifier: 202, launchDate: newerLaunchDate),
-                (processIdentifier: 101, launchDate: olderLaunchDate),
-            ],
-            persistentDockItemCount: 2,
-            dockItemRunningStates: [nil, nil]
-        )
-
-        #expect(processIdentifiers == [202, 101])
+    @Test func conflictingEvidenceDoesNotTargetEitherTile() {
+        #expect(DockAppInstanceOrdering.resolve(runningPIDs: [101, 202], runningStates: [true, true], knownPIDs: [101, 101]) == [nil, nil])
     }
 }

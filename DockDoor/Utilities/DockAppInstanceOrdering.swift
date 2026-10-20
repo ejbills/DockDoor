@@ -1,98 +1,108 @@
 import Cocoa
 
-/// Reconstructs the order macOS uses for separate Dock items that share a
-/// bundle identifier. Accessibility exposes each item's position, but not the
-/// PID it represents, so launch order provides the identity bridge.
-enum DockAppInstanceOrdering {
-    typealias RunningApplicationIdentity = (processIdentifier: pid_t, launchDate: Date?)
+final class DockAppInstanceOrdering {
+    static let shared = DockAppInstanceOrdering()
 
-    /// Returns how many persistent Dock tiles use a bundle identifier.
-    static func persistentDockItemCount(for bundleIdentifier: String) -> Int {
-        guard let persistentApps = UserDefaults(suiteName: "com.apple.dock")?
-            .array(forKey: "persistent-apps") as? [[String: Any]]
-        else {
-            return 0
-        }
+    private struct Assignment {
+        let item: AXUIElement
+        let pid: pid_t
+    }
 
-        return persistentApps.count { item in
-            guard let tileData = item["tile-data"] as? [String: Any] else {
-                return false
-            }
-            return tileData["bundle-identifier"] as? String == bundleIdentifier
+    private var assignments: [String: [Assignment]] = [:]
+    private var snapshots: [String: [String]] = [:]
+    private var dockPID: pid_t?
+    private var pending: (bundle: String, item: AXUIElement, expires: Date)?
+    private var observer: NSObjectProtocol?
+
+    private init() {
+        observer = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self, let pending,
+                  let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
+            else { return }
+            self.pending = nil
+            guard Date() < pending.expires,
+                  app.bundleIdentifier == pending.bundle,
+                  (try? pending.item.appIsRunning()) == true
+            else { return }
+            var entries = assignments[pending.bundle] ?? []
+            entries.removeAll { CFEqual($0.item, pending.item) || $0.pid == app.processIdentifier }
+            entries.append(Assignment(item: pending.item, pid: app.processIdentifier))
+            assignments[pending.bundle] = entries
         }
     }
 
-    /// Returns running application PIDs in the order represented by the Dock.
-    /// Duplicate persistent tiles are filled in reverse launch order, followed
-    /// by any additional transient tiles in launch order.
-    static func processIdentifiers(
-        for runningApplications: [RunningApplicationIdentity],
-        persistentDockItemCount: Int
-    ) -> [pid_t] {
-        let processIdentifiers = runningApplications
-            .sorted { lhs, rhs in
-                let lhsDate = lhs.launchDate ?? .distantPast
-                let rhsDate = rhs.launchDate ?? .distantPast
-
-                if lhsDate == rhsDate {
-                    return lhs.processIdentifier < rhs.processIdentifier
-                }
-
-                return lhsDate < rhsDate
-            }
-            .map(\.processIdentifier)
-
-        let persistentProcessCount = min(
-            persistentDockItemCount,
-            processIdentifiers.count
-        )
-        let persistentProcessIdentifiers = processIdentifiers
-            .prefix(persistentProcessCount)
-            .reversed()
-        let transientProcessIdentifiers = processIdentifiers
-            .dropFirst(persistentProcessCount)
-
-        return Array(persistentProcessIdentifiers) + Array(transientProcessIdentifiers)
+    func cancelPendingClick() {
+        pending = nil
     }
 
-    /// Returns a PID assignment aligned with the matching Dock items. A nil
-    /// entry represents an unoccupied tile whose application instance exited.
-    static func processIdentifiersByDockItem(
-        for runningApplications: [RunningApplicationIdentity],
-        persistentDockItemCount: Int,
-        dockItemRunningStates: [Bool?]
+    func observeNativeClick(on item: AXUIElement, bundleIdentifier: String) {
+        pending = (bundleIdentifier, item, Date().addingTimeInterval(1))
+    }
+
+    func processIdentifiers(
+        for apps: [NSRunningApplication],
+        items: [AXUIElement],
+        bundleIdentifier: String
     ) -> [pid_t?] {
-        let runningDockItemIndices = dockItemRunningStates.indices.filter {
-            dockItemRunningStates[$0] == true
+        let currentDockPID = NSRunningApplication.runningApplications(
+            withBundleIdentifier: "com.apple.dock"
+        ).first?.processIdentifier
+        if dockPID != currentDockPID {
+            dockPID = currentDockPID
+            assignments.removeAll()
+            snapshots.removeAll()
+            pending = nil
         }
-
-        // Trust the Accessibility occupancy flags when they account for every
-        // process. Otherwise retain the previous prefix-based behavior while
-        // the Dock and NSWorkspace are between updates.
-        let occupiedDockItemIndices = if runningDockItemIndices.count == runningApplications.count {
-            runningDockItemIndices
-        } else {
-            Array(dockItemRunningStates.indices.prefix(runningApplications.count))
+        // PID plus launch date prevents reuse of a terminated process's identity.
+        let snapshot = apps.map {
+            "\($0.processIdentifier):\($0.launchDate?.timeIntervalSince1970 ?? 0)"
+        }.sorted()
+        if snapshots[bundleIdentifier] != snapshot {
+            snapshots[bundleIdentifier] = snapshot
+            assignments[bundleIdentifier] = []
+            pending = nil
         }
-        let occupiedPersistentDockItemCount = occupiedDockItemIndices.count {
-            $0 < persistentDockItemCount
+        let entries = assignments[bundleIdentifier] ?? []
+        let known = items.map { item in
+            entries.first { CFEqual($0.item, item) }?.pid
         }
-        let processIdentifiers = processIdentifiers(
-            for: runningApplications,
-            persistentDockItemCount: occupiedPersistentDockItemCount
+        return Self.resolve(
+            runningPIDs: apps.map(\.processIdentifier),
+            runningStates: items.map { try? $0.appIsRunning() },
+            knownPIDs: known
         )
+    }
 
-        var processIdentifiersByDockItem = [pid_t?](
-            repeating: nil,
-            count: dockItemRunningStates.count
-        )
-        for (dockItemIndex, processIdentifier) in zip(
-            occupiedDockItemIndices,
-            processIdentifiers
-        ) {
-            processIdentifiersByDockItem[dockItemIndex] = processIdentifier
+    static func resolve(
+        runningPIDs: [pid_t],
+        runningStates: [Bool?],
+        knownPIDs: [pid_t?]
+    ) -> [pid_t?] {
+        guard runningStates.count == knownPIDs.count else {
+            return Array(repeating: nil, count: runningStates.count)
         }
-
-        return processIdentifiersByDockItem
+        var result = knownPIDs.indices.map { index -> pid_t? in
+            guard runningStates[index] == true,
+                  let pid = knownPIDs[index], runningPIDs.contains(pid),
+                  knownPIDs.filter({ $0 == pid }).count == 1
+            else { return nil }
+            return pid
+        }
+        let missingPIDs = runningPIDs.filter { !result.contains($0) }
+        let missingItems = runningStates.indices.filter {
+            runningStates[$0] == true && result[$0] == nil
+        }
+        // Only infer an identity when occupancy and the remaining process agree.
+        if runningStates.allSatisfy({ $0 != nil }),
+           runningStates.filter({ $0 == true }).count == runningPIDs.count,
+           missingPIDs.count == 1, missingItems.count == 1
+        {
+            result[missingItems[0]] = missingPIDs[0]
+        }
+        return result
     }
 }

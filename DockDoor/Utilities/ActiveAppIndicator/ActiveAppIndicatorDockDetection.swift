@@ -52,18 +52,10 @@ enum ActiveAppIndicatorDockDetection {
         let runningApps = NSRunningApplication.runningApplications(
             withBundleIdentifier: bundleIdentifier
         )
-        let persistentDockItemCount = bundleMatchingItems.count > 1
-            ? DockAppInstanceOrdering.persistentDockItemCount(for: bundleIdentifier)
-            : 0
-        let dockItemRunningStates: [Bool?] = bundleMatchingItems.map {
-            try? $0.appIsRunning()
-        }
-        let processIdentifiersByDockItem = DockAppInstanceOrdering.processIdentifiersByDockItem(
-            for: runningApps.map {
-                (processIdentifier: $0.processIdentifier, launchDate: $0.launchDate)
-            },
-            persistentDockItemCount: persistentDockItemCount,
-            dockItemRunningStates: dockItemRunningStates
+        let processIdentifiersByDockItem = DockAppInstanceOrdering.shared.processIdentifiers(
+            for: runningApps,
+            items: bundleMatchingItems,
+            bundleIdentifier: bundleIdentifier
         )
         if let matchingItemIndex = processIdentifiersByDockItem.firstIndex(
             of: app.processIdentifier
@@ -74,6 +66,9 @@ enum ActiveAppIndicatorDockDetection {
             return frame
         }
 
+        if bundleMatchingItems.count > 1 {
+            return nil
+        }
         if let item = bundleMatchingItems.first(where: {
             (try? $0.appIsRunning()) == true
         }) ?? bundleMatchingItems.first {
