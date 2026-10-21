@@ -8,7 +8,9 @@ struct MediaLyricsButton: View {
     @Binding var showingLyrics: Bool
     var isFullMode: Bool = false
 
-    @Default(.showAnimations) var showAnimations
+    @Default(.showAnimations) private var showAnimationsSetting
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
 
     var body: some View {
         MediaControlButton(

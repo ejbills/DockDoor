@@ -21,7 +21,9 @@ struct MediaControlsFullView: View {
     let hoveringWindowTitle: Bool
     let backgroundAppearance: BackgroundAppearance
 
-    @Default(.showAnimations) var showAnimations
+    @Default(.showAnimations) private var showAnimationsSetting
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
 
     @State private var initialContentSize: CGSize = .zero
     @State private var hasSetInitialSize: Bool = false
