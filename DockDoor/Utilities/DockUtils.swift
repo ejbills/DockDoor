@@ -23,6 +23,10 @@ enum DockPosition {
 }
 
 class DockUtils {
+    static var runningDock: NSRunningApplication? {
+        NSRunningApplication.runningApplications(withBundleIdentifier: dockAppIdentifier).first
+    }
+
     static func getDockPosition() -> DockPosition {
         var orientation: Int32 = 0
         var pinning: Int32 = 0
@@ -37,7 +41,7 @@ class DockUtils {
     }
 
     static func dockScreen() -> NSScreen? {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
+        guard let dockApp = DockUtils.runningDock,
               let list = try? AXUIElementCreateApplication(dockApp.processIdentifier).children()?
               .first(where: { (try? $0.role()) == kAXListRole }),
               let position = try? list.position(),
