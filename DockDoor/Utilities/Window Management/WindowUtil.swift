@@ -1825,6 +1825,8 @@ extension WindowUtil {
             windows.sorted { $0.lastAccessedTime != $1.lastAccessedTime ? $0.lastAccessedTime > $1.lastAccessedTime : $0.id > $1.id }
         case .creationOrder:
             windows.sorted { $0.creationTime != $1.creationTime ? $0.creationTime < $1.creationTime : $0.id < $1.id }
+        case .screenPosition:
+            sortWindowsByScreenPosition(windows)
         case .alphabeticalByTitle:
             windows.sorted { ($0.windowName ?? "").localizedCaseInsensitiveCompare($1.windowName ?? "") == .orderedAscending }
         case .alphabeticalByAppName:
@@ -1853,6 +1855,65 @@ extension WindowUtil {
         }
 
         return sortedWindows
+    }
+
+    /// Orders windows the way they sit on the desktop: screens are walked left to right,
+    /// then windows are ordered by their leading edge (and top edge as a tie-breaker).
+    /// Windows whose frame is unknown or entirely off-screen keep their original relative
+    /// order and are placed at the end.
+    private static func sortWindowsByScreenPosition(_ windows: [WindowInfo]) -> [WindowInfo] {
+        guard windows.count > 1 else { return windows }
+
+        let screens = orderedScreens()
+        let keyed = windows.enumerated().map { index, window in
+            (window: window, key: screenPositionKey(for: window.frame, screens: screens), index: index)
+        }
+
+        return keyed.sorted { lhs, rhs in
+            switch (lhs.key, rhs.key) {
+            case let (left?, right?):
+                if left.screen != right.screen { return left.screen < right.screen }
+                if left.minX != right.minX { return left.minX < right.minX }
+                if left.minY != right.minY { return left.minY < right.minY }
+                return lhs.index < rhs.index
+            case (nil, _?):
+                return false
+            case (_?, nil):
+                return true
+            case (nil, nil):
+                return lhs.index < rhs.index
+            }
+        }.map { $0.window }
+    }
+
+    /// Screens in reading order (left to right, then top to bottom). `NSScreen.screens` has no
+    /// documented ordering, so it is re-sorted by frame origin in Core Graphics coordinates.
+    private static func orderedScreens() -> [NSScreen] {
+        NSScreen.screens.sorted { lhs, rhs in
+            let left = lhs.cgFrame
+            let right = rhs.cgFrame
+            if left.minX != right.minX { return left.minX < right.minX }
+            return left.minY < right.minY
+        }
+    }
+
+    /// Screen index plus leading/top edge for a window, in Core Graphics global coordinates.
+    private static func screenPositionKey(for frame: CGRect, screens: [NSScreen]) -> (screen: Int, minX: CGFloat, minY: CGFloat)? {
+        guard frame.width > 0, frame.height > 0, !screens.isEmpty else { return nil }
+
+        var bestIndex: Int?
+        var bestOverlap: CGFloat = 0
+        for (index, screen) in screens.enumerated() {
+            let intersection = screen.cgFrame.intersection(frame)
+            let overlap = intersection.isNull ? 0 : intersection.width * intersection.height
+            if overlap > bestOverlap {
+                bestOverlap = overlap
+                bestIndex = index
+            }
+        }
+
+        guard let screen = bestIndex else { return nil }
+        return (screen, frame.minX, frame.minY)
     }
 
     /// Groups windows by app for selected apps, keeping only the most recently used window for each grouped app.

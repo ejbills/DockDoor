@@ -986,6 +986,7 @@ enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
 enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identifiable {
     case recentlyUsed
     case creationOrder
+    case screenPosition
     case alphabeticalByTitle
     case alphabeticalByAppName
 
@@ -997,6 +998,8 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Recently used", comment: "Window preview sort order option")
         case .creationOrder:
             String(localized: "Creation order (fixed)", comment: "Window preview sort order option")
+        case .screenPosition:
+            String(localized: "Screen position (left to right)", comment: "Window preview sort order option")
         case .alphabeticalByTitle:
             String(localized: "Alphabetical by title", comment: "Window preview sort order option")
         case .alphabeticalByAppName:
