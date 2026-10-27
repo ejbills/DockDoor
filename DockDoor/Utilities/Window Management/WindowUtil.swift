@@ -1636,12 +1636,42 @@ extension WindowUtil {
         return cached.contains { $0.id == windowID }
     }
 
+    static var isScreenLocked: Bool {
+        guard let session = CGSessionCopyCurrentDictionary() as? [String: Any] else { return false }
+        return (session["CGSSessionScreenIsLocked"] as? Bool) == true
+    }
+
+    private static func quitBlockReason(for app: NSRunningApplication) -> String? {
+        if isScreenLocked { return "screen locked" }
+        if app.activationPolicy != .regular { return "not a regular app" }
+        if let bundleIdentifier = app.bundleIdentifier,
+           Defaults[.quitAppOnWindowCloseExcludedApps].contains(bundleIdentifier)
+        {
+            return "excluded"
+        }
+        return nil
+    }
+
+    private static func hasOrderedInWindow(pid: pid_t) -> Bool {
+        getCGWindowCandidates(for: pid).contains { desc in
+            guard (desc[kCGWindowLayer as String] as? NSNumber)?.intValue == 0,
+                  let id = (desc[kCGWindowNumber as String] as? NSNumber).map({ CGWindowID($0.uint32Value) })
+            else { return false }
+            return isValidCGWindowCandidate(id, in: [desc]) && SLSWindowIsOrderedIn(id) == true
+        }
+    }
+
     @discardableResult
     static func quitAppOnLastWindowCloseIfNeeded(app: NSRunningApplication) -> Bool {
         guard Defaults[.quitAppOnWindowClose],
               app.bundleIdentifier != "com.apple.finder",
               !app.isTerminated
         else {
+            return false
+        }
+
+        if let reason = quitBlockReason(for: app) {
+            DebugLogger.log("quitAppOnLastWindowClose", details: "Skipped, \(reason): \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
             return false
         }
 
@@ -1680,14 +1710,20 @@ extension WindowUtil {
             case let count? where count > 0:
                 finish("Aborted, \(count) live window(s)")
             default:
-                if confirmed {
+                if !confirmed {
+                    verifyNoWindowsRemain(app: app, attempt: attempt + 1, confirmed: true)
+                } else if hasOrderedInWindow(pid: pid) {
+                    finish("Aborted, window still ordered in")
+                } else {
                     DispatchQueue.main.async {
+                        if let reason = quitBlockReason(for: app) {
+                            finish("Aborted, \(reason)")
+                            return
+                        }
                         app.terminate()
                         purgeAppCache(with: pid)
                         finish("Terminated")
                     }
-                } else {
-                    verifyNoWindowsRemain(app: app, attempt: attempt + 1, confirmed: true)
                 }
             }
         }

@@ -21,6 +21,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.restoreAllMinimizedWindowsOnDockClick) var restoreAllMinimizedWindowsOnDockClick
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
     @Default(.quitAppOnWindowClose) var quitAppOnWindowClose
+    @Default(.quitAppOnWindowCloseExcludedApps) var quitAppOnWindowCloseExcludedApps
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.enableFolderWidget) var enableFolderWidget
@@ -28,6 +29,8 @@ struct DockPreviewsSettingsView: View {
     @Default(.folderWidgetDefaultSortReversed) var folderWidgetDefaultSortReversed
     @Default(.folderWidgetRememberSortPerFolder) var folderWidgetRememberSortPerFolder
     @Default(.folderWidgetShowHiddenFiles) var folderWidgetShowHiddenFiles
+
+    @State private var showQuitExclusionsSheet = false
 
     var body: some View {
         BaseSettingsView {
@@ -44,6 +47,14 @@ struct DockPreviewsSettingsView: View {
                     dockAppearanceSection
                 }
             }
+        }
+        .sheet(isPresented: $showQuitExclusionsSheet) {
+            AppPickerSheet(
+                selectedApps: $quitAppOnWindowCloseExcludedApps,
+                title: "Never Quit These Apps",
+                description: "Selected apps keep running after their last window closes.",
+                selectionMode: .include
+            )
         }
     }
 
@@ -253,6 +264,23 @@ struct DockPreviewsSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+                if quitAppOnWindowClose {
+                    HStack {
+                        Text("Never quit these apps")
+                        Spacer()
+                        if !quitAppOnWindowCloseExcludedApps.isEmpty {
+                            Text("\(quitAppOnWindowCloseExcludedApps.count) app\(quitAppOnWindowCloseExcludedApps.count == 1 ? "" : "s")")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Button("Select...") {
+                            showQuitExclusionsSheet = true
+                        }
+                        .buttonStyle(AccentButtonStyle(small: true))
+                    }
+                    .padding(.leading, 20)
+                    .settingsSearchTarget("dockPreviews.quitOnCloseExclusions")
+                }
 
                 sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                     .settingsSearchTarget("dockPreviews.buffer")

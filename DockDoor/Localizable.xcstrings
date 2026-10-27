@@ -116582,6 +116582,7 @@
         }
       }
     },
+    "Never quit these apps" : {},
     "Never show again" : {
       "comment" : "DockDoor Pro banner dismiss help text",
       "localizations" : {
