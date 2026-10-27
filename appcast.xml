@@ -3,6 +3,40 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.41.1b1</title>
+            <pubDate>Mon, 26 Oct 2026 17:30:34 -0700</pubDate>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.41.1b1</sparkle:version>
+            <sparkle:shortVersionString>1.41.1b1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;BETA RELEASE WARNING&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This is an unstable pre-release version intended for testing purposes only.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;🔧 Improvements &amp;amp; Stability&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Choose apps that never quit automatically&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Turn on &amp;quot;Quit app when last window closes&amp;quot; in Settings &amp;gt; Dock Previews (Dock Interaction section)&lt;/li&gt;
+  &lt;li&gt;Click &amp;quot;Select...&amp;quot; next to &amp;quot;Never quit these apps&amp;quot; and pick the apps to keep running&lt;/li&gt;
+  &lt;li&gt;The list is empty by default, and the row shows how many apps are excluded&lt;/li&gt;
+  &lt;li&gt;Find it quickly through Settings search, for example &amp;quot;exclude&amp;quot; or &amp;quot;last window&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+&lt;h3&gt;🐛 Bug Fixes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Apps no longer quit when their last window closes while your Mac is locked&lt;/li&gt;
+&lt;li&gt;Menu bar and background-only apps no longer quit when their window closes&lt;/li&gt;
+&lt;li&gt;Apps with windows on another desktop or still visible on screen no longer quit by mistake&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;DockDoor checks all desktops for remaining windows first, and cancels the quit if one is still open&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Window Gestures no longer trigger while the screen is locked&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.41.1b1/DockDoor.dmg" length="22819570" type="application/octet-stream" sparkle:edSignature="wqex4qn7AUcGGe71ep5TGQBgeVNDXutWEG1kN+OIBnS6mwtPxe+JBwiu3LBULfn1Dz7qRJfAFV4C3Oob7yE5Bg==" />
+        </item>
+    <item>
             <title>1.41.0</title>
             <pubDate>Thu, 15 Oct 2026 10:51:09 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
