@@ -10,7 +10,7 @@ struct RunningDockItem {
 /// Handles dock item detection and indicator positioning calculations.
 enum ActiveAppIndicatorDockDetection {
     static func dockList() -> AXUIElement? {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
+        guard let dockApp = DockUtils.runningDock,
               let children = try? AXUIElementCreateApplication(dockApp.processIdentifier).children()
         else { return nil }
         return children.first { (try? $0.role()) == kAXListRole }

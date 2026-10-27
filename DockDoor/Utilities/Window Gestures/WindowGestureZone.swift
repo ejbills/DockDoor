@@ -255,7 +255,7 @@ enum WindowGestureZoneResolver {
     // MARK: - Helpers
 
     private static func topWindow(at point: CGPoint, in windows: [[String: AnyObject]]) -> [String: AnyObject]? {
-        let dockPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier
+        let dockPID = DockUtils.runningDock?.processIdentifier
         let cursorLevel = Int(CGWindowLevelForKey(.cursorWindow))
         let screenFrames = NSScreen.screens.map(\.cgFrame)
         return windows.first { window in

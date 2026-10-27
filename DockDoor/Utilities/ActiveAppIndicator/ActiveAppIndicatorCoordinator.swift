@@ -113,7 +113,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func setupDockLayoutObserver() {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockUtils.runningDock else {
             return
         }
 
@@ -398,7 +398,7 @@ final class ActiveAppIndicatorCoordinator {
         let previousApp = currentActiveApp
         currentActiveApp = app
 
-        guard app.bundleIdentifier != "com.apple.dock" else {
+        guard app.bundleIdentifier != dockAppIdentifier else {
             if showsRunningAppDots {
                 updateRunningAppDots()
             } else {

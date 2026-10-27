@@ -1664,7 +1664,7 @@ extension WindowUtil {
     @discardableResult
     static func quitAppOnLastWindowCloseIfNeeded(app: NSRunningApplication) -> Bool {
         guard Defaults[.quitAppOnWindowClose],
-              app.bundleIdentifier != "com.apple.finder",
+              app.bundleIdentifier != finderAppIdentifier,
               !app.isTerminated
         else {
             return false

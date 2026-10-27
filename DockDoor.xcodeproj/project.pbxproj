@@ -231,6 +231,7 @@
 		D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */; };
 		DB8BDF88C55D471D891F3B8C /* WindowActionCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D02B0085604D66A1A26D4A /* WindowActionCatalog.swift */; };
 		DBFD0B5445DD4F01BD0FBBAB /* DockDoorPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = F875D112D98340CFAB1BC620 /* DockDoorPro.swift */; };
+		0B939F007507453EBD11BA0D /* Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4763D2E6D3D7410695893D93 /* Links.swift */; };
 		EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */; };
 		EE170699DAA44638A41F52048707488C /* SettingsSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C876FFD01A4267862BF125EA617987 /* SettingsSearchEngine.swift */; };
 		F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0970FA03935B41E59919A618 /* SettingsSliderRow.swift */; };
@@ -493,6 +494,7 @@
 		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
 		F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdKeyShortcutsSection.swift; sourceTree = "<group>"; };
 		F875D112D98340CFAB1BC620 /* DockDoorPro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockDoorPro.swift; sourceTree = "<group>"; };
+		4763D2E6D3D7410695893D93 /* Links.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Links.swift; sourceTree = "<group>"; };
 		FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabAppearanceSection.swift; sourceTree = "<group>"; };
 		FCF95019606449008856E149 /* SettingsLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -827,6 +829,7 @@
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 				AA11001122334455AA110011 /* DockLocker.swift */,
 				F875D112D98340CFAB1BC620 /* DockDoorPro.swift */,
+				4763D2E6D3D7410695893D93 /* Links.swift */,
 				22877BDC0B154607B25B3A8B /* WindowActionsMenuController.swift */,
 				DAA46B46CA724CB39EB9FBA8 /* Window Gestures */,
 			);
@@ -1421,6 +1424,7 @@
 				AA11001122334455AA110022 /* DockLocker.swift in Sources */,
 				DBFD0B5445DD4F01BD0FBBAB /* DockDoorPro.swift in Sources */,
 				AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */,
+				0B939F007507453EBD11BA0D /* Links.swift in Sources */,
 				64CFB895E75142028A938986 /* WindowGestureTypes.swift in Sources */,
 				55FCF34F93B7487D989A978E /* WindowGestureRecognizer.swift in Sources */,
 				DBFEE8524DF44512829C9C90 /* WindowGestureResolver.swift in Sources */,
