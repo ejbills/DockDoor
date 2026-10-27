@@ -8,7 +8,7 @@ struct MediaPlaybackControls: View {
     @Binding var lyricsMode: Bool
     @Binding var showingLyricsInFull: Bool
 
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
 
     init(mediaInfo: MediaInfo,
          isExpanded: Bool,

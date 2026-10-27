@@ -13,7 +13,7 @@ struct MediaControlsEmbeddedView: View {
     var isPinnedMode: Bool = false
 
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
 
     var body: some View {
         let cardRadius = CardRadius.Resolved.current().card

@@ -2879,6 +2879,27 @@
         }
       }
     },
+    "Back 15 seconds" : {
+      "comment" : "Media control"
+    },
+    "Forward 15 seconds" : {
+      "comment" : "Media control"
+    },
+    "Lyrics" : {
+      "comment" : "Media control"
+    },
+    "Next track" : {
+      "comment" : "Media control"
+    },
+    "Pause" : {
+      "comment" : "Media control"
+    },
+    "Play" : {
+      "comment" : "Media control"
+    },
+    "Previous track" : {
+      "comment" : "Media control"
+    },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
       "localizations" : {
