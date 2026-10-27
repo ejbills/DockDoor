@@ -441,6 +441,8 @@ extension WindowInfo {
             return
         }
 
+        let wasOwnerActive = ownerApp.isActive
+
         var psn = ProcessSerialNumber()
         _ = GetProcessForPID(ownerApp.processIdentifier, &psn)
         _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
@@ -476,6 +478,14 @@ extension WindowInfo {
             while retryCount < maxRetries {
                 if attemptActivation() {
                     WindowUtil.updateTimestampOptimistically(for: window)
+                    // An already active app posts no activation notification, so tiling window managers (AeroSpace, yabai) miss the switch.
+                    // Re-activate it after the raise, once the target is main and key, so only that window comes forward.
+                    if wasOwnerActive {
+                        DispatchQueue.main.async {
+                            NSApp.activate(ignoringOtherApps: true)
+                            window.ownerApp.activate(options: [.activateIgnoringOtherApps])
+                        }
+                    }
                     return
                 }
                 retryCount += 1
