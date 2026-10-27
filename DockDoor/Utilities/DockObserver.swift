@@ -131,6 +131,7 @@ final class DockObserver {
     }
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
+        _ = DockAppInstanceOrdering.shared
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
         postingCanaryMonitor = NSEvent.addLocalMonitorForEvents(matching: .applicationDefined) { [weak self] event in
@@ -655,6 +656,35 @@ final class DockObserver {
         return dockChildren
     }
 
+    /// Returns Dock items that share a bundle identifier in their visual order.
+    private func findDockItems(bundleIdentifier: String) -> [AXUIElement] {
+        guard let allDockItems = getAllDockItemChildren() else {
+            return []
+        }
+
+        return allDockItems.filter { item in
+            guard (try? item.subrole()) == "AXApplicationDockItem",
+                  let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+                  let itemBundle = Bundle(url: itemURL)
+            else { return false }
+            return itemBundle.bundleIdentifier == bundleIdentifier
+        }
+    }
+
+    /// Finds the hovered item's index among matching Dock items.
+    private func findDockItemInstanceIndex(
+        _ hoveredItem: AXUIElement,
+        matchingItems: [AXUIElement]
+    ) -> Int? {
+        for (index, item) in matchingItems.enumerated() {
+            if CFEqual(item, hoveredItem) {
+                return index
+            }
+        }
+
+        return nil
+    }
+
     private func applicationDockItems() -> [(element: AXUIElement, url: URL, bundleIdentifier: String)] {
         (getAllDockItemChildren() ?? []).compactMap { item in
             guard (try? item.subrole()) == "AXApplicationDockItem",
@@ -676,14 +706,6 @@ final class DockObserver {
             }
             return app
         }
-    }
-
-    /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
-    /// This is used to correctly identify which instance of a multi-instance app is being hovered.
-    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
-        applicationDockItems()
-            .filter { $0.bundleIdentifier == bundleIdentifier }
-            .firstIndex { CFEqual($0.element, hoveredItem) } ?? 0
     }
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
@@ -711,14 +733,57 @@ final class DockObserver {
 
             let runningApps = LauncherShortcutResolver.runningApplications(forBundleAt: appURL, bundleIdentifier: bundleIdentifier)
 
-            // For multiple instances, find the correct one based on dock position
+            // A duplicate persistent tile can be inactive while another tile
+            // for the same bundle still has the sole running process.
+            if runningApps.count == 1,
+               (try? hoveredDockItem.appIsRunning()) == false
+            {
+                return ApplicationReturnType(
+                    status: .notRunning(bundleIdentifier: bundleIdentifier),
+                    dockItemElement: hoveredDockItem
+                )
+            }
+
+            // Resolve separate running and inactive tiles for duplicate bundles.
             if runningApps.count > 1 {
-                let instanceIndex = findDockItemInstanceIndex(hoveredDockItem, bundleIdentifier: bundleIdentifier)
-                if instanceIndex < runningApps.count {
-                    return ApplicationReturnType(status: .success(runningApps[instanceIndex]), dockItemElement: hoveredDockItem)
+                let matchingItems = findDockItems(bundleIdentifier: bundleIdentifier)
+                let dockItemRunningStates: [Bool?] = matchingItems.map {
+                    try? $0.appIsRunning()
+                }
+                let processIdentifiersByDockItem = DockAppInstanceOrdering.shared.processIdentifiers(
+                    for: runningApps,
+                    items: matchingItems,
+                    bundleIdentifier: bundleIdentifier
+                )
+                if let instanceIndex = findDockItemInstanceIndex(
+                    hoveredDockItem,
+                    matchingItems: matchingItems
+                ),
+                    processIdentifiersByDockItem.indices.contains(instanceIndex)
+                {
+                    if let processIdentifier = processIdentifiersByDockItem[instanceIndex],
+                       let runningApp = runningApps.first(where: {
+                           $0.processIdentifier == processIdentifier
+                       })
+                    {
+                        return ApplicationReturnType(
+                            status: .success(runningApp),
+                            dockItemElement: hoveredDockItem
+                        )
+                    }
+
+                    if dockItemRunningStates[instanceIndex] == false {
+                        return ApplicationReturnType(
+                            status: .notRunning(bundleIdentifier: bundleIdentifier),
+                            dockItemElement: hoveredDockItem
+                        )
+                    }
                 }
             }
 
+            if runningApps.count > 1 {
+                return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
+            }
             if let runningApp = runningApps.first {
                 return ApplicationReturnType(status: .success(runningApp), dockItemElement: hoveredDockItem)
             } else {
@@ -894,11 +959,29 @@ final class DockObserver {
             return Unmanaged.passUnretained(event)
         }
 
+        if type == .leftMouseDown || type == .rightMouseDown {
+            DockAppInstanceOrdering.shared.cancelPendingClick()
+        }
         guard isPointNearDock(event.location) else {
             return Unmanaged.passUnretained(event)
         }
 
         let appUnderMouse = getDockItemAppStatusUnderMouse()
+
+        if type == .leftMouseDown,
+           !event.flags.contains(.maskShift), !event.flags.contains(.maskControl),
+           !event.flags.contains(.maskCommand), !event.flags.contains(.maskAlternate),
+           let item = appUnderMouse.dockItemElement,
+           let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+           let bundleIdentifier = Bundle(url: url)?.bundleIdentifier,
+           LauncherShortcutResolver.runningApplications(forBundleAt: url, bundleIdentifier: bundleIdentifier).count > 1,
+           case .notFound = appUnderMouse.status
+        {
+            lastHoveredPID = nil
+            previewCoordinator.cancelPendingShow()
+            DockAppInstanceOrdering.shared.observeNativeClick(on: item, bundleIdentifier: bundleIdentifier)
+            return Unmanaged.passUnretained(event)
+        }
 
         if handleDockPreviewActivation(type: type, event: event, appUnderMouse: appUnderMouse) {
             return nil

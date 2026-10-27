@@ -40,24 +40,48 @@ enum ActiveAppIndicatorDockDetection {
 
         let appItems = dockItems.filter { (try? $0.subrole()) == "AXApplicationDockItem" }
 
-        // Find the dock item for this app
-        for item in appItems {
-            // Check if this is our app by comparing bundle identifiers
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
+        let bundleMatchingItems = appItems.filter { item in
+            guard let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
                 .absoluteURL,
-                let itemBundle = Bundle(url: itemURL),
-                itemBundle.bundleIdentifier == bundleIdentifier
-            {
-                return frame(of: item).map { restingFrame($0, among: appItems) }
+                let itemBundle = Bundle(url: itemURL)
+            else {
+                return false
             }
+            return itemBundle.bundleIdentifier == bundleIdentifier
+        }
 
-            // Check by running app if bundle ID check failed
-            if shortcutBundleIdentifier == nil,
-               let itemTitle = try? item.title(),
-               itemTitle == app.localizedName
-            {
-                return frame(of: item).map { restingFrame($0, among: appItems) }
-            }
+        let runningApps = bundleMatchingItems.first
+            .flatMap { try? $0.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL }
+            .map { LauncherShortcutResolver.runningApplications(forBundleAt: $0, bundleIdentifier: bundleIdentifier) } ?? []
+        let processIdentifiersByDockItem = DockAppInstanceOrdering.shared.processIdentifiers(
+            for: runningApps,
+            items: bundleMatchingItems,
+            bundleIdentifier: bundleIdentifier
+        )
+        if let matchingItemIndex = processIdentifiersByDockItem.firstIndex(
+            of: app.processIdentifier
+        ),
+            bundleMatchingItems.indices.contains(matchingItemIndex),
+            let frame = frame(of: bundleMatchingItems[matchingItemIndex])
+        {
+            return restingFrame(frame, among: appItems)
+        }
+
+        if bundleMatchingItems.count > 1 {
+            return nil
+        }
+        if let item = bundleMatchingItems.first(where: {
+            (try? $0.appIsRunning()) == true
+        }) ?? bundleMatchingItems.first {
+            return frame(of: item).map { restingFrame($0, among: appItems) }
+        }
+
+        // Preserve the existing fallback for apps whose Dock URL cannot be
+        // resolved to a bundle, or while Launch Services is still settling.
+        if shortcutBundleIdentifier == nil, let title = app.localizedName,
+           let item = appItems.first(where: { (try? $0.title()) == title })
+        {
+            return frame(of: item).map { restingFrame($0, among: appItems) }
         }
 
         return nil
