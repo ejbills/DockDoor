@@ -8,9 +8,7 @@ struct MediaControlButton: View {
     let action: () -> Void
     var buttonDimension: CGFloat = 28
 
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled var showAnimations
     @State private var isHovering = false
     @State private var isPressed = false
 

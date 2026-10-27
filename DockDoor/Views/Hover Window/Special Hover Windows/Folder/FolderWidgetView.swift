@@ -41,9 +41,7 @@ struct FolderWidgetPanelView: View {
     @Default(.folderWidgetSortOrders) private var folderSortOrders
     @Default(.folderWidgetSortReversed) private var folderSortReversed
     @Default(.folderWidgetShowHiddenFiles) private var showHiddenFiles
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    private var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled private var showAnimations
 
     @State private var navigationStack: [FolderWidgetLevel] = []
 
@@ -248,9 +246,7 @@ private struct FolderWidgetListView: View {
     let contentHeight: CGFloat
     let onOpenFolder: (FolderWidgetItem) -> Void
 
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    private var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled private var showAnimations
 
     @State private var accessState: FolderWidgetAccessState = .loading
     @State private var sortedItems: [FolderWidgetItem] = []
@@ -453,9 +449,7 @@ private struct FolderWidgetItemRow: View {
     let item: FolderWidgetItem
     let action: () -> Void
 
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    private var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled private var showAnimations
 
     @State private var icon: NSImage?
     @State private var isHovering = false

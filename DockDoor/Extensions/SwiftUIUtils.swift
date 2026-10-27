@@ -22,6 +22,18 @@ var animationsEnabled: Bool {
     Defaults[.showAnimations] && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
 }
 
+@MainActor
+@propertyWrapper
+struct AnimationsEnabled: @preconcurrency DynamicProperty {
+    @Default(.showAnimations) private var showAnimations
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private(set) var wrappedValue = true
+
+    mutating func update() {
+        wrappedValue = showAnimations && !reduceMotion
+    }
+}
+
 /// Runs an animation block respecting the user's showAnimations preference.
 /// If animations are disabled, executes the block immediately without animation.
 func animateWithUserPreference(

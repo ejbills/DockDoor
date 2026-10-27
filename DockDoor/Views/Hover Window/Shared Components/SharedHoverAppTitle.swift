@@ -10,9 +10,7 @@ struct SharedHoverAppTitle: View {
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled var showAnimations
     @Default(.gradientColorPalette) private var defaultGradientColorPalette
 
     var body: some View {

@@ -632,7 +632,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     private func applyWindowFrame(_ frame: CGRect, animated: Bool, dockPositionOverride: DockPosition? = nil) {
-        let shouldAnimate = animated && Defaults[.showAnimations]
+        let shouldAnimate = animated && animationsEnabled
 
         setFrame(frame, display: true)
         alphaValue = 1.0

@@ -5,9 +5,7 @@ struct MediaControlsSkeleton: View {
     let isEmbedded: Bool
 
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled var showAnimations
 
     var body: some View {
         if isEmbedded {

@@ -13,9 +13,7 @@ struct MediaControlsEmbeddedView: View {
     var isPinnedMode: Bool = false
 
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAnimations) private var showAnimationsSetting
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    var showAnimations: Bool { showAnimationsSetting && !reduceMotion }
+    @AnimationsEnabled var showAnimations
 
     var body: some View {
         let cardRadius = CardRadius.Resolved.current().card
