@@ -81,6 +81,7 @@
 		9AD6A659AD09402298725727449D05D5 /* SettingsSearchTargetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63C0725F7FB46D3B6850352B3493FA8 /* SettingsSearchTargetModifier.swift */; };
 		9DA27E8E83A84AECA8AD3BBD /* SettingsToggleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */; };
 		A093F1E5F59748358F395814 /* SettingsNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */; };
+		245E6C76A4D8488796CB0225313A4310 /* ModifierKeyToggles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D141BB5B744CDA74FC7A8EF2DCD99 /* ModifierKeyToggles.swift */; };
 		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
 		A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */; };
 		A4C2F91474874A3A9CE0FBA825CC44EC /* FolderWidgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CF9A1A6F9A48AABC07761494454213 /* FolderWidgetModel.swift */; };
@@ -89,6 +90,8 @@
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
 		B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */; };
 		80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */; };
+		7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */; };
+		7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */; };
@@ -290,6 +293,7 @@
 		D472118E65414972AEE40B2D /* TrackpadSwitcherSwipeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadSwitcherSwipeSection.swift; sourceTree = "<group>"; };
 		0970FA03935B41E59919A618 /* SettingsSliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSliderRow.swift; sourceTree = "<group>"; };
 		0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNote.swift; sourceTree = "<group>"; };
+		5C2D141BB5B744CDA74FC7A8EF2DCD99 /* ModifierKeyToggles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierKeyToggles.swift; sourceTree = "<group>"; };
 		0FCC42884D0A48E6B9FB1E34 /* CompactModeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactModeSection.swift; sourceTree = "<group>"; };
 		13BC17F44A8F456A8061A07F /* GestureSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureSettingsSection.swift; sourceTree = "<group>"; };
 		1531BE8CC50A472986E31058 /* GeneralAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralAppearanceSection.swift; sourceTree = "<group>"; };
@@ -345,6 +349,8 @@
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
 		857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTitlePresentationTests.swift; sourceTree = "<group>"; };
 		EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackupManagerTests.swift; sourceTree = "<group>"; };
+		587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutModifierTests.swift; sourceTree = "<group>"; };
+		0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternateKeybindTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
@@ -702,6 +708,8 @@
 				22D3504B979C44D68BB7875D /* TrackpadSwipeDetectorTests.swift */,
 				857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */,
 				EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */,
+				587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */,
+				0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */,
 				92FFF970DCB649F3BBE19214 /* WindowGestureRecognizerTests.swift */,
 				49E6B5DEC1D045BFBAE71564 /* WindowGestureResolverTests.swift */,
 				57D1951BF6F040FF89F832F8 /* WindowPositionRectTests.swift */,
@@ -880,6 +888,7 @@
 				0970FA03935B41E59919A618 /* SettingsSliderRow.swift */,
 				3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */,
 				0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */,
+				5C2D141BB5B744CDA74FC7A8EF2DCD99 /* ModifierKeyToggles.swift */,
 				FCF95019606449008856E149 /* SettingsLinkRow.swift */,
 				1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */,
 				B3D6937C6B55416A8668B25B /* DockDoorProPromo.swift */,
@@ -1214,6 +1223,8 @@
 				524C1C716FD24706A7B0D1DE /* TrackpadSwipeDetectorTests.swift in Sources */,
 				B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */,
 				80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */,
+				7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */,
+				7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */,
 				204F31BF2B7E46239664231A /* WindowGestureRecognizerTests.swift in Sources */,
 				FBF8A3761BBB44ADA589043B /* WindowGestureResolverTests.swift in Sources */,
 				C91D81FAF6744A248A3130AC /* WindowPositionRectTests.swift in Sources */,
@@ -1374,6 +1385,7 @@
 				F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */,
 				FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */,
 				A093F1E5F59748358F395814 /* SettingsNote.swift in Sources */,
+				245E6C76A4D8488796CB0225313A4310 /* ModifierKeyToggles.swift in Sources */,
 				18D7DFD6690D45C8A63982D2 /* SettingsLinkRow.swift in Sources */,
 				5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */,
 				02D5CE06E29A4A3087322871 /* DockDoorProPromo.swift in Sources */,

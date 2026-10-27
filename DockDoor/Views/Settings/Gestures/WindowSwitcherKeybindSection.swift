@@ -10,6 +10,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
     @Default(.alternateKeybindModifierFlags) var alternateKeybindModifierFlags
+    @Default(.additionalAlternateKeybinds) var additionalAlternateKeybinds
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
     @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
     @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
@@ -155,8 +156,10 @@ struct WindowSwitcherKeybindSection: View {
             // Current shortcut summary
             if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
                 HStack(spacing: 8) {
-                    KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: nil)
-                    Text("+").foregroundColor(.secondary)
+                    ForEach(ShortcutModifier.contained(in: keybind.modifierFlags)) { modifier in
+                        KeyCapView(text: modifier.localizedName, symbol: nil)
+                        Text("+").foregroundColor(.secondary)
+                    }
                     KeyCapView(text: KeyboardLabel.localizedKey(for: keybind.keyCode), symbol: nil)
                 }
             } else {
@@ -165,20 +168,14 @@ struct WindowSwitcherKeybindSection: View {
 
             // Controls: initializer modifier + capture button
             HStack(spacing: 12) {
-                Picker("Initializer", selection: $keybindModel.modifierKey) {
-                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-                }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-                .onChange(of: keybindModel.modifierKey) { newValue in
-                    if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
-                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
-                        Defaults[.UserKeybind] = updatedKeybind
-                        keybindModel.currentKeybind = updatedKeybind
+                ModifierKeyToggles(modifierFlags: $keybindModel.modifierKey)
+                    .onChange(of: keybindModel.modifierKey) { newValue in
+                        if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
+                            let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
+                            Defaults[.UserKeybind] = updatedKeybind
+                            keybindModel.currentKeybind = updatedKeybind
+                        }
                     }
-                }
 
                 Button(action: { keybindModel.isRecording.toggle() }) {
                     HStack {
@@ -198,7 +195,7 @@ struct WindowSwitcherKeybindSection: View {
                 .buttonStyle(.bordered)
             }
 
-            Text("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
+            Text("Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all.")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -235,48 +232,96 @@ struct WindowSwitcherKeybindSection: View {
 
     private var alternateShortcutsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Alternate Shortcut").font(.headline)
-            Text("An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode.")
+            Text("Alternate Shortcuts").font(.headline)
+            Text("Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode.")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            HStack(spacing: 12) {
-                Picker("Modifier", selection: $alternateKeybindModifierFlags) {
-                    Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
-                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
+            alternateShortcutRow(firstAlternate, index: 0, canRemove: alternateKeybindKey != 0 || !additionalAlternateKeybinds.isEmpty) {
+                if additionalAlternateKeybinds.isEmpty {
+                    alternateKeybindKey = 0
+                } else {
+                    AlternateKeybind.first = additionalAlternateKeybinds.removeFirst()
                 }
-                .pickerStyle(.menu)
-                .labelsHidden()
-                .fixedSize()
-                Text("+")
-                    .font(.system(size: 12))
-                    .foregroundColor(.secondary)
-
-                KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set", allowsEscape: true)
-
-                if alternateKeybindKey != 0 {
-                    Button("Clear") {
-                        alternateKeybindKey = 0
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                }
-
-                Spacer()
-
-                Picker("Mode", selection: $alternateKeybindMode) {
-                    ForEach(SwitcherInvocationMode.allCases) { mode in
-                        Text(mode.localizedName).tag(mode)
-                    }
-                }
-                .pickerStyle(.menu)
-                .labelsHidden()
-                .frame(maxWidth: 200)
             }
+
+            ForEach(Array($additionalAlternateKeybinds.enumerated()), id: \.element.id) { offset, alternate in
+                let id = alternate.wrappedValue.id
+                alternateShortcutRow(alternate, index: offset + 1, canRemove: true) {
+                    additionalAlternateKeybinds.removeAll { $0.id == id }
+                }
+            }
+
+            Text("Alternate shortcuts with no modifiers selected use the main shortcut's modifiers.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Button {
+                additionalAlternateKeybinds.append(AlternateKeybind())
+            } label: {
+                Label("Add Alternate Shortcut", systemImage: "plus")
+            }
+            .buttonStyle(.bordered)
         }
         .settingsSearchTarget("gestures.alternateShortcut")
+    }
+
+    private var firstAlternate: Binding<AlternateKeybind> {
+        Binding(
+            get: {
+                AlternateKeybind(keyCode: alternateKeybindKey, modifierFlags: alternateKeybindModifierFlags, mode: alternateKeybindMode)
+            },
+            set: { AlternateKeybind.first = $0 }
+        )
+    }
+
+    private func alternateShortcutRow(_ alternate: Binding<AlternateKeybind>, index: Int, canRemove: Bool, onRemove: @escaping () -> Void) -> some View {
+        HStack(spacing: 12) {
+            ModifierKeyToggles(modifierFlags: alternate.modifierFlags, compact: true, inheritedModifierFlags: keybindModel.modifierKey)
+            Text("+")
+                .font(.system(size: 12))
+                .foregroundColor(.secondary)
+
+            KeyCaptureButton(keyCode: alternate.keyCode, emptyLabel: "Not set", allowsEscape: true)
+
+            if isConflictingAlternate(at: index) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundColor(.yellow)
+                    .help(String(localized: "This shortcut is already used by another window switcher shortcut."))
+            }
+
+            Spacer()
+
+            Picker("Mode", selection: alternate.mode) {
+                ForEach(SwitcherInvocationMode.allCases) { mode in
+                    Text(mode.localizedName).tag(mode)
+                }
+            }
+            .pickerStyle(.menu)
+            .labelsHidden()
+            .frame(maxWidth: 200)
+
+            Button(action: onRemove) {
+                Image(systemName: "trash")
+                    .foregroundColor(.secondary)
+            }
+            .buttonStyle(.plain)
+            .help(String(localized: "Remove alternate shortcut"))
+            .opacity(canRemove ? 1 : 0)
+            .disabled(!canRemove)
+        }
+    }
+
+    private func isConflictingAlternate(at index: Int) -> Bool {
+        let primary = keybindModel.currentKeybind ?? Defaults[.UserKeybind]
+        let resolved = ([firstAlternate.wrappedValue] + additionalAlternateKeybinds).map {
+            $0.resolved(primaryModifierFlags: primary.modifierFlags)
+        }
+        guard resolved.indices.contains(index), let current = resolved[index] else { return false }
+        let matches = { (other: UserKeyBind) in
+            other.keyCode == current.keyCode && other.modifierFlags == current.modifierFlags
+        }
+        return matches(primary) || resolved.prefix(index).compactMap { $0 }.contains(where: matches)
     }
 
     // MARK: - Fullscreen App Blacklist
