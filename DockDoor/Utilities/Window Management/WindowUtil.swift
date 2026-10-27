@@ -1883,7 +1883,7 @@ extension WindowUtil {
             case (nil, nil):
                 return lhs.index < rhs.index
             }
-        }.map { $0.window }
+        }.map(\.window)
     }
 
     /// Screens in reading order (left to right, then top to bottom). `NSScreen.screens` has no
