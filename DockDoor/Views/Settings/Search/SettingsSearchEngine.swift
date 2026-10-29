@@ -6,7 +6,7 @@ final class SettingsSearchEngine: ObservableObject {
         didSet { recompute() }
     }
 
-    @Published private(set) var results: [SettingsSearchResult] = []
+    private(set) var results: [SettingsSearchResult] = []
 
     var isSearching: Bool { !query.isEmpty }
 
@@ -40,9 +40,9 @@ final class SettingsSearchEngine: ObservableObject {
         var scored: [SettingsSearchResult] = []
 
         for item in items where isAvailable(item) {
-            let titleLower = item.title.lowercased()
-            let descLower = item.description.lowercased()
-            let keywordsLower = item.keywords.map { $0.lowercased() }
+            let titleLower = item.searchTitle
+            let descLower = item.searchDescription
+            let keywordsLower = item.searchKeywords
 
             var totalScore = 0
             var allTokensMatch = true

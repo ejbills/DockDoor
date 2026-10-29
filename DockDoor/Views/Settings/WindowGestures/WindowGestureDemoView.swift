@@ -86,10 +86,15 @@ struct GestureDemoCarousel: View {
     let gestures: [WindowGesture]
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.controlActiveState) private var controlActiveState
     @State private var startDate = Date()
 
+    private var isPaused: Bool {
+        reduceMotion || controlActiveState == .inactive
+    }
+
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 60, paused: reduceMotion)) { timeline in
+        TimelineView(.animation(minimumInterval: 1 / 30, paused: isPaused)) { timeline in
             let elapsed = max(timeline.date.timeIntervalSince(startDate), 0)
             let cycle = Int(elapsed / GestureDemoView.cycleDuration)
             let gesture = gestures[cycle % max(gestures.count, 1)]
