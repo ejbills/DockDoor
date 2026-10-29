@@ -181,7 +181,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         pendingShow = nil
     }
 
-    func restoreDockAutoHideState() {
+    @discardableResult
+    func restoreDockAutoHideState() -> Bool {
         dockManager.restoreDockState()
     }
 
