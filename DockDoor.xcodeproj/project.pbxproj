@@ -687,7 +687,6 @@
 				FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */,
 				E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */,
 				C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */,
-				B2C3D4E5F6A890123456789B /* EnabledButtonsPicker.swift */,
 				41BF5F5A97DE457581E09235 /* TrafficLightButtonsSettingsView.swift */,
 			);
 			path = Appearance;
@@ -840,6 +839,7 @@
 				1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */,
 				B3D6937C6B55416A8668B25B /* DockDoorProPromo.swift */,
 				B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */,
+				B2C3D4E5F6A890123456789B /* EnabledButtonsPicker.swift */,
 			);
 			path = "Shared Components";
 			sourceTree = "<group>";
