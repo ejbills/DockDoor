@@ -121,7 +121,10 @@ struct WindowPreviewInteractionModifier: ViewModifier {
         } else if windowInfo.isHidden {
             handleWindowAction(.hide)
         } else {
-            windowInfo.bringToFront()
+            // Re-raising the focused window can resize it before the Dock's work area updates.
+            if windowSwitcherActive || !windowInfo.app.isActive || (try? windowInfo.appAxElement.focusedWindow()) != windowInfo.axElement {
+                windowInfo.bringToFront()
+            }
             onTap?()
         }
     }
