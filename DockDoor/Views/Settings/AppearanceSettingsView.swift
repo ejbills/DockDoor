@@ -7,25 +7,25 @@ struct AppearanceSettingsView: View {
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
-        BaseSettingsView {
-            VStack(alignment: .leading, spacing: 16) {
-                if !permissionsChecker.screenRecordingPermission {
+        SettingsFormView {
+            if !permissionsChecker.screenRecordingPermission {
+                Section {
                     CompactModeWarningBanner(
                         hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission,
                         disableImagePreview: disableImagePreview
                     )
                 }
-
-                WindowSizeSettingsSection()
-
-                BackgroundAppearanceSection()
-
-                GeneralAppearanceSection()
-
-                CompactModeSection(hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission)
-
-                AdvancedAppearanceSection()
             }
+
+            WindowSizeSettingsSection()
+
+            BackgroundAppearanceSection()
+
+            GeneralAppearanceSection()
+
+            CompactModeSection(hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission)
+
+            AdvancedAppearanceSection()
         }
     }
 }

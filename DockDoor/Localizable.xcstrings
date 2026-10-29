@@ -5188,6 +5188,12 @@
         }
       }
     },
+    "%@ %@" : {
+      "shouldTranslate" : false
+    },
+    "%lld of %lld" : {
+      "comment" : "Number of enabled traffic light buttons, e.g. 4 of 7"
+    },
     "1." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10144,6 +10150,7 @@
         }
       }
     },
+    "Action" : {},
     "Action performed when middle-clicking on a window preview." : {
       "localizations" : {
         "af" : {
@@ -12239,6 +12246,7 @@
         }
       }
     },
+    "Add color" : {},
     "Add Directory" : {
       "localizations" : {
         "af" : {
@@ -18334,6 +18342,9 @@
         }
       }
     },
+    "An enhanced Cmd-Tab overlay" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Anchor preview to initial dock icon position" : {
       "localizations" : {
         "af" : {
@@ -24044,6 +24055,7 @@
         }
       }
     },
+    "Automatic app icon size" : {},
     "Automatic Updates" : {
       "localizations" : {
         "af" : {
@@ -26518,6 +26530,9 @@
         }
       }
     },
+    "Backgrounds, sizes and titles" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Backup & Restore" : {
       "localizations" : {
         "af" : {
@@ -28419,6 +28434,10 @@
         }
       }
     },
+    "Blurred" : {
+      "comment" : "Dock preview background option"
+    },
+    "Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows." : {},
     "Body" : {
       "comment" : "Window title font size option",
       "localizations" : {
@@ -41185,6 +41204,7 @@
         }
       }
     },
+    "Cmd+Tab enhancements" : {},
     "Cmd+Tab Layout" : {
       "localizations" : {
         "af" : {
@@ -43279,6 +43299,7 @@
         }
       }
     },
+    "Compact list appearance" : {},
     "Compact List Mode Only (Window Previews are Disabled)" : {
       "localizations" : {
         "af" : {
@@ -50890,6 +50911,9 @@
         }
       }
     },
+    "Custom color" : {
+      "comment" : "Dock preview background option"
+    },
     "Custom Hover Highlight Color" : {
       "localizations" : {
         "af" : {
@@ -56982,6 +57006,9 @@
           }
         }
       }
+    },
+    "Do nothing" : {
+      "comment" : "Dock icon click option"
     },
     "Dock Click Action" : {
       "localizations" : {
@@ -72210,6 +72237,7 @@
         }
       }
     },
+    "Every setting goes back to its default. This can't be undone." : {},
     "Everything is now set up!" : {
       "localizations" : {
         "af" : {
@@ -73354,6 +73382,7 @@
         }
       }
     },
+    "Explain what each setting does underneath its row." : {},
     "Export DockDoor Settings" : {
       "localizations" : {
         "af" : {
@@ -76796,6 +76825,7 @@
         }
       }
     },
+    "Find" : {},
     "Fine-tune opacity, blur, saturation, tint, and border for glass background style." : {
       "localizations" : {
         "af" : {
@@ -91648,6 +91678,7 @@
         }
       }
     },
+    "Horizontal offset" : {},
     "Horizontal scrolling may interfere with dock preview gestures." : {
       "localizations" : {
         "af" : {
@@ -92981,6 +93012,9 @@
           }
         }
       }
+    },
+    "Icon only" : {
+      "comment" : "App header option"
     },
     "If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible." : {
       "extractionState" : "stale",
@@ -100219,6 +100253,7 @@
         }
       }
     },
+    "Key" : {},
     "Keybinds" : {
       "comment" : "Settings tab title",
       "localizations" : {
@@ -100600,6 +100635,9 @@
           }
         }
       }
+    },
+    "Keyboard-driven window switching and its shortcuts" : {
+      "comment" : "Settings tab subtitle"
     },
     "Kind" : {
       "comment" : "Folder widget sort option",
@@ -110886,6 +110924,9 @@
         }
       }
     },
+    "Media, calendar and folder panels" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Medium" : {
       "comment" : "Compact mode item size option",
       "localizations" : {
@@ -116031,6 +116072,12 @@
         }
       }
     },
+    "Name and icon" : {
+      "comment" : "App header option"
+    },
+    "Name and icon (shadowed)" : {
+      "comment" : "App header option"
+    },
     "Native (Best)" : {
       "localizations" : {
         "af" : {
@@ -116412,6 +116459,7 @@
         }
       }
     },
+    "Navigation" : {},
     "Never" : {
       "comment" : "Mouse follows focus mode option",
       "localizations" : {
@@ -127269,6 +127317,7 @@
         }
       }
     },
+    "Open %@" : {},
     "Open a new window when clicking windowless apps" : {
       "comment" : "Setting to auto-open new window for apps with no windows",
       "localizations" : {
@@ -132217,6 +132266,9 @@
         }
       }
     },
+    "Performance, previews and the Dock position lock" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Permission changes may not appear here until the app restarts" : {
       "localizations" : {
         "af" : {
@@ -132979,6 +133031,9 @@
           }
         }
       }
+    },
+    "Permissions, updates and credits" : {
+      "comment" : "Settings tab subtitle"
     },
     "Pin to" : {
       "localizations" : {
@@ -143838,6 +143893,9 @@
         }
       }
     },
+    "Previews shown when hovering the Dock" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Previous App" : {
       "comment" : "Window gesture tooltip",
       "localizations" : {
@@ -148027,6 +148085,7 @@
         }
       }
     },
+    "Remove %@" : {},
     "Remove All" : {
       "localizations" : {
         "af" : {
@@ -152972,6 +153031,8 @@
         }
       }
     },
+    "Reset and quit" : {},
+    "Reset to default" : {},
     "Reset to Defaults" : {
       "localizations" : {
         "af" : {
@@ -160780,6 +160841,9 @@
         }
       }
     },
+    "Search" : {
+      "comment" : "Toolbar title while searching settings"
+    },
     "Search & Input" : {
       "localizations" : {
         "af" : {
@@ -168017,6 +168081,7 @@
         }
       }
     },
+    "Settings file" : {},
     "Shadow Opacity" : {
       "localizations" : {
         "af" : {
@@ -169538,6 +169603,9 @@
           }
         }
       }
+    },
+    "Shortcut %lld" : {
+      "comment" : "Numbered Cmd+key preview shortcut"
     },
     "Show a placeholder preview when Cmd+Tab lands on an app that has no windows." : {
       "localizations" : {
@@ -175248,6 +175316,7 @@
         }
       }
     },
+    "Show setting descriptions" : {},
     "Show shadow beneath previews" : {
       "localizations" : {
         "af" : {
@@ -175818,6 +175887,7 @@
         }
       }
     },
+    "Show the app name and icon above dock previews. Shared with widget headers." : {},
     "Show today's events when hovering the Calendar Dock icon." : {
       "localizations" : {
         "af" : {
@@ -182679,6 +182749,9 @@
         }
       }
     },
+    "Solid" : {
+      "comment" : "Dock preview background option"
+    },
     "Sort descending by default" : {
       "localizations" : {
         "af" : {
@@ -188011,6 +188084,9 @@
           }
         }
       }
+    },
+    "Support links, startup, menu bar and backups" : {
+      "comment" : "Settings tab subtitle"
     },
     "Support settings" : {
       "extractionState" : "stale",
@@ -202496,6 +202572,9 @@
         }
       }
     },
+    "Trackpad, scroll and mouse actions" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Traffic Light Buttons" : {
       "localizations" : {
         "af" : {
@@ -212976,6 +213055,7 @@
         }
       }
     },
+    "Vertical offset" : {},
     "View" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -214309,6 +214389,7 @@
         }
       }
     },
+    "What clicking the icon of an app that is already in front does to its windows." : {},
     "What is this? A window for ANTS?" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -219461,6 +219542,9 @@
           }
         }
       }
+    },
+    "Which apps and titles appear" : {
+      "comment" : "Settings tab subtitle"
     },
     "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures." : {
       "localizations" : {

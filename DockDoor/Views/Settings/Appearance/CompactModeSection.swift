@@ -17,117 +17,74 @@ struct CompactModeSection: View {
     }
 
     var body: some View {
-        SettingsGroup(header: "Compact Mode (Titles Only)") {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Compact mode displays windows as a streamlined vertical list with app icons and titles.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+        SettingsSection("Compact Mode (Titles Only)", footer: "Compact mode displays windows as a streamlined vertical list with app icons and titles.") {
+            Toggle(isOn: Binding(
+                get: { !hasScreenRecordingPermission || disableImagePreview },
+                set: { disableImagePreview = $0 }
+            )) {
+                Text("Always use compact mode")
+            }
+            .settingsSearchTarget("appearance.compactMode")
+            .disabled(!hasScreenRecordingPermission)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Toggle(isOn: Binding(
-                        get: { !hasScreenRecordingPermission || disableImagePreview },
-                        set: { disableImagePreview = $0 }
-                    )) {
-                        Text("Always use compact mode")
-                    }
-                    .settingsSearchTarget("appearance.compactMode")
-                    .disabled(!hasScreenRecordingPermission)
+            if !hasScreenRecordingPermission {
+                SettingsCallout(icon: "lock.fill", message: Text("Screen Recording permission is required for window thumbnails."))
+            }
+        }
 
-                    if !hasScreenRecordingPermission {
-                        HStack(spacing: 4) {
-                            Image(systemName: "lock.fill")
-                                .font(.caption)
-                            Text("Screen Recording permission is required for window thumbnails.")
-                                .font(.caption)
-                        }
-                        .foregroundColor(.orange)
-                        .padding(.leading, 20)
-                    }
-                }
+        if !isCompactModeForced {
+            SettingsSection("Window Threshold", footer: "Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable.") {
+                compactThresholdSlider(
+                    title: "Window Switcher",
+                    value: $windowSwitcherCompactThreshold,
+                    description: "Switch to compact list in window switcher when window count reaches threshold."
+                )
+                .settingsSearchTarget("appearance.compactThresholdSwitcher")
 
-                if !isCompactModeForced {
-                    Divider().padding(.vertical, 2)
-                    Text("Window Threshold").font(.headline).padding(.bottom, -2)
+                compactThresholdSlider(
+                    title: "Dock Previews",
+                    value: $dockPreviewCompactThreshold,
+                    description: "Switch to compact list in dock previews when window count reaches threshold."
+                )
+                .settingsSearchTarget("appearance.compactThresholdDock")
 
-                    Text("Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                compactThresholdSlider(
+                    title: "Cmd+Tab Enhancement",
+                    value: $cmdTabCompactThreshold,
+                    description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
+                )
+                .settingsSearchTarget("appearance.compactThresholdCmdTab")
+            }
+        }
 
-                    compactThresholdSlider(
-                        title: "Window Switcher",
-                        value: $windowSwitcherCompactThreshold,
-                        description: "Switch to compact list in window switcher when window count reaches threshold."
-                    )
-                    .settingsSearchTarget("appearance.compactThresholdSwitcher")
-
-                    compactThresholdSlider(
-                        title: "Dock Previews",
-                        value: $dockPreviewCompactThreshold,
-                        description: "Switch to compact list in dock previews when window count reaches threshold."
-                    )
-                    .settingsSearchTarget("appearance.compactThresholdDock")
-
-                    compactThresholdSlider(
-                        title: "Cmd+Tab Enhancement",
-                        value: $cmdTabCompactThreshold,
-                        description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
-                    )
-                    .settingsSearchTarget("appearance.compactThresholdCmdTab")
-                }
-
-                Divider().padding(.vertical, 2)
-                Text("Appearance").font(.headline).padding(.bottom, -2)
-
-                Picker("Item Size", selection: $compactModeItemSize) {
-                    ForEach(CompactModeItemSize.allCases) { size in
-                        Text(size.localizedName).tag(size)
-                    }
-                }
-                .pickerStyle(.menu)
-                .settingsSearchTarget("appearance.compactItemSize")
-
-                Picker("Title Format", selection: $compactModeTitleFormat) {
-                    ForEach(CompactModeTitleFormat.allCases) { format in
-                        Text(format.localizedName).tag(format)
-                    }
-                }
-                .pickerStyle(.menu)
-                .settingsSearchTarget("appearance.compactTitleFormat")
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Toggle("Hide Traffic Lights", isOn: $compactModeHideTrafficLights)
-                        .settingsSearchTarget("appearance.hideTrafficLights")
-                    Text("Hides the close, minimize, and other window control buttons in compact mode to provide more room for window titles.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        SettingsSection("Compact list appearance") {
+            Picker("Item Size", selection: $compactModeItemSize) {
+                ForEach(CompactModeItemSize.allCases) { size in
+                    Text(size.localizedName).tag(size)
                 }
             }
+            .settingsSearchTarget("appearance.compactItemSize")
+
+            Picker("Title Format", selection: $compactModeTitleFormat) {
+                ForEach(CompactModeTitleFormat.allCases) { format in
+                    Text(format.localizedName).tag(format)
+                }
+            }
+            .settingsSearchTarget("appearance.compactTitleFormat")
+
+            Toggle("Hide Traffic Lights", isOn: $compactModeHideTrafficLights)
+                .settingsSearchTarget("appearance.hideTrafficLights")
+                .settingsAnnotation("Hides the close, minimize, and other window control buttons in compact mode to provide more room for window titles.")
         }
     }
 
-    @ViewBuilder
     private func compactThresholdSlider(title: String, value: Binding<Int>, description: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(title)
-                Spacer()
-                Text(value.wrappedValue == 0 ? "Disabled" : "\(value.wrappedValue)+ windows")
-                    .foregroundColor(.secondary)
-                    .monospacedDigit()
-            }
-
-            Slider(
-                value: Binding(
-                    get: { Double(value.wrappedValue) },
-                    set: { value.wrappedValue = Int($0) }
-                ),
-                in: 0 ... 10,
-                step: 1
-            )
-
-            Text(description)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
+        SettingsSliderRow(
+            title: LocalizedStringKey(title),
+            value: Binding(get: { Double(value.wrappedValue) }, set: { value.wrappedValue = Int($0) }),
+            range: 0 ... 10,
+            valueText: { $0 == 0 ? String(localized: "Disabled") : String(localized: "\(Int($0))+ windows") }
+        )
+        .settingsAnnotation(LocalizedStringKey(description))
     }
 }

@@ -30,7 +30,6 @@ class SettingsManager: NSObject, ObservableObject {
             window.isReleasedWhenClosed = true
 
             window.delegate = self
-            window.titlebarAppearsTransparent = true
             window.title = ""
             window.toolbarStyle = .unified
 
@@ -127,8 +126,8 @@ extension SettingsManager: NSWindowDelegate {
                 splitViewController.splitViewItems.first?.isCollapsed = false
                 splitViewController.splitViewItems.first?.canCollapse = false
                 splitViewController.splitViewItems.first?.holdingPriority = .defaultHigh
-                splitViewController.splitViewItems.first?.minimumThickness = 270
-                splitViewController.splitViewItems.first?.maximumThickness = 270
+                splitViewController.splitViewItems.first?.minimumThickness = 230
+                splitViewController.splitViewItems.first?.maximumThickness = 230
             }
         }
     }
@@ -148,135 +147,144 @@ extension SettingsManager: NSWindowDelegate {
 }
 
 struct SettingsView: View {
-    @State private var selectedTab = "General"
+    @State private var selectedTab = SettingsTab.general
     @StateObject private var searchEngine = SettingsSearchEngine()
     @State private var scrollTarget: String?
+    @FocusState private var isSearchFieldFocused: Bool
     @ObservedObject var updaterState: UpdaterState
 
     init(updaterState: UpdaterState) {
         self.updaterState = updaterState
     }
 
+    private var isSearching: Bool {
+        searchEngine.isSearching
+    }
+
+    private var toolbarTitle: String {
+        isSearching
+            ? String(localized: "Search", comment: "Toolbar title while searching settings")
+            : selectedTab.localizedTitle
+    }
+
+    private var toolbarSubtitle: String {
+        isSearching ? "" : selectedTab.localizedSubtitle
+    }
+
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all), sidebar: {
-            VStack(spacing: 0) {
-                HStack(spacing: 8) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 12))
-                        .foregroundStyle(.tertiary)
-                    TextField(String(localized: "Search settings…", comment: "Settings search placeholder"), text: $searchEngine.query)
-                        .textFieldStyle(.plain)
-                        .font(.system(size: 12))
-                    if !searchEngine.query.isEmpty {
-                        Button {
-                            searchEngine.query = ""
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 12))
-                                .foregroundStyle(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-
-                Divider()
-
-                if searchEngine.isSearching {
-                    SettingsSearchResultsView(engine: searchEngine) { item in
-                        selectedTab = item.tab
-                        searchEngine.query = ""
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                            scrollTarget = item.id
-                        }
-                    }
-                } else {
-                    List(selection: $selectedTab) {
-                        Spacer()
-                            .frame(height: 1)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
-
-                        Label(String(localized: "General", comment: "Settings tab title"), systemImage: "gearshape.fill")
-                            .tag("General")
-
-                        Section(String(localized: "Features", comment: "Settings section header")) {
-                            Label(String(localized: "Dock Previews", comment: "Settings tab title"), systemImage: "dock.rectangle")
-                                .tag("DockPreviews")
-                            Label(String(localized: "Window Switcher", comment: "Settings tab title"), systemImage: "uiwindow.split.2x1")
-                                .tag("WindowSwitcher")
-                            Label(String(localized: "Gestures", comment: "Settings tab title"), systemImage: "hand.draw.fill")
-                                .tag("Gestures")
-                            Label(String(localized: "Cmd+Tab", comment: "Settings tab title"), systemImage: "command")
-                                .tag("CmdTab")
-                            Label(String(localized: "Dock Locking", comment: "Settings tab title"), systemImage: "lock.fill")
-                                .tag("DockLocking")
-                        }
-
-                        Section(String(localized: "Customization", comment: "Settings section header")) {
-                            Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
-                                .tag("Appearance")
-                            Label(String(localized: "Keybinds", comment: "Settings tab title"), systemImage: "keyboard")
-                                .tag("Keybinds")
-                            Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
-                                .tag("Filters")
-                            Label(String(localized: "Widgets", comment: "Widget settings tab title"), systemImage: "square.grid.2x2")
-                                .tag("Widgets")
-                        }
-
-                        Section(String(localized: "System", comment: "Settings section header")) {
-                            Label(String(localized: "Advanced", comment: "Settings tab title"), systemImage: "slider.horizontal.3")
-                                .tag("Advanced")
-                            Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
-                                .tag("Support")
-                        }
-                    }
-                    .listStyle(.sidebar)
-                }
-            }
-            .frame(minWidth: 270, maxWidth: 270)
-            .modifier(HideSidebarToggleModifier())
+            sidebar
         }, detail: {
-            Group {
-                switch selectedTab {
-                case "General":
-                    MainSettingsView()
-                case "DockPreviews":
-                    DockPreviewsSettingsView()
-                case "WindowSwitcher":
-                    WindowSwitcherBehaviorSettingsView()
-                case "Gestures":
-                    GesturesSettingsView()
-                case "CmdTab":
-                    CmdTabSettingsView()
-                case "DockLocking":
-                    DockLockingSettingsView()
-                case "Appearance":
-                    AppearanceSettingsView()
-                case "Keybinds":
-                    KeybindsSettingsView()
-                case "Filters":
-                    FiltersSettingsView()
-                case "Widgets":
-                    WidgetSettingsView()
-                case "Advanced":
-                    AdvancedSettingsView()
-                case "Support":
-                    SupportSettingsView(updaterState: updaterState)
-                default:
-                    MainSettingsView()
-                }
+            detail
+        })
+        .background {
+            // ⌘F from anywhere in the window lands in the sidebar field.
+            Button("Find") {
+                isSearchFieldFocused = true
             }
-            .environment(\.settingsScrollTarget, scrollTarget)
-            .onChange(of: scrollTarget) { newTarget in
-                if newTarget != nil {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        scrollTarget = nil
+            .keyboardShortcut("f", modifiers: .command)
+            .hidden()
+        }
+    }
+
+    private var sidebar: some View {
+        SettingsSidebar(selectedTab: $selectedTab, isSearching: isSearching) { tab in
+            // Clear the search first: the clicked tab may already be selected,
+            // and a leftover query would keep the detail column on results.
+            searchEngine.query = ""
+            selectedTab = tab
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            searchField
+        }
+        .frame(minWidth: 230, maxWidth: 230)
+        .modifier(HideSidebarToggleModifier())
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "magnifyingglass")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            TextField(
+                String(localized: "Search settings…", comment: "Settings search placeholder"),
+                text: $searchEngine.query
+            )
+            .textFieldStyle(.plain)
+            .font(.callout)
+            .focused($isSearchFieldFocused)
+
+            if !searchEngine.query.isEmpty {
+                Button {
+                    searchEngine.query = ""
+                    isSearchFieldFocused = false
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 5)
+        .background {
+            if #available(macOS 26.0, *) {
+                Color.clear
+                    .glassEffect(in: Capsule())
+            } else {
+                Capsule()
+                    .fill(Color.primary.opacity(0.07))
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.top, 2)
+        .padding(.bottom, 8)
+    }
+
+    private var detail: some View {
+        Group {
+            if isSearching {
+                SettingsSearchResultsView(engine: searchEngine) { item in
+                    selectedTab = SettingsTab(rawValue: item.tab) ?? .general
+                    searchEngine.query = ""
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        scrollTarget = item.id
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                pane(for: selectedTab)
+                    .environment(\.settingsScrollTarget, scrollTarget)
+                    .onChange(of: scrollTarget) { newTarget in
+                        if newTarget != nil {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                scrollTarget = nil
+                            }
+                        }
+                    }
             }
-        })
+        }
+        // The toolbar names the pane, so no pane carries a heading of its own.
+        .navigationTitle(Text(verbatim: toolbarTitle))
+        .navigationSubtitle(Text(verbatim: toolbarSubtitle))
+    }
+
+    @ViewBuilder
+    private func pane(for tab: SettingsTab) -> some View {
+        switch tab {
+        case .general: MainSettingsView()
+        case .dockPreviews: DockPreviewsSettingsView()
+        case .windowSwitcher: WindowSwitcherBehaviorSettingsView()
+        case .gestures: GesturesSettingsView()
+        case .cmdTab: CmdTabSettingsView()
+        case .appearance: AppearanceSettingsView()
+        case .filters: FiltersSettingsView()
+        case .widgets: WidgetSettingsView()
+        case .advanced: AdvancedSettingsView()
+        case .support: SupportSettingsView(updaterState: updaterState)
+        }
     }
 }
 

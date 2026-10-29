@@ -17,186 +17,153 @@ struct BackgroundAppearanceSection: View {
     @Default(.previewShadowRadius) var previewShadowRadius
     @Default(.previewShadowOpacity) var previewShadowOpacity
 
-    private var isGlass: Bool { backgroundStyle == .liquidGlass }
-    private var isFrosted: Bool { backgroundStyle == .frostedMaterial }
+    private var isGlass: Bool {
+        backgroundStyle == .liquidGlass
+    }
+
+    private var isFrosted: Bool {
+        backgroundStyle == .frostedMaterial
+    }
 
     var body: some View {
-        SettingsGroup(header: "Background") {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("Style")
-                        .font(.body)
-                    Spacer()
-                    Picker("", selection: $backgroundStyle) {
+        SettingsSection("Background") {
+            Picker("Style", selection: $backgroundStyle) {
+                if #available(macOS 26.0, *) {
+                    ForEach(DockBackgroundStyle.allAvailable, id: \.self) { style in
+                        Text(style.displayName).tag(style)
+                    }
+                } else {
+                    ForEach(DockBackgroundStyle.preTahoe, id: \.self) { style in
+                        Text(style.displayName).tag(style)
+                    }
+                }
+            }
+            .settingsSearchTarget("appearance.backgroundStyle")
+
+            if isFrosted {
+                Picker("Material", selection: $material) {
+                    ForEach(DockBackgroundMaterial.allCases, id: \.self) { mat in
+                        Text(mat.displayName).tag(mat)
+                    }
+                }
+                .settingsSearchTarget("appearance.material")
+            }
+
+            if isGlass {
+                if #available(macOS 26.0, *), LiquidGlass.usesModernPipeline {
+                    glassSettings
+                } else {
+                    DisclosureGroup("Glass Tuning") {
                         if #available(macOS 26.0, *) {
-                            ForEach(DockBackgroundStyle.allAvailable, id: \.self) { style in
-                                Text(style.displayName).tag(style)
-                            }
-                        } else {
-                            ForEach(DockBackgroundStyle.preTahoe, id: \.self) { style in
-                                Text(style.displayName).tag(style)
-                            }
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .frame(maxWidth: 250)
-                    .settingsSearchTarget("appearance.backgroundStyle")
-                }
-
-                if isFrosted {
-                    HStack {
-                        Text("Material")
-                            .font(.body)
-                        Spacer()
-                        Picker("", selection: $material) {
-                            ForEach(DockBackgroundMaterial.allCases, id: \.self) { mat in
-                                Text(mat.displayName).tag(mat)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .labelsHidden()
-                        .frame(maxWidth: 150)
-                    }
-                    .settingsSearchTarget("appearance.material")
-                }
-
-                if isGlass {
-                    if #available(macOS 26.0, *), LiquidGlass.usesModernPipeline {
-                        glassSettings
-                    } else {
-                        DisclosureGroup("Glass Tuning") {
-                            VStack(alignment: .leading, spacing: 8) {
-                                if #available(macOS 26.0, *) {
-                                    HStack {
-                                        Text("Variant")
-                                            .font(.body)
-                                        Spacer()
-                                        Slider(
-                                            value: Binding(
-                                                get: { Double(glassVariant) },
-                                                set: { glassVariant = Int($0.rounded()) }
-                                            ),
-                                            in: 0 ... 20,
-                                            step: 1
-                                        )
-                                        .frame(maxWidth: 160)
-                                        Stepper(value: $glassVariant, in: 0 ... 20) {
-                                            Text("\(glassVariant)")
-                                                .font(.body.monospacedDigit())
-                                                .frame(minWidth: 20, alignment: .trailing)
-                                        }
-                                        .fixedSize()
-                                    }
-                                    .settingsSearchTarget("appearance.glassVariant")
+                            HStack {
+                                Text("Variant")
+                                    .font(.body)
+                                Spacer()
+                                Slider(
+                                    value: Binding(
+                                        get: { Double(glassVariant) },
+                                        set: { glassVariant = Int($0.rounded()) }
+                                    ),
+                                    in: 0 ... 20,
+                                    step: 1
+                                )
+                                .frame(maxWidth: 160)
+                                Stepper(value: $glassVariant, in: 0 ... 20) {
+                                    Text("\(glassVariant)")
+                                        .font(.body.monospacedDigit())
+                                        .frame(minWidth: 20, alignment: .trailing)
                                 }
-
-                                sliderSetting(
-                                    title: "Opacity",
-                                    value: $glassOpacity,
-                                    range: 0 ... 1.0,
-                                    step: 0.05,
-                                    unit: "",
-                                    formatter: NumberFormatter.percentFormatter
-                                )
-
-                                sliderSetting(
-                                    title: "Blur Radius",
-                                    value: $blurRadius,
-                                    range: 0 ... 80,
-                                    step: 1,
-                                    unit: "pt"
-                                )
-
-                                sliderSetting(
-                                    title: "Saturation",
-                                    value: $saturation,
-                                    range: 0 ... 2.0,
-                                    step: 0.05,
-                                    unit: "",
-                                    formatter: NumberFormatter.percentFormatter
-                                )
-
-                                sliderSetting(
-                                    title: "Tint Intensity",
-                                    value: $tintOpacity,
-                                    range: 0 ... 1.0,
-                                    step: 0.05,
-                                    unit: "",
-                                    formatter: NumberFormatter.percentFormatter
-                                )
-
-                                sliderSetting(
-                                    title: "Border Opacity",
-                                    value: $borderOpacity,
-                                    range: 0 ... 1.0,
-                                    step: 0.05,
-                                    unit: "",
-                                    formatter: NumberFormatter.percentFormatter
-                                )
-
-                                sliderSetting(
-                                    title: "Border Width",
-                                    value: $borderWidth,
-                                    range: 0 ... 4.0,
-                                    step: 0.5,
-                                    unit: "pt"
-                                )
-
-                                Button("Reset to Defaults") {
-                                    withAnimation(.easeInOut(duration: 0.15)) {
-                                        Defaults.reset(
-                                            .dockGlassOpacity,
-                                            .dockGlassBlurRadius,
-                                            .dockGlassSaturation,
-                                            .dockGlassVariant,
-                                            .dockBackgroundTintOpacity,
-                                            .dockBackgroundBorderOpacity,
-                                            .dockBackgroundBorderWidth
-                                        )
-                                    }
-                                }
-                                .buttonStyle(AccentButtonStyle(small: true))
-                                .padding(.top, 4)
+                                .fixedSize()
                             }
-                            .padding(.top, 6)
+                            .settingsSearchTarget("appearance.glassVariant")
                         }
-                        .font(.body)
-                        .settingsSearchTarget("appearance.glassTuning")
-                    }
-                }
 
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $showPreviewShadow) {
-                        Text("Show shadow beneath previews")
-                    }
-                    Text("Casts a soft shadow around preview panels so their edges stay visible over light backgrounds.")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 20)
-
-                    if showPreviewShadow {
-                        sliderSetting(
-                            title: "Shadow Size",
-                            value: $previewShadowRadius,
-                            range: 2 ... 10,
-                            step: 1,
-                            unit: "pt"
+                        SettingsSliderRow(
+                            title: "Opacity",
+                            value: $glassOpacity,
+                            range: 0 ... 1.0,
+                            step: 0.05
                         )
-                        .padding(.leading, 20)
 
-                        sliderSetting(
-                            title: "Shadow Opacity",
-                            value: $previewShadowOpacity,
-                            range: 0.05 ... 1.0,
-                            step: 0.05,
-                            unit: "",
-                            formatter: NumberFormatter.percentFormatter
+                        SettingsSliderRow(
+                            title: "Blur Radius",
+                            value: $blurRadius,
+                            range: 0 ... 80,
+                            unit: " pt",
+                            step: 1
                         )
-                        .padding(.leading, 20)
+
+                        SettingsSliderRow(
+                            title: "Saturation",
+                            value: $saturation,
+                            range: 0 ... 2.0,
+                            step: 0.05
+                        )
+
+                        SettingsSliderRow(
+                            title: "Tint Intensity",
+                            value: $tintOpacity,
+                            range: 0 ... 1.0,
+                            step: 0.05
+                        )
+
+                        SettingsSliderRow(
+                            title: "Border Opacity",
+                            value: $borderOpacity,
+                            range: 0 ... 1.0,
+                            step: 0.05
+                        )
+
+                        SettingsSliderRow(
+                            title: "Border Width",
+                            value: $borderWidth,
+                            range: 0 ... 4.0,
+                            unit: " pt",
+                            step: 0.5
+                        )
+
+                        Button("Reset to Defaults") {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                Defaults.reset(
+                                    .dockGlassOpacity,
+                                    .dockGlassBlurRadius,
+                                    .dockGlassSaturation,
+                                    .dockGlassVariant,
+                                    .dockBackgroundTintOpacity,
+                                    .dockBackgroundBorderOpacity,
+                                    .dockBackgroundBorderWidth
+                                )
+                            }
+                        }
+                        .buttonStyle(.settings)
+                        .padding(.top, 4)
                     }
+                    .font(.body)
+                    .settingsSearchTarget("appearance.glassTuning")
                 }
-                .settingsSearchTarget("appearance.previewShadow")
+            }
+
+            Toggle(isOn: $showPreviewShadow) {
+                Text("Show shadow beneath previews")
+            }
+            .settingsAnnotation("Casts a soft shadow around preview panels so their edges stay visible over light backgrounds.")
+            .settingsSearchTarget("appearance.previewShadow")
+
+            if showPreviewShadow {
+                SettingsSliderRow(
+                    title: "Shadow Size",
+                    value: $previewShadowRadius,
+                    range: 2 ... 10,
+                    unit: " pt",
+                    step: 1
+                )
+
+                SettingsSliderRow(
+                    title: "Shadow Opacity",
+                    value: $previewShadowOpacity,
+                    range: 0.05 ... 1.0,
+                    step: 0.05
+                )
             }
         }
     }
@@ -206,33 +173,26 @@ struct BackgroundAppearanceSection: View {
     private var glassSettings: some View {
         let flavors = LiquidGlass.availableFlavors
         if flavors.count > 1 {
-            HStack {
-                Text("Opacity")
-                    .font(.body)
-                Spacer()
+            LabeledContent("Opacity") {
                 HStack(spacing: 8) {
                     Text("Clearer")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                     Slider(value: glassFlavorIndex(in: flavors), in: 0 ... Double(flavors.count - 1), step: 1)
+                        .labelsHidden()
+                        .frame(width: 180)
                     Text("More Opaque")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
-                .frame(maxWidth: 250)
             }
             .settingsSearchTarget("appearance.glassOpacity")
         }
 
-        VStack(alignment: .leading) {
-            Toggle(isOn: $glassRefraction) {
-                Text("Refraction")
-            }
-            Text("Bends the background at the edges and adds a bright rim. Turn off for softer frosted glass that is easier to read over busy backgrounds.")
-                .font(.footnote)
-                .foregroundColor(.gray)
-                .padding(.leading, 20)
+        Toggle(isOn: $glassRefraction) {
+            Text("Refraction")
         }
+        .settingsAnnotation("Bends the background at the edges and adds a bright rim. Turn off for softer frosted glass that is easier to read over busy backgrounds.")
         .settingsSearchTarget("appearance.glassRefraction")
     }
 

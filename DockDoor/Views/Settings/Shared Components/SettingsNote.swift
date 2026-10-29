@@ -5,15 +5,6 @@ struct SettingsNote: View {
     let text: LocalizedStringKey
 
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundStyle(.secondary)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.horizontal, 4)
+        SettingsCallout(tone: .info, icon: icon, message: Text(text))
     }
 }

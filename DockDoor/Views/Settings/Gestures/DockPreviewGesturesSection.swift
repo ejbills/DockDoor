@@ -8,76 +8,46 @@ struct DockPreviewGesturesSection: View {
     @Default(.aeroShakeAction) var aeroShakeAction
 
     var body: some View {
-        SettingsGroup(header: "Dock Preview Gestures") {
-            VStack(alignment: .leading, spacing: 12) {
-                Toggle(isOn: $enableDockPreviewGestures) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "dock.rectangle")
-                            .foregroundColor(.accentColor)
-                        Text("Enable gestures on dock window previews")
+        SettingsSection("Dock Preview Gestures") {
+            Toggle(isOn: $enableDockPreviewGestures) {
+                Text("Enable gestures on dock window previews")
+            }
+            .settingsSearchTarget("gestures.dockPreview")
+            .settingsAnnotation("Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left).")
+
+            if enableDockPreviewGestures {
+                GestureDirectionRow(
+                    direction: "Towards Dock",
+                    icon: "arrow.down.to.line",
+                    description: "Swipe toward the dock edge",
+                    action: $dockSwipeTowardsDockAction
+                )
+                .settingsSearchTarget("gestures.swipeTowardsDock")
+
+                GestureDirectionRow(
+                    direction: "Away from Dock",
+                    icon: "arrow.up.to.line",
+                    description: "Swipe away from the dock edge",
+                    action: $dockSwipeAwayFromDockAction
+                )
+                .settingsSearchTarget("gestures.swipeAwayFromDock")
+
+                Picker("Aero Shake", selection: $aeroShakeAction) {
+                    ForEach(AeroShakeAction.allCases, id: \.self) { action in
+                        Text(action.localizedName).tag(action)
                     }
                 }
-                .settingsSearchTarget("gestures.dockPreview")
+                .settingsAnnotation("Shake a window preview rapidly")
+                .settingsSearchTarget("gestures.aeroShake")
 
-                if enableDockPreviewGestures {
-                    Text("Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left).")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 4)
-
-                    Divider()
-
-                    GestureDirectionRow(
-                        direction: "Towards Dock",
-                        icon: "arrow.down.to.line",
-                        description: "Swipe toward the dock edge",
-                        action: $dockSwipeTowardsDockAction
-                    )
-                    .settingsSearchTarget("gestures.swipeTowardsDock")
-
-                    GestureDirectionRow(
-                        direction: "Away from Dock",
-                        icon: "arrow.up.to.line",
-                        description: "Swipe away from the dock edge",
-                        action: $dockSwipeAwayFromDockAction
-                    )
-                    .settingsSearchTarget("gestures.swipeAwayFromDock")
-
-                    Divider()
-
-                    HStack(spacing: 12) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "hand.point.up.left.and.text")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 20)
-                                Text("Aero Shake")
-                            }
-                            Text("Shake a window preview rapidly")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 26)
-                        }
-                        .frame(minWidth: 140, alignment: .leading)
-
-                        Picker("", selection: $aeroShakeAction) {
-                            ForEach(AeroShakeAction.allCases, id: \.self) { action in
-                                Text(action.localizedName).tag(action)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .labelsHidden()
-                    }
-                    .settingsSearchTarget("gestures.aeroShake")
-
+                HStack {
+                    Spacer()
                     Button("Reset to Defaults") {
                         dockSwipeTowardsDockAction = Defaults.Keys.dockSwipeTowardsDockAction.defaultValue
                         dockSwipeAwayFromDockAction = Defaults.Keys.dockSwipeAwayFromDockAction.defaultValue
                         aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
-                    .padding(.top, 4)
+                    .buttonStyle(.settings)
                 }
             }
         }
@@ -93,35 +63,16 @@ struct GestureDirectionRow: View {
     @Binding var action: WindowAction
 
     var body: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 6) {
-                    Image(systemName: icon)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.secondary)
-                        .frame(width: 20)
-                    Text(direction)
-                }
-                if let description {
-                    Text(description)
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 26)
-                }
-            }
-            .frame(minWidth: 140, alignment: .leading)
-
-            Picker("", selection: $action) {
-                ForEach(WindowAction.gestureActions, id: \.self) { windowAction in
-                    HStack(spacing: 6) {
-                        Image(systemName: windowAction.iconName)
-                        Text(windowAction.localizedName)
-                    }
+        let picker = Picker(LocalizedStringKey(direction), selection: $action) {
+            ForEach(WindowAction.gestureActions, id: \.self) { windowAction in
+                Label(windowAction.localizedName, systemImage: windowAction.iconName)
                     .tag(windowAction)
-                }
             }
-            .pickerStyle(.menu)
-            .labelsHidden()
+        }
+        if let description {
+            picker.settingsAnnotation(LocalizedStringKey(description))
+        } else {
+            picker
         }
     }
 }
