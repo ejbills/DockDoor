@@ -48,18 +48,18 @@ private struct SettingsSearchResultRow: View {
         Button(action: action) {
             HStack(spacing: 10) {
                 Image(systemName: item.icon)
-                    .font(.system(size: 13))
+                    .font(.body)
                     .foregroundStyle(.secondary)
                     .frame(width: 20)
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(item.title)
-                        .font(.system(size: 12))
+                        .font(.callout)
                         .lineLimit(1)
 
                     if !item.section.isEmpty {
                         Text(item.section)
-                            .font(.system(size: 10))
+                            .font(.caption)
                             .foregroundStyle(.tertiary)
                             .lineLimit(1)
                     }

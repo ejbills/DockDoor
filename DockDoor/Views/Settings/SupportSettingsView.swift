@@ -10,151 +10,130 @@ struct SupportSettingsView: View {
     }
 
     var body: some View {
-        BaseSettingsView {
-            VStack(alignment: .leading, spacing: 20) {
-                DockDoorProBanner()
-                permissionsSection
-                updatesSection
-                acknowledgmentsSection
-            }
+        SettingsFormView {
+            DockDoorProBanner()
+            permissionsSection
+            updatesSection
+            acknowledgmentsSection
         }
     }
 
     // MARK: - Permissions Section
 
     private var permissionsSection: some View {
-        SettingsGroup(header: "Permissions", compact: true) {
-            VStack(alignment: .leading, spacing: 0) {
-                PermissionRow(
-                    title: "Accessibility",
-                    description: "Required for dock hover detection and window switcher hotkeys",
-                    icon: "accessibility",
-                    isGranted: permissionsChecker.accessibilityPermission,
-                    action: { SystemPreferencesHelper.openAccessibilityPreferences() }
-                )
-                .settingsSearchTarget("support.accessibility")
+        SettingsSection("Permissions", footer: "Changes to permissions require an app restart to take effect.") {
+            PermissionRow(
+                title: "Accessibility",
+                description: "Required for dock hover detection and window switcher hotkeys",
+                icon: "accessibility",
+                isGranted: permissionsChecker.accessibilityPermission,
+                action: { SystemPreferencesHelper.openAccessibilityPreferences() }
+            )
+            .settingsSearchTarget("support.accessibility")
 
-                Divider().padding(.leading, 40)
-
-                PermissionRow(
-                    title: "Screen Recording",
-                    description: "Required for capturing window previews. Without this, only compact list view is available.",
-                    icon: "record.circle",
-                    isGranted: permissionsChecker.screenRecordingPermission,
-                    action: { SystemPreferencesHelper.openScreenRecordingPreferences() }
-                )
-                .settingsSearchTarget("support.screenRecording")
-            }
-
-            Text("Changes to permissions require an app restart to take effect.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.top, 8)
+            PermissionRow(
+                title: "Screen Recording",
+                description: "Required for capturing window previews. Without this, only compact list view is available.",
+                icon: "record.circle",
+                isGranted: permissionsChecker.screenRecordingPermission,
+                action: { SystemPreferencesHelper.openScreenRecordingPreferences() }
+            )
+            .settingsSearchTarget("support.screenRecording")
         }
     }
 
     // MARK: - Updates Section
 
     private var updatesSection: some View {
-        SettingsGroup(header: "Updates") {
-            VStack(alignment: .leading, spacing: 12) {
-                // Current version
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
+        SettingsSection("Updates") {
+            // Current version
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Current Version")
-                            .font(.body)
-                        Text("Version \(updaterState.currentVersion)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    updateStatusBadge
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Current Version")
+                        .font(.body)
+                    Text("Version \(updaterState.currentVersion)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
-                Divider().padding(.leading, 40)
+                Spacer()
 
-                // Update channel
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Update Channel")
-                            .font(.body)
-                        Text("Choose between stable releases and beta versions")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Picker("", selection: $updaterState.updateChannel) {
-                        ForEach(UpdateChannel.allCases, id: \.self) { channel in
-                            Text(channel.displayName).tag(channel)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 100)
-                }
-                .settingsSearchTarget("support.updateChannel")
-
-                Divider().padding(.leading, 40)
-
-                // Check for updates
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Check for Updates")
-                            .font(.body)
-                        Text(lastCheckDescription)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Button("Check Now") {
-                        updaterState.checkForUpdates()
-                    }
-                    .buttonStyle(AccentButtonStyle(small: true))
-                    .disabled(!updaterState.canCheckForUpdates)
-                }
-                .settingsSearchTarget("support.checkForUpdates")
-
-                Divider().padding(.leading, 40)
-
-                // Automatic updates toggle
-                HStack(spacing: 12) {
-                    SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Automatic Updates")
-                            .font(.body)
-                        Text("Automatically check for updates in the background")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    Toggle("", isOn: Binding(
-                        get: { updaterState.isAutomaticChecksEnabled },
-                        set: { _ in updaterState.toggleAutomaticChecks() }
-                    ))
-                    .labelsHidden()
-                }
-                .settingsSearchTarget("support.automaticUpdates")
-
-                Divider().padding(.leading, 40)
-
-                // Debug logging
-                DebugLoggingRow()
-                    .settingsSearchTarget("support.debugLogging")
+                updateStatusBadge
             }
+
+            // Update channel
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Update Channel")
+                        .font(.body)
+                    Text("Choose between stable releases and beta versions")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Picker("", selection: $updaterState.updateChannel) {
+                    ForEach(UpdateChannel.allCases, id: \.self) { channel in
+                        Text(channel.displayName).tag(channel)
+                    }
+                }
+                .labelsHidden()
+                .frame(width: 100)
+            }
+            .settingsSearchTarget("support.updateChannel")
+
+            // Check for updates
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Check for Updates")
+                        .font(.body)
+                    Text(lastCheckDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Button("Check Now") {
+                    updaterState.checkForUpdates()
+                }
+                .buttonStyle(.settings)
+                .disabled(!updaterState.canCheckForUpdates)
+            }
+            .settingsSearchTarget("support.checkForUpdates")
+
+            // Automatic updates toggle
+            HStack(spacing: 12) {
+                SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Automatic Updates")
+                        .font(.body)
+                    Text("Automatically check for updates in the background")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Toggle("", isOn: Binding(
+                    get: { updaterState.isAutomaticChecksEnabled },
+                    set: { _ in updaterState.toggleAutomaticChecks() }
+                ))
+                .labelsHidden()
+            }
+            .settingsSearchTarget("support.automaticUpdates")
+
+            // Debug logging
+            DebugLoggingRow()
+                .settingsSearchTarget("support.debugLogging")
         }
     }
 
@@ -171,78 +150,64 @@ struct SupportSettingsView: View {
     private var updateStatusBadge: some View {
         switch updaterState.updateStatus {
         case .noUpdates:
-            Label("Up to date", systemImage: "checkmark.circle.fill")
-                .font(.caption)
-                .foregroundColor(.green)
+            Label("Up to Date", systemImage: "checkmark.circle.fill")
+                .font(.callout)
+                .foregroundStyle(.green)
         case .checking:
             ProgressView()
                 .scaleEffect(0.7)
                 .frame(width: 20, height: 20)
         case let .available(version, _, _):
             Label("v\(version) available", systemImage: "arrow.down.circle.fill")
-                .font(.caption)
-                .foregroundColor(.blue)
+                .font(.callout)
+                .foregroundStyle(.blue)
         case let .error(message):
             Label(message, systemImage: "exclamationmark.triangle.fill")
-                .font(.caption2)
-                .foregroundColor(.red)
+                .font(.callout)
+                .foregroundStyle(.red)
                 .lineLimit(1)
         }
     }
 
     // MARK: - Acknowledgments Section
 
+    @ViewBuilder
     private var acknowledgmentsSection: some View {
-        SettingsGroup(header: "Acknowledgments") {
-            VStack(alignment: .leading, spacing: 12) {
-                // Community Contributors
-                Text("Community Contributors")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
+        SettingsSection("Community Contributors") {
+            CreditRow(name: "illavoluntas", detail: "Website, documentation, Discord moderation", icon: "person")
+        }
 
-                ContributorRow(
-                    name: "illavoluntas",
-                    detail: "Website, documentation, Discord moderation",
-                    icon: "person.fill"
-                )
-
-                Divider()
-
-                // Translation Contributors
-                Text("Translation Contributors")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
-
-                VStack(spacing: 2) {
-                    TranslatorRow(name: "Rocco 'Roccobot' Casadei", language: "Italian", profile: "Roccobot")
-                    TranslatorRow(name: "favorsjewelry5", language: "Chinese Traditional", profile: "favorsjewelry5")
-                    TranslatorRow(name: "Денис Єгоров", language: "Ukrainian", profile: "makedonsky47")
-                    TranslatorRow(name: "HuangxinDong", language: "Chinese Simplified", profile: "HuangxinDong")
-                    TranslatorRow(name: "don.julien.7", language: "German", profile: "JuGro1332")
-                    TranslatorRow(name: "awaustin", language: "Chinese Simplified", profile: "awaustin")
-                    TranslatorRow(name: "illavoluntas", language: "French", profile: "illavoluntas")
-                    TranslatorRow(name: "Diamant", language: "French", profile: "Diamant")
-                }
-
-                Divider()
-
-                // Audio Assets
-                Text("Audio Assets")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
-
-                AudioAssetRow(
-                    name: "Magic Glow",
-                    author: "IENBA",
-                    sourceURL: "https://freesound.org/s/752274/",
-                    license: "CC0"
+        SettingsSection("Translation Contributors") {
+            ForEach(Self.translators, id: \.profile) { translator in
+                CreditRow(
+                    name: translator.name,
+                    detail: translator.language,
+                    icon: "globe",
+                    url: URL(string: "https://crowdin.com/profile/\(translator.profile)")
                 )
             }
         }
+
+        SettingsSection("Audio Assets") {
+            CreditRow(
+                name: "Magic Glow",
+                detail: "IENBA · CC0",
+                icon: "speaker.wave.2",
+                url: URL(string: "https://freesound.org/s/752274/")
+            )
+        }
     }
+
+    private static let translators: [(name: String, language: String, profile: String)] = [
+        ("Rocco 'Roccobot' Casadei", "Italian", "Roccobot"),
+        ("favorsjewelry5", "Chinese Traditional", "favorsjewelry5"),
+        ("Денис Єгоров", "Ukrainian", "makedonsky47"),
+        ("HuangxinDong", "Chinese Simplified", "HuangxinDong"),
+        ("don.julien.7", "German", "JuGro1332"),
+        ("awaustin", "Chinese Simplified", "awaustin"),
+        ("illavoluntas", "French", "illavoluntas"),
+        ("Diamant", "French", "Diamant"),
+    ]
 }
 
 // MARK: - Helper Views
@@ -263,21 +228,21 @@ private struct PermissionRow: View {
                     .font(.body)
                 Text(description)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             HStack(spacing: 8) {
                 Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(isGranted ? .green : .red)
+                    .foregroundStyle(isGranted ? .green : .red)
                     .font(.callout)
 
                 if !isGranted {
                     Button("Grant") {
                         action()
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
                 }
             }
         }
@@ -298,7 +263,7 @@ private struct DebugLoggingRow: View {
                         .font(.body)
                     Text("Capture performance metrics for troubleshooting")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
@@ -314,12 +279,12 @@ private struct DebugLoggingRow: View {
                             NSWorkspace.shared.activateFileViewerSelecting([url])
                         }
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
 
                     Button("Clear Logs") {
                         DebugLogger.clearLogs()
                     }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    .buttonStyle(.settings)
                 }
                 .padding(.leading, 40)
             }
@@ -327,93 +292,38 @@ private struct DebugLoggingRow: View {
     }
 }
 
-private struct ContributorRow: View {
+private struct CreditRow: View {
     let name: String
     let detail: String
     let icon: String
+    var url: URL?
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .frame(width: 16)
+                .foregroundStyle(.secondary)
+                .frame(width: 18)
 
-            Text(name)
-                .font(.body)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(verbatim: name)
+                    .lineLimit(1)
+                Text(verbatim: detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
 
             Spacer()
 
-            Text(detail)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .lineLimit(1)
-        }
-        .padding(.vertical, 2)
-    }
-}
-
-private struct TranslatorRow: View {
-    let name: String
-    let language: String
-    let profile: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "globe")
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .frame(width: 16)
-
-            Text(name)
-                .font(.body)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(language)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .frame(width: 120, alignment: .leading)
-
-            Link(destination: URL(string: "https://crowdin.com/profile/\(profile)")!) {
-                Image(systemName: "arrow.up.right.square")
-                    .font(.system(size: 12))
-                    .foregroundColor(.accentColor)
+            if let url {
+                Link(destination: url) {
+                    Image(systemName: "arrow.up.right")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help(url.host() ?? url.absoluteString)
+                .accessibilityLabel("Open \(name)")
             }
         }
-        .padding(.vertical, 2)
-    }
-}
-
-private struct AudioAssetRow: View {
-    let name: String
-    let author: String
-    let sourceURL: String
-    let license: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "speaker.wave.2.fill")
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .frame(width: 16)
-
-            Text(name)
-                .font(.body)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(license)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .frame(width: 40, alignment: .leading)
-
-            Link(destination: URL(string: sourceURL)!) {
-                Image(systemName: "arrow.up.right.square")
-                    .font(.system(size: 12))
-                    .foregroundColor(.accentColor)
-            }
-        }
-        .padding(.vertical, 2)
     }
 }

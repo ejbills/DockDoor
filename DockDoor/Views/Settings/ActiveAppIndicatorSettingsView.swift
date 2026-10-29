@@ -18,184 +18,117 @@ struct ActiveAppIndicatorSettingsView: View {
     @State private var currentDockSize: CGFloat = 0
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        Group {
             Toggle(isOn: $showActiveAppIndicator) {
                 Text("Show active app indicator below dock icon")
             }
             .settingsSearchTarget("general.activeAppIndicator")
             .onChange(of: showActiveAppIndicator) { _ in askUserToRestartApplication() }
-
-            Text(
-                "Displays a colored line below the currently active application's dock icon."
-            )
-            .font(.caption)
-            .foregroundColor(.secondary)
-            .padding(.leading, 20)
+            .settingsAnnotation("Displays a colored line below the currently active application's dock icon.")
 
             if showActiveAppIndicator {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        ColorPicker(
-                            "Indicator Color",
-                            selection: $activeAppIndicatorColor
-                        )
-                        Button("Reset") {
+                LabeledContent("Indicator Color") {
+                    HStack(spacing: 8) {
+                        ColorPicker("Indicator Color", selection: $activeAppIndicatorColor)
+                            .labelsHidden()
+                        SettingsResetButton(isModified: true) {
                             Defaults.reset(.activeAppIndicatorColor)
                         }
-                        .buttonStyle(AccentButtonStyle(small: true))
                     }
-                    .settingsSearchTarget("general.indicatorColor")
-                    .padding(.leading, 20)
+                }
+                .settingsSearchTarget("general.indicatorColor")
 
-                    Picker(
-                        "Indicator Style",
-                        selection: $activeAppIndicatorStyle
-                    ) {
-                        ForEach(ActiveAppIndicatorStyle.allCases, id: \.self) { style in
-                            Text(style.localizedName).tag(style)
-                        }
+                Picker("Indicator Style", selection: $activeAppIndicatorStyle) {
+                    ForEach(ActiveAppIndicatorStyle.allCases, id: \.self) { style in
+                        Text(style.localizedName).tag(style)
                     }
-                    .pickerStyle(.segmented)
-                    .fixedSize()
-                    .settingsSearchTarget("general.indicatorStyle")
-                    .padding(.leading, 20)
+                }
+                .settingsSearchTarget("general.indicatorStyle")
 
-                    if activeAppIndicatorStyle == .runningAppDots {
-                        Group {
-                            if activeAppIndicatorHighlightFrontmost {
-                                Text(
-                                    "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
-                                )
-                            } else {
-                                Text("Shows a dot under every running application: bright for apps with open windows, black for apps with none.")
+                if activeAppIndicatorStyle == .runningAppDots {
+                    Toggle(isOn: $activeAppIndicatorHighlightFrontmost) {
+                        Text("Highlight the frontmost app")
+                    }
+                    .settingsSearchTarget("general.indicatorHighlightFrontmost")
+                    .settingsAnnotation(activeAppIndicatorHighlightFrontmost
+                        ? "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
+                        : "Shows a dot under every running application: bright for apps with open windows, black for apps with none.")
+                }
+
+                Toggle(isOn: $activeAppIndicatorAutoSize) {
+                    Text("Automatically set height and offset")
+                }
+                .settingsSearchTarget("general.indicatorAutoSize")
+
+                if !activeAppIndicatorAutoSize {
+                    LabeledContent("Current Dock Size:") {
+                        HStack(spacing: 6) {
+                            Text(verbatim: "\(Int(currentDockSize)) px")
+                                .monospacedDigit()
+                                .foregroundStyle(.secondary)
+                            Button {
+                                currentDockSize = DockUtils.getDockSize()
+                            } label: {
+                                Image(systemName: "arrow.clockwise")
                             }
+                            .buttonStyle(.plain)
+                            .help("Refresh dock size")
+                            .accessibilityLabel("Refresh dock size")
                         }
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                        Toggle(isOn: $activeAppIndicatorHighlightFrontmost) {
-                            Text("Highlight the frontmost app")
-                        }
-                        .settingsSearchTarget("general.indicatorHighlightFrontmost")
-                        .padding(.leading, 20)
-                    }
-
-                    HStack {
-                        Text("Current Dock Size:")
-                            .foregroundColor(.secondary)
-                        Text("\(Int(currentDockSize)) px")
-                            .fontWeight(.medium)
-                        Button {
-                            currentDockSize = DockUtils.getDockSize()
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                        }
-                        .buttonStyle(.borderless)
-                        .help("Refresh dock size")
-                    }
-                    .font(.caption)
-                    .padding(.leading, 20)
-
-                    Toggle(isOn: $activeAppIndicatorAutoSize) {
-                        Text("Automatically set height and offset")
-                    }
-                    .settingsSearchTarget("general.indicatorAutoSize")
-                    .padding(.leading, 20)
-
-                    if !activeAppIndicatorAutoSize {
-                        if activeAppIndicatorStyle == .bar {
-                            sliderSetting(
-                                title: "Indicator Height",
-                                value: $activeAppIndicatorHeight,
-                                range: 1.0 ... 15.0,
-                                step: 1,
-                                unit: "px",
-                                formatter: {
-                                    let f = NumberFormatter()
-                                    f.minimumFractionDigits = 0
-                                    f.maximumFractionDigits = 0
-                                    return f
-                                }()
-                            )
-                            .settingsSearchTarget("general.indicatorHeight")
-                            .padding(.leading, 40)
-                        }
-
-                        sliderSetting(
-                            title: "Position Offset",
-                            value: $activeAppIndicatorOffset,
-                            range: -30.0 ... 30.0,
-                            step: 1.0,
-                            unit: "px",
-                            formatter: {
-                                let f = NumberFormatter()
-                                f.minimumFractionDigits = 0
-                                f.maximumFractionDigits = 0
-                                f.positivePrefix = "+"
-                                return f
-                            }()
-                        )
-                        .settingsSearchTarget("general.indicatorOffset")
-                        .padding(.leading, 40)
                     }
 
                     if activeAppIndicatorStyle == .bar {
-                        Toggle(isOn: $activeAppIndicatorAutoLength) {
-                            Text("Automatically set length")
-                        }
-                        .settingsSearchTarget("general.indicatorAutoLength")
-                        .padding(.leading, 20)
-
-                        if !activeAppIndicatorAutoLength {
-                            sliderSetting(
-                                title: "Indicator Length",
-                                value: $activeAppIndicatorLength,
-                                range: 1.0 ... 110.0,
-                                step: 1.0,
-                                unit: "px",
-                                formatter: {
-                                    let f = NumberFormatter()
-                                    f.minimumFractionDigits = 0
-                                    f.maximumFractionDigits = 0
-                                    return f
-                                }()
-                            )
-                            .settingsSearchTarget("general.indicatorLength")
-                            .padding(.leading, 40)
-                        }
-                    }
-
-                    sliderSetting(
-                        title: "Shift Indicator",
-                        value: $activeAppIndicatorShift,
-                        range: -2.0 ... 2.0,
-                        step: 1.0,
-                        unit: "px",
-                        formatter: {
-                            let f = NumberFormatter()
-                            f.minimumFractionDigits = 0
-                            f.maximumFractionDigits = 0
-                            f.positivePrefix = "+"
-                            return f
-                        }()
-                    )
-                    .settingsSearchTarget("general.indicatorShift")
-                    .padding(.leading, 20)
-
-                    HStack(spacing: 8) {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.secondary)
-                        Text(
-                            "The indicator appears next to the active app's dock icon. Note: This feature does not support auto-hiding docks."
+                        SettingsSliderRow(
+                            title: "Indicator Height",
+                            value: $activeAppIndicatorHeight,
+                            range: 1.0 ... 15.0,
+                            unit: " px",
+                            step: 1,
+                            decimals: 0
                         )
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .settingsSearchTarget("general.indicatorHeight")
                     }
-                    .padding(.leading, 20)
-                    .padding(.top, 4)
+
+                    SettingsSliderRow(
+                        title: "Position Offset",
+                        value: $activeAppIndicatorOffset,
+                        range: -30.0 ... 30.0,
+                        unit: " px",
+                        step: 1.0,
+                        decimals: 0
+                    )
+                    .settingsSearchTarget("general.indicatorOffset")
                 }
-                .padding(.top, 4)
+
+                if activeAppIndicatorStyle == .bar {
+                    Toggle(isOn: $activeAppIndicatorAutoLength) {
+                        Text("Automatically set length")
+                    }
+                    .settingsSearchTarget("general.indicatorAutoLength")
+
+                    if !activeAppIndicatorAutoLength {
+                        SettingsSliderRow(
+                            title: "Indicator Length",
+                            value: $activeAppIndicatorLength,
+                            range: 1.0 ... 110.0,
+                            unit: " px",
+                            step: 1.0,
+                            decimals: 0
+                        )
+                        .settingsSearchTarget("general.indicatorLength")
+                    }
+                }
+
+                SettingsSliderRow(
+                    title: "Shift Indicator",
+                    value: $activeAppIndicatorShift,
+                    range: -2.0 ... 2.0,
+                    unit: " px",
+                    step: 1.0,
+                    decimals: 0
+                )
+                .settingsSearchTarget("general.indicatorShift")
+                .settingsAnnotation("The indicator appears next to the active app's dock icon. Note: This feature does not support auto-hiding docks.")
             }
         }
         .onAppear {

@@ -26,11 +26,9 @@ struct KeyCapView: View {
                 Text(text)
             }
         }
-        .font(.system(size: 14, weight: .medium, design: .monospaced))
         .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Color.secondary.opacity(0.2))
-        .cornerRadius(4)
+        .padding(.vertical, 3)
+        .background(Color.primary.opacity(0.08), in: RoundedRectangle(cornerRadius: 5, style: .continuous))
     }
 }
 
@@ -98,9 +96,13 @@ struct ShortcutCaptureView: NSViewControllerRepresentable {
                 let count = [wantsCmd, wantsOpt, wantsCtrl].filter { $0 }.count
                 var capturedModifier = parent.modifierKey
                 if count == 1 {
-                    if wantsCmd { capturedModifier = Defaults[.Int64maskCommand] }
-                    else if wantsOpt { capturedModifier = Defaults[.Int64maskAlternate] }
-                    else if wantsCtrl { capturedModifier = Defaults[.Int64maskControl] }
+                    if wantsCmd {
+                        capturedModifier = Defaults[.Int64maskCommand]
+                    } else if wantsOpt {
+                        capturedModifier = Defaults[.Int64maskAlternate]
+                    } else if wantsCtrl {
+                        capturedModifier = Defaults[.Int64maskControl]
+                    }
                 }
                 let newKeybind = UserKeyBind(keyCode: UInt16(event.keyCode), modifierFlags: capturedModifier)
                 Defaults[.UserKeybind] = newKeybind

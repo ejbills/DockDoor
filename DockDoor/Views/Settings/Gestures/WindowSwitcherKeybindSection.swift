@@ -3,7 +3,6 @@ import Defaults
 import SwiftUI
 
 struct WindowSwitcherKeybindSection: View {
-    @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.searchTriggerKey) var searchTriggerKey
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
@@ -21,186 +20,159 @@ struct WindowSwitcherKeybindSection: View {
     @State private var newBlacklistApp = ""
 
     var body: some View {
-        SettingsGroup(header: "Window Switcher Shortcuts") {
-            VStack(alignment: .leading, spacing: 12) {
-                if !enableWindowSwitcher {
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.yellow)
-                        Text("Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(8)
-                    .background(Color.yellow.opacity(0.1))
-                    .cornerRadius(8)
+        SettingsSection("Window Switcher Shortcuts") {
+            initializerRow
+                .settingsSearchTarget("gestures.switcherKeybind")
+                .settingsAnnotation("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
+
+            triggerKeyRow
+
+            LabeledContent("Backward Key") {
+                HStack(spacing: 8) {
+                    KeyCaptureButton(keyCode: $switcherBackwardKeyCode, captureModifiers: true)
+                    SettingsResetButton(isModified: switcherBackwardKeyCode != 56) { switcherBackwardKeyCode = 56 }
                 }
-
-                keyboardShortcutSection
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Backward Key")
-                        Spacer()
-                        KeyCaptureButton(keyCode: $switcherBackwardKeyCode, captureModifiers: true)
-                        Button("Reset") { switcherBackwardKeyCode = 56 }
-                            .buttonStyle(.bordered)
-                    }
-                    .settingsSearchTarget("gestures.backwardKey")
-                    Text("The key used to navigate backward in the window switcher.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                    Toggle(isOn: $requireShiftTabToGoBack) {
-                        Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
-                    }
-                    .settingsSearchTarget("gestures.requireShiftTab")
-                    Text("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                }
-                .disabled(!enableWindowSwitcher)
-                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                selectionKeySection
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Toggle(isOn: $enableVimMotions) {
-                        Text("Enable Vim Motions")
-                    }
-                    .settingsSearchTarget("gestures.vimMotions")
-                    Text("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                    Toggle(isOn: $passArrowsThroughToSystem) {
-                        Text("Pass Arrow Keys Through to System")
-                    }
-                    .settingsSearchTarget("gestures.arrowPassthrough")
-                    Text("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                }
-                .disabled(!enableWindowSwitcher)
-                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                Divider()
-
-                alternateShortcutsSection
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-
-                if enableWindowSwitcherSearch {
-                    Divider()
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Search Trigger Key").font(.headline)
-                        Text("The key that activates search while the window switcher is open.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-
-                        HStack(spacing: 12) {
-                            Text(modifierConverter.toString(keybindModel.modifierKey))
-                                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                                .foregroundColor(.secondary)
-                            Text("+")
-                                .font(.system(size: 12))
-                                .foregroundColor(.secondary)
-
-                            KeyCaptureButton(keyCode: $searchTriggerKey)
-                        }
-                    }
-                    .settingsSearchTarget("gestures.searchTriggerKey")
-                    .disabled(!enableWindowSwitcher)
-                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
-                }
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Fullscreen App Blacklist").font(.headline)
-                    Text("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                    fullscreenAppBlacklistView
-                }
-                .settingsSearchTarget("gestures.fullscreenBlacklist")
             }
-            .settingsSearchTarget("gestures.switcherKeybind")
+            .settingsSearchTarget("gestures.backwardKey")
+            .settingsAnnotation("The key used to navigate backward in the window switcher.")
+
+            Toggle(isOn: $requireShiftTabToGoBack) {
+                Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
+            }
+            .settingsSearchTarget("gestures.requireShiftTab")
+            .settingsAnnotation("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
+
+            LabeledContent("Selection Key") {
+                HStack(spacing: 8) {
+                    KeyCaptureButton(keyCode: $selectionKeyCode)
+                    SettingsResetButton(isModified: selectionKeyCode != UInt16(kVK_Return)) { selectionKeyCode = UInt16(kVK_Return) }
+                }
+            }
+            .settingsSearchTarget("gestures.selectionKey")
+            .settingsAnnotation("The key used to select and bring to front the highlighted window in the switcher.")
+
+            if enableWindowSwitcherSearch {
+                LabeledContent("Search Trigger Key") {
+                    HStack(spacing: 6) {
+                        Text(verbatim: "\(modifierConverter.toString(keybindModel.modifierKey)) +")
+                            .foregroundStyle(.secondary)
+                        KeyCaptureButton(keyCode: $searchTriggerKey)
+                    }
+                }
+                .settingsSearchTarget("gestures.searchTriggerKey")
+                .settingsAnnotation("The key that activates search while the window switcher is open.")
+            }
         }
         .onAppear {
             keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
             keybindModel.currentKeybind = Defaults[.UserKeybind]
         }
-    }
 
-    // MARK: - Keyboard Shortcut Section
-
-    private var keyboardShortcutSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            // Current shortcut summary
-            if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
+        SettingsSection("Alternate Shortcut") {
+            LabeledContent("Key") {
                 HStack(spacing: 8) {
-                    KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: nil)
-                    Text("+").foregroundColor(.secondary)
-                    KeyCapView(text: KeyboardLabel.localizedKey(for: keybind.keyCode), symbol: nil)
+                    KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set", allowsEscape: true)
+                    SettingsResetButton(isModified: alternateKeybindKey != 0) { alternateKeybindKey = 0 }
+                        .frame(width: 16)
                 }
-            } else {
-                Text("No shortcut set").foregroundColor(.secondary)
             }
+            .settingsSearchTarget("gestures.alternateShortcut")
+            .settingsAnnotation("An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode.")
 
-            // Controls: initializer modifier + capture button
-            HStack(spacing: 12) {
-                Picker("Initializer", selection: $keybindModel.modifierKey) {
+            if alternateKeybindKey != 0 {
+                Picker("Modifier", selection: $alternateKeybindModifierFlags) {
+                    Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
                     Text("Control ⌃").tag(Defaults[.Int64maskControl])
                     Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
                     Text("Command ⌘").tag(Defaults[.Int64maskCommand])
                 }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-                .onChange(of: keybindModel.modifierKey) { newValue in
-                    if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
-                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
-                        Defaults[.UserKeybind] = updatedKeybind
-                        keybindModel.currentKeybind = updatedKeybind
+
+                Picker("Mode", selection: $alternateKeybindMode) {
+                    ForEach(SwitcherInvocationMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
                     }
+                }
+            }
+        }
+
+        SettingsSection("Navigation") {
+            Toggle(isOn: $enableVimMotions) {
+                Text("Enable Vim Motions")
+            }
+            .settingsSearchTarget("gestures.vimMotions")
+            .settingsAnnotation("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
+
+            Toggle(isOn: $passArrowsThroughToSystem) {
+                Text("Pass Arrow Keys Through to System")
+            }
+            .settingsSearchTarget("gestures.arrowPassthrough")
+            .settingsAnnotation("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
+        }
+
+        SettingsListSection(
+            title: "Fullscreen App Blacklist",
+            footer: "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.",
+            items: fullscreenAppBlacklist,
+            itemIcon: "app",
+            emptyText: "No apps in blacklist",
+            addTitle: "Add App",
+            onAdd: { showingAddBlacklistAppSheet = true },
+            onRemove: { appName in fullscreenAppBlacklist.removeAll { $0 == appName } },
+            onRemoveAll: { fullscreenAppBlacklist.removeAll() }
+        )
+        .settingsSearchTarget("gestures.fullscreenBlacklist")
+        .sheet(isPresented: $showingAddBlacklistAppSheet) {
+            AddBlacklistAppSheet(
+                isPresented: $showingAddBlacklistAppSheet,
+                appNameToAdd: $newBlacklistApp,
+                onAdd: { appName in
+                    if !appName.isEmpty, !fullscreenAppBlacklist.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame }) {
+                        fullscreenAppBlacklist.append(appName)
+                    }
+                }
+            )
+        }
+    }
+
+    // MARK: - Shortcut
+
+    private var initializerRow: some View {
+        Picker("Initializer", selection: $keybindModel.modifierKey) {
+            Text("Control ⌃").tag(Defaults[.Int64maskControl])
+            Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
+            Text("Command ⌘").tag(Defaults[.Int64maskCommand])
+        }
+        .onChange(of: keybindModel.modifierKey) { newValue in
+            if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
+                let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
+                Defaults[.UserKeybind] = updatedKeybind
+                keybindModel.currentKeybind = updatedKeybind
+            }
+        }
+    }
+
+    private var triggerKeyRow: some View {
+        LabeledContent("Trigger Key") {
+            HStack(spacing: 8) {
+                if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
+                    KeyCapView(text: KeyboardLabel.localizedKey(for: keybind.keyCode), symbol: nil)
+                } else {
+                    Text("No shortcut set").foregroundStyle(.secondary)
                 }
 
-                Button(action: { keybindModel.isRecording.toggle() }) {
-                    HStack {
-                        Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle")
-                        Text(keybindModel.isRecording ? "Press shortcut…" : "Change…")
-                    }
+                Button(keybindModel.isRecording ? "Press shortcut…" : "Change…") {
+                    keybindModel.isRecording.toggle()
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.settings)
                 .disabled(keybindModel.isRecording)
 
-                Button("Reset") {
-                    let def = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate])
-                    Defaults[.UserKeybind] = def
-                    keybindModel.currentKeybind = def
-                    keybindModel.modifierKey = def.modifierFlags
+                SettingsResetButton(isModified: !isDefaultShortcut) {
+                    Defaults[.UserKeybind] = Self.defaultKeybind
+                    keybindModel.currentKeybind = Self.defaultKeybind
+                    keybindModel.modifierKey = Self.defaultKeybind.modifierFlags
                 }
-                .buttonStyle(.bordered)
+                .frame(width: 16)
             }
-
-            Text("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
-                .font(.caption)
-                .foregroundColor(.secondary)
         }
         .background(
             ShortcutCaptureView(
@@ -213,144 +185,10 @@ struct WindowSwitcherKeybindSection: View {
         )
     }
 
-    // MARK: - Selection Key Section
+    private static let defaultKeybind = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate])
 
-    private var selectionKeySection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Selection Key")
-                Spacer()
-                KeyCaptureButton(keyCode: $selectionKeyCode)
-                Button("Reset") { selectionKeyCode = UInt16(kVK_Return) }
-                    .buttonStyle(.bordered)
-            }
-            .settingsSearchTarget("gestures.selectionKey")
-            Text("The key used to select and bring to front the highlighted window in the switcher.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-    }
-
-    // MARK: - Alternate Shortcuts Section
-
-    private var alternateShortcutsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Alternate Shortcut").font(.headline)
-            Text("An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-
-            HStack(spacing: 12) {
-                Picker("Modifier", selection: $alternateKeybindModifierFlags) {
-                    Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
-                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-                }
-                .pickerStyle(.menu)
-                .labelsHidden()
-                .fixedSize()
-                Text("+")
-                    .font(.system(size: 12))
-                    .foregroundColor(.secondary)
-
-                KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set", allowsEscape: true)
-
-                if alternateKeybindKey != 0 {
-                    Button("Clear") {
-                        alternateKeybindKey = 0
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                }
-
-                Spacer()
-
-                Picker("Mode", selection: $alternateKeybindMode) {
-                    ForEach(SwitcherInvocationMode.allCases) { mode in
-                        Text(mode.localizedName).tag(mode)
-                    }
-                }
-                .pickerStyle(.menu)
-                .labelsHidden()
-                .frame(maxWidth: 200)
-            }
-        }
-        .settingsSearchTarget("gestures.alternateShortcut")
-    }
-
-    // MARK: - Fullscreen App Blacklist
-
-    private var fullscreenAppBlacklistView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 8) {
-                    if !fullscreenAppBlacklist.isEmpty {
-                        ForEach(fullscreenAppBlacklist, id: \.self) { appName in
-                            HStack {
-                                Text(appName)
-                                    .foregroundColor(.primary)
-
-                                Spacer()
-
-                                Button(action: {
-                                    fullscreenAppBlacklist.removeAll { $0 == appName }
-                                }) {
-                                    Image(systemName: "trash")
-                                        .foregroundColor(.secondary)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            .padding(.vertical, 4)
-
-                            if appName != fullscreenAppBlacklist.last {
-                                Divider()
-                            }
-                        }
-                    } else {
-                        Text("No apps in blacklist")
-                            .foregroundColor(.secondary)
-                            .padding(.vertical, 8)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(8)
-            }
-            .frame(maxHeight: 120)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-            )
-
-            HStack {
-                Button(action: { showingAddBlacklistAppSheet.toggle() }) {
-                    Text("Add App")
-                }
-                .buttonStyle(AccentButtonStyle())
-                .disabled(!enableWindowSwitcher)
-
-                Spacer()
-
-                if !fullscreenAppBlacklist.isEmpty {
-                    DangerButton(action: {
-                        fullscreenAppBlacklist.removeAll()
-                    }) {
-                        Text("Remove All")
-                    }
-                    .disabled(!enableWindowSwitcher)
-                }
-            }
-        }
-        .sheet(isPresented: $showingAddBlacklistAppSheet) {
-            AddBlacklistAppSheet(
-                isPresented: $showingAddBlacklistAppSheet,
-                appNameToAdd: $newBlacklistApp,
-                onAdd: { appName in
-                    if !appName.isEmpty, !fullscreenAppBlacklist.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame }) {
-                        fullscreenAppBlacklist.append(appName)
-                    }
-                }
-            )
-        }
+    private var isDefaultShortcut: Bool {
+        keybindModel.currentKeybind?.keyCode == Self.defaultKeybind.keyCode
+            && keybindModel.currentKeybind?.modifierFlags == Self.defaultKeybind.modifierFlags
     }
 }

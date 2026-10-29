@@ -5,30 +5,21 @@ struct GestureSettingsSection: View {
     @Default(.gestureSwipeThreshold) var gestureSwipeThreshold
 
     var body: some View {
-        SettingsGroup(header: "Gesture Settings") {
-            VStack(alignment: .leading, spacing: 4) {
-                let thresholdBinding = Binding<Double>(
-                    get: { Double(gestureSwipeThreshold) },
-                    set: { gestureSwipeThreshold = CGFloat($0) }
-                )
-                sliderSetting(
-                    title: "Gesture Sensitivity",
-                    value: thresholdBinding,
-                    range: 20 ... 100,
-                    step: 10,
-                    unit: "px",
-                    formatter: {
-                        let f = NumberFormatter()
-                        f.minimumFractionDigits = 0
-                        f.maximumFractionDigits = 0
-                        return f
-                    }()
-                )
-                .settingsSearchTarget("gestures.sensitivity")
-                Text("Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+        SettingsSection("Gesture Settings") {
+            let thresholdBinding = Binding<Double>(
+                get: { Double(gestureSwipeThreshold) },
+                set: { gestureSwipeThreshold = CGFloat($0) }
+            )
+            SettingsSliderRow(
+                title: "Gesture Sensitivity",
+                value: thresholdBinding,
+                range: 20 ... 100,
+                unit: " px",
+                step: 10,
+                decimals: 0
+            )
+            .settingsSearchTarget("gestures.sensitivity")
+            .settingsAnnotation("Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher.")
         }
     }
 }

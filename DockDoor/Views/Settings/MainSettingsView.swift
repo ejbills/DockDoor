@@ -2,37 +2,28 @@ import AppKit
 import Defaults
 import LaunchAtLogin
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.showAnimations) var showAnimations
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
+    @Default(.showSettingsDescriptions) var showSettingsDescriptions
 
     var body: some View {
-        BaseSettingsView {
-            VStack(alignment: .leading, spacing: 24) {
-                DockDoorProBanner()
-                supportAndContributionsSection
-                applicationBasicsSection
-                activeAppIndicatorSection
-                backupAndRestoreSection
-
-                HStack {
-                    Spacer()
-                    Button("Reset All Settings to Defaults") { showResetConfirmation() }
-                    Button("Quit DockDoor") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
-                    Spacer()
-                }
-                .padding(.top, 5)
-            }
+        SettingsFormView {
+            DockDoorProBanner()
+            supportAndContributionsSection
+            applicationBasicsSection
+            activeAppIndicatorSection
+            backupAndRestoreSection
+            resetAndQuitSection
         }
     }
 
     // MARK: - Support & Contributions
 
     private var supportAndContributionsSection: some View {
-        SettingsGroup(header: "Support & Contributions", compact: true) {
+        SettingsSection("Support & Contributions") {
             SupportLinksSection()
         }
     }
@@ -40,44 +31,45 @@ struct MainSettingsView: View {
     // MARK: - Application Basics
 
     private var applicationBasicsSection: some View {
-        SettingsGroup(header: "Application Basics") {
-            VStack(alignment: .leading, spacing: 10) {
-                LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
-                    .settingsSearchTarget("general.launchAtLogin")
+        SettingsSection("Application Basics") {
+            LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
+                .settingsSearchTarget("general.launchAtLogin")
 
-                Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
-                    .settingsSearchTarget("general.menuBarIcon")
-                    .onChange(of: showMenuBarIcon) { isOn in
-                        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-                        if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
+            Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
+                .settingsSearchTarget("general.menuBarIcon")
+                .onChange(of: showMenuBarIcon) { isOn in
+                    let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                    if isOn {
+                        appDelegate.setupMenuBar()
+                    } else {
+                        appDelegate.removeMenuBar()
                     }
-
-                Toggle(isOn: Binding(
-                    get: { !showAnimations },
-                    set: { showAnimations = !$0 }
-                )) {
-                    Text("Reduce motion")
                 }
-                .settingsSearchTarget("general.reduceMotion")
 
-                VStack(alignment: .leading, spacing: 0) {
-                    Toggle(isOn: $sortMinimizedToEnd, label: {
-                        Text("Sort minimized/hidden windows to end")
-                    })
-                    Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                }
-                .settingsSearchTarget("general.sortMinimized")
+            Toggle(isOn: Binding(
+                get: { !showAnimations },
+                set: { showAnimations = !$0 }
+            )) {
+                Text("Reduce motion")
             }
+            .settingsSearchTarget("general.reduceMotion")
+
+            Toggle(isOn: $showSettingsDescriptions, label: { Text("Show setting descriptions") })
+                .settingsSearchTarget("general.showSettingDescriptions")
+                .settingsAnnotation("Explain what each setting does underneath its row.")
+
+            Toggle(isOn: $sortMinimizedToEnd, label: {
+                Text("Sort minimized/hidden windows to end")
+            })
+            .settingsAnnotation("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
+            .settingsSearchTarget("general.sortMinimized")
         }
     }
 
     // MARK: - Active App Indicator
 
     private var activeAppIndicatorSection: some View {
-        SettingsGroup(header: "Active App Indicator") {
+        SettingsSection("Active App Indicator") {
             ActiveAppIndicatorSettingsView()
         }
     }
@@ -85,16 +77,32 @@ struct MainSettingsView: View {
     // MARK: - Backup & Restore
 
     private var backupAndRestoreSection: some View {
-        SettingsGroup(header: "Backup & Restore") {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 12) {
+        SettingsSection("Backup & Restore") {
+            LabeledContent("Settings file") {
+                HStack(spacing: 8) {
                     Button("Export Settings…") { SettingsBackupManager.exportSettings() }
+                        .buttonStyle(.settings)
                         .settingsSearchTarget("general.exportSettings")
                     Button("Import Settings…") { SettingsBackupManager.importSettings() }
+                        .buttonStyle(.settings)
                         .settingsSearchTarget("general.importSettings")
                 }
+            }
+            .settingsAnnotation("Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
+        }
+    }
 
-                SettingsNote(icon: "arrow.up.arrow.down.circle", text: "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor.")
+    private var resetAndQuitSection: some View {
+        SettingsSection("Reset and quit") {
+            LabeledContent("Reset All Settings to Defaults") {
+                Button("Reset", role: .destructive) { showResetConfirmation() }
+                    .buttonStyle(.settings)
+            }
+            .settingsAnnotation("Every setting goes back to its default. This can't be undone.")
+
+            LabeledContent("Quit DockDoor") {
+                Button("Quit") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
+                    .buttonStyle(.settings)
             }
         }
     }
@@ -192,124 +200,5 @@ struct MainSettingsView: View {
                 askUserToRestartApplication()
             }
         }
-    }
-}
-
-struct AddBlacklistAppSheet: View {
-    @Binding var isPresented: Bool
-    @Binding var appNameToAdd: String
-    var onAdd: (String) -> Void
-
-    @State private var selectedAppInfo: String = ""
-    @State private var isLoadingAppInfo: Bool = false
-
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Add App to Blacklist")
-                .font(.headline)
-
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Select an application:")
-                    .font(.subheadline)
-
-                Button(action: selectAppFile) {
-                    HStack {
-                        Image(systemName: "folder")
-                        Text("Browse for .app file...")
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                }
-                .buttonStyle(.bordered)
-                .disabled(isLoadingAppInfo)
-
-                if isLoadingAppInfo {
-                    HStack {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                        Text("Reading app information...")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-
-                if !selectedAppInfo.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Selected app:")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text(selectedAppInfo)
-                            .font(.subheadline)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color(NSColor.controlBackgroundColor))
-                            .cornerRadius(4)
-                    }
-                }
-
-                Text("This will add the app to the blacklist using its bundle identifier for reliable matching.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            HStack {
-                Spacer()
-
-                Button("Cancel") {
-                    resetState()
-                    isPresented = false
-                }
-                .keyboardShortcut(.escape)
-
-                Spacer()
-            }
-        }
-        .padding()
-        .frame(width: 450, height: 200)
-    }
-
-    private func selectAppFile() {
-        let panel = NSOpenPanel()
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        panel.canChooseFiles = true
-        panel.allowedContentTypes = [.applicationBundle]
-        panel.prompt = "Select Application"
-        panel.message = "Choose an application to add to the blacklist"
-
-        if panel.runModal() == .OK, let url = panel.url {
-            isLoadingAppInfo = true
-
-            DispatchQueue.global(qos: .userInitiated).async {
-                let bundle = Bundle(url: url)
-                let appName = bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
-                    ?? bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
-                    ?? url.deletingPathExtension().lastPathComponent
-
-                let bundleIdentifier = bundle?.bundleIdentifier ?? ""
-
-                DispatchQueue.main.async {
-                    let appToAdd: String
-                    if !bundleIdentifier.isEmpty {
-                        appToAdd = bundleIdentifier
-                        selectedAppInfo = "\(appName) (\(bundleIdentifier))"
-                    } else {
-                        appToAdd = appName
-                        selectedAppInfo = appName
-                    }
-
-                    onAdd(appToAdd)
-                    resetState()
-                    isPresented = false
-                    isLoadingAppInfo = false
-                }
-            }
-        }
-    }
-
-    private func resetState() {
-        appNameToAdd = ""
-        selectedAppInfo = ""
-        isLoadingAppInfo = false
     }
 }

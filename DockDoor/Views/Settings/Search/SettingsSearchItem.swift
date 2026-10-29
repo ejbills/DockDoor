@@ -9,6 +9,10 @@ struct SettingsSearchItem: Identifiable, Hashable {
     let section: String
     let icon: String
 
+    let searchTitle: String
+    let searchDescription: String
+    let searchKeywords: [String]
+
     init(
         id: String,
         title: String,
@@ -25,6 +29,9 @@ struct SettingsSearchItem: Identifiable, Hashable {
         self.tab = tab
         self.section = section
         self.icon = icon
+        searchTitle = title.lowercased()
+        searchDescription = description.lowercased()
+        searchKeywords = keywords.map { $0.lowercased() }
     }
 }
 

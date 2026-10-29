@@ -18,17 +18,12 @@ struct GradientColorPaletteSettingsView: View {
             Text("Highlight Gradient Colors")
                 .layoutPriority(1)
 
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 4) {
-                    ForEach(storedSettings.colors.indices, id: \.self) { index in
-                        colorShape(for: storedSettings.colors[index], index: index)
-                    }
+            HStack(spacing: 4) {
+                ForEach(storedSettings.colors.indices, id: \.self) { index in
+                    colorShape(for: storedSettings.colors[index], index: index)
                 }
-
-                Text("Right click a color to remove it.")
-                    .font(.caption)
-                    .foregroundColor(.gray)
             }
+            .settingsAnnotation("Right click a color to remove it.")
 
             Spacer()
 
@@ -41,29 +36,33 @@ struct GradientColorPaletteSettingsView: View {
             }
             Button(action: addRandomColor) {
                 Image(systemName: "plus")
-                    .frame(width: 30, height: 30)
             }
+            .buttonStyle(.settings)
+            .help("Add color")
+            .accessibilityLabel("Add color")
         }
         .settingsSearchTarget("appearance.gradientColors")
 
-        sliderSetting(title: "Animation speed",
-                      value: $storedSettings.speed,
-                      range: 0.1 ... 1.0,
-                      step: 0.05,
-                      unit: "seconds",
-                      formatter: NumberFormatter.twoDecimalFormatter)
-            .settingsSearchTarget("appearance.gradientSpeed")
+        SettingsSliderRow(
+            title: "Animation speed",
+            value: $storedSettings.speed,
+            range: 0.1 ... 1.0,
+            unit: " s",
+            step: 0.05
+        )
+        .settingsSearchTarget("appearance.gradientSpeed")
 
-        sliderSetting(title: "Blur amount",
-                      value: $storedSettings.blur,
-                      range: 0 ... 1.0,
-                      step: 0.05,
-                      unit: "amount",
-                      formatter: NumberFormatter.twoDecimalFormatter)
-            .settingsSearchTarget("appearance.gradientBlur")
-            .onAppear {
-                setupColorDebounce()
-            }
+        SettingsSliderRow(
+            title: "Blur amount",
+            value: $storedSettings.blur,
+            range: 0 ... 1.0,
+            unit: "",
+            step: 0.05
+        )
+        .settingsSearchTarget("appearance.gradientBlur")
+        .onAppear {
+            setupColorDebounce()
+        }
     }
 
     private func colorShape(for hexColor: String, index: Int) -> some View {
