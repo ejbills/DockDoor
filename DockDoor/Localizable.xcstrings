@@ -38911,6 +38911,8 @@
         }
       }
     },
+    "Close after" : {},
+    "Close after a delay" : {},
     "Close All" : {
       "localizations" : {
         "af" : {

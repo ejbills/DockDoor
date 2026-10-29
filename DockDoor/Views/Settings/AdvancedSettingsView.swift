@@ -205,71 +205,11 @@ struct AdvancedSettingsView: View {
 
     private var streamManagementSection: some View {
         SettingsSection("Stream Management") {
-            Text("Stream Keep-Alive Duration")
-                .onTapGesture { isKeepAliveFieldFocused = false }
-
-            HStack(spacing: 0) {
-                Button(action: {
-                    setKeepAliveMode(0)
-                }) {
-                    Text("Immediately close")
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .background(livePreviewStreamKeepAlive == 0 ? Color.accentColor : Color.secondary.opacity(0.15))
-                .foregroundStyle(livePreviewStreamKeepAlive == 0 ? .white : .primary)
-                .contentShape(Rectangle())
-
-                HStack(spacing: 4) {
-                    TextField("", text: $keepAliveDurationText)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 40)
-                        .multilineTextAlignment(.center)
-                        .focused($isKeepAliveFieldFocused)
-                        .onSubmit {
-                            commitKeepAliveDurationText()
-                        }
-                        .onChange(of: keepAliveDurationText) { _ in
-                            updateKeepAliveDurationFromText()
-                        }
-                        .onChange(of: isKeepAliveFieldFocused) { focused in
-                            if focused {
-                                selectKeepAliveDuration()
-                            } else {
-                                commitKeepAliveDurationText()
-                            }
-                        }
-                    Text("seconds")
-                        .foregroundStyle(livePreviewStreamKeepAlive > 0 ? .white : .primary)
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(livePreviewStreamKeepAlive > 0 ? Color.accentColor : Color.secondary.opacity(0.15))
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    selectKeepAliveDuration()
-                }
-
-                Button(action: {
-                    setKeepAliveMode(-1)
-                }) {
-                    Text("Keep Open")
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .background(livePreviewStreamKeepAlive == -1 ? Color.accentColor : Color.secondary.opacity(0.15))
-                .foregroundStyle(livePreviewStreamKeepAlive == -1 ? .white : .primary)
-                .contentShape(Rectangle())
+            Picker("Stream Keep-Alive Duration", selection: keepAliveModeBinding) {
+                Text("Immediately close").tag(0)
+                Text("Close after a delay").tag(1)
+                Text("Keep Open").tag(-1)
             }
-            .cornerRadius(6)
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-            )
             .onChange(of: livePreviewStreamKeepAlive) { newValue in
                 if newValue > 0 {
                     lastKeepAliveDuration = newValue
@@ -280,10 +220,43 @@ struct AdvancedSettingsView: View {
                 }
             }
             .settingsAnnotation("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
-            .onTapGesture { isKeepAliveFieldFocused = false }
-            .frame(maxWidth: .infinity, alignment: .leading)
             .settingsSearchTarget("advanced.streamKeepAlive")
+
+            if livePreviewStreamKeepAlive > 0 {
+                LabeledContent("Close after") {
+                    HStack(spacing: 6) {
+                        TextField("", text: $keepAliveDurationText)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 48)
+                            .multilineTextAlignment(.trailing)
+                            .focused($isKeepAliveFieldFocused)
+                            .onSubmit {
+                                commitKeepAliveDurationText()
+                            }
+                            .onChange(of: keepAliveDurationText) { _ in
+                                updateKeepAliveDurationFromText()
+                            }
+                            .onChange(of: isKeepAliveFieldFocused) { focused in
+                                if !focused {
+                                    commitKeepAliveDurationText()
+                                }
+                            }
+                        Text("seconds")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
         }
+    }
+
+    /// Any positive duration maps to the "Close after a delay" tag (1).
+    private var keepAliveModeBinding: Binding<Int> {
+        Binding(
+            get: { livePreviewStreamKeepAlive > 0 ? 1 : livePreviewStreamKeepAlive },
+            set: { mode in
+                setKeepAliveMode(mode == 1 ? lastKeepAliveDuration : mode)
+            }
+        )
     }
 
     private func setKeepAliveMode(_ value: Int) {
@@ -294,11 +267,6 @@ struct AdvancedSettingsView: View {
             lastKeepAliveDuration = value
             keepAliveDurationText = "\(value)"
         }
-    }
-
-    private func selectKeepAliveDuration() {
-        let duration = positiveKeepAliveDuration() ?? lastKeepAliveDuration
-        setKeepAliveMode(duration)
     }
 
     private func updateKeepAliveDurationFromText() {
