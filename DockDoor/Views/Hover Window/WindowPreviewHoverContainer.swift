@@ -289,7 +289,8 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .popover && effectiveShowAppName) ? 30 : 0)
         .onAppear {
             loadAppIcon()
-            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+            // The settings mock is not a panel: it must not stop or extend real streams.
+            if !mockPreviewActive, Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
                 LiveCaptureManager.shared.panelOpened()
             }
             if #available(macOS 15.0, *) {
@@ -297,7 +298,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
         .onDisappear {
-            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+            if !mockPreviewActive, Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
                 Task { await LiveCaptureManager.shared.panelClosed() }
             }
         }
@@ -310,11 +311,14 @@ struct WindowPreviewHoverContainer: View {
         .task(id: previewStateCoordinator.windowSwitcherActive) {
             let keys = PreviewAppearanceSettings.observedKeys + BackgroundAppearance.observedKeys
             for await _ in Defaults.updates(keys, initial: true) {
-                let updated = PreviewAppearanceSettings.resolve(
-                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
-                    dockPosition: dockPosition
-                )
-                if updated != cachedAppearance { cachedAppearance = updated }
+                // An override (the settings mock) already carries the resolved appearance.
+                if appearanceOverride == nil {
+                    let updated = PreviewAppearanceSettings.resolve(
+                        windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                        dockPosition: dockPosition
+                    )
+                    if updated != cachedAppearance { cachedAppearance = updated }
+                }
                 let updatedBg = BackgroundAppearance.resolve()
                 if updatedBg != backgroundAppearance { backgroundAppearance = updatedBg }
             }
