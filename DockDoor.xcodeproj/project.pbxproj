@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ADF1A55E819A4A8CBF87E8E5B8AB4371 /* ActiveAppIndicatorMotionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEB737D04684AAFAF1CB0D5B22587EB /* ActiveAppIndicatorMotionTests.swift */; };
 		7B0C516C06C44C8B87621ABD /* ScreenReservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AC6332C434450F9FF53CF3 /* ScreenReservationTests.swift */; };
 		F97DA8E2FB6A4BE992DB4522 /* WindowGestureDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1F391DA2A46F98D82A4F1 /* WindowGestureDemoView.swift */; };
 		72F81E67A26E470D9895F9FA /* ScreenReservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0448C6F30A6F48A0875C81C3 /* ScreenReservations.swift */; };
@@ -267,6 +268,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5EEB737D04684AAFAF1CB0D5B22587EB /* ActiveAppIndicatorMotionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorMotionTests.swift; sourceTree = "<group>"; };
 		22AC6332C434450F9FF53CF3 /* ScreenReservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenReservationTests.swift; sourceTree = "<group>"; };
 		C4D1F391DA2A46F98D82A4F1 /* WindowGestureDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGestureDemoView.swift; sourceTree = "<group>"; };
 		0448C6F30A6F48A0875C81C3 /* ScreenReservations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenReservations.swift; sourceTree = "<group>"; };
@@ -698,6 +700,7 @@
 			isa = PBXGroup;
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
+				5EEB737D04684AAFAF1CB0D5B22587EB /* ActiveAppIndicatorMotionTests.swift */,
 				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
 				22D3504B979C44D68BB7875D /* TrackpadSwipeDetectorTests.swift */,
 				857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */,
@@ -1210,6 +1213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
+				ADF1A55E819A4A8CBF87E8E5B8AB4371 /* ActiveAppIndicatorMotionTests.swift in Sources */,
 				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
 				524C1C716FD24706A7B0D1DE /* TrackpadSwipeDetectorTests.swift in Sources */,
 				B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */,

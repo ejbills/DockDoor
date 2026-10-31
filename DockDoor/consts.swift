@@ -289,6 +289,7 @@ extension Defaults.Keys {
     // MARK: - Active App Indicator
 
     static let showActiveAppIndicator = Key<Bool>("showActiveAppIndicator", default: false)
+    static let activeAppIndicatorFollowsMagnification = Key<Bool>("activeAppIndicatorFollowsMagnification", default: false)
     static let activeAppIndicatorColor = Key<Color>("activeAppIndicatorColor", default: Color.accentColor)
     static let activeAppIndicatorAutoSize = Key<Bool>("activeAppIndicatorAutoSize", default: true)
     static let activeAppIndicatorAutoLength = Key<Bool>("activeAppIndicatorAutoLength", default: false)

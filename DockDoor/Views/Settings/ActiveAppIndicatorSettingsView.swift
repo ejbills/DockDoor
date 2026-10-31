@@ -5,6 +5,7 @@ import SwiftUI
 /// Shows a line below the currently active app in the dock.
 struct ActiveAppIndicatorSettingsView: View {
     @Default(.showActiveAppIndicator) var showActiveAppIndicator
+    @Default(.activeAppIndicatorFollowsMagnification) var activeAppIndicatorFollowsMagnification
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
     @Default(.activeAppIndicatorAutoSize) var activeAppIndicatorAutoSize
     @Default(.activeAppIndicatorAutoLength) var activeAppIndicatorAutoLength
@@ -59,6 +60,14 @@ struct ActiveAppIndicatorSettingsView: View {
                     .fixedSize()
                     .settingsSearchTarget("general.indicatorStyle")
                     .padding(.leading, 20)
+
+                    if activeAppIndicatorStyle == .bar {
+                        Toggle(isOn: $activeAppIndicatorFollowsMagnification) {
+                            Text(String(localized: "Follow Dock magnification"))
+                        }
+                        .settingsSearchTarget("general.indicatorFollowsMagnification")
+                        .padding(.leading, 20)
+                    }
 
                     if activeAppIndicatorStyle == .runningAppDots {
                         Group {

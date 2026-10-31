@@ -31,10 +31,21 @@ enum ActiveAppIndicatorDockDetection {
     /// - Parameter app: The running application to find in the dock.
     /// - Returns: The frame of the dock item, or nil if not found.
     static func getDockItemFrame(for app: NSRunningApplication) -> CGRect? {
+        guard let items = try? dockList()?.children(),
+              let item = findDockItem(for: app, among: items),
+              let itemFrame = frame(of: item)
+        else { return nil }
+        return restingFrame(itemFrame, among: items.filter { (try? $0.subrole()) == "AXApplicationDockItem" })
+    }
+
+    static func getDockItem(for app: NSRunningApplication) -> AXUIElement? {
+        guard let items = try? dockList()?.children() else { return nil }
+        return findDockItem(for: app, among: items)
+    }
+
+    private static func findDockItem(for app: NSRunningApplication, among dockItems: [AXUIElement]) -> AXUIElement? {
         let shortcutBundleIdentifier = LauncherShortcutResolver.owningShortcutBundleIdentifier(of: app)
-        guard let bundleIdentifier = shortcutBundleIdentifier ?? app.bundleIdentifier,
-              let dockItems = try? dockList()?.children()
-        else {
+        guard let bundleIdentifier = shortcutBundleIdentifier ?? app.bundleIdentifier else {
             return nil
         }
 
@@ -48,7 +59,7 @@ enum ActiveAppIndicatorDockDetection {
                 let itemBundle = Bundle(url: itemURL),
                 itemBundle.bundleIdentifier == bundleIdentifier
             {
-                return frame(of: item).map { restingFrame($0, among: appItems) }
+                return item
             }
 
             // Check by running app if bundle ID check failed
@@ -56,7 +67,7 @@ enum ActiveAppIndicatorDockDetection {
                let itemTitle = try? item.title(),
                itemTitle == app.localizedName
             {
-                return frame(of: item).map { restingFrame($0, among: appItems) }
+                return item
             }
         }
 
@@ -81,10 +92,25 @@ enum ActiveAppIndicatorDockDetection {
 
     /// Gets the frame for a dock element from accessibility.
     static func frame(of element: AXUIElement) -> CGRect? {
-        guard let position = try? element.position(),
-              let size = try? element.size()
+        var values: CFArray?
+        guard AXUIElementCopyMultipleAttributeValues(
+            element,
+            [kAXPositionAttribute, kAXSizeAttribute] as CFArray,
+            AXCopyMultipleAttributeOptions(rawValue: 0),
+            &values
+        ) == .success,
+            let attributes = values as? [AXValue],
+            attributes.count == 2,
+            AXValueGetType(attributes[0]) == .cgPoint,
+            AXValueGetType(attributes[1]) == .cgSize
         else { return nil }
 
+        var position = CGPoint.zero
+        var size = CGSize.zero
+        guard AXValueGetValue(attributes[0], .cgPoint, &position),
+              AXValueGetValue(attributes[1], .cgSize, &size),
+              size.width > 0, size.height > 0
+        else { return nil }
         return CGRect(origin: position, size: size)
     }
 
