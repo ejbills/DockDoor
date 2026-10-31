@@ -120,3 +120,49 @@ enum ActiveAppIndicatorPositioning {
         return CGRect(x: x, y: y, width: indicatorThickness, height: height)
     }
 }
+
+struct ActiveAppIndicatorMotionPredictor {
+    private var previousFrame: CGRect?
+    private var previousTime: TimeInterval?
+    private var previousVelocity = CGPoint.zero
+
+    mutating func reset() {
+        previousFrame = nil
+        previousTime = nil
+        previousVelocity = .zero
+    }
+
+    mutating func project(_ frame: CGRect, at time: TimeInterval, presentationTime: TimeInterval) -> CGRect {
+        defer {
+            previousFrame = frame
+            previousTime = time
+        }
+        guard let previousFrame, let previousTime else { return frame }
+        let elapsed = time - previousTime
+        guard elapsed > 0, elapsed <= 1.0 / 30.0,
+              abs(frame.midX - previousFrame.midX) < 24,
+              abs(frame.midY - previousFrame.midY) < 24
+        else {
+            previousVelocity = .zero
+            return frame
+        }
+
+        let velocity = CGPoint(
+            x: (frame.midX - previousFrame.midX) / elapsed,
+            y: (frame.midY - previousFrame.midY) / elapsed
+        )
+        let horizon = min(max(presentationTime - time, 0), 1.0 / 120.0)
+        var delta = CGPoint(
+            x: velocity.x * previousVelocity.x < 0 ? 0 : velocity.x * horizon,
+            y: velocity.y * previousVelocity.y < 0 ? 0 : velocity.y * horizon
+        )
+        previousVelocity = velocity
+        // Keep prediction small enough that a stopped icon settles within one refresh.
+        let distance = hypot(delta.x, delta.y)
+        if distance > 3 {
+            delta.x *= 3 / distance
+            delta.y *= 3 / distance
+        }
+        return frame.offsetBy(dx: delta.x, dy: delta.y)
+    }
+}

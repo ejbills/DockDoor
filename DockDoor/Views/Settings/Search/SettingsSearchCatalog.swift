@@ -60,6 +60,14 @@ enum SettingsSearchCatalog {
             icon: "line.horizontal.star.fill.line.horizontal"
         ),
         SettingsSearchItem(
+            id: "general.indicatorFollowsMagnification",
+            title: String(localized: "Follow Dock magnification"),
+            keywords: ["indicator", "magnification", "tracking", "underline", "live"],
+            tab: "General",
+            section: String(localized: "Active App Indicator"),
+            icon: "cursorarrow.motionlines"
+        ),
+        SettingsSearchItem(
             id: "general.indicatorColor",
             title: String(localized: "Indicator Color"),
             keywords: ["indicator", "color", "picker"],

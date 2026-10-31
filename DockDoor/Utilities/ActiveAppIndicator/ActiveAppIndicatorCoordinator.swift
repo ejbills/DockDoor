@@ -1,5 +1,6 @@
 import Cocoa
 import Defaults
+import QuartzCore
 import SwiftUI
 
 /// Manages the active app indicator that shows a line next to the currently active app in the dock.
@@ -31,6 +32,25 @@ final class ActiveAppIndicatorCoordinator {
     private var currentActiveApp: NSRunningApplication?
     private var trackedDots: [TrackedDot] = []
 
+    @available(macOS 14.0, *)
+    private final class DisplayLinkTarget: NSObject {
+        weak var coordinator: ActiveAppIndicatorCoordinator?
+
+        @objc func refresh(_ link: CADisplayLink) {
+            coordinator?.trackDockItem(presentationTime: link.targetTimestamp)
+        }
+    }
+
+    private var displayLink: AnyObject?
+    private var trackingSettingsObserver: Defaults.Observation?
+    private var trackingTimer: Timer?
+    private var trackedDockItem: AXUIElement?
+    private var lastTrackedFrame: CGRect?
+    private var motionPredictor = ActiveAppIndicatorMotionPredictor()
+    private var predictionNeedsSettling = false
+    private var nextDockItemLookup = Date.distantPast
+    private var nextVisibilityCheck = Date.distantPast
+
     private var delayedUpdateTimer: Timer?
     private let delayedUpdateInterval: TimeInterval = 0.6
 
@@ -58,6 +78,7 @@ final class ActiveAppIndicatorCoordinator {
         ActiveAppIndicatorCoordinator.shared = self
         setupObservers()
         showIndicator()
+        updateTrackingMode()
     }
 
     deinit {
@@ -96,6 +117,7 @@ final class ActiveAppIndicatorCoordinator {
         ) { [weak self] in
             DispatchQueue.main.async {
                 guard let self, let app = self.currentActiveApp else { return }
+                self.updateTrackingMode()
                 self.updateIndicatorPosition(for: app)
             }
         }
@@ -109,7 +131,73 @@ final class ActiveAppIndicatorCoordinator {
             self?.handleScreenParametersChanged()
         }
 
+        trackingSettingsObserver = Defaults.observe(.activeAppIndicatorFollowsMagnification) { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.updateTrackingMode()
+                if let app = self.currentActiveApp {
+                    self.updateIndicatorPosition(for: app)
+                }
+            }
+        }
         setupDockLayoutObserver()
+    }
+
+    private func updateTrackingMode() {
+        stopTrackingDockItem()
+        guard Defaults[.activeAppIndicatorFollowsMagnification], !showsRunningAppDots else { return }
+        lastTrackedFrame = nil
+        motionPredictor.reset()
+        predictionNeedsSettling = false
+        if #available(macOS 14.0, *), let indicatorWindow {
+            let target = DisplayLinkTarget()
+            target.coordinator = self
+            let link = indicatorWindow.displayLink(target: target, selector: #selector(DisplayLinkTarget.refresh(_:)))
+            link.preferredFrameRateRange = CAFrameRateRange(minimum: 120, maximum: 120, preferred: 120)
+            link.add(to: .main, forMode: .common)
+            displayLink = link
+            return
+        }
+        let timer = Timer(timeInterval: 1.0 / 120.0, repeats: true) { [weak self] _ in
+            self?.trackDockItem()
+        }
+        timer.tolerance = 0
+        RunLoop.main.add(timer, forMode: .common)
+        trackingTimer = timer
+    }
+
+    private func stopTrackingDockItem() {
+        if #available(macOS 14.0, *) {
+            (displayLink as? CADisplayLink)?.invalidate()
+        }
+        displayLink = nil
+        trackingTimer?.invalidate()
+        trackingTimer = nil
+    }
+
+    private func trackDockItem(presentationTime: TimeInterval? = nil) {
+        guard let app = currentActiveApp, app.bundleIdentifier != dockAppIdentifier else { return }
+        if Date() >= nextVisibilityCheck {
+            nextVisibilityCheck = Date().addingTimeInterval(delayedUpdateInterval)
+            updateDockVisibilityState(listFrame: currentDockListFrame())
+        }
+        guard isDockCurrentlyVisible else { return }
+
+        if trackedDockItem == nil {
+            guard Date() >= nextDockItemLookup else { return }
+            nextDockItemLookup = Date().addingTimeInterval(delayedUpdateInterval)
+            trackedDockItem = ActiveAppIndicatorDockDetection.getDockItem(for: app)
+        }
+        guard let item = trackedDockItem else { return }
+        guard let frame = ActiveAppIndicatorDockDetection.frame(of: item) else {
+            trackedDockItem = nil
+            lastTrackedFrame = nil
+            indicatorWindow?.orderOut(nil)
+            return
+        }
+        guard frame != lastTrackedFrame || predictionNeedsSettling else { return }
+        lastTrackedFrame = frame
+        updateIndicatorPosition(for: app, liveFrame: frame, presentationTime: presentationTime)
     }
 
     private func setupDockLayoutObserver() {
@@ -150,6 +238,11 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func handleDockLayoutChanged(itemsChanged: Bool) {
+        if itemsChanged {
+            trackedDockItem = nil
+            lastTrackedFrame = nil
+            nextDockItemLookup = .distantPast
+        }
         let listMoved = followDockList()
         if itemsChanged || listMoved {
             trackDockLayout(refreshingDots: itemsChanged)
@@ -273,6 +366,8 @@ final class ActiveAppIndicatorCoordinator {
         dockLayoutObserver = nil
         observedDockList = nil
         updateHiddenDockMouseMonitor(enabled: false)
+        stopTrackingDockItem()
+        trackingSettingsObserver?.invalidate()
         delayedUpdateTimer?.invalidate()
         layoutTrackingTimer?.invalidate()
         positionSettingsObserver?.invalidate()
@@ -280,6 +375,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func handleScreenParametersChanged() {
+        updateTrackingMode()
         let newDockPosition = DockUtils.getDockPosition()
         let newDockSize = DockUtils.getDockSize()
 
@@ -397,6 +493,11 @@ final class ActiveAppIndicatorCoordinator {
     private func handleActiveAppChanged(_ app: NSRunningApplication) {
         let previousApp = currentActiveApp
         currentActiveApp = app
+        motionPredictor.reset()
+        predictionNeedsSettling = false
+        trackedDockItem = nil
+        lastTrackedFrame = nil
+        nextDockItemLookup = .distantPast
 
         guard app.bundleIdentifier != dockAppIdentifier else {
             if showsRunningAppDots {
@@ -418,7 +519,7 @@ final class ActiveAppIndicatorCoordinator {
         trackDockLayout(refreshingDots: !visibilityChanged)
     }
 
-    private func updateIndicatorPosition(for app: NSRunningApplication, widenFromCenter: Bool = false) {
+    private func updateIndicatorPosition(for app: NSRunningApplication, widenFromCenter: Bool = false, liveFrame: CGRect? = nil, presentationTime: TimeInterval? = nil) {
         guard isDockCurrentlyVisible else {
             indicatorWindow?.orderOut(self)
             return
@@ -433,7 +534,7 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        guard let dockItemFrame = ActiveAppIndicatorDockDetection.getDockItemFrame(for: app) else {
+        guard let dockItemFrame = liveFrame ?? ActiveAppIndicatorDockDetection.getDockItemFrame(for: app) else {
             indicatorWindow.orderOut(self)
             return
         }
@@ -445,7 +546,7 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        guard let targetFrame = ActiveAppIndicatorDockDetection.calculateIndicatorFrame(
+        guard var targetFrame = ActiveAppIndicatorDockDetection.calculateIndicatorFrame(
             relativeTo: dockItemFrame,
             dockPosition: dockPosition
         ) else {
@@ -453,7 +554,29 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        if widenFromCenter {
+        if Defaults[.activeAppIndicatorFollowsMagnification] {
+            if liveFrame != nil {
+                let measuredFrame = targetFrame
+                let now = CACurrentMediaTime()
+                targetFrame = motionPredictor.project(
+                    measuredFrame,
+                    at: now,
+                    presentationTime: presentationTime ?? (now + 1.0 / 120.0)
+                )
+                predictionNeedsSettling = targetFrame != measuredFrame
+            } else {
+                motionPredictor.reset()
+                predictionNeedsSettling = false
+            }
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            indicatorWindow.setFrame(targetFrame, display: true)
+            CATransaction.commit()
+            indicatorWindow.alphaValue = 1
+            if !indicatorWindow.isVisible {
+                indicatorWindow.orderFront(self)
+            }
+        } else if widenFromCenter {
             let collapsed = ActiveAppIndicatorDockDetection.collapsedFrame(
                 from: targetFrame,
                 dockPosition: dockPosition
@@ -607,6 +730,10 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
+        if Defaults[.activeAppIndicatorFollowsMagnification], !showsRunningAppDots {
+            indicatorWindow.orderOut(nil)
+            return
+        }
         let dockPosition = DockUtils.getDockPosition()
         let collapsed = ActiveAppIndicatorDockDetection.collapsedFrame(
             from: indicatorWindow.frame,
