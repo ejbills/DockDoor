@@ -23,8 +23,18 @@ struct CmdTabSettingsView: View {
                 windowDisplaySection
             }
         } pinnedHeader: {
-            if enableCmdTabEnhancements {
-                SettingsMockPreview(context: .cmdTab, maxHeight: 170)
+            HStack(spacing: 12) {
+                if enableCmdTabEnhancements {
+                    SettingsMockPreview(context: .cmdTab, maxHeight: 170)
+                }
+
+                Image("CmdTab")
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFill()
+                    .frame(width: 260, height: 170)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
         }
     }
