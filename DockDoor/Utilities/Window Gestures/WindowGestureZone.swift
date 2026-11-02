@@ -135,7 +135,7 @@ enum WindowGestureZoneResolver {
 
     private static func dockZone(at point: CGPoint) -> Outcome {
         guard let dockObserver = DockObserver.activeInstance, dockObserver.isPointNearDock(point) else { return .notHere }
-        let hovered = dockObserver.getDockItemAppStatusUnderMouse()
+        let hovered = dockObserver.dockItemAppStatus(at: point)
         guard hovered.dockItemElement != nil else { return .notHere }
         guard case let .success(app) = hovered.status,
               app.processIdentifier != ProcessInfo.processInfo.processIdentifier
