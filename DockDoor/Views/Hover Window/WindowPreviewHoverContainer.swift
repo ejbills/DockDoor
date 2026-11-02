@@ -59,7 +59,6 @@ struct WindowPreviewHoverContainer: View {
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
     let hasScreenRecordingPermission: Bool
-    let appearanceOverride: PreviewAppearanceSettings?
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -133,8 +132,7 @@ struct WindowPreviewHoverContainer: View {
          mockPreviewActive: Bool,
          updateAvailable: Bool,
          embeddedContentType: EmbeddedContentType = .none,
-         hasScreenRecordingPermission: Bool,
-         appearanceOverride: PreviewAppearanceSettings? = nil)
+         hasScreenRecordingPermission: Bool)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -148,7 +146,6 @@ struct WindowPreviewHoverContainer: View {
         self.updateAvailable = updateAvailable
         self.embeddedContentType = embeddedContentType
         self.hasScreenRecordingPermission = hasScreenRecordingPermission
-        self.appearanceOverride = appearanceOverride
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -271,7 +268,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private var radii: CardRadius.Resolved {
-        (appearanceOverride ?? cachedAppearance)?.radii ?? .current()
+        cachedAppearance?.radii ?? .current()
     }
 
     var body: some View {
@@ -311,14 +308,11 @@ struct WindowPreviewHoverContainer: View {
         .task(id: previewStateCoordinator.windowSwitcherActive) {
             let keys = PreviewAppearanceSettings.observedKeys + BackgroundAppearance.observedKeys
             for await _ in Defaults.updates(keys, initial: true) {
-                // An override (the settings mock) already carries the resolved appearance.
-                if appearanceOverride == nil {
-                    let updated = PreviewAppearanceSettings.resolve(
-                        windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
-                        dockPosition: dockPosition
-                    )
-                    if updated != cachedAppearance { cachedAppearance = updated }
-                }
+                let updated = PreviewAppearanceSettings.resolve(
+                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                    dockPosition: dockPosition
+                )
+                if updated != cachedAppearance { cachedAppearance = updated }
                 let updatedBg = BackgroundAppearance.resolve()
                 if updatedBg != backgroundAppearance { backgroundAppearance = updatedBg }
             }
@@ -721,7 +715,7 @@ struct WindowPreviewHoverContainer: View {
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         let cachedFilteredIndices = filteredWindowIndices()
-        let appearance = appearanceOverride ?? cachedAppearance ?? PreviewAppearanceSettings.resolve(
+        let appearance = cachedAppearance ?? PreviewAppearanceSettings.resolve(
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )
@@ -807,7 +801,7 @@ struct WindowPreviewHoverContainer: View {
     private func handleEdgeScrollHover(at location: CGPoint, isHorizontal: Bool) {
         let edgeSize: CGFloat = 50
         let toolbarExclusion: CGFloat = 46
-        let appearance = appearanceOverride ?? cachedAppearance ?? PreviewAppearanceSettings.resolve(
+        let appearance = cachedAppearance ?? PreviewAppearanceSettings.resolve(
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )
