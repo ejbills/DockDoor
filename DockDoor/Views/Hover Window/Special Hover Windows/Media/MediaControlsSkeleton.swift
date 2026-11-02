@@ -5,7 +5,7 @@ struct MediaControlsSkeleton: View {
     let isEmbedded: Bool
 
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
 
     var body: some View {
         if isEmbedded {

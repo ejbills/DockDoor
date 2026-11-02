@@ -188,7 +188,7 @@ final class DockObserver {
             return
         }
 
-        let currentDockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
+        let currentDockApp = DockUtils.runningDock
 
         if currentDockApp?.processIdentifier != currentDockPID {
             reset()
@@ -287,7 +287,7 @@ final class DockObserver {
     }
 
     private func setupSelectedDockItemObserver() {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockUtils.runningDock else {
             return
         }
 

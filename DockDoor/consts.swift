@@ -13,6 +13,8 @@ let roughWidthCap = optimisticScreenSizeWidth / 3
 let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
+let dockAppIdentifier = "com.apple.dock"
+let finderAppIdentifier = "com.apple.finder"
 
 @MainActor func isMediaApp(_ bundleIdentifier: String?) -> Bool {
     guard let bundleId = bundleIdentifier else { return false }
@@ -42,6 +44,7 @@ extension Defaults.Keys {
     static let restoreAllMinimizedWindowsOnDockClick = Key<Bool>("restoreAllMinimizedWindowsOnDockClick", default: true)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
+    static let quitAppOnWindowCloseExcludedApps = Key<[String]>("quitAppOnWindowCloseExcludedApps", default: [])
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
     static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)
@@ -988,6 +991,7 @@ enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
 enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identifiable {
     case recentlyUsed
     case creationOrder
+    case screenPosition
     case alphabeticalByTitle
     case alphabeticalByAppName
 
@@ -999,6 +1003,8 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Recently used", comment: "Window preview sort order option")
         case .creationOrder:
             String(localized: "Creation order (fixed)", comment: "Window preview sort order option")
+        case .screenPosition:
+            String(localized: "Screen position (left to right)", comment: "Window preview sort order option")
         case .alphabeticalByTitle:
             String(localized: "Alphabetical by title", comment: "Window preview sort order option")
         case .alphabeticalByAppName:

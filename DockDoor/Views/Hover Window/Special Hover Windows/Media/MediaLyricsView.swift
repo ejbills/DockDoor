@@ -8,7 +8,7 @@ struct MediaLyricsView: View {
     let isFullMode: Bool
     let backgroundAppearance: BackgroundAppearance
 
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {

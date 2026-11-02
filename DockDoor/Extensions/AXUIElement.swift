@@ -285,7 +285,7 @@ typealias AXUIElementID = UInt64
 /// Probes Finder's AX tree to detect post-wake AX subsystem degradation.
 func isAccessibilityReady() -> Bool {
     guard let finder = NSWorkspace.shared.runningApplications
-        .first(where: { $0.bundleIdentifier == "com.apple.finder" })
+        .first(where: { $0.bundleIdentifier == finderAppIdentifier })
     else {
         return false
     }

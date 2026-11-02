@@ -178,7 +178,7 @@ enum LauncherShortcutResolver {
     }
 
     private static func dockSawLaunch(of app: NSRunningApplication) -> Bool {
-        guard let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
+        guard let dock = DockUtils.runningDock,
               let dockStart = startTime(of: dock.processIdentifier),
               let start = startTime(of: app.processIdentifier)
         else { return true }

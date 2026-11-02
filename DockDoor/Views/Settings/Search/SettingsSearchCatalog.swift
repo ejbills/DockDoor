@@ -317,6 +317,14 @@ enum SettingsSearchCatalog {
             icon: "xmark.app.fill"
         ),
         SettingsSearchItem(
+            id: "dockPreviews.quitOnCloseExclusions",
+            title: String(localized: "Never quit these apps"),
+            keywords: ["quit", "close", "last window", "exclude", "exclusion", "ignore"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "xmark.app"
+        ),
+        SettingsSearchItem(
             id: "dockPreviews.buffer",
             title: String(localized: "Window Buffer from Dock (pixels)"),
             keywords: ["buffer", "distance", "gap", "offset", "pixels"],

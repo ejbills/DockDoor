@@ -7,7 +7,7 @@ struct SupportLinksSection: View {
                 title: "Get DockDoor Pro",
                 description: "Replace the Dock entirely with the paid app from the same developer",
                 icon: "sparkles",
-                destination: DockDoorPro.url,
+                destination: Links.dockDoorPro,
                 iconColor: .mint
             )
             .settingsSearchTarget("general.dockDoorPro")
@@ -18,7 +18,7 @@ struct SupportLinksSection: View {
                 title: "Support DockDoor",
                 description: "Help keep the project going with a small donation",
                 icon: "heart.fill",
-                destination: URL(string: "https://dockdoor.net/donate")!,
+                destination: Links.donate,
                 iconColor: .pink
             )
 
@@ -28,7 +28,7 @@ struct SupportLinksSection: View {
                 title: "Leave a Review",
                 description: "Share your experience on Product Hunt",
                 icon: "star.bubble.fill",
-                destination: URL(string: "https://www.producthunt.com/products/dockdoor/reviews")!,
+                destination: Links.review,
                 iconColor: .orange
             )
             .settingsSearchTarget("general.leaveReview")
@@ -39,7 +39,7 @@ struct SupportLinksSection: View {
                 title: "Join our Discord",
                 description: "Discuss features and get help from the community",
                 icon: "bubble.left.and.bubble.right.fill",
-                destination: URL(string: "https://discord.gg/TZeRs73hFb")!,
+                destination: Links.discord,
                 iconColor: .indigo
             )
 
@@ -49,7 +49,7 @@ struct SupportLinksSection: View {
                 title: "Report a Bug",
                 description: "Help us improve by reporting issues",
                 icon: "ladybug.fill",
-                destination: URL(string: "https://github.com/ejbills/DockDoor/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D")!,
+                destination: Links.bugReport,
                 iconColor: .red
             )
 
@@ -59,7 +59,7 @@ struct SupportLinksSection: View {
                 title: "Request a Feature",
                 description: "Suggest new features to make DockDoor better",
                 icon: "lightbulb.fill",
-                destination: URL(string: "https://github.com/ejbills/DockDoor/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=%5BFR%5D")!,
+                destination: Links.featureRequest,
                 iconColor: .yellow
             )
 
@@ -69,7 +69,7 @@ struct SupportLinksSection: View {
                 title: "Contribute Translation",
                 description: "Help make DockDoor available in your language",
                 icon: "globe",
-                destination: URL(string: "https://crowdin.com/project/dockdoor")!,
+                destination: Links.translations,
                 iconColor: .blue
             )
 
@@ -79,7 +79,7 @@ struct SupportLinksSection: View {
                 title: "View Source Code",
                 description: "DockDoor is open source on GitHub",
                 icon: "chevron.left.forwardslash.chevron.right",
-                destination: URL(string: "https://github.com/ejbills/DockDoor")!,
+                destination: Links.repository,
                 iconColor: .purple
             )
         }

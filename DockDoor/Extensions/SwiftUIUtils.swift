@@ -17,6 +17,23 @@ func timer(_ seconds: Double = 0, action: @escaping (Timer) -> Void) -> Timer {
     Timer.scheduledTimer(withTimeInterval: seconds, repeats: false, block: action)
 }
 
+// Off when DockDoor animations are off or Reduce Motion is on in System Settings.
+var animationsEnabled: Bool {
+    Defaults[.showAnimations] && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+}
+
+@MainActor
+@propertyWrapper
+struct AnimationsEnabled: @preconcurrency DynamicProperty {
+    @Default(.showAnimations) private var showAnimations
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private(set) var wrappedValue = true
+
+    mutating func update() {
+        wrappedValue = showAnimations && !reduceMotion
+    }
+}
+
 /// Runs an animation block respecting the user's showAnimations preference.
 /// If animations are disabled, executes the block immediately without animation.
 func animateWithUserPreference(
@@ -25,7 +42,7 @@ func animateWithUserPreference(
     changes: @escaping () -> Void,
     completion: (() -> Void)? = nil
 ) {
-    if Defaults[.showAnimations] {
+    if animationsEnabled {
         NSAnimationContext.runAnimationGroup { context in
             context.duration = duration
             context.timingFunction = timingFunction

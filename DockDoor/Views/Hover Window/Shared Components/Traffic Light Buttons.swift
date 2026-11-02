@@ -87,18 +87,22 @@ struct TrafficLightButtons: View {
 
     private func buttonFor(action: WindowAction, symbol: String, color: Color, fillColor: Color) -> some View {
         let monochromeFillColor = colorScheme == .dark ? Color.gray.opacity(0.85) : Color.white
-        return ZStack {
-            TrafficLightOrb(base: useMonochrome ? monochromeFillColor : fillColor, diameter: Self.glyphFontSize * 1.0385)
-            Image(systemName: "\(symbol).circle.fill")
-                .font(.system(size: Self.glyphFontSize, weight: .bold))
-                .foregroundStyle(useMonochrome ? AnyShapeStyle(.secondary) : AnyShapeStyle(color), .clear)
-        }
-        .scaleEffect(buttonScale)
-        .frame(width: 17 * buttonScale, height: 17 * buttonScale)
-        .contentShape(Rectangle())
-        .onTapGesture {
+        return Button {
             onWindowAction(action)
+        } label: {
+            ZStack {
+                TrafficLightOrb(base: useMonochrome ? monochromeFillColor : fillColor, diameter: Self.glyphFontSize * 1.0385)
+                Image(systemName: "\(symbol).circle.fill")
+                    .font(.system(size: Self.glyphFontSize, weight: .bold))
+                    .foregroundStyle(useMonochrome ? AnyShapeStyle(.secondary) : AnyShapeStyle(color), .clear)
+            }
+            .scaleEffect(buttonScale)
+            .frame(width: 17 * buttonScale, height: 17 * buttonScale)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .help(action.localizedName)
+        .accessibilityLabel(action.localizedName)
     }
 
     private static let glyphFontSize: CGFloat = 13
