@@ -4,9 +4,9 @@ enum SettingsTab: String, CaseIterable, Identifiable {
     case general = "General"
     case dockPreviews = "DockPreviews"
     case windowSwitcher = "WindowSwitcher"
+    case cmdTab = "CmdTab"
     case gestures = "Gestures"
     case keybinds = "Keybinds"
-    case cmdTab = "CmdTab"
     case appearance = "Appearance"
     case filters = "Filters"
     case widgets = "Widgets"
@@ -86,7 +86,7 @@ enum SettingsTab: String, CaseIterable, Identifiable {
     var section: Section? {
         switch self {
         case .general: nil
-        case .dockPreviews, .windowSwitcher, .gestures, .keybinds, .cmdTab: .features
+        case .dockPreviews, .windowSwitcher, .cmdTab, .gestures, .keybinds: .features
         case .appearance, .filters, .widgets: .customization
         case .advanced, .support: .system
         }
