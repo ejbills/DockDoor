@@ -334,10 +334,7 @@ extension Defaults.Keys {
 
     static let middleClickAction = Key<WindowAction>("middleClickAction", default: .close)
 
-    // MARK: - Window Switcher Keyboard Shortcuts (Cmd+key)
-
-    // Each shortcut has a key code (the letter/key) and an action
-    // The Cmd modifier is always required - only the key is customizable
+    // MARK: - Window Preview Keyboard Shortcuts
 
     static let cmdShortcut1Key = Key<UInt16>("cmdShortcut1Key", default: UInt16(kVK_ANSI_W))
     static let cmdShortcut1Action = Key<WindowAction>("cmdShortcut1Action", default: .close)

@@ -464,6 +464,7 @@ class KeybindHelper {
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
     private var heldKeyRepeatTask: Task<Void, Never>?
+    private var windowStashedByShortcut: WindowInfo?
 
     /// Track the invocation mode for alternate keybinds
     private var currentInvocationMode: SwitcherInvocationMode = .allWindows
@@ -1038,8 +1039,21 @@ class KeybindHelper {
     @MainActor
     private func selectOnSwitcherRelease() {
         windowSwitchingCoordinator.cancelPendingRender()
+        let stashedWindow = windowStashedByShortcut
+        windowStashedByShortcut = nil
 
         Task { @MainActor in
+            if let stashedWindow,
+               let selectedWindow = self.previewCoordinator.windowSwitcherCoordinator.getCurrentWindow(),
+               selectedWindow.id == stashedWindow.id,
+               selectedWindow.app.processIdentifier == stashedWindow.app.processIdentifier,
+               selectedWindow.isMinimized || selectedWindow.isHidden
+            {
+                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                self.previewCoordinator.hideWindow()
+                return
+            }
+
             if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                 self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                 self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
@@ -1122,11 +1136,14 @@ class KeybindHelper {
         }
 
         if previewIsCurrentlyVisible {
-            if flags.contains(.maskCommand), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
+            if isPreviewShortcutModifierHeld(flags), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                 if let action = getActionForCmdShortcut(keyCode: keyCode) {
                     preventSwitcherHideOnRelease = true
                     return (true, { @MainActor in
                         let keepsSwitcherOpen = self.previewCoordinator.performActionOnCurrentWindow(action: action)
+                        self.windowStashedByShortcut = action == .minimize || action == .hide
+                            ? self.previewCoordinator.windowSwitcherCoordinator.getCurrentWindow()
+                            : nil
                         if !keepsSwitcherOpen || self.previewCoordinator.windowSwitcherCoordinator.windows.isEmpty {
                             self.switcherSessionActive = false
                             self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
@@ -1316,6 +1333,14 @@ class KeybindHelper {
         return (false, nil)
     }
 
+    private func isPreviewShortcutModifierHeld(_ flags: CGEventFlags) -> Bool {
+        if flags.contains(.maskCommand) { return true }
+        guard switcherSessionActive || previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive else { return false }
+        let switcherModifiers = CGEventFlags(rawValue: UInt64(activeSessionKeybind.modifierFlags))
+            .intersection([.maskAlternate, .maskControl, .maskCommand])
+        return !switcherModifiers.isEmpty && flags.contains(switcherModifiers)
+    }
+
     private func allowsVimMotionNavigation(flags: CGEventFlags, keyBoardShortcutSaved: UserKeyBind) -> Bool {
         var allowedModifiers: CGEventFlags = [.maskShift, .maskAlphaShift, .maskNumericPad]
         let saved = keyBoardShortcutSaved.modifierFlags
@@ -1368,6 +1393,7 @@ class KeybindHelper {
     ) {
         guard Defaults[.enableWindowSwitcher] else { return }
         windowSwitchingCoordinator.trackpadOpenedCurrentSession = false
+        windowStashedByShortcut = nil
         hasProcessedModifierRelease = false
         currentInvocationMode = mode
         let modifierPressedForActivation = isModifierPressed ?? isSwitcherModifierKeyPressed

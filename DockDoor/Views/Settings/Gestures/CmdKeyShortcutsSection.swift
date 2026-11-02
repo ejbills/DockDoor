@@ -8,6 +8,7 @@ struct CmdKeyShortcutsSection: View {
     @Default(.cmdShortcut2Action) var cmdShortcut2Action
     @Default(.cmdShortcut3Key) var cmdShortcut3Key
     @Default(.cmdShortcut3Action) var cmdShortcut3Action
+    @Default(.UserKeybind) var userKeybind
 
     var body: some View {
         Section {
@@ -31,16 +32,22 @@ struct CmdKeyShortcutsSection: View {
         } header: {
             Text("Window Preview Keyboard Shortcuts")
         } footer: {
-            Text("Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode.")
+            Text("Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
     }
 
+    private var modifierPrefix: String {
+        let switcherModifiers = ShortcutModifier.contained(in: userKeybind.modifierFlags)
+        guard !switcherModifiers.isEmpty, !switcherModifiers.contains(.command) else { return "⌘" }
+        return "⌘ / " + switcherModifiers.map(\.symbol).joined()
+    }
+
     private func cmdShortcutRow(slot: Int, keyBinding: Binding<UInt16>, actionBinding: Binding<WindowAction>) -> some View {
         LabeledContent(String(localized: "Shortcut \(slot)", comment: "Numbered Cmd+key preview shortcut")) {
             HStack(spacing: 6) {
-                Text(verbatim: "⌘")
+                Text(verbatim: modifierPrefix)
                     .foregroundStyle(.secondary)
                 KeyCaptureButton(keyCode: keyBinding)
                 Image(systemName: "arrow.right")

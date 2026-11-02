@@ -43837,6 +43837,7 @@
       }
     },
     "Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -96217,6 +96218,9 @@
           }
         }
       }
+    },
+    "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only." : {
+
     },
     "Hold this key to temporarily allow the Dock to move freely." : {
       "localizations" : {
