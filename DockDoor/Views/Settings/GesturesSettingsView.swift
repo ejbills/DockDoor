@@ -144,7 +144,6 @@ struct GesturesSettingsView: View {
                     Text(edge.localizedName).tag(edge)
                 }
             }
-            .fixedSize()
             .settingsSearchTarget("windowGestures.dockSpace")
 
             if reservationEdge != .none {

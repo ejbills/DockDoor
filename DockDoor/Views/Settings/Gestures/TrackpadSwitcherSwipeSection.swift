@@ -23,7 +23,6 @@ struct TrackpadSwitcherSwipeSection: View {
                         Text("3").tag(3)
                         Text("4").tag(4)
                     }
-                    .fixedSize()
                     .settingsSearchTarget("gestures.trackpadSwitcherSwipeFingers")
 
                     Picker("Direction:", selection: $trackpadSwitcherSwipeDirection) {
@@ -31,7 +30,6 @@ struct TrackpadSwitcherSwipeSection: View {
                             Text(direction.localizedName).tag(direction)
                         }
                     }
-                    .fixedSize()
                     .settingsSearchTarget("gestures.trackpadSwitcherSwipeDirection")
 
                     let sensitivityBinding = Binding<Double>(
