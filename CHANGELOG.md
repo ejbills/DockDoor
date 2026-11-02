@@ -38,6 +38,59 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.42.0"></a>
+# [Release 1.42.0](https://github.com/ejbills/DockDoor/releases/tag/1.42.0) - 2026-11-02
+
+## ✨ New Features
+- Redesigned Settings window
+- Live preview stays pinned at the top of Settings
+- Search moved into the Settings sidebar
+- Set multiple alternate window switcher shortcuts
+  - Go to Settings > Keybinds > Window Switcher Shortcuts > Alternate Shortcuts and click "Add Alternate Shortcut"
+  - Each shortcut has its own key, modifiers, and filter mode, such as Active App Only or Current Space Only
+- Combine modifier keys in switcher shortcuts
+  - Click Control, Option, and Command in Settings > Keybinds to toggle any combination, such as Control + Option + Tab
+- Sort previews by screen position
+  - Choose "Screen position (left to right)" in the window preview sort order setting
+  - Previews follow your windows' layout across screens, then by left edge; windows with unknown positions go last
+- Choose apps that are never quit automatically
+  - Turn on "Quit app on last window close" in Settings > Dock Previews, then click "Select..." next to "Never quit these apps"
+  - The row shows how many apps are excluded
+- Show or hide setting descriptions
+  - Settings > General > Show setting descriptions, on by default
+  - The ⓘ details stay available when descriptions are hidden
+
+## 🔧 Improvements & Stability
+- Clearer stream keep-alive setting
+- Compact traffic light button picker
+- Clearer Compact Mode settings
+- Clearer warnings for Screen Recording permission and Dock Locking
+- Consistent sliders, reset buttons, and shortcut buttons
+- Tidier Active App Indicator settings
+- Cmd+Tab settings pane shows the Cmd+Tab photo beside its preview
+- Animations respect macOS Reduce Motion
+- Traffic light buttons and media controls work with VoiceOver
+- Lower CPU use in Settings
+- Smaller loading spinners in preview app icons
+- More complete interface translations in non-English languages
+
+## 🐛 Bug Fixes
+- Quit on last window close no longer quits the wrong apps
+- Selecting a window of the frontmost app switches workspace in AeroSpace and yabai
+- Fixed a crash when apps quit or relaunch while DockDoor tracks their windows
+- Dock gestures and scroll actions apply only to the Dock icon under your cursor
+- Command + Option + Tab no longer interferes with the system Cmd+Tab
+- Leaving a Settings page with a sample preview no longer interrupts live preview streams
+- "Minimized" and "Hidden" badges on previews appear in your language
+- Custom Dock space shows even when Window Gestures are off
+- Hiding the app header no longer changes the icon-only header setting
+- "Max Rows" and "Max Columns" labels restored
+- Sample preview in Settings skips wallpapers in protected folders
+
+
+[Changes][1.42.0]
+
+
 <a id="1.41.0"></a>
 # [Release 1.41.0](https://github.com/ejbills/DockDoor/releases/tag/1.41.0) - 2026-10-15
 
@@ -2597,6 +2650,7 @@ v1.0
 [Changes][releases]
 
 
+[1.42.0]: https://github.com/ejbills/DockDoor/compare/1.41.0...1.42.0
 [1.41.0]: https://github.com/ejbills/DockDoor/compare/1.40.7...1.41.0
 [1.40.7]: https://github.com/ejbills/DockDoor/compare/1.40.6...1.40.7
 [1.40.6]: https://github.com/ejbills/DockDoor/compare/1.40.5...1.40.6
