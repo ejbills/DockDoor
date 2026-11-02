@@ -24,7 +24,6 @@ struct GesturesSettingsView: View {
                 gestureGroup(title: "On a Dock Icon", gestures: WindowGestureArea.dock.gestures)
                 gestureGroup(title: "On the Menu Bar", gestures: WindowGestureArea.menuBar.gestures)
                 optionsSection
-                dockSpaceSection
                 Section {
                     SettingsNote(
                         icon: "info.circle",
@@ -32,11 +31,11 @@ struct GesturesSettingsView: View {
                     )
                 }
             } else {
-                // Window Gestures owns scrolling on Dock icons and title bars.
                 DockScrollGestureSection()
                 TitleBarScrollGestureSection()
             }
 
+            dockSpaceSection
             DockPreviewGesturesSection()
             GestureSettingsSection()
             MouseActionsSection()
