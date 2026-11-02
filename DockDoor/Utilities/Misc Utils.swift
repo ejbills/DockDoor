@@ -41,15 +41,7 @@ func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weigh
 
 enum modifierConverter {
     static func toString(_ modifierIntValue: Int) -> String {
-        if modifierIntValue == Defaults[.Int64maskCommand] {
-            String(localized: "Command")
-        } else if modifierIntValue == Defaults[.Int64maskAlternate] {
-            String(localized: "Option")
-        } else if modifierIntValue == Defaults[.Int64maskControl] {
-            String(localized: "Control")
-        } else {
-            ""
-        }
+        ShortcutModifier.contained(in: modifierIntValue).map(\.localizedName).joined(separator: " + ")
     }
 }
 

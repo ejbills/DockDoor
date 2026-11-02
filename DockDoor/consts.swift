@@ -357,6 +357,7 @@ extension Defaults.Keys {
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
     static let alternateKeybindModifierFlags = Key<Int>("alternateKeybindModifierFlags", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
+    static let additionalAlternateKeybinds = Key<[AlternateKeybind]>("additionalAlternateKeybinds", default: [])
 }
 
 enum ActiveAppIndicatorStyle: String, CaseIterable, Defaults.Serializable {
@@ -1021,7 +1022,7 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
     }
 }
 
-enum SwitcherInvocationMode: String, CaseIterable, Defaults.Serializable, Identifiable {
+enum SwitcherInvocationMode: String, CaseIterable, Codable, Defaults.Serializable, Defaults.PreferRawRepresentable, Identifiable {
     case allWindows
     case activeAppOnly
     case currentSpaceOnly

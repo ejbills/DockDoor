@@ -243,6 +243,7 @@ class WindowManipulationObservers {
     private func createObserverForApp(_ app: NSRunningApplication) {
         let pid = app.processIdentifier
         guard pid != ProcessInfo.processInfo.processIdentifier else { return }
+        removeObserver(for: pid)
 
         var observer: AXObserver?
         guard AXObserverCreate(pid, axObserverCallback, &observer) == .success, let observer else { return }
@@ -272,6 +273,7 @@ class WindowManipulationObservers {
 
     func removeObserver(for pid: pid_t) {
         guard let observer = observers.removeValue(forKey: pid) else { return }
+        CFRunLoopRemoveSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
         DispatchQueue.global(qos: .utility).async {
             let appElement = AXUIElementCreateApplication(pid)

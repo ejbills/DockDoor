@@ -1491,7 +1491,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "gestures.switcherKeybind",
             title: String(localized: "Window Switcher Shortcuts"),
-            keywords: ["keybind", "shortcut", "alt tab", "switcher", "initializer"],
+            keywords: ["keybind", "shortcut", "alt tab", "switcher", "initializer", "modifier", "combination", "control", "option", "command"],
             tab: "WindowSwitcher",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "keyboard"
@@ -1542,11 +1542,11 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "gestures.alternateShortcut",
-            title: String(localized: "Alternate Shortcut"),
-            description: String(localized: "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."),
-            keywords: ["alternate", "shortcut", "trigger", "mode", "modifier", "escape"],
+            title: String(localized: "Alternate Shortcuts"),
+            description: String(localized: "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode."),
+            keywords: ["alternate", "shortcut", "shortcuts", "multiple", "trigger", "mode", "modifier", "escape"],
             tab: "WindowSwitcher",
-            section: String(localized: "Window Switcher Shortcuts"),
+            section: String(localized: "Alternate Shortcuts"),
             icon: "keyboard"
         ),
         SettingsSearchItem(
