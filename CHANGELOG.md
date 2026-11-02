@@ -38,6 +38,29 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.42.1"></a>
+# [Release 1.42.1](https://github.com/ejbills/DockDoor/releases/tag/1.42.1) - 2026-11-02
+
+## 🔧 Improvements & Stability
+- Window preview shortcuts work with your switcher's modifier
+  - While the window switcher is open, hold Option, Control, or Cmd (whichever your switcher shortcut uses) and press a shortcut key to close, minimize, hide, or quit the selected window
+  - Previously only Cmd worked, which clashed with switcher shortcuts that use Option or Control
+  - Cmd+Tab enhancement mode still uses Cmd only
+  - Set the keys and actions in Settings > Keybinds > Window Preview Keyboard Shortcuts
+- Shortcut rows show which modifier to hold
+  - Settings > Keybinds > Window Preview Keyboard Shortcuts now lists modifiers such as "⌘ / ⌥" before each key, based on your switcher shortcut
+  - The description under the section explains which modifiers apply
+- Settings search finds Window Preview Keyboard Shortcuts
+  - Search for terms like option, alt, modifier, close, minimize, quit, or hide
+
+## 🐛 Bug Fixes
+- Switcher no longer jumps to a window you just minimized or hid
+  - After pressing a minimize or hide shortcut in the switcher, releasing the switcher keys simply closes it
+
+
+[Changes][1.42.1]
+
+
 <a id="1.42.0"></a>
 # [Release 1.42.0](https://github.com/ejbills/DockDoor/releases/tag/1.42.0) - 2026-11-02
 
@@ -2650,6 +2673,7 @@ v1.0
 [Changes][releases]
 
 
+[1.42.1]: https://github.com/ejbills/DockDoor/compare/1.42.0...1.42.1
 [1.42.0]: https://github.com/ejbills/DockDoor/compare/1.41.0...1.42.0
 [1.41.0]: https://github.com/ejbills/DockDoor/compare/1.40.7...1.41.0
 [1.40.7]: https://github.com/ejbills/DockDoor/compare/1.40.6...1.40.7
