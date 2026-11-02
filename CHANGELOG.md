@@ -38,6 +38,20 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.42.2"></a>
+# [Release 1.42.2](https://github.com/ejbills/DockDoor/releases/tag/1.42.2) - 2026-11-02
+
+## 🐛 Bug Fixes
+- Cmd+Tab switcher shows the correct app on macOS 27
+  - Highlighting an app now previews the app itself, not a background helper with the same name
+  - Example: Messages no longer shows its helper extension in place of the real app
+- Apps with no open windows stay in the Cmd+Tab switcher
+  - Their entry no longer disappears or goes blank after a refresh finds no windows
+
+
+[Changes][1.42.2]
+
+
 <a id="1.42.1"></a>
 # [Release 1.42.1](https://github.com/ejbills/DockDoor/releases/tag/1.42.1) - 2026-11-02
 
@@ -2673,6 +2687,7 @@ v1.0
 [Changes][releases]
 
 
+[1.42.2]: https://github.com/ejbills/DockDoor/compare/1.42.1...1.42.2
 [1.42.1]: https://github.com/ejbills/DockDoor/compare/1.42.0...1.42.1
 [1.42.0]: https://github.com/ejbills/DockDoor/compare/1.41.0...1.42.0
 [1.41.0]: https://github.com/ejbills/DockDoor/compare/1.40.7...1.41.0
