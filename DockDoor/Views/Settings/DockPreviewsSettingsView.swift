@@ -134,7 +134,6 @@ struct DockPreviewsSettingsView: View {
 
     // MARK: - Dock Interaction
 
-    /// Maps the hide-on-click flag and its action onto one picker.
     private var dockIconClickChoice: Binding<DockIconClickChoice> {
         Binding {
             guard shouldHideOnDockItemClick else { return .nothing }

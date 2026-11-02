@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// Warnings tint the symbol orange; notes keep it secondary.
 struct SettingsCallout: View {
     enum Tone {
         case warning

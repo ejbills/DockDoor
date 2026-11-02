@@ -249,7 +249,6 @@ struct AdvancedSettingsView: View {
         }
     }
 
-    /// Any positive duration maps to the "Close after a delay" tag (1).
     private var keepAliveModeBinding: Binding<Int> {
         Binding(
             get: { livePreviewStreamKeepAlive > 0 ? 1 : livePreviewStreamKeepAlive },

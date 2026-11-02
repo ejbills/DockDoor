@@ -29,7 +29,6 @@ struct EnabledButtonsPicker: View {
                     Toggle(label, isOn: binding(for: action))
                 }
             } label: {
-                // Drawn like a picker's value so it matches the menus around it.
                 Text("\(summary) \(Image(systemName: "chevron.up.chevron.down"))")
             }
             .menuStyle(.borderlessButton)

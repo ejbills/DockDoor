@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// Bare rows for a Form section, shared by all three surfaces so the captions can't drift.
 struct SharedWindowDisplayRows: View {
     let currentSpaceOnly: Binding<Bool>
     let currentSpaceOnlyTarget: String

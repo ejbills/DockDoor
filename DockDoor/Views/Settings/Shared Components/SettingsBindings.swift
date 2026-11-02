@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// One picker over the showAppName / appNameStyle / showAppIconOnly keys; each surface passes its own.
 enum AppHeaderMode: String, CaseIterable, Identifiable {
     case hidden
     case iconOnly
@@ -62,7 +61,6 @@ enum AppHeaderMode: String, CaseIterable, Identifiable {
     }
 }
 
-/// One picker over the showTitle and visibility keys.
 enum WindowTitleMode: String, CaseIterable, Identifiable {
     case hidden
     case whenHoveringPreview

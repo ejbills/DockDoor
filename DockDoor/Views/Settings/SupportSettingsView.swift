@@ -46,7 +46,6 @@ struct SupportSettingsView: View {
 
     private var updatesSection: some View {
         SettingsSection("Updates") {
-            // Current version
             HStack(spacing: 12) {
                 SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
 
@@ -63,7 +62,6 @@ struct SupportSettingsView: View {
                 updateStatusBadge
             }
 
-            // Update channel
             HStack(spacing: 12) {
                 SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
 
@@ -87,7 +85,6 @@ struct SupportSettingsView: View {
             }
             .settingsSearchTarget("support.updateChannel")
 
-            // Check for updates
             HStack(spacing: 12) {
                 SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
 
@@ -109,7 +106,6 @@ struct SupportSettingsView: View {
             }
             .settingsSearchTarget("support.checkForUpdates")
 
-            // Automatic updates toggle
             HStack(spacing: 12) {
                 SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
 
@@ -131,7 +127,6 @@ struct SupportSettingsView: View {
             }
             .settingsSearchTarget("support.automaticUpdates")
 
-            // Debug logging
             DebugLoggingRow()
                 .settingsSearchTarget("support.debugLogging")
         }

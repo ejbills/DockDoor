@@ -1,13 +1,6 @@
 import Foundation
 import Testing
 
-/// Guards the settings form style from drifting. Rules apply to the panes
-/// listed in `convertedPanes`; add a pane there as it adopts the form kit
-/// (`SettingsFormView` + `SettingsSection` + `.settingsAnnotation`).
-///
-/// - Pickers must be menu style: no segmented, radio group, inline or wheel.
-/// - Every `Button` carries an explicit `.buttonStyle(...)`.
-/// - No bordered buttons: panes use plain rows, kit styles or no button.
 struct SettingsStyleDriftTests {
     private let sourceRoot = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent() // DockDoorTests
@@ -40,11 +33,9 @@ struct SettingsStyleDriftTests {
         ".buttonStyle(.borderedProminent",
         ".buttonStyle(.bordered)",
         ".buttonStyle(BorderedButtonStyle()",
-        // Text buttons use .settings (glass, bordered before macOS 26).
         "AccentButtonStyle(",
     ]
 
-    /// Search jumps by id, so catalog entries and `.settingsSearchTarget`s must match both ways.
     @Test func searchCatalogMatchesSearchTargets() throws {
         let appRoot = sourceRoot.deletingLastPathComponent().deletingLastPathComponent()
         let catalog = try String(contentsOf: sourceRoot.appendingPathComponent("Search/SettingsSearchCatalog.swift"), encoding: .utf8)
@@ -55,7 +46,6 @@ struct SettingsStyleDriftTests {
         let enumerator = FileManager.default.enumerator(at: appRoot, includingPropertiesForKeys: nil)
         for case let file as URL in enumerator?.allObjects ?? [] where file.pathExtension == "swift" {
             let source = try String(contentsOf: file, encoding: .utf8)
-            // Literal targets, plus ids handed to shared rows through `…Target:` parameters.
             let found = Self.matches(of: #"settingsSearchTarget\("((?:[^"\\]|\\.)*)"\)"#, in: source)
                 + Self.matches(of: #"\w+Target: "([^"]+)""#, in: source)
             for target in found {
@@ -87,8 +77,6 @@ struct SettingsStyleDriftTests {
         }
     }
 
-    /// A modifier after a control-flow block's `}` has no base view and fails to build.
-    /// Checked in every settings source, not only the converted panes.
     @Test func settingsSourcesDoNotChainModifiersOntoControlFlow() throws {
         for file in try settingsSourceFiles() {
             let lines = try String(contentsOf: file, encoding: .utf8).components(separatedBy: .newlines)
@@ -127,7 +115,6 @@ struct SettingsStyleDriftTests {
         return ((enumerator?.allObjects as? [URL]) ?? []).filter { $0.pathExtension == "swift" }
     }
 
-    /// Index of the line that opened the block closed on `closingAt`.
     private func blockOpenerIndex(in lines: [String], closingAt closeIndex: Int) -> Int? {
         var depth = 0
         var index = closeIndex
@@ -151,7 +138,6 @@ struct SettingsStyleDriftTests {
         for pane in convertedPanes {
             let source = try String(contentsOf: sourceRoot.appendingPathComponent(pane), encoding: .utf8)
             #expect(source.contains("SettingsFormView"), "\(pane) should be built on SettingsFormView")
-            // Some panes compose section views that carry their own SettingsSections.
             #expect(
                 source.contains("SettingsSection(") || source.contains("SettingsListSection(") || source.contains("Section()"),
                 "\(pane) should use SettingsSection for groups"
@@ -188,7 +174,6 @@ struct SettingsStyleDriftTests {
                 let line = lines[index]
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
 
-                // Only SwiftUI's Button; KeyCaptureButton, DangerButton etc. are styled views of their own.
                 let isCall = Self.buttonCallPattern.firstMatch(in: trimmed, range: NSRange(trimmed.startIndex..., in: trimmed)) != nil
                     && !trimmed.contains("struct ") && !trimmed.contains("func ")
                 guard isCall else {
@@ -198,8 +183,6 @@ struct SettingsStyleDriftTests {
 
                 let leading = indentWidth(of: line)
                 let statement = contiguousStatement(in: lines, from: index, atIndent: leading)
-                // A `.buttonStyle` only counts when it continues the modifier chain. Inside the
-                // action closure it chains onto the last statement and breaks the build.
                 let statementLines = statement.components(separatedBy: "\n")
                     .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
                 let hasStyle = trimmed.contains(".buttonStyle(") || statementLines.indices.dropFirst().contains { i in
@@ -217,8 +200,6 @@ struct SettingsStyleDriftTests {
         }
     }
 
-    /// The statement starting at `startLine`, following its modifier chain past the
-    /// label closure, so a `.buttonStyle(...)` after the label still counts.
     private func contiguousStatement(in lines: [String], from startLine: Int, atIndent: Int) -> String {
         var collected = [lines[startLine]]
         var index = startLine + 1

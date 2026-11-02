@@ -69,7 +69,6 @@ struct AdvancedAppearanceSection: View {
         }
     }
 
-    /// A custom color wins over opaque; neither means blurred.
     private var backgroundChoice: Binding<PreviewBackgroundChoice> {
         Binding {
             if customBackgroundColor != nil {

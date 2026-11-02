@@ -89,7 +89,6 @@ struct SettingsSection<Content: View>: View {
     }
 }
 
-/// Glass on macOS 26, bordered before.
 struct SettingsButtonStyle: PrimitiveButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         if #available(macOS 26.0, *) {
@@ -106,7 +105,6 @@ extension PrimitiveButtonStyle where Self == SettingsButtonStyle {
     }
 }
 
-/// Hidden until modified so rows keep their width.
 struct SettingsResetButton: View {
     let isModified: Bool
     let action: () -> Void

@@ -11,7 +11,6 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
     var valueText: ((T) -> String)?
     var onEditingChanged: ((Bool) -> Void)?
 
-    /// Fractional steps need digits even at `decimals` 0, or a 0.5…2 range reads "0×".
     private var effectiveDecimals: Int {
         guard decimals == 0, Double(step) < 1 else { return decimals }
         return Double(step) < 0.1 ? 2 : 1
@@ -43,7 +42,6 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
     var body: some View {
         LabeledContent {
             HStack(spacing: 8) {
-                // No `step:`: macOS draws a tick per step, so the binding snaps instead.
                 Slider(value: snappedValue, in: range) { isEditing in
                     onEditingChanged?(isEditing)
                 }
@@ -56,7 +54,6 @@ struct SettingsSliderRow<T: BinaryFloatingPoint>: View where T.Stride: BinaryFlo
                     .lineLimit(1)
                     .frame(width: 72, alignment: .trailing)
 
-                // The reset slot is always reserved so every slider in a pane lines up.
                 SettingsResetButton(isModified: isModified) {
                     guard let defaultValue else { return }
                     withAnimation(.easeInOut(duration: 0.15)) {

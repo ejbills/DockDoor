@@ -12,7 +12,6 @@ final class SettingsSearchEngine: ObservableObject {
 
     private let items: [SettingsSearchItem]
 
-    /// Derived from SettingsTab so search and the sidebar agree on pane order and names.
     private static let tabDisplayOrder = SettingsTab.allCases.map(\.rawValue)
 
     static let tabDisplayNames: [String: String] = Dictionary(

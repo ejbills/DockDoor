@@ -1,7 +1,5 @@
 import SwiftUI
 
-/// Every pane's id, title, subtitle, icon and group. The sidebar, the detail
-/// router and search all derive from it, so a pane is added in one place.
 enum SettingsTab: String, CaseIterable, Identifiable {
     case general = "General"
     case dockPreviews = "DockPreviews"
@@ -51,7 +49,6 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         }
     }
 
-    /// The toolbar subtitle, so panes carry no description of their own.
     var localizedSubtitle: String {
         switch self {
         case .general: String(localized: "Support links, startup, menu bar and backups", comment: "Settings tab subtitle")

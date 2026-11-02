@@ -26,8 +26,6 @@ enum SettingsSidebarRow: Identifiable, Equatable {
     }
 }
 
-/// Rows of its own, not a List: a List draws its own selection, and in Thaw its Sections crashed AppKit
-/// on macOS 27.0 and 27.2 (a freed row view in sizeLastColumnToFit), so this avoids them as a precaution.
 struct SettingsSidebar: View {
     @Binding var selectedTab: SettingsTab
     let isSearching: Bool

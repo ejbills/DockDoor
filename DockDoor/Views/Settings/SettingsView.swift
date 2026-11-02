@@ -179,7 +179,6 @@ struct SettingsView: View {
             detail
         })
         .background {
-            // ⌘F from anywhere in the window lands in the sidebar field.
             Button("Find") {
                 isSearchFieldFocused = true
             }
@@ -190,8 +189,6 @@ struct SettingsView: View {
 
     private var sidebar: some View {
         SettingsSidebar(selectedTab: $selectedTab, isSearching: isSearching) { tab in
-            // Clear the search first: the clicked tab may already be selected,
-            // and a leftover query would keep the detail column on results.
             searchEngine.query = ""
             selectedTab = tab
         }
@@ -267,7 +264,6 @@ struct SettingsView: View {
                     }
             }
         }
-        // The toolbar names the pane, so no pane carries a heading of its own.
         .navigationTitle(Text(verbatim: toolbarTitle))
         .navigationSubtitle(Text(verbatim: toolbarSubtitle))
     }

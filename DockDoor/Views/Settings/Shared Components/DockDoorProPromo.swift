@@ -4,7 +4,6 @@ import SwiftUI
 struct DockDoorProBanner: View {
     @Default(.hideDockDoorProBanner) private var hideDockDoorProBanner
 
-    /// Owns its section: an empty one pushes the next section's header into its card.
     var body: some View {
         if !hideDockDoorProBanner {
             Section {

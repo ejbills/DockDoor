@@ -34,7 +34,6 @@ struct SettingsMockPreview: View {
     init(context: SettingsMockPreviewContext, maxHeight: CGFloat = 200) {
         self.context = context
         self.maxHeight = maxHeight
-        // Inside the autoclosure so the coordinator is built once, not on every redraw.
         _coordinator = StateObject(wrappedValue: Self.makeCoordinator(
             windows: Self.mockWindows,
             context: context
@@ -154,7 +153,6 @@ struct SettingsMockPreview: View {
     }
 }
 
-/// Sizes come from GeometryReader: preference keys don't update inside a grouped Form row.
 private struct ScaledToFit: ViewModifier {
     let maxHeight: CGFloat
     @State private var contentSize: CGSize = .zero
@@ -178,7 +176,6 @@ private struct ScaledToFit: ViewModifier {
             }
             .overlay {
                 content
-                    // The container draws its header and cards slightly past its own bounds.
                     .padding(.vertical, 24)
                     .padding(.horizontal, 16)
                     .fixedSize()
@@ -194,7 +191,6 @@ private struct ScaledToFit: ViewModifier {
     }
 }
 
-/// Decoded once off the main thread as a thumbnail; a full-size decode takes ~0.6s.
 @MainActor
 private enum SettingsWallpaper {
     private static var cachedURL: URL?
@@ -223,7 +219,6 @@ private enum SettingsWallpaper {
             return completion(cached)
         }
 
-        // Utility: ImageIO decodes on default-QoS threads, and waiting on them from higher is an inversion.
         DispatchQueue.global(qos: .utility).async {
             let image = thumbnail(at: url, maxPixelSize: 1200)
             DispatchQueue.main.async {
