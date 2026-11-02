@@ -142,6 +142,7 @@ extension SettingsManager: NSWindowDelegate {
         }
         settingsWindowController?.window?.contentViewController = nil
         settingsWindowController = nil
+        SettingsMockPreview.releaseCaches()
         NSApp.setActivationPolicy(.accessory)
     }
 }

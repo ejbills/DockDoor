@@ -81,7 +81,19 @@ struct SettingsMockPreview: View {
         }
     }
 
-    private static let mockWindows: [WindowInfo] = generateMockWindows()
+    private static var cachedMockWindows: [WindowInfo]?
+
+    private static var mockWindows: [WindowInfo] {
+        if let cachedMockWindows { return cachedMockWindows }
+        let windows = generateMockWindows()
+        cachedMockWindows = windows
+        return windows
+    }
+
+    static func releaseCaches() {
+        cachedMockWindows = nil
+        SettingsWallpaper.release()
+    }
 
     private static func generateMockWindows(count: Int = 2) -> [WindowInfo] {
         guard let baseNSImage = NSImage(named: "WindowsXP") else { return [] }
@@ -188,10 +200,25 @@ private enum SettingsWallpaper {
     private static var cachedURL: URL?
     private(set) static var cached: NSImage?
 
+    private static let privacyProtectedFolders: [String] = {
+        let fileManager = FileManager.default
+        let userFolders = [FileManager.SearchPathDirectory.desktopDirectory, .documentDirectory, .downloadsDirectory]
+            .compactMap { fileManager.urls(for: $0, in: .userDomainMask).first }
+        let others = [fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Library/Mobile Documents"), URL(fileURLWithPath: "/Volumes")]
+        return (userFolders + others).map { $0.standardizedFileURL.path + "/" }
+    }()
+
+    static func release() {
+        cachedURL = nil
+        cached = nil
+    }
+
     static func load(completion: @escaping (NSImage?) -> Void) {
         guard let screen = NSScreen.main ?? NSScreen.screens.first,
               let url = NSWorkspace.shared.desktopImageURL(for: screen)
         else { return completion(nil) }
+        let path = url.standardizedFileURL.path
+        guard !privacyProtectedFolders.contains(where: { path.hasPrefix($0) }) else { return completion(nil) }
         if url == cachedURL, let cached {
             return completion(cached)
         }
