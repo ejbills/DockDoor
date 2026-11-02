@@ -435,6 +435,7 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             } else {
                                 ProgressView()
+                                    .controlSize(.small)
                                     .frame(width: 24, height: 24)
                             }
                             if showName {
@@ -470,6 +471,7 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             } else {
                                 ProgressView()
+                                    .controlSize(.small)
                                     .frame(width: 24, height: 24)
                             }
                             if showName {
@@ -503,6 +505,7 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             } else {
                                 ProgressView()
+                                    .controlSize(.small)
                                     .frame(width: 24, height: 24)
                             }
                             if showName {
