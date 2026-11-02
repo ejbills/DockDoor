@@ -26,11 +26,9 @@ struct KeyCapView: View {
                 Text(text)
             }
         }
-        .font(.system(size: 14, weight: .medium, design: .monospaced))
         .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Color.secondary.opacity(0.2))
-        .cornerRadius(4)
+        .padding(.vertical, 3)
+        .background(Color.primary.opacity(0.08), in: RoundedRectangle(cornerRadius: 5, style: .continuous))
     }
 }
 

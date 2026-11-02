@@ -11,24 +11,27 @@ struct KeyCaptureButton: View {
     @State private var monitors: [Any] = []
 
     var body: some View {
-        if isCapturing {
-            Text("Press a key…")
-                .font(.system(size: 12))
-                .foregroundColor(.accentColor)
-                .frame(minWidth: 50)
-                .onDisappear {
-                    stopCapture()
-                }
-        } else {
-            Button(action: startCapture) {
-                Text(displayLabel)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.secondary.opacity(keyCode == 0 && emptyLabel != nil ? 0.1 : 0.2))
-                    .cornerRadius(4)
+        Button {
+            if isCapturing {
+                stopCapture()
+            } else {
+                startCapture()
             }
-            .buttonStyle(.plain)
+        } label: {
+            Group {
+                if isCapturing {
+                    Text("Press a key…")
+                        .foregroundStyle(Color.accentColor)
+                } else {
+                    Text(displayLabel)
+                        .foregroundStyle(keyCode == 0 && emptyLabel != nil ? .secondary : .primary)
+                }
+            }
+            .frame(minWidth: 36)
+        }
+        .buttonStyle(.settings)
+        .onDisappear {
+            stopCapture()
         }
     }
 

@@ -1530,6 +1530,9 @@
         }
       }
     },
+    "%@ %@" : {
+      "shouldTranslate" : false
+    },
     "%@, %lld px" : {
       "localizations" : {
         "af" : {
@@ -1725,6 +1728,9 @@
           }
         }
       }
+    },
+    "%@, inherited from the main shortcut" : {
+
     },
     "%lld" : {
       "localizations" : {
@@ -2308,8 +2314,12 @@
         }
       }
     },
+    "%lld of %lld" : {
+      "comment" : "Number of enabled traffic light buttons, e.g. 4 of 7"
+    },
     "%lld px" : {
       "comment" : "A text field displaying the current size of the dock in pixels",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -2500,6 +2510,7 @@
       }
     },
     "%lld%%" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4597,6 +4608,7 @@
       }
     },
     "×" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4787,6 +4799,7 @@
       }
     },
     "⌘" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -9934,6 +9947,7 @@
       }
     },
     "Acknowledgments" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -10122,6 +10136,9 @@
           }
         }
       }
+    },
+    "Action" : {
+
     },
     "Action performed when middle-clicking on a window preview." : {
       "localizations" : {
@@ -11838,6 +11855,9 @@
         }
       }
     },
+    "Add Alternate Shortcut" : {
+
+    },
     "Add App" : {
       "localizations" : {
         "af" : {
@@ -12218,6 +12238,9 @@
         }
       }
     },
+    "Add color" : {
+
+    },
     "Add Directory" : {
       "localizations" : {
         "af" : {
@@ -12597,6 +12620,9 @@
           }
         }
       }
+    },
+    "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode." : {
+
     },
     "Adjust this if the preview is misaligned with dock" : {
       "extractionState" : "stale",
@@ -16790,6 +16816,7 @@
       }
     },
     "Alternate Shortcut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16978,6 +17005,12 @@
           }
         }
       }
+    },
+    "Alternate Shortcuts" : {
+
+    },
+    "Alternate shortcuts with no modifiers selected use the main shortcut's modifiers." : {
+
     },
     "Always" : {
       "comment" : "Mouse follows focus mode option",
@@ -17743,6 +17776,7 @@
       }
     },
     "amount" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18124,6 +18158,7 @@
       }
     },
     "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18312,6 +18347,9 @@
           }
         }
       }
+    },
+    "An enhanced Cmd-Tab overlay" : {
+      "comment" : "Settings tab subtitle"
     },
     "Anchor preview to initial dock icon position" : {
       "localizations" : {
@@ -20789,7 +20827,6 @@
       }
     },
     "Application filters" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -23834,6 +23871,7 @@
       }
     },
     "Automatic" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24022,6 +24060,9 @@
           }
         }
       }
+    },
+    "Automatic app icon size" : {
+
     },
     "Automatic Updates" : {
       "localizations" : {
@@ -26500,6 +26541,9 @@
         }
       }
     },
+    "Backgrounds, sizes and titles" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Backup & Restore" : {
       "localizations" : {
         "af" : {
@@ -28400,6 +28444,12 @@
           }
         }
       }
+    },
+    "Blurred" : {
+      "comment" : "Dock preview background option"
+    },
+    "Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows." : {
+
     },
     "Body" : {
       "comment" : "Window title font size option",
@@ -38684,6 +38734,9 @@
         }
       }
     },
+    "Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all." : {
+
+    },
     "Close" : {
       "localizations" : {
         "af" : {
@@ -38873,6 +38926,12 @@
           }
         }
       }
+    },
+    "Close after" : {
+
+    },
+    "Close after a delay" : {
+
     },
     "Close All" : {
       "localizations" : {
@@ -41167,7 +41226,11 @@
         }
       }
     },
+    "Cmd+Tab enhancements" : {
+
+    },
     "Cmd+Tab Layout" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41549,6 +41612,7 @@
       }
     },
     "Cmd+Tab Toolbar" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -43260,6 +43324,9 @@
           }
         }
       }
+    },
+    "Compact list appearance" : {
+
     },
     "Compact List Mode Only (Window Previews are Disabled)" : {
       "localizations" : {
@@ -48397,6 +48464,7 @@
       }
     },
     "Controls when window titles appear in the switcher." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50871,6 +50939,9 @@
           }
         }
       }
+    },
+    "Custom color" : {
+      "comment" : "Dock preview background option"
     },
     "Custom Hover Highlight Color" : {
       "localizations" : {
@@ -56965,6 +57036,9 @@
         }
       }
     },
+    "Do nothing" : {
+      "comment" : "Dock icon click option"
+    },
     "Dock Click Action" : {
       "localizations" : {
         "af" : {
@@ -59820,6 +59894,7 @@
       }
     },
     "Dock Preview Layout" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -60391,6 +60466,7 @@
       }
     },
     "Dock Preview Toolbar" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -62676,6 +62752,7 @@
       }
     },
     "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -63627,6 +63704,7 @@
       }
     },
     "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -65340,6 +65418,7 @@
       }
     },
     "Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -66675,6 +66754,7 @@
       }
     },
     "Enable automatic checking for updates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -68007,6 +68087,7 @@
       }
     },
     "Enable gestures in window switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -70862,6 +70943,7 @@
       }
     },
     "Enabled" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -72192,6 +72274,9 @@
         }
       }
     },
+    "Every setting goes back to its default. This can't be undone." : {
+
+    },
     "Everything is now set up!" : {
       "localizations" : {
         "af" : {
@@ -73335,6 +73420,9 @@
           }
         }
       }
+    },
+    "Explain what each setting does underneath its row." : {
+
     },
     "Export DockDoor Settings" : {
       "localizations" : {
@@ -76778,6 +76866,9 @@
         }
       }
     },
+    "Find" : {
+
+    },
     "Fine-tune opacity, blur, saturation, tint, and border for glass background style." : {
       "localizations" : {
         "af" : {
@@ -80020,6 +80111,7 @@
       "comment" : "Media control"
     },
     "Found a Bug?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -85733,6 +85825,7 @@
       }
     },
     "Have an Idea?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -87258,6 +87351,7 @@
       }
     },
     "Help us improve DockDoor by reporting any issues you encounter." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -87448,7 +87542,7 @@
       }
     },
     "Hidden" : {
-      "comment" : "Window state badge",
+      "comment" : "App header option\nWindow state badge\nWindow title visibility option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -88020,6 +88114,7 @@
       }
     },
     "Hide all app windows on dock icon click" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -91633,6 +91728,9 @@
         }
       }
     },
+    "Horizontal offset" : {
+
+    },
     "Horizontal scrolling may interfere with dock preview gestures." : {
       "localizations" : {
         "af" : {
@@ -92967,6 +93065,9 @@
         }
       }
     },
+    "Icon only" : {
+      "comment" : "App header option"
+    },
     "If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -93540,6 +93641,7 @@
       }
     },
     "If you find DockDoor useful, consider donating. Your support helps keep the project going!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -100585,6 +100687,9 @@
           }
         }
       }
+    },
+    "Keyboard-driven window switching" : {
+      "comment" : "Settings tab subtitle"
     },
     "Kind" : {
       "comment" : "Folder widget sort option",
@@ -107638,6 +107743,7 @@
       }
     },
     "Mass Action Buttons" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -110874,6 +110980,9 @@
         }
       }
     },
+    "Media, calendar and folder panels" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Medium" : {
       "comment" : "Compact mode item size option",
       "localizations" : {
@@ -113737,6 +113846,7 @@
       }
     },
     "Modifier" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -114118,6 +114228,7 @@
       }
     },
     "More Gestures" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -116020,6 +116131,12 @@
         }
       }
     },
+    "Name and icon" : {
+      "comment" : "App header option"
+    },
+    "Name and icon (shadowed)" : {
+      "comment" : "App header option"
+    },
     "Native (Best)" : {
       "localizations" : {
         "af" : {
@@ -116400,6 +116517,9 @@
           }
         }
       }
+    },
+    "Navigation" : {
+
     },
     "Never" : {
       "comment" : "Mouse follows focus mode option",
@@ -127263,6 +127383,9 @@
         }
       }
     },
+    "Open %@" : {
+
+    },
     "Open a new window when clicking windowless apps" : {
       "comment" : "Setting to auto-open new window for apps with no windows",
       "localizations" : {
@@ -132214,6 +132337,9 @@
         }
       }
     },
+    "Performance, previews and the Dock position lock" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Permission changes may not appear here until the app restarts" : {
       "localizations" : {
         "af" : {
@@ -132976,6 +133102,9 @@
           }
         }
       }
+    },
+    "Permissions, updates and credits" : {
+      "comment" : "Settings tab subtitle"
     },
     "Pin to" : {
       "localizations" : {
@@ -136411,7 +136540,7 @@
       }
     },
     "Popover" : {
-      "comment" : "Preview title style option",
+      "comment" : "App header option\nPreview title style option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -143838,6 +143967,9 @@
         }
       }
     },
+    "Previews shown when hovering the Dock" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Previous App" : {
       "comment" : "Window gesture tooltip",
       "localizations" : {
@@ -144224,6 +144356,7 @@
       }
     },
     "pt" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -144414,6 +144547,7 @@
       }
     },
     "px" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -148030,7 +148164,11 @@
         }
       }
     },
+    "Remove %@" : {
+
+    },
     "Remove All" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -148219,6 +148357,9 @@
           }
         }
       }
+    },
+    "Remove alternate shortcut" : {
+
     },
     "Remove only terminated app's windows instead of hiding the entire preview." : {
       "localizations" : {
@@ -152975,6 +153116,12 @@
         }
       }
     },
+    "Reset and quit" : {
+
+    },
+    "Reset to default" : {
+
+    },
     "Reset to Defaults" : {
       "localizations" : {
         "af" : {
@@ -156785,6 +156932,7 @@
       }
     },
     "Same as main (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -160597,6 +160745,7 @@
       }
     },
     "Scrolling on Dock icons and title bars, swipes on previews, and a trackpad swipe for the window switcher." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -160785,6 +160934,9 @@
           }
         }
       }
+    },
+    "Search" : {
+      "comment" : "Toolbar title while searching settings"
     },
     "Search & Input" : {
       "localizations" : {
@@ -162312,6 +162464,7 @@
       }
     },
     "See more..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -168023,6 +168176,9 @@
         }
       }
     },
+    "Settings file" : {
+
+    },
     "Shadow Opacity" : {
       "localizations" : {
         "af" : {
@@ -169544,6 +169700,9 @@
           }
         }
       }
+    },
+    "Shortcut %lld" : {
+      "comment" : "Numbered Cmd+key preview shortcut"
     },
     "Show a placeholder preview when Cmd+Tab lands on an app that has no windows." : {
       "localizations" : {
@@ -171258,6 +171417,7 @@
       }
     },
     "Show App Icon Only" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -175254,6 +175414,9 @@
         }
       }
     },
+    "Show setting descriptions" : {
+
+    },
     "Show shadow beneath previews" : {
       "localizations" : {
         "af" : {
@@ -175823,6 +175986,9 @@
           }
         }
       }
+    },
+    "Show the app name and icon above dock previews. Shared with widget headers." : {
+
     },
     "Show today's events when hovering the Calendar Dock icon." : {
       "localizations" : {
@@ -176966,6 +177132,7 @@
       }
     },
     "Show Window Title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -182685,6 +182852,9 @@
         }
       }
     },
+    "Solid" : {
+      "comment" : "Dock preview background option"
+    },
     "Sort descending by default" : {
       "localizations" : {
         "af" : {
@@ -187067,6 +187237,7 @@
       }
     },
     "Suggest new features to make DockDoor even better." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -188017,6 +188188,9 @@
           }
         }
       }
+    },
+    "Support links, startup, menu bar and backups" : {
+      "comment" : "Settings tab subtitle"
     },
     "Support settings" : {
       "extractionState" : "stale",
@@ -191265,6 +191439,7 @@
       }
     },
     "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -193360,6 +193535,9 @@
           }
         }
       }
+    },
+    "Switcher shortcuts and keyboard actions on previews" : {
+      "comment" : "Settings tab subtitle"
     },
     "Switching between dock icons while a preview is already open will show previews instantly." : {
       "localizations" : {
@@ -198692,6 +198870,9 @@
         }
       }
     },
+    "This shortcut is already used by another window switcher shortcut." : {
+
+    },
     "This will add the app to the blacklist using its bundle identifier for reliable matching." : {
       "localizations" : {
         "af" : {
@@ -200787,6 +200968,7 @@
       }
     },
     "Toggle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -202502,6 +202684,9 @@
         }
       }
     },
+    "Trackpad, scroll and mouse actions" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Traffic Light Buttons" : {
       "localizations" : {
         "af" : {
@@ -202693,6 +202878,7 @@
       }
     },
     "Traffic Light Buttons in Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -203454,7 +203640,6 @@
       }
     },
     "Trigger Key" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -204598,6 +204783,9 @@
           }
         }
       }
+    },
+    "Turn on the Window Switcher to change its shortcuts." : {
+
     },
     "Turn this up if gestures need too much finger movement." : {
       "localizations" : {
@@ -207459,6 +207647,7 @@
       }
     },
     "Up to date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -208600,6 +208789,7 @@
       }
     },
     "Update v%@ available" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -212982,6 +213172,9 @@
         }
       }
     },
+    "Vertical offset" : {
+
+    },
     "View" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -213554,6 +213747,7 @@
       }
     },
     "Want to see for yourself? Review our source code" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -214314,6 +214508,9 @@
           }
         }
       }
+    },
+    "What clicking the icon of an app that is already in front does to its windows." : {
+
     },
     "What is this? A window for ANTS?" : {
       "comment" : "Window size option",
@@ -219468,6 +219665,9 @@
         }
       }
     },
+    "Which apps and titles appear" : {
+      "comment" : "Settings tab subtitle"
+    },
     "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures." : {
       "localizations" : {
         "af" : {
@@ -222518,6 +222718,7 @@
       }
     },
     "Window Gestures handles scrolling on Dock icons and title bars, so these two are off while it's on." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -226136,6 +226337,7 @@
       }
     },
     "Window Switcher Gestures" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -226326,6 +226528,7 @@
       }
     },
     "Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -227470,6 +227673,7 @@
       }
     },
     "Window Switcher Toolbar" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -228040,7 +228244,6 @@
       }
     },
     "Window title filters" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -228992,6 +229195,7 @@
       }
     },
     "Window Title Visibility" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -230137,6 +230341,7 @@
       }
     },
     "Your app is on version %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

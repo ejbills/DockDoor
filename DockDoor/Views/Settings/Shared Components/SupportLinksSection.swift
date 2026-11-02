@@ -7,8 +7,8 @@ struct SupportLinksSection: View {
                 title: "Get DockDoor Pro",
                 description: "Replace the Dock entirely with the paid app from the same developer",
                 icon: "sparkles",
-                destination: Links.dockDoorPro,
-                iconColor: .mint
+                iconColor: .mint,
+                destination: Links.dockDoorPro
             )
             .settingsSearchTarget("general.dockDoorPro")
 
@@ -18,8 +18,8 @@ struct SupportLinksSection: View {
                 title: "Support DockDoor",
                 description: "Help keep the project going with a small donation",
                 icon: "heart.fill",
-                destination: Links.donate,
-                iconColor: .pink
+                iconColor: .pink,
+                destination: Links.donate
             )
 
             Divider().padding(.leading, 40)
@@ -28,8 +28,8 @@ struct SupportLinksSection: View {
                 title: "Leave a Review",
                 description: "Share your experience on Product Hunt",
                 icon: "star.bubble.fill",
-                destination: Links.review,
-                iconColor: .orange
+                iconColor: .orange,
+                destination: Links.review
             )
             .settingsSearchTarget("general.leaveReview")
 
@@ -39,8 +39,8 @@ struct SupportLinksSection: View {
                 title: "Join our Discord",
                 description: "Discuss features and get help from the community",
                 icon: "bubble.left.and.bubble.right.fill",
-                destination: Links.discord,
-                iconColor: .indigo
+                iconColor: .indigo,
+                destination: Links.discord
             )
 
             Divider().padding(.leading, 40)
@@ -49,8 +49,8 @@ struct SupportLinksSection: View {
                 title: "Report a Bug",
                 description: "Help us improve by reporting issues",
                 icon: "ladybug.fill",
-                destination: Links.bugReport,
-                iconColor: .red
+                iconColor: .red,
+                destination: Links.bugReport
             )
 
             Divider().padding(.leading, 40)
@@ -59,8 +59,8 @@ struct SupportLinksSection: View {
                 title: "Request a Feature",
                 description: "Suggest new features to make DockDoor better",
                 icon: "lightbulb.fill",
-                destination: Links.featureRequest,
-                iconColor: .yellow
+                iconColor: .yellow,
+                destination: Links.featureRequest
             )
 
             Divider().padding(.leading, 40)
@@ -69,8 +69,8 @@ struct SupportLinksSection: View {
                 title: "Contribute Translation",
                 description: "Help make DockDoor available in your language",
                 icon: "globe",
-                destination: Links.translations,
-                iconColor: .blue
+                iconColor: .blue,
+                destination: Links.translations
             )
 
             Divider().padding(.leading, 40)
@@ -79,8 +79,8 @@ struct SupportLinksSection: View {
                 title: "View Source Code",
                 description: "DockDoor is open source on GitHub",
                 icon: "chevron.left.forwardslash.chevron.right",
-                destination: Links.repository,
-                iconColor: .purple
+                iconColor: .purple,
+                destination: Links.repository
             )
         }
     }
