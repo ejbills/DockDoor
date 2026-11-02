@@ -1528,7 +1528,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "gestures.switcherKeybind",
             title: String(localized: "Window Switcher Shortcuts"),
-            keywords: ["keybind", "shortcut", "alt tab", "switcher", "initializer"],
+            keywords: ["keybind", "shortcut", "alt tab", "switcher", "initializer", "modifier", "combination", "control", "option", "command"],
             tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "keyboard"
