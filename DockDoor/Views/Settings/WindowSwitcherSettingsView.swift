@@ -89,15 +89,7 @@ struct ShortcutCaptureView: NSViewControllerRepresentable {
                 }
 
                 parent.isRecording = false
-                // Any Command/Option/Control keys held while recording become the initializer modifiers.
-                let flags = event.modifierFlags
-                let heldModifiers = ShortcutModifier.allCases.filter { modifier in
-                    switch modifier {
-                    case .control: flags.contains(.control)
-                    case .option: flags.contains(.option)
-                    case .command: flags.contains(.command)
-                    }
-                }
+                let heldModifiers = ShortcutModifier.contained(in: Int(event.modifierFlags.rawValue))
                 let capturedModifier = heldModifiers.isEmpty ? parent.modifierKey : ShortcutModifier.modifierFlags(for: heldModifiers)
                 let newKeybind = UserKeyBind(keyCode: UInt16(event.keyCode), modifierFlags: capturedModifier)
                 Defaults[.UserKeybind] = newKeybind

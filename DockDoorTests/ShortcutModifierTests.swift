@@ -1,3 +1,4 @@
+import AppKit
 import Defaults
 @testable import DockDoor
 import Testing
@@ -34,6 +35,12 @@ struct ShortcutModifierTests {
 
         #expect(ShortcutModifier.modifierFlags(for: remaining) == controlMask | commandMask)
         #expect(ShortcutModifier.modifierFlags(for: remaining.filter { $0 != .command }) == controlMask)
+    }
+
+    @Test func appKitModifierFlagsDecodeToSameModifiers() {
+        let flags: NSEvent.ModifierFlags = [.control, .option, .shift]
+
+        #expect(ShortcutModifier.contained(in: Int(flags.rawValue)) == [.control, .option])
     }
 
     @Test func converterDescribesSingleAndCombinedModifiers() {

@@ -3,7 +3,6 @@ import SwiftUI
 struct ModifierKeyToggles: View {
     @Binding var modifierFlags: Int
     var compact = false
-    // When set, an empty selection is allowed and shows these modifiers dimmed as inherited.
     var inheritedModifierFlags: Int?
 
     private var allowsEmpty: Bool { inheritedModifierFlags != nil }
@@ -41,5 +40,7 @@ struct ModifierKeyToggles: View {
         }
         .buttonStyle(.plain)
         .help(isInherited ? String(localized: "\(modifier.localizedName), inherited from the main shortcut") : modifier.localizedName)
+        .accessibilityLabel(modifier.localizedName)
+        .accessibilityAddTraits(isOn ? .isSelected : [])
     }
 }

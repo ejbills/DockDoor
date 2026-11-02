@@ -314,7 +314,7 @@ struct WindowSwitcherKeybindSection: View {
 
     private func isConflictingAlternate(at index: Int) -> Bool {
         let primary = keybindModel.currentKeybind ?? Defaults[.UserKeybind]
-        let resolved = ([firstAlternate.wrappedValue] + additionalAlternateKeybinds).map {
+        let resolved = AlternateKeybind.all.map {
             $0.resolved(primaryModifierFlags: primary.modifierFlags)
         }
         guard resolved.indices.contains(index), let current = resolved[index] else { return false }

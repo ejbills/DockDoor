@@ -18,7 +18,6 @@ struct UserKeyBind: Codable, Defaults.Serializable {
 struct AlternateKeybind: Codable, Defaults.Serializable, Identifiable, Equatable {
     var id = UUID()
     var keyCode: UInt16 = 0
-    // 0 = same as the primary keybind modifier
     var modifierFlags: Int = 0
     var mode: SwitcherInvocationMode = .activeAppOnly
 
@@ -911,19 +910,17 @@ class KeybindHelper {
     }
 
     private func isCmdTabWindowSwitcherKeybind(keyCode: Int64, flags: CGEventFlags) -> Bool {
-        guard keyCode == Int64(kVK_Tab), flags.contains(.maskCommand), let keybind = cmdTabKeybind() else { return false }
-        return modifierFlagsMatch(keybind.modifierFlags, flags: flags)
+        guard keyCode == Int64(kVK_Tab), flags.contains(.maskCommand) else { return false }
+        return tabKeybinds().contains { modifierFlagsMatch($0.modifierFlags, flags: flags) }
     }
 
     private func usesCmdTabWindowSwitcherKeybind() -> Bool {
-        cmdTabKeybind() != nil
+        tabKeybinds().contains { modifierFlagsMatch($0.modifierFlags, flags: .maskCommand) }
     }
 
-    private func cmdTabKeybind() -> UserKeyBind? {
-        guard Defaults[.enableWindowSwitcher] else { return nil }
-        return ([Defaults[.UserKeybind]] + alternateKeybinds().map(\.keybind)).first {
-            $0.keyCode == UInt16(kVK_Tab) && ($0.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
-        }
+    private func tabKeybinds() -> [UserKeyBind] {
+        guard Defaults[.enableWindowSwitcher] else { return [] }
+        return ([Defaults[.UserKeybind]] + alternateKeybinds().map(\.keybind)).filter { $0.keyCode == UInt16(kVK_Tab) }
     }
 
     private func modifierFlagsMatch(_ saved: Int, flags: CGEventFlags) -> Bool {
