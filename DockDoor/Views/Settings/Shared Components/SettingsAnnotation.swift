@@ -1,8 +1,6 @@
 import Defaults
 import SwiftUI
 
-/// A grey caption under a row, with the full text in an ⓘ popover.
-/// "Show setting descriptions" hides the caption but keeps the ⓘ.
 struct SettingsAnnotationModifier: ViewModifier {
     let summary: Text
     let more: LocalizedStringKey?
@@ -13,12 +11,14 @@ struct SettingsAnnotationModifier: ViewModifier {
         VStack(alignment: .leading, spacing: 3) {
             content
 
-            if showDescriptions {
+            if showDescriptions || more != nil {
                 HStack(alignment: .top, spacing: 4) {
-                    summary
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.leading)
+                    if showDescriptions {
+                        summary
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.leading)
+                    }
 
                     if let more {
                         Button {
