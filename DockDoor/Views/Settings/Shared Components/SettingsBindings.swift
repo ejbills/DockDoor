@@ -45,7 +45,6 @@ enum AppHeaderMode: String, CaseIterable, Identifiable {
                 switch mode {
                 case .hidden:
                     showName.wrappedValue = false
-                    showIconOnly.wrappedValue = false
                 case .iconOnly:
                     showName.wrappedValue = true
                     showIconOnly.wrappedValue = true
