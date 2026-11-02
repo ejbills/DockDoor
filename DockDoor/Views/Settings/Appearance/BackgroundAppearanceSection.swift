@@ -104,7 +104,8 @@ struct BackgroundAppearanceSection: View {
                             title: "Tint Intensity",
                             value: $tintOpacity,
                             range: 0 ... 1.0,
-                            step: 0.05
+                            defaultValue: Defaults.Keys.dockBackgroundTintOpacity.defaultValue,
+                            step: 0.01
                         )
 
                         SettingsSliderRow(

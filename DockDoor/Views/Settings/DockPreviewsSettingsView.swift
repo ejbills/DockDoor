@@ -239,8 +239,9 @@ struct DockPreviewsSettingsView: View {
             title: "Window Buffer from Dock (pixels)",
             value: $bufferFromDock,
             range: -100 ... 100,
+            defaultValue: Defaults.Keys.bufferFromDock.defaultValue,
             unit: " px",
-            step: 5
+            step: 1
         )
         .settingsSearchTarget("dockPreviews.buffer")
 
