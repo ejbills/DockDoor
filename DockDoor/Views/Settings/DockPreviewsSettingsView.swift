@@ -346,7 +346,7 @@ struct DockPreviewsSettingsView: View {
             .settingsAnnotation("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
 
         SettingsSliderRow(
-            title: "Max Rows",
+            title: "Max Rows (Bottom Dock)",
             value: Binding<Double>(get: { Double(previewMaxRows) }, set: { previewMaxRows = Int($0) }),
             range: 1.0 ... 8.0,
             defaultValue: 1,
@@ -355,7 +355,7 @@ struct DockPreviewsSettingsView: View {
         .settingsSearchTarget("appearance.dockMaxRows")
 
         SettingsSliderRow(
-            title: "Max Columns",
+            title: "Max Columns (Left/Right Dock)",
             value: Binding<Double>(get: { Double(previewMaxColumns) }, set: { previewMaxColumns = Int($0) }),
             range: 1.0 ... 8.0,
             defaultValue: 2,
