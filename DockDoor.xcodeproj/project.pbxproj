@@ -218,6 +218,7 @@
 		D4B28EF578BC4053BF908A5A /* CmdKeyShortcutsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */; };
 		D840D9FEDA7F4F129CAC9C455104296F /* SettingsSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E159457AD5CE4E54988FDAF2CB583AE3 /* SettingsSearchResultsView.swift */; };
 		D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */; };
+		EDB4BF333E3F45E8BC21AC4131E1F741 /* KeybindsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527BEFA12C4148D68FFCD7C83A2D4177 /* KeybindsSettingsView.swift */; };
 		DB8BDF88C55D471D891F3B8C /* WindowActionCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D02B0085604D66A1A26D4A /* WindowActionCatalog.swift */; };
 		DBFD0B5445DD4F01BD0FBBAB /* DockDoorPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = F875D112D98340CFAB1BC620 /* DockDoorPro.swift */; };
 		0B939F007507453EBD11BA0D /* Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4763D2E6D3D7410695893D93 /* Links.swift */; };
@@ -284,6 +285,7 @@
 		22AC6332C434450F9FF53CF3 /* ScreenReservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenReservationTests.swift; sourceTree = "<group>"; };
 		22D3504B979C44D68BB7875D /* TrackpadSwipeDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadSwipeDetectorTests.swift; sourceTree = "<group>"; };
 		2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherBehaviorSettingsView.swift; sourceTree = "<group>"; };
+		527BEFA12C4148D68FFCD7C83A2D4177 /* KeybindsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindsSettingsView.swift; sourceTree = "<group>"; };
 		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		3217C55D219C4BC4A9A00E52 /* LiquidGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlass.swift; sourceTree = "<group>"; };
 		341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWindowCapture.swift; sourceTree = "<group>"; };
@@ -1016,6 +1018,7 @@
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
 				970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */,
 				2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */,
+				527BEFA12C4148D68FFCD7C83A2D4177 /* KeybindsSettingsView.swift */,
 				99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */,
 				B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */,
 				BB1A85F42D05263C00326297 /* FiltersSettingsView.swift */,
@@ -1377,6 +1380,7 @@
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,
 				4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */,
 				D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */,
+				EDB4BF333E3F45E8BC21AC4131E1F741 /* KeybindsSettingsView.swift in Sources */,
 				EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */,
 				5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,

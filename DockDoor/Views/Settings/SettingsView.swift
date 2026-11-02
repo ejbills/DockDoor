@@ -275,6 +275,7 @@ struct SettingsView: View {
         case .dockPreviews: DockPreviewsSettingsView()
         case .windowSwitcher: WindowSwitcherBehaviorSettingsView()
         case .gestures: GesturesSettingsView()
+        case .keybinds: KeybindsSettingsView()
         case .cmdTab: CmdTabSettingsView()
         case .appearance: AppearanceSettingsView()
         case .filters: FiltersSettingsView()

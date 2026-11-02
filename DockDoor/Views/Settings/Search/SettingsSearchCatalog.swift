@@ -1484,7 +1484,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Window Preview Keyboard Shortcuts"),
             description: String(localized: "Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode."),
             keywords: ["shortcut", "cmd", "keyboard", "hotkey"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Preview Keyboard Shortcuts"),
             icon: "command"
         ),
@@ -1492,7 +1492,7 @@ enum SettingsSearchCatalog {
             id: "gestures.switcherKeybind",
             title: String(localized: "Window Switcher Shortcuts"),
             keywords: ["keybind", "shortcut", "alt tab", "switcher", "initializer", "modifier", "combination", "control", "option", "command"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "keyboard"
         ),
@@ -1501,7 +1501,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Enable Vim Motions"),
             description: String(localized: "Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused."),
             keywords: ["vim", "hjkl", "navigation"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "character.textbox"
         ),
@@ -1510,7 +1510,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Pass Arrow Keys Through to System"),
             description: String(localized: "When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching."),
             keywords: ["arrow", "passthrough", "spaces", "ctrl"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "arrow.left.arrow.right"
         ),
@@ -1519,7 +1519,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Backward Key"),
             description: String(localized: "The key used to navigate backward in the window switcher."),
             keywords: ["backward", "key", "navigate", "back"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "arrow.left"
         ),
@@ -1527,7 +1527,7 @@ enum SettingsSearchCatalog {
             id: "gestures.requireShiftTab",
             title: String(localized: "Require \u{21E7}+Tab to go back in Switcher"),
             keywords: ["shift", "tab", "back", "require"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "arrow.uturn.backward"
         ),
@@ -1536,7 +1536,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Selection Key"),
             description: String(localized: "The key used to select and bring to front the highlighted window in the switcher."),
             keywords: ["selection", "key", "enter", "return", "select"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "return"
         ),
@@ -1545,7 +1545,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Alternate Shortcuts"),
             description: String(localized: "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode."),
             keywords: ["alternate", "shortcut", "shortcuts", "multiple", "trigger", "mode", "modifier", "escape"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Alternate Shortcuts"),
             icon: "keyboard"
         ),
@@ -1554,7 +1554,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Search Trigger Key"),
             description: String(localized: "The key that activates search while the window switcher is open."),
             keywords: ["search", "trigger", "key", "activate"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "magnifyingglass"
         ),
@@ -1563,7 +1563,7 @@ enum SettingsSearchCatalog {
             title: String(localized: "Fullscreen App Blacklist"),
             description: String(localized: "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."),
             keywords: ["fullscreen", "blacklist", "exclude", "app"],
-            tab: "WindowSwitcher",
+            tab: "Keybinds",
             section: String(localized: "Window Switcher Shortcuts"),
             icon: "app.badge.checkmark"
         ),

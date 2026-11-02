@@ -5,6 +5,7 @@ enum SettingsTab: String, CaseIterable, Identifiable {
     case dockPreviews = "DockPreviews"
     case windowSwitcher = "WindowSwitcher"
     case gestures = "Gestures"
+    case keybinds = "Keybinds"
     case cmdTab = "CmdTab"
     case appearance = "Appearance"
     case filters = "Filters"
@@ -40,6 +41,7 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         case .dockPreviews: String(localized: "Dock Previews", comment: "Settings tab title")
         case .windowSwitcher: String(localized: "Window Switcher", comment: "Settings tab title")
         case .gestures: String(localized: "Gestures", comment: "Settings tab title")
+        case .keybinds: String(localized: "Keybinds", comment: "Settings tab title")
         case .cmdTab: String(localized: "Cmd+Tab", comment: "Settings tab title")
         case .appearance: String(localized: "Appearance", comment: "Settings Tab")
         case .filters: String(localized: "Filters", comment: "Filters tab title")
@@ -53,8 +55,9 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         switch self {
         case .general: String(localized: "Support links, startup, menu bar and backups", comment: "Settings tab subtitle")
         case .dockPreviews: String(localized: "Previews shown when hovering the Dock", comment: "Settings tab subtitle")
-        case .windowSwitcher: String(localized: "Keyboard-driven window switching and its shortcuts", comment: "Settings tab subtitle")
+        case .windowSwitcher: String(localized: "Keyboard-driven window switching", comment: "Settings tab subtitle")
         case .gestures: String(localized: "Trackpad, scroll and mouse actions", comment: "Settings tab subtitle")
+        case .keybinds: String(localized: "Switcher shortcuts and keyboard actions on previews", comment: "Settings tab subtitle")
         case .cmdTab: String(localized: "An enhanced Cmd-Tab overlay", comment: "Settings tab subtitle")
         case .appearance: String(localized: "Backgrounds, sizes and titles", comment: "Settings tab subtitle")
         case .filters: String(localized: "Which apps and titles appear", comment: "Settings tab subtitle")
@@ -70,6 +73,7 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         case .dockPreviews: "dock.rectangle"
         case .windowSwitcher: "uiwindow.split.2x1"
         case .gestures: "hand.draw.fill"
+        case .keybinds: "keyboard"
         case .cmdTab: "command"
         case .appearance: "wand.and.stars.inverse"
         case .filters: "air.purifier"
@@ -82,7 +86,7 @@ enum SettingsTab: String, CaseIterable, Identifiable {
     var section: Section? {
         switch self {
         case .general: nil
-        case .dockPreviews, .windowSwitcher, .gestures, .cmdTab: .features
+        case .dockPreviews, .windowSwitcher, .gestures, .keybinds, .cmdTab: .features
         case .appearance, .filters, .widgets: .customization
         case .advanced, .support: .system
         }

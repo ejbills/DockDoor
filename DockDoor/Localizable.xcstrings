@@ -100308,7 +100308,6 @@
     },
     "Keybinds" : {
       "comment" : "Settings tab title",
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -100689,7 +100688,7 @@
         }
       }
     },
-    "Keyboard-driven window switching and its shortcuts" : {
+    "Keyboard-driven window switching" : {
       "comment" : "Settings tab subtitle"
     },
     "Kind" : {
@@ -193537,6 +193536,9 @@
         }
       }
     },
+    "Switcher shortcuts and keyboard actions on previews" : {
+      "comment" : "Settings tab subtitle"
+    },
     "Switching between dock icons while a preview is already open will show previews instantly." : {
       "localizations" : {
         "af" : {
@@ -204781,6 +204783,9 @@
           }
         }
       }
+    },
+    "Turn on the Window Switcher to change its shortcuts." : {
+
     },
     "Turn this up if gestures need too much finger movement." : {
       "localizations" : {

@@ -12,6 +12,7 @@ struct SettingsStyleDriftTests {
         "MainSettingsView.swift",
         "WindowSwitcherBehaviorSettingsView.swift",
         "GesturesSettingsView.swift",
+        "KeybindsSettingsView.swift",
         "CmdTabSettingsView.swift",
         "AppearanceSettingsView.swift",
         "FiltersSettingsView.swift",
