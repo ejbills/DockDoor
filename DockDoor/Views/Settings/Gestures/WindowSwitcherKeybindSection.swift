@@ -12,6 +12,8 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.additionalAlternateKeybinds) var additionalAlternateKeybinds
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
     @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
+    @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
+    @Default(.startOnLastWindowWhenOpeningBackward) var startOnLastWindowWhenOpeningBackward
     @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
     @Default(.enableVimMotions) var enableVimMotions
     @Default(.passArrowsThroughToSystem) var passArrowsThroughToSystem
@@ -148,6 +150,9 @@ struct WindowSwitcherKeybindSection: View {
             HStack(spacing: 8) {
                 if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
                     KeyCapView(text: KeyboardLabel.localizedKey(for: keybind.keyCode), symbol: nil)
+                    if isShadowedWhenOpeningBackward(keybind) {
+                        backwardKeyWarning
+                    }
                 } else {
                     Text("No shortcut set").foregroundStyle(.secondary)
                 }
@@ -208,6 +213,8 @@ struct WindowSwitcherKeybindSection: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundStyle(.yellow)
                     .help(String(localized: "This shortcut is already used by another window switcher shortcut."))
+            } else if isShadowedWhenOpeningBackward(resolvedAlternate(at: index)) {
+                backwardKeyWarning
             }
 
             Spacer()
@@ -232,16 +239,40 @@ struct WindowSwitcherKeybindSection: View {
         }
     }
 
-    private func isConflictingAlternate(at index: Int) -> Bool {
+    private func resolvedShortcuts() -> (primary: UserKeyBind, alternates: [UserKeyBind?]) {
         let primary = keybindModel.currentKeybind ?? Defaults[.UserKeybind]
-        let resolved = AlternateKeybind.all.map {
+        let alternates = AlternateKeybind.all.map {
             $0.resolved(primaryModifierFlags: primary.modifierFlags)
         }
+        return (primary, alternates)
+    }
+
+    private func resolvedAlternate(at index: Int) -> UserKeyBind? {
+        let alternates = resolvedShortcuts().alternates
+        return alternates.indices.contains(index) ? alternates[index] : nil
+    }
+
+    private func isConflictingAlternate(at index: Int) -> Bool {
+        let (primary, resolved) = resolvedShortcuts()
         guard resolved.indices.contains(index), let current = resolved[index] else { return false }
         let matches = { (other: UserKeyBind) in
             other.keyCode == current.keyCode && other.modifierFlags == current.modifierFlags
         }
         return matches(primary) || resolved.prefix(index).compactMap { $0 }.contains(where: matches)
+    }
+
+    private func isShadowedWhenOpeningBackward(_ shortcut: UserKeyBind?) -> Bool {
+        guard let shortcut, useClassicWindowOrdering, startOnLastWindowWhenOpeningBackward,
+              let backwardModifier = ShortcutModifier(keyCode: switcherBackwardKeyCode)
+        else { return false }
+        let (primary, resolved) = resolvedShortcuts()
+        return ([primary] + resolved.compactMap { $0 }).contains { backwardModifier.turns(shortcut, into: $0) }
+    }
+
+    private var backwardKeyWarning: some View {
+        Image(systemName: "exclamationmark.triangle.fill")
+            .foregroundStyle(.yellow)
+            .help(String(localized: "Holding \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode)) with this shortcut triggers another window switcher shortcut, so it can't open the Switcher on the last window."))
     }
 
     private static let defaultKeybind = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate])

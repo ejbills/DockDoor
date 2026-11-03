@@ -143,6 +143,7 @@ struct MainSettingsView: View {
                 Defaults[.openNewWindowForWindowlessApps] = Defaults.Keys.openNewWindowForWindowlessApps.defaultValue
                 Defaults[.ignoreAppsWithSingleWindowInCmdTab] = Defaults.Keys.ignoreAppsWithSingleWindowInCmdTab.defaultValue
                 Defaults[.useClassicWindowOrdering] = Defaults.Keys.useClassicWindowOrdering.defaultValue
+                Defaults[.startOnLastWindowWhenOpeningBackward] = Defaults.Keys.startOnLastWindowWhenOpeningBackward.defaultValue
                 Defaults[.limitSwitcherToFrontmostApp] = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
                 Defaults[.fullscreenAppBlacklist] = Defaults.Keys.fullscreenAppBlacklist.defaultValue
 
