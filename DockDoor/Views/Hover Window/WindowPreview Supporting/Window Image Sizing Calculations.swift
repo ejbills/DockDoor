@@ -230,7 +230,7 @@ extension WindowPreviewHoverContainer {
         totalItems: Int? = nil
     ) -> (maxColumns: Int, maxRows: Int) {
         let screenWidth = bestGuessMonitor.visibleFrame.width
-        let screenHeight = bestGuessMonitor.visibleFrame.height
+        let screenHeight = SwitcherHeightBudget.limit(for: bestGuessMonitor)
         let itemSpacing = HoverContainerPadding.itemSpacing
         let globalPadding = HoverContainerPadding.totalPerSide() * 2
 
@@ -473,5 +473,19 @@ extension WindowPreviewHoverContainer {
         }
 
         return chunks[targetChunkIndex][targetPositionInChunk]
+    }
+}
+
+/// Caps the vertical space the window switcher panel may use. Set by the Cmd+Tab
+/// search session so the panel stays above the native app strip, and cleared when
+/// the switcher session ends. Every layout pass reads it through `limit(for:)`, so the
+/// row calculation and the container's frame always agree.
+enum SwitcherHeightBudget {
+    @MainActor static var current: CGFloat?
+
+    /// The vertical space a panel may use on `screen`: its visible height, reduced by
+    /// the active budget when a Cmd+Tab search session has set one.
+    @MainActor static func limit(for screen: NSScreen) -> CGFloat {
+        min(screen.visibleFrame.height, current ?? .greatestFiniteMagnitude)
     }
 }

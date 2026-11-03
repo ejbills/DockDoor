@@ -86,6 +86,7 @@
 		AA11001122334455AA110022 /* DockLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110011 /* DockLocker.swift */; };
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
 		7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */; };
+		A1C0DE000000000000000001 /* CmdTabSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0DE000000000000000002 /* CmdTabSearchTests.swift */; };
 		7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
@@ -336,6 +337,7 @@
 		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
 		587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutModifierTests.swift; sourceTree = "<group>"; };
+		A1C0DE000000000000000002 /* CmdTabSearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabSearchTests.swift; sourceTree = "<group>"; };
 		0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternateKeybindTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
@@ -678,6 +680,7 @@
 				EEE5A44714CC42C180F33053 /* SettingsBackupManagerTests.swift */,
 				94CF1A5A4CD24965A0E7030ED069ECB7 /* SettingsStyleDriftTests.swift */,
 				587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */,
+				A1C0DE000000000000000002 /* CmdTabSearchTests.swift */,
 				0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */,
 				92FFF970DCB649F3BBE19214 /* WindowGestureRecognizerTests.swift */,
 				49E6B5DEC1D045BFBAE71564 /* WindowGestureResolverTests.swift */,
@@ -1196,6 +1199,7 @@
 				80D3866B628F4782B1CA25ED /* SettingsBackupManagerTests.swift in Sources */,
 				9F19F8FDAF9741BC9438398B4FF73B7B /* SettingsStyleDriftTests.swift in Sources */,
 				7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */,
+				A1C0DE000000000000000001 /* CmdTabSearchTests.swift in Sources */,
 				7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */,
 				204F31BF2B7E46239664231A /* WindowGestureRecognizerTests.swift in Sources */,
 				FBF8A3761BBB44ADA589043B /* WindowGestureResolverTests.swift in Sources */,
