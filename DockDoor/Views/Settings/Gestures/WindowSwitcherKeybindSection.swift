@@ -17,6 +17,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
     @Default(.enableVimMotions) var enableVimMotions
     @Default(.passArrowsThroughToSystem) var passArrowsThroughToSystem
+    @Default(.showSettingsDescriptions) var showSettingsDescriptions
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -71,10 +72,9 @@ struct WindowSwitcherKeybindSection: View {
             keybindModel.currentKeybind = Defaults[.UserKeybind]
         }
 
-        SettingsSection("Alternate Shortcuts", footer: "Alternate shortcuts with no modifiers selected use the main shortcut's modifiers.") {
+        Section {
             alternateShortcutRow(firstAlternate, index: 0, canRemove: alternateKeybindKey != 0 || !additionalAlternateKeybinds.isEmpty, onRemove: removeFirstAlternate)
                 .settingsSearchTarget("gestures.alternateShortcut")
-                .settingsAnnotation("Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode.")
 
             ForEach(Array($additionalAlternateKeybinds.enumerated()), id: \.element.id) { offset, alternate in
                 let id = alternate.wrappedValue.id
@@ -89,6 +89,20 @@ struct WindowSwitcherKeybindSection: View {
                 Label("Add Alternate Shortcut", systemImage: "plus")
             }
             .buttonStyle(.settings)
+        } header: {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Alternate Shortcuts")
+                if showSettingsDescriptions {
+                    Text("Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode.")
+                        .font(.footnote)
+                        .fontWeight(.regular)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } footer: {
+            Text("Alternate shortcuts with no modifiers selected use the main shortcut's modifiers.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
 
         SettingsSection("Navigation") {
