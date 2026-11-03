@@ -252,6 +252,7 @@ class WindowManipulationObservers {
 
         let details = "App: \(app.localizedName ?? "Unknown") (PID: \(pid))"
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let start = CFAbsoluteTimeGetCurrent()
             let registrationFailed: Bool = DebugLogger.measure("createObserverForApp", details: details) {
                 let appElement = AXUIElementCreateApplication(pid)
                 return observedAXNotifications.map {
@@ -259,7 +260,9 @@ class WindowManipulationObservers {
                 }.contains(.cannotComplete)
             }
             guard registrationFailed else { return }
-            AXResponsiveness.markUnresponsive(pid)
+            if CFAbsoluteTimeGetCurrent() - start >= AXResponsiveness.hangThreshold {
+                AXResponsiveness.markUnresponsive(pid)
+            }
             DispatchQueue.main.async {
                 guard let self, self.observers[pid] === observer else { return }
                 self.removeObserver(for: pid)
