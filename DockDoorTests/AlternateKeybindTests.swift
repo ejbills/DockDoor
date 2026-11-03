@@ -4,7 +4,9 @@ import Foundation
 import Testing
 
 struct AlternateKeybindTests {
-    private let suiteName = "com.ethanbills.DockDoorTests.AlternateKeybind"
+    // Tests run in parallel, so each test that writes defaults uses its own suite
+    private let listSuiteName = "com.ethanbills.DockDoorTests.AlternateKeybind.list"
+    private let modeSuiteName = "com.ethanbills.DockDoorTests.AlternateKeybind.mode"
     private let primaryModifierFlags = 524_576
 
     @Test func unsetKeyResolvesToNoShortcut() {
@@ -30,9 +32,9 @@ struct AlternateKeybindTests {
     }
 
     @Test func alternateListRoundTripsThroughDefaults() throws {
-        let defaults = try #require(UserDefaults(suiteName: suiteName))
-        defaults.removePersistentDomain(forName: suiteName)
-        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let defaults = try #require(UserDefaults(suiteName: listSuiteName))
+        defaults.removePersistentDomain(forName: listSuiteName)
+        defer { defaults.removePersistentDomain(forName: listSuiteName) }
 
         let key = Defaults.Key<[AlternateKeybind]>("additionalAlternateKeybinds", default: [], suite: defaults)
         let alternates = [
@@ -46,9 +48,9 @@ struct AlternateKeybindTests {
     }
 
     @Test func invocationModeIsStillStoredAsRawString() throws {
-        let defaults = try #require(UserDefaults(suiteName: suiteName))
-        defaults.removePersistentDomain(forName: suiteName)
-        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let defaults = try #require(UserDefaults(suiteName: modeSuiteName))
+        defaults.removePersistentDomain(forName: modeSuiteName)
+        defer { defaults.removePersistentDomain(forName: modeSuiteName) }
 
         let key = Defaults.Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly, suite: defaults)
 
