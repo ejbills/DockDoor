@@ -210,8 +210,9 @@ private class WindowSwitchingCoordinator {
         }
     }
 
+    // fileprivate: also used by KeybindHelper's Cmd+Tab search session.
     @MainActor
-    private func buildSwitcherWindows(mode: SwitcherInvocationMode) -> [WindowInfo] {
+    fileprivate func buildSwitcherWindows(mode: SwitcherInvocationMode) -> [WindowInfo] {
         var windows = WindowUtil.getAllWindowsOfAllApps()
         let windowsForWindowlessDetection = windows
 
@@ -407,7 +408,7 @@ private class WindowSwitchingCoordinator {
         )
     }
 
-    private func getTargetScreenForSwitcher() -> NSScreen {
+    fileprivate func getTargetScreenForSwitcher() -> NSScreen {
         if Defaults[.windowSwitcherPlacementStrategy] == .pinnedToScreen,
            let pinnedScreen = NSScreen.findScreen(byIdentifier: Defaults[.pinnedScreenIdentifier])
         {
@@ -465,6 +466,8 @@ class KeybindHelper {
     private var preventSwitcherHideOnRelease: Bool = false
     private var heldKeyRepeatTask: Task<Void, Never>?
     private var windowStashedByShortcut: WindowInfo?
+    private var nativeSelectionSyncDebounce: DispatchWorkItem?
+    private var secureInputWatchTimer: Timer?
 
     /// Track the invocation mode for alternate keybinds
     private var currentInvocationMode: SwitcherInvocationMode = .allWindows
@@ -483,6 +486,10 @@ class KeybindHelper {
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
     private var trackpadSwipeTrigger: TrackpadSwipeTrigger?
+
+    deinit {
+        secureInputWatchTimer?.invalidate()
+    }
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -606,6 +613,11 @@ class KeybindHelper {
     }
 
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        // Keys typed while the tap was disabled would reach the native switcher unseen
+        // (Command+Q quits, Command+H hides), so a search session cannot survive that.
+        if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput, DockObserver.isCmdTabSearchSession {
+            DispatchQueue.main.async { DockObserver.activeInstance?.endCmdTabSearchSession(keepSwallowingKeys: true) }
+        }
         if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
             return passthrough
         }
@@ -618,12 +630,19 @@ class KeybindHelper {
             // Track Command up/down explicitly for Cmd+Tab fallback behavior
             let cmdNowDown = event.flags.contains(.maskCommand)
             if isCommandKeyCurrentlyDown, !cmdNowDown {
-                DispatchQueue.main.async { DockObserver.activeInstance?.teardownCmdTabObserver() }
-
-                if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive {
-                    let actionAlreadyHandled = cmdTabActionPerformed
-                    let wasVisible = previewCoordinator.tapSnapshot.isVisible
-                    Task { @MainActor in
+                let observedCmdTab = Defaults[.enableCmdTabEnhancements] && lastCmdTabObservedActive
+                let actionAlreadyHandled = cmdTabActionPerformed
+                let wasVisible = previewCoordinator.tapSnapshot.isVisible
+                let nativeSessionGeneration = DockObserver.cmdTabNativeSessionGeneration
+                Task { @MainActor in
+                    // A newer switcher appeared before this ran: it is not ours to finish.
+                    guard nativeSessionGeneration == DockObserver.cmdTabNativeSessionGeneration else { return }
+                    // Settle the two selections before activating: a Tab just before the
+                    // release wins, and a pending native-highlight write lands before the
+                    // system reads the selection to activate an app.
+                    DockObserver.activeInstance?.applyNativeSelectionToSearchPanel()
+                    self.flushNativeSelectionSync()
+                    if observedCmdTab {
                         if actionAlreadyHandled {
                             self.previewCoordinator.hideWindow()
                         } else if wasVisible, self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
@@ -633,6 +652,9 @@ class KeybindHelper {
                         }
                         self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                     }
+                    // Tear down only after the selected window was activated: a search
+                    // session is dismissed here, which clears the panel selection.
+                    DockObserver.activeInstance?.teardownCmdTabObserver()
                 }
                 lastCmdTabObservedActive = false
                 cmdTabActionPerformed = false
@@ -704,10 +726,49 @@ class KeybindHelper {
                 cmdTabActionPerformed = false
             } else if DockObserver.isCmdTabSwitcherActive {
                 lastCmdTabObservedActive = true
+                // Search session. The search key opens it; handled before the overlay
+                // visibility check below, because the overlay may not have appeared yet when
+                // the key is pressed quickly, and it never appears for an app without windows.
+                // Once it runs, every key except Escape and the native-cycling keys is routed
+                // through the existing window-switcher key handling (characters, arrows,
+                // Enter) and swallowed, so letters type into the search instead of reaching
+                // the native switcher. Both apply from the first instant, before anything has
+                // rendered, so an early keystroke cannot leak.
+                let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+                if !DockObserver.isCmdTabSearchSession, keyCode == Int64(Defaults[.searchTriggerKey]),
+                   canBeginCmdTabSearch(), !previewCoordinator.tapSnapshot.isSearchFocused
+                {
+                    DockObserver.isCmdTabSearchSession = true
+                    watchSecureInputDuringCmdTabSearch()
+                    Task { @MainActor in
+                        self.convertCmdTabOverlayToSearch()
+                    }
+                    return nil
+                }
+                if DockObserver.isCmdTabSearchSession {
+                    switch CmdTabSessionKey.disposition(forKeyCode: keyCode) {
+                    case .escape:
+                        // End the session right away instead of waiting for the Dock to
+                        // announce that the switcher went away; the existing Escape branch
+                        // below still dismisses the panel and passes Escape on.
+                        DispatchQueue.main.async { DockObserver.activeInstance?.endCmdTabSearchSession() }
+                    case .passToSystem:
+                        // Tab, Shift+Tab and the backward key keep cycling the native strip
+                        // (muscle memory: they move between apps); the panel follows through
+                        // reflectNativeSelectionIntoSearchSession.
+                        return Unmanaged.passUnretained(event)
+                    case .consume:
+                        let (_, actionTask) = determineActionForKeyDown(event: event)
+                        if let actionTask {
+                            dispatchHeldKeyAction(actionTask)
+                        }
+                        return nil
+                    }
+                }
+
                 if Defaults[.enableCmdTabEnhancements],
                    previewCoordinator.tapSnapshot.isVisible
                 {
-                    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
                     let hasSelection = previewCoordinator.windowSwitcherCoordinator.currIndex >= 0
                     let flags = event.flags
                     switch keyCode {
@@ -825,14 +886,8 @@ class KeybindHelper {
                 return Unmanaged.passUnretained(event)
             }
             let (shouldConsume, actionTask) = determineActionForKeyDown(event: event)
-            if let task = actionTask {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-                    heldKeyRepeatTask?.cancel()
-                    heldKeyRepeatTask = Task { @MainActor in
-                        await task()
-                    }
-                }
+            if let actionTask {
+                dispatchHeldKeyAction(actionTask)
             }
             if shouldConsume { return nil }
 
@@ -1136,7 +1191,9 @@ class KeybindHelper {
         }
 
         if previewIsCurrentlyVisible {
-            if isPreviewShortcutModifierHeld(flags), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
+            if isPreviewShortcutModifierHeld(flags), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0,
+               !DockObserver.isCmdTabSearchSession
+            {
                 if let action = getActionForCmdShortcut(keyCode: keyCode) {
                     preventSwitcherHideOnRelease = true
                     return (true, { @MainActor in
@@ -1237,7 +1294,8 @@ class KeybindHelper {
             case Int64(kVK_ANSI_H), Int64(kVK_ANSI_J), Int64(kVK_ANSI_K), Int64(kVK_ANSI_L):
                 if Defaults[.enableVimMotions],
                    !snapshot.isSearchFocused,
-                   allowsVimMotionNavigation(flags: flags, keyBoardShortcutSaved: sessionKeybind())
+                   allowsVimMotionNavigation(flags: flags, keyBoardShortcutSaved: sessionKeybind()),
+                   !DockObserver.isCmdTabSearchSession
                 {
                     let dir: ArrowDirection = switch keyCode {
                     case Int64(kVK_ANSI_H): .left
@@ -1264,8 +1322,11 @@ class KeybindHelper {
            keyCode == Int64(Defaults[.searchTriggerKey]),
            !snapshot.isSearchFocused
         {
+            // During a converted Cmd+Tab search the field must stay unfocused:
+            // a focused field would turn Command-held keystrokes into shortcuts.
+            let focusField = !DockObserver.isCmdTabSearchSession
             return (true, { @MainActor in
-                self.previewCoordinator.focusSearchWindow()
+                self.previewCoordinator.focusSearchWindow(focusField: focusField)
                 self.preventSwitcherHideOnRelease = true
             })
         }
@@ -1289,7 +1350,7 @@ class KeybindHelper {
                 })
             }
 
-            if !flags.contains(.maskCommand) {
+            if !flags.contains(.maskCommand) || DockObserver.isCmdTabSearchSession {
                 var length = 0
                 var buffer = [UniChar](repeating: 0, count: 4)
                 event.keyboardGetUnicodeString(maxStringLength: buffer.count, actualStringLength: &length, unicodeString: &buffer)
@@ -1383,6 +1444,158 @@ class KeybindHelper {
                 self.previewCoordinator.selectAndBringToFrontCurrentWindow()
             }
         }
+    }
+
+    /// Cancels any pending held-key repeat and schedules the new action task.
+    private func dispatchHeldKeyAction(_ actionTask: @escaping () async -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            heldKeyRepeatTask?.cancel()
+            heldKeyRepeatTask = Task { @MainActor in
+                await actionTask()
+            }
+        }
+    }
+
+    // MARK: - Cmd+Tab search conversion
+
+    /// Whether the search key may turn the Cmd+Tab overlay into a search session. Secure
+    /// input hides keystrokes from the event tap, so typed letters would reach the native
+    /// switcher (Command+Q quits and Command+H hides the highlighted app there).
+    private func canBeginCmdTabSearch() -> Bool {
+        DockObserver.isCmdTabSwitcherActive
+            && Defaults[.enableCmdTabEnhancements]
+            && Defaults[.enableWindowSwitcherSearch]
+            && !usesCmdTabWindowSwitcherKeybind()
+            && !IsSecureEventInputEnabled()
+    }
+
+    /// Ends the search session if secure input turns on while it runs: the event tap then
+    /// stops receiving keys, so typed letters would reach the native switcher. Stops itself
+    /// when the session ends.
+    private func watchSecureInputDuringCmdTabSearch() {
+        secureInputWatchTimer?.invalidate()
+        secureInputWatchTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                guard DockObserver.isCmdTabSearchSession else {
+                    self?.secureInputWatchTimer?.invalidate()
+                    return
+                }
+                if IsSecureEventInputEnabled() {
+                    self?.secureInputWatchTimer?.invalidate()
+                    DockObserver.activeInstance?.endCmdTabSearchSession(keepSwallowingKeys: true)
+                }
+            }
+        }
+    }
+
+    /// Replaces the Cmd+Tab overlay with a full window-switcher session over every app's
+    /// windows. The native Cmd+Tab switcher stays on screen; its highlighted row is kept in
+    /// sync with the panel through the accessibility API (see syncNativeCmdTabSelection and
+    /// reflectNativeSelectionIntoSearchSession), so releasing Command activates the window
+    /// that is selected. The search bar appears through the shared render path, exactly as
+    /// in the Alt+Tab switcher, and is never focused here: a focused field would turn the
+    /// Command-held keystrokes into shortcuts.
+    ///
+    /// The caller has already set `DockObserver.isCmdTabSearchSession`, which makes the
+    /// event tap swallow typed keys while the window list below is being built.
+    @MainActor
+    func convertCmdTabOverlayToSearch() {
+        // The session may have ended between the key press and this running.
+        guard DockObserver.isCmdTabSearchSession else { return }
+        let coordinator = previewCoordinator.windowSwitcherCoordinator
+
+        // The overlay's selected window belongs to the app the native switcher already
+        // highlights; record it as in sync so it is not written back.
+        DockObserver.activeInstance?.cmdTabSelection.markInSync(with: coordinator.getCurrentWindow()?.app.processIdentifier)
+
+        // Remove the small per-app overlay right away, before the slower work below: it
+        // would otherwise linger beside the strip until the full list has rendered.
+        previewCoordinator.hideWindow()
+        previewCoordinator.prepareSearchWindow()
+
+        let windows = windowSwitchingCoordinator.buildSwitcherWindows(mode: .allWindows)
+        // Nothing to search: the flag stays set so keys remain swallowed until Command is
+        // released, as in every other session that ends early.
+        guard !windows.isEmpty else { return }
+
+        // Open on the display the native switcher is on.
+        let strip = DockObserver.activeInstance?.cmdTabSwitcherFrame()
+        let screen = strip.flatMap { frame in
+            NSScreen.screens.first { $0.frame.contains(CGPoint(x: frame.midX, y: frame.midY)) }
+        } ?? windowSwitchingCoordinator.getTargetScreenForSwitcher()
+
+        // Top-anchor the panel below the search bar, limited in height so it stays above the
+        // strip (a small minimum keeps at least a row visible; with no readable strip frame
+        // the normal screen-based limit applies). The budget is set before initialization so
+        // the first layout pass honors it.
+        let visibleFrame = screen.visibleFrame
+        previewCoordinator.customOriginProvider = { CmdTabSearchLayout.origin(for: $0, in: visibleFrame) }
+        SwitcherHeightBudget.current = strip.map { CmdTabSearchLayout.heightBudget(in: visibleFrame, stripTop: $0.maxY) }
+
+        // Flip the switcher state so search filtering, navigation and Enter selection all
+        // use the existing window-switcher code paths unchanged. The callback is attached
+        // only afterwards so initialization's index changes cannot fire AX writes.
+        coordinator.onSelectedIndexChanged = nil
+        coordinator.setShowing(.windowSwitcher, toState: true)
+        coordinator.initializeForWindowSwitcher(with: windows, dockPosition: .cmdTab, bestGuessMonitor: screen)
+        coordinator.onSelectedIndexChanged = { [weak self] _ in
+            Task { @MainActor in
+                self?.syncNativeCmdTabSelection()
+            }
+        }
+
+        previewCoordinator.showWindow(
+            appName: "Window Switcher",
+            windows: windows,
+            mouseLocation: nil,
+            mouseScreen: screen,
+            dockItemElement: nil,
+            overrideDelay: true,
+            centeredHoverWindowState: .none,
+            onWindowTap: {
+                DockObserver.activeInstance?.hideWindowAndResetLastApp()
+            },
+            bundleIdentifier: nil,
+            bypassDockMouseValidation: true,
+            dockPositionOverride: .cmdTab,
+            initialIndex: coordinator.currIndex
+        )
+    }
+
+    /// Runs a pending debounced native-highlight write immediately (used on Command release).
+    @MainActor
+    func flushNativeSelectionSync() {
+        let pending = nativeSelectionSyncDebounce
+        nativeSelectionSyncDebounce = nil
+        guard let pending, !pending.isCancelled else { return }
+        pending.perform()
+        pending.cancel()
+    }
+
+    /// Mirrors the overlay's selected window onto the native Cmd+Tab switcher's
+    /// highlighted row through the accessibility API, debounced so typing does not
+    /// strobe the highlight across every intermediate match.
+    @MainActor
+    func syncNativeCmdTabSelection() {
+        // Whatever was pending targets a selection that no longer exists, even when
+        // there is no new target (no match, session over).
+        nativeSelectionSyncDebounce?.cancel()
+        nativeSelectionSyncDebounce = nil
+        guard DockObserver.isCmdTabSearchSession else { return }
+        guard let app = previewCoordinator.windowSwitcherCoordinator.getCurrentWindow()?.app else { return }
+        // One AX write per pause in typing/navigation, not per keystroke: per-keystroke
+        // writes would strobe the native highlight across every intermediate match. A
+        // native move by the user (Tab) after this was scheduled wins over the stale write.
+        let generation = DockObserver.activeInstance?.cmdTabSelection.userMoveGeneration
+        let item = DispatchWorkItem { [weak self] in
+            guard let self, DockObserver.isCmdTabSearchSession,
+                  DockObserver.activeInstance?.cmdTabSelection.userMoveGeneration == generation
+            else { return }
+            DockObserver.activeInstance?.selectCmdTabRow(for: app)
+        }
+        nativeSelectionSyncDebounce = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: item)
     }
 
     @MainActor

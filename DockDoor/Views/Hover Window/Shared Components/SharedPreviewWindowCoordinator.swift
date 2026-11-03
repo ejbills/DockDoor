@@ -127,17 +127,37 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
-    func focusSearchWindow() {
+    /// Creates the search bar window ahead of its first use, so on the first session after
+    /// launch it appears together with the panel instead of a moment after it.
+    func prepareSearchWindow() {
+        guard Defaults[.enableWindowSwitcherSearch], searchWindow == nil else { return }
+        setupSearchWindow()
+    }
+
+    func focusSearchWindow(focusField: Bool = true) {
         guard Defaults[.enableWindowSwitcherSearch] else { return }
         if searchWindow == nil { setupSearchWindow() }
         guard let searchWindow else { return }
         searchWindow.showSearch(relativeTo: self)
-        searchWindow.focusSearchField()
+        if focusField {
+            searchWindow.focusSearchField()
+        }
         publishTapSnapshot()
     }
 
     var isSearchWindowFocused: Bool {
         searchWindow?.isFocused ?? false
+    }
+
+    /// Optional provider for a custom panel origin, called with the content size when
+    /// the panel renders. Set by the Cmd+Tab search session to top-anchor the panel;
+    /// cleared in hideWindow so other show paths use their default placement.
+    var customOriginProvider: ((CGSize) -> CGPoint)?
+
+    /// The custom origin provider, but only while a Cmd+Tab search session is active,
+    /// so a dock-hover preview shown mid-session can never inherit its placement.
+    var activeCustomOrigin: ((CGSize) -> CGPoint)? {
+        DockObserver.isCmdTabSearchSession ? customOriginProvider : nil
     }
 
     var searchWindowFrame: NSRect? {
@@ -192,6 +212,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         // Always restore dock auto-hide state, even if the preview isn't visible.
         restoreDockAutoHideState()
+        customOriginProvider = nil
         hideFullPreviewWindow()
 
         guard isVisible else { return }
@@ -295,6 +316,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             { [unowned self] in calculateWindowPosition(mouseLocation: mouseLocation, windowSize: $0, screen: mouseScreen, dockIconRect: dockIconRect, dockPositionOverride: dockPositionOverride) }
         } else if let dockItemFrameOverride {
             { [unowned self] in calculateWindowPositionFromFrame(mouseLocation: mouseLocation, windowSize: $0, screen: mouseScreen, dockItemFrame: dockItemFrameOverride, dockPositionOverride: dockPositionOverride) }
+        } else if let customOrigin = activeCustomOrigin {
+            { customOrigin($0) }
         } else {
             { [unowned self] in centerWindowOnScreen(size: $0, screen: mouseScreen) }
         }
@@ -392,7 +415,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         let isDockIconAnchored = !centerOnScreen && dockItemElement != nil && dockIconRect != nil
 
-        let origin: (CGSize) -> CGPoint = if centerOnScreen {
+        let origin: (CGSize) -> CGPoint = if let customOrigin = activeCustomOrigin {
+            { customOrigin($0) }
+        } else if centerOnScreen {
             { [unowned self] in centerWindowOnScreen(size: $0, screen: mouseScreen) }
         } else if isDockIconAnchored, let dockIconRect {
             { [unowned self] in calculateWindowPosition(mouseLocation: mouseLocation, windowSize: $0, screen: mouseScreen, dockIconRect: dockIconRect, dockPositionOverride: dockPositionOverride) }
@@ -427,11 +452,18 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         // Now that the main panel has a valid frame, position the search window (if active)
         if windowSwitcherCoordinator.windowSwitcherActive, Defaults[.enableWindowSwitcherSearch] {
-            DispatchQueue.main.async { [weak self] in
+            let showSearchBar = { [weak self] in
                 guard let self else { return }
                 if searchWindow == nil { setupSearchWindow() }
                 searchWindow?.showSearch(relativeTo: self)
                 publishTapSnapshot()
+            }
+            // The Cmd+Tab session shows the bar in the same turn as the panel, so the two
+            // appear together; the Alt+Tab switcher keeps showing it on the next turn.
+            if DockObserver.isCmdTabSearchSession {
+                showSearchBar()
+            } else {
+                DispatchQueue.main.async(execute: showSearchBar)
             }
         }
     }
