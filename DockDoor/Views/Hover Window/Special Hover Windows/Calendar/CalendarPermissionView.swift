@@ -4,8 +4,6 @@ import SwiftUI
 struct CalendarPermissionView: View {
     let isEmbedded: Bool
 
-    @Environment(\.openURL) private var openURL
-
     var body: some View {
         if isEmbedded {
             embeddedPermissionView()
@@ -64,8 +62,6 @@ struct CalendarPermissionView: View {
     }
 
     private func openPrivacySettings() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
-            openURL(url)
-        }
+        SystemPreferencesHelper.openCalendarPreferences()
     }
 }

@@ -3,13 +3,46 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.41.0</title>
-            <pubDate>Thu, 15 Oct 2026 10:51:09 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.41.0</sparkle:version>
-            <sparkle:shortVersionString>1.41.0</sparkle:shortVersionString>
+            <title>1.42.3b1</title>
+            <pubDate>Tue, 03 Nov 2026 09:55:51 -0800</pubDate>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.42.3b1</sparkle:version>
+            <sparkle:shortVersionString>1.42.3b1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.41.0/DockDoor.dmg" length="22814750" type="application/octet-stream" sparkle:edSignature="lahOo1/mLLx05ddoDTT8j4vLFJw2k4Lv7wcixcgiIlGQsRT0unYnprRJb9REaNmMDQxcUwx/6btRUd/DOLcvAw==" />
+            <description>&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;BETA RELEASE WARNING&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This is an unstable pre-release version intended for testing purposes only.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;🔧 Improvements &amp;amp; Stability&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Clearer Alternate Shortcuts description in Settings&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;The description now appears under the Alternate Shortcuts section title, so it clearly covers the whole list&lt;/li&gt;
+  &lt;li&gt;Find it in Settings &amp;gt; Gestures &amp;gt; Window Switcher, when &amp;quot;show settings descriptions&amp;quot; is enabled&lt;/li&gt;
+  &lt;li&gt;Shortcuts with no modifiers selected still use the main shortcut&amp;#x27;s modifiers, as noted at the bottom of the section&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+&lt;h3&gt;🐛 Bug Fixes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Previews missing for apps that are slow to respond&lt;/li&gt;
+&lt;ul&gt;
+  &lt;li&gt;Apps that are launching or busy are no longer treated as frozen&lt;/li&gt;
+  &lt;li&gt;Their window previews now appear reliably instead of being skipped&lt;/li&gt;
+  &lt;li&gt;Apps are only treated as unresponsive after a long delay&lt;/li&gt;
+  &lt;li&gt;Works automatically, no setting needed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+</description>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.42.3b1/DockDoor.dmg" length="22810454" type="application/octet-stream" sparkle:edSignature="Q4/KEuNptwU8qU2GqN1JaG5wgv2uCJL4MzsDqx+p2qV7e4QuRnFHrXkbG2A6SZyiPpCPbEsBTQGY/gnUa4hPCw==" />
+        </item>
+    <item>
+            <title>1.42.2</title>
+            <pubDate>Mon, 02 Nov 2026 13:09:04 -0800</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.42.2</sparkle:version>
+            <sparkle:shortVersionString>1.42.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.42.2/DockDoor.dmg" length="22808526" type="application/octet-stream" sparkle:edSignature="uid0v9S8V8rd/ANtYUCqihy+hCjCpgFd5095L1BeVvag+Va9pgWgPFEYWJeL6qVOQmo7kplc4FX4dvrFkPjHCw==" />
         </item>
     </channel>
 </rss>

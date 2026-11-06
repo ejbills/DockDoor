@@ -209,7 +209,7 @@ struct AppPickerSheet: View {
 
             // Add Finder explicitly
             apps.append(InstalledApp(
-                id: "com.apple.finder",
+                id: finderAppIdentifier,
                 name: "Finder",
                 icon: workspace.icon(forFile: "/System/Library/CoreServices/Finder.app")
             ))

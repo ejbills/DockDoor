@@ -13,6 +13,8 @@ let roughWidthCap = optimisticScreenSizeWidth / 3
 let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
+let dockAppIdentifier = "com.apple.dock"
+let finderAppIdentifier = "com.apple.finder"
 
 @MainActor func isMediaApp(_ bundleIdentifier: String?) -> Bool {
     guard let bundleId = bundleIdentifier else { return false }
@@ -42,6 +44,7 @@ extension Defaults.Keys {
     static let restoreAllMinimizedWindowsOnDockClick = Key<Bool>("restoreAllMinimizedWindowsOnDockClick", default: true)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
+    static let quitAppOnWindowCloseExcludedApps = Key<[String]>("quitAppOnWindowCloseExcludedApps", default: [])
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
     static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)
@@ -159,6 +162,7 @@ extension Defaults.Keys {
     static let groupAppInstancesInDock = Key<Bool>("groupAppInstancesInDock", default: true)
     static let collapseNativeTabsIntoSingleWindow = Key<Bool>("collapseNativeTabsIntoSingleWindow", default: false)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
+    static let showSettingsDescriptions = Key<Bool>("showSettingsDescriptions", default: true)
     static let hideDockDoorProBanner = Key<Bool>("hideDockDoorProBanner", default: false)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
@@ -330,10 +334,7 @@ extension Defaults.Keys {
 
     static let middleClickAction = Key<WindowAction>("middleClickAction", default: .close)
 
-    // MARK: - Window Switcher Keyboard Shortcuts (Cmd+key)
-
-    // Each shortcut has a key code (the letter/key) and an action
-    // The Cmd modifier is always required - only the key is customizable
+    // MARK: - Window Preview Keyboard Shortcuts
 
     static let cmdShortcut1Key = Key<UInt16>("cmdShortcut1Key", default: UInt16(kVK_ANSI_W))
     static let cmdShortcut1Action = Key<WindowAction>("cmdShortcut1Action", default: .close)
@@ -353,6 +354,7 @@ extension Defaults.Keys {
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
     static let alternateKeybindModifierFlags = Key<Int>("alternateKeybindModifierFlags", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
+    static let additionalAlternateKeybinds = Key<[AlternateKeybind]>("additionalAlternateKeybinds", default: [])
 }
 
 enum ActiveAppIndicatorStyle: String, CaseIterable, Defaults.Serializable {
@@ -985,6 +987,7 @@ enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
 enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identifiable {
     case recentlyUsed
     case creationOrder
+    case screenPosition
     case alphabeticalByTitle
     case alphabeticalByAppName
 
@@ -996,6 +999,8 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Recently used", comment: "Window preview sort order option")
         case .creationOrder:
             String(localized: "Creation order (fixed)", comment: "Window preview sort order option")
+        case .screenPosition:
+            String(localized: "Screen position (left to right)", comment: "Window preview sort order option")
         case .alphabeticalByTitle:
             String(localized: "Alphabetical by title", comment: "Window preview sort order option")
         case .alphabeticalByAppName:
@@ -1014,7 +1019,7 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
     }
 }
 
-enum SwitcherInvocationMode: String, CaseIterable, Defaults.Serializable, Identifiable {
+enum SwitcherInvocationMode: String, CaseIterable, Codable, Defaults.Serializable, Defaults.PreferRawRepresentable, Identifiable {
     case allWindows
     case activeAppOnly
     case currentSpaceOnly

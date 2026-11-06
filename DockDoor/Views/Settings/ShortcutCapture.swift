@@ -26,11 +26,9 @@ struct KeyCapView: View {
                 Text(text)
             }
         }
-        .font(.system(size: 14, weight: .medium, design: .monospaced))
         .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Color.secondary.opacity(0.2))
-        .cornerRadius(4)
+        .padding(.vertical, 3)
+        .background(Color.primary.opacity(0.08), in: RoundedRectangle(cornerRadius: 5, style: .continuous))
     }
 }
 
@@ -89,19 +87,8 @@ struct ShortcutCaptureView: NSViewControllerRepresentable {
                 }
 
                 parent.isRecording = false
-                // If user is holding exactly one of Command/Option/Control while recording,
-                // capture that as the initializer modifier automatically.
-                let flags = event.modifierFlags
-                let wantsCmd = flags.contains(.command)
-                let wantsOpt = flags.contains(.option)
-                let wantsCtrl = flags.contains(.control)
-                let count = [wantsCmd, wantsOpt, wantsCtrl].filter { $0 }.count
-                var capturedModifier = parent.modifierKey
-                if count == 1 {
-                    if wantsCmd { capturedModifier = Defaults[.Int64maskCommand] }
-                    else if wantsOpt { capturedModifier = Defaults[.Int64maskAlternate] }
-                    else if wantsCtrl { capturedModifier = Defaults[.Int64maskControl] }
-                }
+                let heldModifiers = ShortcutModifier.contained(in: Int(event.modifierFlags.rawValue))
+                let capturedModifier = heldModifiers.isEmpty ? parent.modifierKey : ShortcutModifier.modifierFlags(for: heldModifiers)
                 let newKeybind = UserKeyBind(keyCode: UInt16(event.keyCode), modifierFlags: capturedModifier)
                 Defaults[.UserKeybind] = newKeybind
                 parent.currentKeybind = newKeybind

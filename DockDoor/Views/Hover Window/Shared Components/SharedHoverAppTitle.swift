@@ -10,7 +10,7 @@ struct SharedHoverAppTitle: View {
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
     @Default(.gradientColorPalette) private var defaultGradientColorPalette
 
     var body: some View {
@@ -25,7 +25,7 @@ struct SharedHoverAppTitle: View {
                                 .scaledToFit()
                                 .zIndex(1)
                                 .frame(width: 24, height: 24)
-                        } else { ProgressView().frame(width: 24, height: 24) }
+                        } else { ProgressView().controlSize(.small).frame(width: 24, height: 24) }
                         hoverTitleLabelView()
                             .animation(nil, value: hoveringAppIcon)
                     }
@@ -41,7 +41,7 @@ struct SharedHoverAppTitle: View {
                                 .scaledToFit()
                                 .zIndex(1)
                                 .frame(width: 24, height: 24)
-                        } else { ProgressView().frame(width: 24, height: 24) }
+                        } else { ProgressView().controlSize(.small).frame(width: 24, height: 24) }
                         hoverTitleLabelView()
                             .animation(nil, value: hoveringAppIcon)
                     }
@@ -58,7 +58,7 @@ struct SharedHoverAppTitle: View {
                                     .scaledToFit()
                                     .zIndex(1)
                                     .frame(width: 24, height: 24)
-                            } else { ProgressView().frame(width: 24, height: 24) }
+                            } else { ProgressView().controlSize(.small).frame(width: 24, height: 24) }
                             hoverTitleLabelView()
                                 .animation(nil, value: hoveringAppIcon)
                         }

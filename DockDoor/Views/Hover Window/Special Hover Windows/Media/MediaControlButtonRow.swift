@@ -9,7 +9,7 @@ struct MediaControlButtonRow: View {
     var isExpanded: Bool = false
     var showingLyrics: Bool = false
 
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
 
     var body: some View {
         HStack(spacing: spacing) {

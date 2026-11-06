@@ -50,7 +50,7 @@ extension DockObserver {
     }
 
     private func attemptCmdTabSubscription() {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockUtils.runningDock else {
             return
         }
 
@@ -106,7 +106,7 @@ extension DockObserver {
 
     func processCmdTabSwitcherChanged() {
         guard Defaults[.enableCmdTabEnhancements] else { return }
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockUtils.runningDock else {
             return
         }
 
@@ -201,6 +201,7 @@ extension DockObserver {
                         windows = windows.filter { !$0.isHidden && !$0.isMinimized }
                     }
 
+                    guard !windows.isEmpty else { return }
                     let freshWindows = windows
 
                     await MainActor.run { [weak self] in
@@ -256,7 +257,7 @@ extension DockObserver {
                 do {
                     if let title = try selectedElement.title(), !title.isEmpty {
                         resolvedTitle = title
-                        let allApps = NSWorkspace.shared.runningApplications
+                        let allApps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
                         if let app = allApps.first(where: { $0.localizedName == title }) {
                             resolvedApp = app
                         } else {

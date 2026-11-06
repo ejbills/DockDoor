@@ -4,8 +4,8 @@ struct SettingsLinkRow: View {
     let title: LocalizedStringKey
     let description: LocalizedStringKey
     let icon: String
+    var iconColor: Color = .secondary
     let destination: URL
-    var iconColor: Color = .accentColor
 
     var body: some View {
         Link(destination: destination) {
@@ -16,7 +16,7 @@ struct SettingsLinkRow: View {
                     Text(title)
                         .font(.body)
                         .fontWeight(.medium)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
 
                     Text(description)
                         .font(.subheadline)
@@ -27,7 +27,7 @@ struct SettingsLinkRow: View {
 
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             .padding(.vertical, 2)
         }

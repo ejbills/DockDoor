@@ -59,7 +59,6 @@ struct WindowPreviewHoverContainer: View {
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
     let hasScreenRecordingPermission: Bool
-    let appearanceOverride: PreviewAppearanceSettings?
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -83,7 +82,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
@@ -133,8 +132,7 @@ struct WindowPreviewHoverContainer: View {
          mockPreviewActive: Bool,
          updateAvailable: Bool,
          embeddedContentType: EmbeddedContentType = .none,
-         hasScreenRecordingPermission: Bool,
-         appearanceOverride: PreviewAppearanceSettings? = nil)
+         hasScreenRecordingPermission: Bool)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -148,7 +146,6 @@ struct WindowPreviewHoverContainer: View {
         self.updateAvailable = updateAvailable
         self.embeddedContentType = embeddedContentType
         self.hasScreenRecordingPermission = hasScreenRecordingPermission
-        self.appearanceOverride = appearanceOverride
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -271,7 +268,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private var radii: CardRadius.Resolved {
-        (appearanceOverride ?? cachedAppearance)?.radii ?? .current()
+        cachedAppearance?.radii ?? .current()
     }
 
     var body: some View {
@@ -289,7 +286,8 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .popover && effectiveShowAppName) ? 30 : 0)
         .onAppear {
             loadAppIcon()
-            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+            // The settings mock is not a panel: it must not stop or extend real streams.
+            if !mockPreviewActive, Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
                 LiveCaptureManager.shared.panelOpened()
             }
             if #available(macOS 15.0, *) {
@@ -297,7 +295,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
         .onDisappear {
-            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+            if !mockPreviewActive, Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
                 Task { await LiveCaptureManager.shared.panelClosed() }
             }
         }
@@ -437,6 +435,7 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             } else {
                                 ProgressView()
+                                    .controlSize(.small)
                                     .frame(width: 24, height: 24)
                             }
                             if showName {
@@ -472,6 +471,7 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             } else {
                                 ProgressView()
+                                    .controlSize(.small)
                                     .frame(width: 24, height: 24)
                             }
                             if showName {
@@ -505,6 +505,7 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             } else {
                                 ProgressView()
+                                    .controlSize(.small)
                                     .frame(width: 24, height: 24)
                             }
                             if showName {
@@ -717,7 +718,7 @@ struct WindowPreviewHoverContainer: View {
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         let cachedFilteredIndices = filteredWindowIndices()
-        let appearance = appearanceOverride ?? cachedAppearance ?? PreviewAppearanceSettings.resolve(
+        let appearance = cachedAppearance ?? PreviewAppearanceSettings.resolve(
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )
@@ -803,7 +804,7 @@ struct WindowPreviewHoverContainer: View {
     private func handleEdgeScrollHover(at location: CGPoint, isHorizontal: Bool) {
         let edgeSize: CGFloat = 50
         let toolbarExclusion: CGFloat = 46
-        let appearance = appearanceOverride ?? cachedAppearance ?? PreviewAppearanceSettings.resolve(
+        let appearance = cachedAppearance ?? PreviewAppearanceSettings.resolve(
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )

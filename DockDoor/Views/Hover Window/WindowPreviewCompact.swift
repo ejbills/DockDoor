@@ -59,9 +59,9 @@ struct WindowPreviewCompact: View, Equatable {
               appearance.trafficLightVisibility != .never
         else { return nil }
         if windowInfo.isMinimized {
-            return "Minimized"
+            return String(localized: "Minimized", comment: "Window state badge")
         } else if windowInfo.isHidden {
-            return "Hidden"
+            return String(localized: "Hidden", comment: "Window state badge")
         }
         return nil
     }

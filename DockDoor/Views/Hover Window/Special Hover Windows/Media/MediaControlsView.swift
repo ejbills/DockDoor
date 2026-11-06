@@ -59,7 +59,7 @@ struct MediaControlsView: View {
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
-    @Default(.showAnimations) var showAnimations
+    @AnimationsEnabled var showAnimations
 
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon: Bool = false
