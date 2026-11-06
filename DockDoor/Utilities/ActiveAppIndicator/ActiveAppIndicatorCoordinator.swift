@@ -16,7 +16,6 @@ final class ActiveAppIndicatorCoordinator {
     static var shared: ActiveAppIndicatorCoordinator?
 
     private var indicatorWindow: ActiveAppIndicatorWindow?
-    private var workspaceObserver: NSObjectProtocol?
     private var positionSettingsObserver: Defaults.Observation?
     private var screenParametersObserver: NSObjectProtocol?
 
@@ -70,19 +69,6 @@ final class ActiveAppIndicatorCoordinator {
     // MARK: - Setup
 
     private func setupObservers() {
-        // Observe frontmost app changes
-        workspaceObserver = NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.didActivateApplicationNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] notification in
-            if let app = notification.userInfo?[
-                NSWorkspace.applicationUserInfoKey
-            ] as? NSRunningApplication {
-                self?.handleActiveAppChanged(app)
-            }
-        }
-
         // Observe all position-related settings with a single observer
         // Color is handled by @Default in the SwiftUI view automatically
         positionSettingsObserver = Defaults.observe(
@@ -259,9 +245,6 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func cleanup() {
-        if let observer = workspaceObserver {
-            NSWorkspace.shared.notificationCenter.removeObserver(observer)
-        }
         if let observer = screenParametersObserver {
             NotificationCenter.default.removeObserver(observer)
         }
@@ -394,7 +377,7 @@ final class ActiveAppIndicatorCoordinator {
 
     // MARK: - Active App Handling
 
-    private func handleActiveAppChanged(_ app: NSRunningApplication) {
+    func handleActiveAppChanged(_ app: NSRunningApplication) {
         let previousApp = currentActiveApp
         currentActiveApp = app
 

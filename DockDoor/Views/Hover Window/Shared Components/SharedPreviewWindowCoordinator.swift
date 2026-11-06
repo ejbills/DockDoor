@@ -1062,7 +1062,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     }
                     let currentDockItemStatus = dockObserver.getDockItemAppStatusUnderMouse()
                     let matches: Bool = switch currentDockItemStatus.status {
-                    case let .success(app):
+                    case let .success(app), let .unresolvedInstance(_, app):
                         app.bundleIdentifier == expectedBundleId
                     case let .notRunning(bundleId):
                         bundleId == expectedBundleId

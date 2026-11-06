@@ -200,6 +200,9 @@ class WindowManipulationObservers {
             return
         }
 
+        DockObserver.activeInstance?.recordAppActivation(app)
+        ActiveAppIndicatorCoordinator.shared?.handleActiveAppChanged(app)
+
         if Self.shouldDismissPreviewOnAppActivation(
             isKeybindSessionActive: previewCoordinator.windowSwitcherCoordinator.isKeybindSessionActive,
             keepPreviewOnHoverActivation: Defaults[.keepPreviewOnHoverActivation],
