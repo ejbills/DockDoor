@@ -39,25 +39,20 @@ enum ActiveAppIndicatorDockDetection {
         }
 
         let appItems = dockItems.filter { (try? $0.subrole()) == "AXApplicationDockItem" }
-
-        // Find the dock item for this app
-        for item in appItems {
-            // Check if this is our app by comparing bundle identifiers
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
-                .absoluteURL,
-                let itemBundle = Bundle(url: itemURL),
-                itemBundle.bundleIdentifier == bundleIdentifier
-            {
-                return frame(of: item).map { restingFrame($0, among: appItems) }
-            }
-
-            // Check by running app if bundle ID check failed
-            if shortcutBundleIdentifier == nil,
-               let itemTitle = try? item.title(),
-               itemTitle == app.localizedName
-            {
-                return frame(of: item).map { restingFrame($0, among: appItems) }
-            }
+        let matchingItems = DockObserver.applicationDockItems(from: appItems).filter { $0.bundleIdentifier == bundleIdentifier }
+        if matchingItems.count > 1 {
+            guard let result = DockObserver.activeInstance?.resolveInstances(of: matchingItems).first(where: {
+                $0.status.resolvedApplication?.processIdentifier == app.processIdentifier
+            }), let item = result.dockItemElement else { return nil }
+            return frame(of: item).map { restingFrame($0, among: appItems) }
+        }
+        if let item = matchingItems.first {
+            return frame(of: item.element).map { restingFrame($0, among: appItems) }
+        }
+        if shortcutBundleIdentifier == nil, let title = app.localizedName,
+           let item = appItems.first(where: { (try? $0.title()) == title })
+        {
+            return frame(of: item).map { restingFrame($0, among: appItems) }
         }
 
         return nil
@@ -180,34 +175,12 @@ enum ActiveAppIndicatorDockDetection {
     }
 
     static func getRunningAppDockItems() -> [RunningDockItem] {
-        guard let dockItems = try? dockList()?.children() else {
-            return []
+        (DockObserver.activeInstance?.resolvedApplicationDockItems() ?? []).compactMap { result in
+            guard result.isRunning == true, let app = result.status.resolvedApplication,
+                  let item = result.dockItemElement, let frame = appKitFrame(of: item)
+            else { return nil }
+            return RunningDockItem(app: app, element: item, frame: frame)
         }
-
-        let runningApps = NSWorkspace.shared.runningApplications
-        var results: [RunningDockItem] = []
-
-        for item in dockItems {
-            guard let subrole = try? item.subrole(),
-                  subrole == "AXApplicationDockItem",
-                  (try? item.appIsRunning()) == true
-            else { continue }
-
-            var matched: NSRunningApplication?
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
-               let bundleIdentifier = Bundle(url: itemURL)?.bundleIdentifier
-            {
-                matched = LauncherShortcutResolver.runningApplications(forBundleAt: itemURL, bundleIdentifier: bundleIdentifier).first
-            }
-            if matched == nil, let itemTitle = try? item.title() {
-                matched = runningApps.first { $0.localizedName == itemTitle }
-            }
-
-            guard let matched, let frame = appKitFrame(of: item) else { continue }
-            results.append(RunningDockItem(app: matched, element: item, frame: frame))
-        }
-
-        return results
     }
 
     /// Positions the indicator window relative to the dock item.
