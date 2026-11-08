@@ -12,11 +12,22 @@ enum EmbeddedContentType: Equatable {
     case none
 }
 
+private final class DockRevealTapContext {
+    let pid: pid_t
+    let revealPoint: CGPoint
+    var tap: CFMachPort?
+
+    init(pid: pid_t, revealPoint: CGPoint) {
+        self.pid = pid
+        self.revealPoint = revealPoint
+    }
+}
+
 final class SharedPreviewWindowCoordinator: NSPanel {
     weak static var activeInstance: SharedPreviewWindowCoordinator?
 
     let windowSwitcherCoordinator = PreviewStateCoordinator()
-    private let dockManager = DockAutoHideManager()
+    private var dockRevealTap: (tap: CFMachPort, source: CFRunLoopSource, context: Unmanaged<DockRevealTapContext>)?
     private var searchWindow: SearchWindow?
 
     private var appName: String = ""
@@ -87,7 +98,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         if SharedPreviewWindowCoordinator.activeInstance === self {
             SharedPreviewWindowCoordinator.activeInstance = nil
         }
-        dockManager.cleanup()
+        releaseDockReveal()
     }
 
     private func setupWindow() {
@@ -181,8 +192,63 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         pendingShow = nil
     }
 
-    func restoreDockAutoHideState() {
-        dockManager.restoreDockState()
+    private func keepDockRevealed() {
+        guard Defaults[.preventDockHide], dockRevealTap == nil, DockObserver.canPostEvents,
+              CoreDockGetAutoHideEnabled(),
+              let target = DockUtils.dockRevealTarget()
+        else { return }
+
+        let context = Unmanaged.passRetained(DockRevealTapContext(pid: target.pid, revealPoint: target.revealPoint))
+        guard let tap = CGEvent.tapCreateForPid(
+            pid: target.pid,
+            place: .tailAppendEventTap,
+            options: .listenOnly,
+            eventsOfInterest: CGEventMask(1) << DockUtils.mouseExitedEventType.rawValue,
+            callback: { _, type, event, refcon in
+                guard let refcon else { return Unmanaged.passUnretained(event) }
+                let context = Unmanaged<DockRevealTapContext>.fromOpaque(refcon).takeUnretainedValue()
+                if let passthrough = reEnableIfNeeded(tap: context.tap, type: type, event: event) {
+                    return passthrough
+                }
+                if type == DockUtils.mouseExitedEventType {
+                    DockUtils.postMouseEvent(.mouseMoved, at: context.revealPoint, toDock: context.pid)
+                }
+                return Unmanaged.passUnretained(event)
+            },
+            userInfo: context.toOpaque()
+        ) else {
+            context.release()
+            return
+        }
+        guard let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0) else {
+            CFMachPortInvalidate(tap)
+            context.release()
+            return
+        }
+
+        context.takeUnretainedValue().tap = tap
+        EventTapThread.shared.add(source)
+        dockRevealTap = (tap, source, context)
+
+        if !target.dockRegion.contains(DockObserver.getMousePosition()) {
+            DockUtils.postMouseEvent(.mouseMoved, at: target.revealPoint, toDock: target.pid)
+        }
+    }
+
+    func releaseDockReveal() {
+        guard let pin = dockRevealTap else { return }
+        dockRevealTap = nil
+
+        let pid = pin.context.takeUnretainedValue().pid
+        let mouseLocation = DockObserver.getMousePosition()
+        let shouldPostLeave = DockUtils.dockRevealTarget().map { $0.pid == pid && !$0.dockRegion.contains(mouseLocation) } ?? false
+
+        EventTapThread.shared.remove(pin.tap, source: pin.source) {
+            if shouldPostLeave {
+                DockUtils.postMouseEvent(DockUtils.mouseExitedEventType, at: mouseLocation, toDock: pid)
+            }
+            pin.context.release()
+        }
     }
 
     func hideWindow(cancelPendingShow shouldCancelPendingShow: Bool = true) {
@@ -190,8 +256,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             cancelPendingShow()
         }
 
-        // Always restore dock auto-hide state, even if the preview isn't visible.
-        restoreDockAutoHideState()
+        // Always release the pinned Dock, even if the preview isn't visible.
+        releaseDockReveal()
         hideFullPreviewWindow()
 
         guard isVisible else { return }
@@ -779,7 +845,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             )
         }
 
-        dockManager.preventDockHiding(centeredHoverWindowState != nil)
+        if centeredHoverWindowState == nil {
+            keepDockRevealed()
+        }
     }
 
     @MainActor
@@ -1012,7 +1080,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     dockPositionOverride: activeDockPosition
                 )
 
-                dockManager.preventDockHiding(false)
+                keepDockRevealed()
             }
         }
 
