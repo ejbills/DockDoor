@@ -45,6 +45,8 @@ extension Defaults.Keys {
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
     static let quitAppOnWindowCloseExcludedApps = Key<[String]>("quitAppOnWindowCloseExcludedApps", default: [])
+    static let quitAppOnWindowCloseScope = Key<QuitOnWindowCloseScope>("quitAppOnWindowCloseScope", default: .allExceptSelected)
+    static let quitAppOnWindowCloseIncludedApps = Key<[String]>("quitAppOnWindowCloseIncludedApps", default: [])
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
     static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)
@@ -768,6 +770,20 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+enum QuitOnWindowCloseScope: String, CaseIterable, Defaults.Serializable {
+    case allExceptSelected
+    case onlySelected
+
+    var localizedName: String {
+        switch self {
+        case .allExceptSelected:
+            String(localized: "All apps except selected", comment: "Quit on last window close scope option")
+        case .onlySelected:
+            String(localized: "Only selected apps", comment: "Quit on last window close scope option")
         }
     }
 }

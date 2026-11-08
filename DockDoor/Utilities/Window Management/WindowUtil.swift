@@ -1644,10 +1644,19 @@ extension WindowUtil {
     private static func quitBlockReason(for app: NSRunningApplication) -> String? {
         if isScreenLocked { return "screen locked" }
         if app.activationPolicy != .regular { return "not a regular app" }
-        if let bundleIdentifier = app.bundleIdentifier,
-           Defaults[.quitAppOnWindowCloseExcludedApps].contains(bundleIdentifier)
-        {
-            return "excluded"
+        switch Defaults[.quitAppOnWindowCloseScope] {
+        case .allExceptSelected:
+            if let bundleIdentifier = app.bundleIdentifier,
+               Defaults[.quitAppOnWindowCloseExcludedApps].contains(bundleIdentifier)
+            {
+                return "excluded"
+            }
+        case .onlySelected:
+            guard let bundleIdentifier = app.bundleIdentifier,
+                  Defaults[.quitAppOnWindowCloseIncludedApps].contains(bundleIdentifier)
+            else {
+                return "not selected"
+            }
         }
         return nil
     }
