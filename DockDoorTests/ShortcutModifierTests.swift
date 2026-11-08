@@ -49,3 +49,44 @@ struct ShortcutModifierTests {
         #expect(modifierConverter.toString(0).isEmpty)
     }
 }
+
+struct BackwardModifierTests {
+    private let option = UserKeyBind(keyCode: 48, modifierFlags: Defaults.Keys.Int64maskAlternate.defaultValue)
+    private let controlOption = UserKeyBind(
+        keyCode: 48,
+        modifierFlags: Defaults.Keys.Int64maskControl.defaultValue | Defaults.Keys.Int64maskAlternate.defaultValue
+    )
+
+    @Test func modifierKeyCodesMapToTheirModifier() {
+        #expect(ShortcutModifier(keyCode: 59) == .control)
+        #expect(ShortcutModifier(keyCode: 62) == .control)
+        #expect(ShortcutModifier(keyCode: 58) == .option)
+        #expect(ShortcutModifier(keyCode: 61) == .option)
+        #expect(ShortcutModifier(keyCode: 55) == .command)
+        #expect(ShortcutModifier(keyCode: 54) == .command)
+    }
+
+    @Test func shiftAndRegularKeysAreNotShortcutModifiers() {
+        #expect(ShortcutModifier(keyCode: 56) == nil)
+        #expect(ShortcutModifier(keyCode: 60) == nil)
+        #expect(ShortcutModifier(keyCode: 50) == nil)
+    }
+
+    @Test func holdingModifierTurnsShortcutIntoCombination() {
+        #expect(ShortcutModifier.control.turns(option, into: controlOption))
+    }
+
+    @Test func onlyTheShortcutWithoutTheModifierIsAffected() {
+        #expect(!ShortcutModifier.control.turns(controlOption, into: option))
+        #expect(!ShortcutModifier.control.turns(controlOption, into: controlOption))
+    }
+
+    @Test func otherKeysAndModifiersDoNotCount() {
+        let otherKey = UserKeyBind(keyCode: 50, modifierFlags: controlOption.modifierFlags)
+        let unset = UserKeyBind(keyCode: 0, modifierFlags: option.modifierFlags)
+
+        #expect(!ShortcutModifier.control.turns(option, into: otherKey))
+        #expect(!ShortcutModifier.command.turns(option, into: controlOption))
+        #expect(!ShortcutModifier.control.turns(unset, into: UserKeyBind(keyCode: 0, modifierFlags: controlOption.modifierFlags)))
+    }
+}

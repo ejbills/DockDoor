@@ -384,9 +384,9 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "windowSwitcher.startOnSecond",
-            title: String(localized: "Start on second window"),
-            description: String(localized: "Highlight the second window instead of the first when opening."),
-            keywords: ["second", "start", "classic", "ordering"],
+            title: String(localized: "Initial window selection"),
+            description: String(localized: "Which window is selected when the Switcher opens. \"Second/Last\" starts on the second window, or on the last one when you hold the backward key with a shortcut."),
+            keywords: ["second", "start", "classic", "ordering", "first", "last", "backward", "reverse", "shift"],
             tab: "WindowSwitcher",
             section: String(localized: "Behavior"),
             icon: "2.circle"

@@ -150,6 +150,7 @@ extension Defaults.Keys {
     static let cmdTabCompactThreshold = Key<Int>("cmdTabCompactThreshold", default: 0)
     static let searchFuzziness = Key<Int>("searchFuzziness", default: 3)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
+    static let startOnLastWindowWhenOpeningBackward = Key<Bool>("startOnLastWindowWhenOpeningBackward", default: false)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let includeHiddenWindowsInDockPreview = Key<Bool>("includeHiddenWindowsInDockPreview", default: true)
     static let includeHiddenWindowsInCmdTab = Key<Bool>("includeHiddenWindowsInCmdTab", default: true)
@@ -557,6 +558,37 @@ enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializabl
             String(localized: "Pinned to screen", comment: "Window switcher placement option")
         }
     }
+}
+
+// Stored as useClassicWindowOrdering + startOnLastWindowWhenOpeningBackward, not as its own key
+enum SwitcherInitialSelection: CaseIterable, Identifiable {
+    case first
+    case second
+    case secondOrLast
+
+    var id: Self { self }
+
+    var localizedName: String {
+        switch self {
+        case .first:
+            String(localized: "First", comment: "Initial window selection option")
+        case .second:
+            String(localized: "Second", comment: "Initial window selection option")
+        case .secondOrLast:
+            String(localized: "Second/Last", comment: "Initial window selection option")
+        }
+    }
+
+    init(useClassicWindowOrdering: Bool, startOnLastWindowWhenOpeningBackward: Bool) {
+        if !useClassicWindowOrdering {
+            self = .first
+        } else {
+            self = startOnLastWindowWhenOpeningBackward ? .secondOrLast : .second
+        }
+    }
+
+    var usesClassicWindowOrdering: Bool { self != .first }
+    var startsOnLastWindowWhenOpeningBackward: Bool { self == .secondOrLast }
 }
 
 enum MouseFollowsFocusMode: String, CaseIterable, Defaults.Serializable {

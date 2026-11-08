@@ -59,6 +59,7 @@ struct CardGridScrollView: NSViewRepresentable {
         }
 
         var onOffsetChange: ((CGFloat) -> Void)?
+        var onSizeChange: (() -> Void)?
         var isInteractive = true
 
         var contentSize: CGSize = .zero {
@@ -98,6 +99,7 @@ struct CardGridScrollView: NSViewRepresentable {
             super.setFrameSize(newSize)
             setOffset(offset)
             commit()
+            onSizeChange?()
         }
 
         override func scrollWheel(with event: NSEvent) {
@@ -179,6 +181,7 @@ struct CardGridScrollView: NSViewRepresentable {
         private var scrolledFromStart: Binding<Bool>?
         private var makeCard: ((FlowItem) -> AnyView)?
         private var pendingItems: [FlowItem] = []
+        private var needsSelectionReveal = false
         private var cancellables: Set<AnyCancellable> = []
         private(set) var contentSize: CGSize = .zero
 
@@ -188,6 +191,7 @@ struct CardGridScrollView: NSViewRepresentable {
             scrolledFromStart = representable.$scrolledFromStart
 
             container.onOffsetChange = { [weak self] offset in self?.offsetChanged(offset) }
+            container.onSizeChange = { [weak self] in self?.revealSelectionIfNeeded() }
 
             representable.coordinator.selection.$currIndex
                 .dropFirst()
@@ -267,6 +271,9 @@ struct CardGridScrollView: NSViewRepresentable {
             if !pendingItems.isEmpty {
                 DispatchQueue.main.async { [weak self] in self?.materializePending(onlyVisible: false) }
             }
+
+            // The selection is set before this layout exists (e.g. opening on the last window), so reveal it once the container has its size
+            needsSelectionReveal = true
         }
 
         @discardableResult
@@ -354,7 +361,13 @@ struct CardGridScrollView: NSViewRepresentable {
             }
         }
 
-        private func scrollToSelection(_ index: Int) {
+        private func revealSelectionIfNeeded() {
+            guard needsSelectionReveal, let container, !container.bounds.isEmpty, let previewCoordinator else { return }
+            needsSelectionReveal = false
+            scrollToSelection(previewCoordinator.currIndex, animated: false)
+        }
+
+        private func scrollToSelection(_ index: Int, animated: Bool = true) {
             guard let container, let previewCoordinator, previewCoordinator.shouldScrollToIndex,
                   let frame = frames[.window(index)]
             else { return }
@@ -363,7 +376,7 @@ struct CardGridScrollView: NSViewRepresentable {
             let target = container.scrollsVertically
                 ? frame.midY - visible.height / 2
                 : frame.midX - visible.width / 2
-            container.scroll(to: target, animated: true)
+            container.scroll(to: target, animated: animated)
         }
     }
 }

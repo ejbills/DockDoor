@@ -13,6 +13,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
+    @Default(.startOnLastWindowWhenOpeningBackward) var startOnLastWindowWhenOpeningBackward
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.showWindowsFromCurrentSpaceOnlyInSwitcher) var showWindowsFromCurrentSpaceOnlyInSwitcher
     @Default(.showWindowsFromCurrentMonitorOnlyInSwitcher) var showWindowsFromCurrentMonitorOnlyInSwitcher
@@ -73,6 +74,21 @@ struct WindowSwitcherBehaviorSettingsView: View {
 
     // MARK: - Behavior
 
+    private var initialSelection: Binding<SwitcherInitialSelection> {
+        Binding(
+            get: {
+                SwitcherInitialSelection(
+                    useClassicWindowOrdering: useClassicWindowOrdering,
+                    startOnLastWindowWhenOpeningBackward: startOnLastWindowWhenOpeningBackward
+                )
+            },
+            set: {
+                useClassicWindowOrdering = $0.usesClassicWindowOrdering
+                startOnLastWindowWhenOpeningBackward = $0.startsOnLastWindowWhenOpeningBackward
+            }
+        )
+    }
+
     private var behaviorSection: some View {
         SettingsSection("Behavior") {
             Toggle(isOn: $instantWindowSwitcher) { Text("Show Window Switcher instantly") }
@@ -85,9 +101,13 @@ struct WindowSwitcherBehaviorSettingsView: View {
             )) { Text("Release initializer key to select window") }
                 .settingsSearchTarget("windowSwitcher.releaseToSelect")
 
-            Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window") }
-                .settingsSearchTarget("windowSwitcher.startOnSecond")
-                .settingsAnnotation("Highlight the second window instead of the first when opening.")
+            Picker("Initial window selection", selection: initialSelection) {
+                ForEach(SwitcherInitialSelection.allCases) {
+                    Text($0.localizedName).tag($0)
+                }
+            }
+            .settingsSearchTarget("windowSwitcher.startOnSecond")
+            .settingsAnnotation("Which window is selected when the Switcher opens. \"Second/Last\" starts on the second window, or on the last one when you hold the backward key with a shortcut.")
 
             Picker(String(localized: "Mouse follows focus", comment: "Mouse follows focus setting label"), selection: $mouseFollowsFocusMode) {
                 ForEach(MouseFollowsFocusMode.allCases, id: \.self) {

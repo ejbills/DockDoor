@@ -812,7 +812,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             windowSwitcherCoordinator.setWindows(windows, dockPosition: activeDockPosition, bestGuessMonitor: screen)
 
             if let initialIndex {
-                windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: false)
+                // The switcher can open on a window that's off screen (e.g. the last one), so it must scroll to it
+                windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: centeredHoverWindowState == .windowSwitcher)
             } else {
                 windowSwitcherCoordinator.currIndex = -1
             }
