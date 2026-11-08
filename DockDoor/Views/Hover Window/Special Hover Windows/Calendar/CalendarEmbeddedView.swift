@@ -27,7 +27,7 @@ struct CalendarEmbeddedView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
 
-                        LazyVStack(alignment: .leading, spacing: CalendarLayout.embeddedEventRowSpacing) {
+                        VStack(alignment: .leading, spacing: CalendarLayout.embeddedEventRowSpacing) {
                             ForEach(calendarInfo.events.prefix(3)) { event in
                                 CalendarEventRow(event: event, isEmbedded: true)
                             }
