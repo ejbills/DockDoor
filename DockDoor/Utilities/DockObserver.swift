@@ -17,18 +17,44 @@ struct ApplicationInfo: Sendable {
 struct ApplicationReturnType {
     enum Status: Equatable {
         case success(NSRunningApplication)
+        case unresolvedInstance(bundleIdentifier: String, fallback: NSRunningApplication)
         case notRunning(bundleIdentifier: String)
         case notFound
+
+        var previewOrGestureApplication: NSRunningApplication? {
+            switch self {
+            case let .success(app), let .unresolvedInstance(_, app): app
+            case .notRunning, .notFound: nil
+            }
+        }
+
+        var resolvedApplication: NSRunningApplication? {
+            guard case let .success(app) = self else { return nil }
+            return app
+        }
     }
 
     let status: Status
     let dockItemElement: AXUIElement?
+    let isRunning: Bool?
+
+    init(status: Status, dockItemElement: AXUIElement?, isRunning: Bool? = nil) {
+        self.status = status
+        self.dockItemElement = dockItemElement
+        self.isRunning = isRunning
+    }
 }
 
 struct FolderDockItemInfo {
     let url: URL
     let title: String
     let dockItemElement: AXUIElement
+}
+
+struct ApplicationDockItem {
+    let element: AXUIElement
+    let url: URL
+    let bundleIdentifier: String
 }
 
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
@@ -60,6 +86,7 @@ final class DockObserver {
 
     weak static var activeInstance: DockObserver?
     let previewCoordinator: SharedPreviewWindowCoordinator
+    private let instanceOrdering = DockAppInstanceOrdering()
 
     var axObserver: AXObserver?
     private var previousStatus: ApplicationReturnType.Status?
@@ -165,6 +192,7 @@ final class DockObserver {
     }
 
     func reset() {
+        instanceOrdering.reset()
         teardownObserver()
         teardownCmdTabObserver()
         setupSelectedDockItemObserver()
@@ -401,7 +429,7 @@ final class DockObserver {
             return
         }
 
-        guard case let .success(currentApp) = appUnderMouseElement.status else {
+        guard let currentApp = appUnderMouseElement.status.previewOrGestureApplication else {
             return
         }
 
@@ -509,7 +537,7 @@ final class DockObserver {
                     guard let self else { return }
 
                     let currentAppStatus = getDockItemAppStatusUnderMouse()
-                    guard case let .success(stillHoveredApp) = currentAppStatus.status,
+                    guard let stillHoveredApp = currentAppStatus.status.previewOrGestureApplication,
                           stillHoveredApp.processIdentifier == currentAppPID
                     else { return }
 
@@ -655,78 +683,104 @@ final class DockObserver {
         return dockChildren
     }
 
-    private func applicationDockItems() -> [(element: AXUIElement, url: URL, bundleIdentifier: String)] {
-        (getAllDockItemChildren() ?? []).compactMap { item in
+    static func applicationDockItems(from elements: [AXUIElement], reusing knownItem: ApplicationDockItem? = nil) -> [ApplicationDockItem] {
+        elements.compactMap { item in
+            if let knownItem, CFEqual(knownItem.element, item) { return knownItem }
             guard (try? item.subrole()) == "AXApplicationDockItem",
                   let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
                   let bundleIdentifier = Bundle(url: url)?.bundleIdentifier
             else { return nil }
-            return (item, url, bundleIdentifier)
+            return ApplicationDockItem(element: item, url: url, bundleIdentifier: bundleIdentifier)
         }
+    }
+
+    func resolveInstances(of items: [ApplicationDockItem], runningApps: [NSRunningApplication]? = nil) -> [ApplicationReturnType] {
+        guard let first = items.first else { return [] }
+        let apps = runningApps ?? LauncherShortcutResolver.runningApplications(forBundleAt: first.url, bundleIdentifier: first.bundleIdentifier)
+        let states = items.map { try? $0.element.appIsRunning() }
+        let pids: [pid_t?] = if items.count > 1 {
+            instanceOrdering.processIdentifiers(
+                for: apps.map(DockAppInstanceOrdering.Process.init),
+                items: zip(items, states).map { .init(element: $0.element, isRunning: $1) },
+                bundleIdentifier: first.bundleIdentifier
+            )
+        } else {
+            [states[0] == false ? nil : apps.first?.processIdentifier]
+        }
+        let fallbacks = DockAppInstanceOrdering.fallbackProcessIdentifiers(
+            runningPIDs: apps.map(\.processIdentifier),
+            runningStates: states,
+            resolvedPIDs: pids
+        )
+        return items.indices.map { index in
+            let status: ApplicationReturnType.Status = if apps.isEmpty || states[index] == false {
+                .notRunning(bundleIdentifier: first.bundleIdentifier)
+            } else if let pid = pids[index], let app = apps.first(where: { $0.processIdentifier == pid }) {
+                .success(app)
+            } else if let app = apps.first(where: { $0.processIdentifier == fallbacks[index] }) ?? apps.first {
+                .unresolvedInstance(bundleIdentifier: first.bundleIdentifier, fallback: app)
+            } else {
+                .notFound
+            }
+            return ApplicationReturnType(status: status, dockItemElement: items[index].element, isRunning: states[index])
+        }
+    }
+
+    func resolvedApplicationDockItems() -> [ApplicationReturnType] {
+        let elements = (getAllDockItemChildren() ?? []).filter { (try? $0.subrole()) == "AXApplicationDockItem" }
+        let items = Self.applicationDockItems(from: elements)
+        var resolutions: [String: [ApplicationReturnType]] = [:]
+        for item in items where resolutions[item.bundleIdentifier] == nil {
+            resolutions[item.bundleIdentifier] = resolveInstances(of: items.filter { $0.bundleIdentifier == item.bundleIdentifier })
+        }
+        return elements.map { element in
+            guard let item = items.first(where: { CFEqual($0.element, element) }),
+                  let result = resolutions[item.bundleIdentifier]?.first(where: {
+                      $0.dockItemElement.map { CFEqual($0, element) } == true
+                  })
+            else { return Self.unidentifiedDockItemStatus(element) }
+            return result
+        }
+    }
+
+    private static func unidentifiedDockItemStatus(_ element: AXUIElement) -> ApplicationReturnType {
+        let app = (try? element.title()).flatMap { WindowUtil.findRunningApplicationByName(named: $0) }
+        return ApplicationReturnType(status: app.map { .success($0) } ?? .notFound, dockItemElement: element, isRunning: try? element.appIsRunning())
     }
 
     func runningApplicationsInDockOrder() -> [NSRunningApplication] {
         var seen = Set<pid_t>()
-        return applicationDockItems().compactMap { item -> NSRunningApplication? in
-            guard (try? item.element.appIsRunning()) == true else { return nil }
-            let app = LauncherShortcutResolver.runningApplications(forBundleAt: item.url, bundleIdentifier: item.bundleIdentifier)
-                .first { !seen.contains($0.processIdentifier) }
-            if let app {
-                seen.insert(app.processIdentifier)
-            }
+        return resolvedApplicationDockItems().compactMap { result in
+            guard result.isRunning == true, let app = result.status.previewOrGestureApplication,
+                  seen.insert(app.processIdentifier).inserted
+            else { return nil }
             return app
         }
     }
 
-    /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
-    /// This is used to correctly identify which instance of a multi-instance app is being hovered.
-    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
-        applicationDockItems()
-            .filter { $0.bundleIdentifier == bundleIdentifier }
-            .firstIndex { CFEqual($0.element, hoveredItem) } ?? 0
+    func recordAppActivation(_ activatedApp: NSRunningApplication) {
+        let now = Date()
+        guard instanceOrdering.hasPendingClick else { return }
+        let app = LauncherShortcutResolver.resolvingInPlaceReexec(activatedApp)
+        guard let bundleIdentifier = LauncherShortcutResolver.owningShortcutBundleIdentifier(of: app) ?? app.bundleIdentifier else { return }
+        instanceOrdering.recordActivation(of: .init(app), bundleIdentifier: bundleIdentifier, now: now)
     }
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
             return ApplicationReturnType(status: .notFound, dockItemElement: nil)
         }
-
-        do {
-            guard let appURL = try hoveredDockItem.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL else {
-                throw AxError.runtimeError
-            }
-
-            let bundle = Bundle(url: appURL)
-            guard let bundleIdentifier = bundle?.bundleIdentifier else {
-                guard let dockItemTitle = try hoveredDockItem.title() else {
-                    return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
-                }
-
-                if let app = WindowUtil.findRunningApplicationByName(named: dockItemTitle) {
-                    return ApplicationReturnType(status: .success(app), dockItemElement: hoveredDockItem)
-                } else {
-                    return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
-                }
-            }
-
-            let runningApps = LauncherShortcutResolver.runningApplications(forBundleAt: appURL, bundleIdentifier: bundleIdentifier)
-
-            // For multiple instances, find the correct one based on dock position
-            if runningApps.count > 1 {
-                let instanceIndex = findDockItemInstanceIndex(hoveredDockItem, bundleIdentifier: bundleIdentifier)
-                if instanceIndex < runningApps.count {
-                    return ApplicationReturnType(status: .success(runningApps[instanceIndex]), dockItemElement: hoveredDockItem)
-                }
-            }
-
-            if let runningApp = runningApps.first {
-                return ApplicationReturnType(status: .success(runningApp), dockItemElement: hoveredDockItem)
-            } else {
-                return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), dockItemElement: hoveredDockItem)
-            }
-        } catch {
-            return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
+        guard let item = Self.applicationDockItems(from: [hoveredDockItem]).first else {
+            return Self.unidentifiedDockItemStatus(hoveredDockItem)
         }
+
+        let apps = LauncherShortcutResolver.runningApplications(forBundleAt: item.url, bundleIdentifier: item.bundleIdentifier)
+        let matchingItems = apps.count > 1
+            ? Self.applicationDockItems(from: getAllDockItemChildren() ?? [], reusing: item).filter { $0.bundleIdentifier == item.bundleIdentifier }
+            : [item]
+        return resolveInstances(of: matchingItems, runningApps: apps).first { result in
+            result.dockItemElement.map { CFEqual($0, hoveredDockItem) } == true
+        } ?? ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
     }
 
     func dockItemAppStatus(at point: CGPoint) -> ApplicationReturnType {
@@ -879,6 +933,10 @@ final class DockObserver {
             return passthrough
         }
 
+        if type == .leftMouseDown || type == .rightMouseDown || type == .otherMouseDown {
+            instanceOrdering.cancelPendingClick()
+        }
+
         if previewCoordinator.containsQuartzPoint(event.location) {
             return Unmanaged.passUnretained(event)
         }
@@ -893,7 +951,7 @@ final class DockObserver {
             }
 
             let appUnderMouse = dockItemAppStatus(at: event.location)
-            if case let .success(app) = appUnderMouse.status {
+            if let app = appUnderMouse.status.previewOrGestureApplication {
                 let handled = handleDockScroll(app: app, event: event)
                 if handled {
                     return nil
@@ -916,7 +974,21 @@ final class DockObserver {
             DispatchQueue.main.async { [weak self] in
                 self?.previewCoordinator.cancelPendingShow()
                 self?.previewCoordinator.restoreDockAutoHideState()
+                if case .unresolvedInstance = appUnderMouse.status {
+                    self?.lastHoveredPID = nil
+                }
             }
+        }
+
+        if case let .unresolvedInstance(bundleIdentifier, _) = appUnderMouse.status {
+            if type == .leftMouseDown,
+               !event.flags.contains(.maskShift), !event.flags.contains(.maskControl),
+               !event.flags.contains(.maskCommand), !event.flags.contains(.maskAlternate),
+               let item = appUnderMouse.dockItemElement
+            {
+                instanceOrdering.observeNativeClick(on: item, bundleIdentifier: bundleIdentifier)
+            }
+            return Unmanaged.passUnretained(event)
         }
 
         if case let .success(app) = appUnderMouse.status {
@@ -982,7 +1054,7 @@ final class DockObserver {
         }
 
         switch appUnderMouse.status {
-        case .success:
+        case .success, .unresolvedInstance:
             break
         case let .notRunning(bundleIdentifier):
             guard canShowSpecialPreview(forNotRunningBundleIdentifier: bundleIdentifier) else {
@@ -1156,7 +1228,7 @@ final class DockObserver {
             let currentMouseLocation = DockObserver.getMousePosition()
             let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
-            guard case let .success(currentApp) = appUnderMouseElement.status,
+            guard let currentApp = appUnderMouseElement.status.previewOrGestureApplication,
                   currentApp.processIdentifier == app.processIdentifier,
                   let dockItemElement = appUnderMouseElement.dockItemElement
             else {
