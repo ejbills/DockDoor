@@ -845,7 +845,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             )
         }
 
-        if centeredHoverWindowState == nil {
+        if centeredHoverWindowState == nil, dockPositionOverride == nil {
             keepDockRevealed()
         }
     }
