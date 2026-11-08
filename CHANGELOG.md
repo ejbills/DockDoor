@@ -38,6 +38,30 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.42.3"></a>
+# [Release 1.42.3](https://github.com/ejbills/DockDoor/releases/tag/1.42.3) - 2026-11-08
+
+## ✨ New Features
+- Quit on last window close can now target only chosen apps
+  - Set "Apps to quit" to "All apps except selected" (default) or "Only selected apps"
+  - Find it in Settings > Dock Previews > Dock Interaction after turning on quit on last window close
+
+## 🔧 Improvements & Stability
+- Settings search finds the new quit options
+- Updated translations in supported languages
+
+## 🐛 Bug Fixes
+- Windows of some apps no longer missing from previews and the switcher
+  - Apps are only treated as unresponsive if they actually hang, not after a quick connection failure
+- Toggles, pickers, and scrolling respond at the top of settings pages with a preview
+  - Affects Settings > Dock Previews, Window Switcher, and Cmd+Tab
+- Cmd+Tab settings hide the header image when Cmd+Tab enhancements are off
+- Alternate Shortcuts description appears under the section title
+
+
+[Changes][1.42.3]
+
+
 <a id="1.42.2"></a>
 # [Release 1.42.2](https://github.com/ejbills/DockDoor/releases/tag/1.42.2) - 2026-11-02
 
@@ -2687,6 +2711,7 @@ v1.0
 [Changes][releases]
 
 
+[1.42.3]: https://github.com/ejbills/DockDoor/compare/1.42.2...1.42.3
 [1.42.2]: https://github.com/ejbills/DockDoor/compare/1.42.1...1.42.2
 [1.42.1]: https://github.com/ejbills/DockDoor/compare/1.42.0...1.42.1
 [1.42.0]: https://github.com/ejbills/DockDoor/compare/1.41.0...1.42.0
