@@ -24,6 +24,7 @@ struct SettingsFormView<Content: View, Header: View>: View {
                         .padding(.top, 12)
                         .padding(.bottom, 6)
                         .background(Color(nsColor: .windowBackgroundColor))
+                        .allowsHitTesting(false)
                 }
             }
             .onChange(of: scrollTarget) { target in
