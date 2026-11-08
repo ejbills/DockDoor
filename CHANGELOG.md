@@ -38,6 +38,21 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.42.4"></a>
+# [Release 1.42.4](https://github.com/ejbills/DockDoor/releases/tag/1.42.4) - 2026-11-08
+
+## 🔧 Improvements & Stability
+- Auto-hidden Dock stays visible during previews
+- Dock stays visible during previews by default
+
+## 🐛 Bug Fixes
+- Pinned compact Calendar widget no longer crashes with four or more events
+  - It shows up to 3 upcoming events
+
+
+[Changes][1.42.4]
+
+
 <a id="1.42.3"></a>
 # [Release 1.42.3](https://github.com/ejbills/DockDoor/releases/tag/1.42.3) - 2026-11-08
 
@@ -2711,6 +2726,7 @@ v1.0
 [Changes][releases]
 
 
+[1.42.4]: https://github.com/ejbills/DockDoor/compare/1.42.3...1.42.4
 [1.42.3]: https://github.com/ejbills/DockDoor/compare/1.42.2...1.42.3
 [1.42.2]: https://github.com/ejbills/DockDoor/compare/1.42.1...1.42.2
 [1.42.1]: https://github.com/ejbills/DockDoor/compare/1.42.0...1.42.1
