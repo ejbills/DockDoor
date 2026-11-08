@@ -80,7 +80,7 @@ struct BaseHoverContainer<Content: View>: View {
                     )
             }
             .padding(.all, mockPreviewActive ? 0 : HoverContainerPadding.container)
-            .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height, alignment: .topLeading)
+            .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: SwitcherHeightBudget.limit(for: bestGuessMonitor), alignment: .topLeading)
     }
 }
 

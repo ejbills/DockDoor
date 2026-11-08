@@ -10,9 +10,20 @@ final class SwitcherSelectionState: ObservableObject {
 /// Pure UI state container for window preview presentation
 class PreviewStateCoordinator: ObservableObject {
     let selection = SwitcherSelectionState()
+
+    /// Fired on the assigning thread whenever currIndex actually changes.
+    /// Used to mirror the overlay selection onto the native Cmd+Tab switcher via AX.
+    var onSelectedIndexChanged: ((Int) -> Void)?
+
     var currIndex: Int {
         get { selection.currIndex }
-        set { selection.currIndex = newValue }
+        set {
+            let didChange = selection.currIndex != newValue
+            selection.currIndex = newValue
+            if didChange {
+                onSelectedIndexChanged?(newValue)
+            }
+        }
     }
 
     @Published var windowSwitcherActive: Bool = false {
@@ -154,6 +165,9 @@ class PreviewStateCoordinator: ObservableObject {
             hasMovedSinceOpen = false
             initialHoverLocation = nil
         }
+        if oldSwitcherState, !windowSwitcherActive {
+            SwitcherHeightBudget.current = nil
+        }
 
         // If window switcher state changed and we have windows, recalculate dimensions
         if oldSwitcherState != windowSwitcherActive, !windows.isEmpty {
@@ -162,6 +176,13 @@ class PreviewStateCoordinator: ObservableObject {
                 recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
             }
         }
+    }
+
+    /// Index of the first window (within the active search filter, if any) that
+    /// belongs to the given process, or nil when that app has no visible entry.
+    func firstSearchIndex(forPID pid: pid_t) -> Int? {
+        let candidates = hasActiveSearch ? filteredWindowIndices() : Array(windows.indices)
+        return candidates.first { windows[$0].app.processIdentifier == pid }
     }
 
     @MainActor

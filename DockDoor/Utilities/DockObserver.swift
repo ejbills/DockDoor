@@ -79,6 +79,8 @@ final class DockObserver {
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
     var cmdTabPollingTimer: Timer?
+    /// Two-way sync bookkeeping between the native Cmd+Tab highlight and the search panel.
+    var cmdTabSelection = CmdTabSelectionTracker()
 
     private var eventTap: CFMachPort?
     private var eventTapRunLoopSource: CFRunLoopSource?
