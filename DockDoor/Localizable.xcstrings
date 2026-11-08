@@ -661,8 +661,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (hidden)"
+            "state" : "translated",
+            "value" : " (nascosta)"
           }
         },
         "ja" : {
@@ -852,8 +852,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " (minimized)"
+            "state" : "translated",
+            "value" : " (ridotta a icona)"
           }
         },
         "ja" : {
@@ -1815,7 +1815,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@, %2$lld px"
           }
         },
@@ -2005,8 +2005,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@, inherited from the main shortcut"
+            "state" : "translated",
+            "value" : "%@, ereditato dalla scorciatoia principale"
           }
         },
         "ja" : {
@@ -2017,8 +2017,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@, inherited from the main shortcut"
+            "state" : "translated",
+            "value" : "%@, 메인 단축키로부터 물려받음"
           }
         },
         "nl" : {
@@ -2095,14 +2095,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@, inherited from the main shortcut"
+            "state" : "translated",
+            "value" : "%@，继承自主快捷键"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@, inherited from the main shortcut"
+            "state" : "translated",
+            "value" : "%@，同主要快速鍵"
           }
         }
       }
@@ -2778,8 +2778,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld of %lld"
+            "state" : "translated",
+            "value" : "%lld di %lld"
           }
         },
         "ja" : {
@@ -2790,14 +2790,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld of %lld"
+            "state" : "translated",
+            "value" : "%lld의 %lld"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld of %lld"
+            "state" : "translated",
+            "value" : "%lld van %lld"
           }
         },
         "no" : {
@@ -2868,14 +2868,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld of %lld"
+            "state" : "translated",
+            "value" : "%lld / %lld"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld of %lld"
+            "state" : "translated",
+            "value" : "%lld/%lld"
           }
         }
       }
@@ -5641,8 +5641,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "$20 one-time"
+            "state" : "translated",
+            "value" : "20 $ una tantum"
           }
         },
         "ja" : {
@@ -6977,7 +6977,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3"
           }
         },
@@ -7168,8 +7168,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3 Macs · 14-day money-back guarantee"
+            "state" : "translated",
+            "value" : "3 Mac · Rimborso garantito entro 14 giorni"
           }
         },
         "ja" : {
@@ -7931,7 +7931,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4"
           }
         },
@@ -10788,8 +10788,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Action"
+            "state" : "translated",
+            "value" : "Azione"
           }
         },
         "ja" : {
@@ -10800,14 +10800,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Action"
+            "state" : "translated",
+            "value" : "액션"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Action"
+            "state" : "translated",
+            "value" : "Actie"
           }
         },
         "no" : {
@@ -10878,14 +10878,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Action"
+            "state" : "translated",
+            "value" : "操作"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Action"
+            "state" : "translated",
+            "value" : "動作"
           }
         }
       }
@@ -12693,8 +12693,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Alternate Shortcut"
+            "state" : "translated",
+            "value" : "Aggiungi scorciatoia alternativa"
           }
         },
         "ja" : {
@@ -12705,8 +12705,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Alternate Shortcut"
+            "state" : "translated",
+            "value" : "대체 단축키 추가"
           }
         },
         "nl" : {
@@ -12783,14 +12783,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Alternate Shortcut"
+            "state" : "translated",
+            "value" : "添加备用快捷键"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Alternate Shortcut"
+            "state" : "translated",
+            "value" : "加入替代快速鍵"
           }
         }
       }
@@ -13263,8 +13263,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add color"
+            "state" : "translated",
+            "value" : "Aggiungi colore"
           }
         },
         "ja" : {
@@ -13275,14 +13275,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add color"
+            "state" : "translated",
+            "value" : "색상 추가"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add color"
+            "state" : "translated",
+            "value" : "Kleur toevoegen"
           }
         },
         "no" : {
@@ -13353,14 +13353,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add color"
+            "state" : "translated",
+            "value" : "添加颜色"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add color"
+            "state" : "translated",
+            "value" : "加入顏色"
           }
         }
       }
@@ -13833,8 +13833,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "Tasti di attivazione aggiuntivi, ciascuno con un proprio modificatore se lo desideri, che aprono il selettore con una diversa modalità di filtro."
           }
         },
         "ja" : {
@@ -13845,8 +13845,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "필요한 경우, 별도의 보조 키들을 조합해 각각 다른 필터 모드로 윈도우 전환기를 여는 추가 실행 키입니다."
           }
         },
         "nl" : {
@@ -13923,14 +13923,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "额外的触发键，可按需为每个键设置自己的修饰键，以不同的筛选模式调用切换器。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Additional trigger keys, each with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "以不同過濾模式打開切換器的額外最終鍵（可選搭配專屬變更鍵）。"
           }
         }
       }
@@ -14405,8 +14405,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how much of the screen shows through the Liquid Glass background."
+            "state" : "translated",
+            "value" : "Regola quanto lo schermo traspare attraverso lo sfondo Liquid Glass."
           }
         },
         "ja" : {
@@ -18405,8 +18405,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate Shortcuts"
+            "state" : "translated",
+            "value" : "Scorciatoie alternative"
           }
         },
         "ja" : {
@@ -18417,8 +18417,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate Shortcuts"
+            "state" : "translated",
+            "value" : "대체 단축키들"
           }
         },
         "nl" : {
@@ -18495,14 +18495,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate Shortcuts"
+            "state" : "translated",
+            "value" : "备用快捷键"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate Shortcuts"
+            "state" : "translated",
+            "value" : "替代快速鍵"
           }
         }
       }
@@ -18595,8 +18595,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate shortcuts with no modifiers selected use the main shortcut's modifiers."
+            "state" : "translated",
+            "value" : "Le scorciatoie alternative senza modificatori selezionati usano i modificatori della scorciatoia principale."
           }
         },
         "ja" : {
@@ -18607,8 +18607,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate shortcuts with no modifiers selected use the main shortcut's modifiers."
+            "state" : "translated",
+            "value" : "보조 키가 선택되지 않은 대체 단축키는 기본 단축키의 보조 키를 사용합니다."
           }
         },
         "nl" : {
@@ -18685,14 +18685,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate shortcuts with no modifiers selected use the main shortcut's modifiers."
+            "state" : "translated",
+            "value" : "未选择修饰键的备用快捷键将使用主快捷键的修饰键。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate shortcuts with no modifiers selected use the main shortcut's modifiers."
+            "state" : "translated",
+            "value" : "沒有變更鍵的額外快速鍵會使用主要快速鍵的變更鍵。"
           }
         }
       }
@@ -19753,7 +19753,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "동일한 수정자 키를 사용하여 다른 필터 모드로 전환기를 호출하는 추가 트리거 키입니다."
+            "value" : "동일한 보조 키를 사용하여 다른 필터 모드로 전환기를 호출하는 추가 트리거 키입니다."
           }
         },
         "nl" : {
@@ -19931,8 +19931,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "Un tasto di attivazione aggiuntivo, con un proprio modificatore se lo desideri, che apre il selettore con una diversa modalità di filtro."
           }
         },
         "ja" : {
@@ -20122,8 +20122,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An enhanced Cmd-Tab overlay"
+            "state" : "translated",
+            "value" : "Un Cmd-Tab potenziato"
           }
         },
         "ja" : {
@@ -20134,8 +20134,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An enhanced Cmd-Tab overlay"
+            "state" : "translated",
+            "value" : "향상된 Cmd-Tab 오버레이"
           }
         },
         "nl" : {
@@ -20212,14 +20212,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An enhanced Cmd-Tab overlay"
+            "state" : "translated",
+            "value" : "增强的 Cmd-Tab 覆盖"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An enhanced Cmd-Tab overlay"
+            "state" : "translated",
+            "value" : "強化版Cmd-Tab覆疊"
           }
         }
       }
@@ -20883,7 +20883,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "App"
           }
         },
@@ -22407,8 +22407,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application"
+            "state" : "translated",
+            "value" : "Applicazione"
           }
         },
         "ja" : {
@@ -23929,8 +23929,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Arrange"
+            "state" : "translated",
+            "value" : "Disponi"
           }
         },
         "ja" : {
@@ -26022,8 +26022,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic app icon size"
+            "state" : "translated",
+            "value" : "Dimensione automatica delle icone delle app"
           }
         },
         "ja" : {
@@ -26034,8 +26034,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic app icon size"
+            "state" : "translated",
+            "value" : "자동 앱 아이콘 크기"
           }
         },
         "nl" : {
@@ -26112,14 +26112,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic app icon size"
+            "state" : "translated",
+            "value" : "自动调整 App 图标大小"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic app icon size"
+            "state" : "translated",
+            "value" : "自動App圖像大小"
           }
         }
       }
@@ -28307,8 +28307,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Back 15 seconds"
+            "state" : "translated",
+            "value" : "Indietro di 15 secondi"
           }
         },
         "ja" : {
@@ -28325,8 +28325,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Back 15 seconds"
+            "state" : "translated",
+            "value" : "15 seconden terug"
           }
         },
         "no" : {
@@ -28397,14 +28397,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Back 15 seconds"
+            "state" : "translated",
+            "value" : "后退 15 秒"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Back 15 seconds"
+            "state" : "translated",
+            "value" : "倒退 15 秒"
           }
         }
       }
@@ -28878,8 +28878,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backgrounds, sizes and titles"
+            "state" : "translated",
+            "value" : "Sfondi, dimensioni e titoli"
           }
         },
         "ja" : {
@@ -28890,14 +28890,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backgrounds, sizes and titles"
+            "state" : "translated",
+            "value" : "배경, 크기와 제목"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backgrounds, sizes and titles"
+            "state" : "translated",
+            "value" : "Achtergrond, grootte en titels"
           }
         },
         "no" : {
@@ -28968,14 +28968,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backgrounds, sizes and titles"
+            "state" : "translated",
+            "value" : "背景、大小和标题"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backgrounds, sizes and titles"
+            "state" : "translated",
+            "value" : "背景、大小與標題"
           }
         }
       }
@@ -29068,8 +29068,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Backup & Restore"
+            "state" : "translated",
+            "value" : "Backup e ripristino"
           }
         },
         "ja" : {
@@ -30018,8 +30018,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bends the background at the edges and adds a bright rim. Turn off for softer frosted glass that is easier to read over busy backgrounds."
+            "state" : "translated",
+            "value" : "Curva lo sfondo ai bordi e aggiunge un contorno luminoso. Disattiva per un vetro smerigliato più morbido, più leggibile su sfondi ricchi di elementi."
           }
         },
         "ja" : {
@@ -30970,8 +30970,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred"
+            "state" : "translated",
+            "value" : "Sfocato"
           }
         },
         "ja" : {
@@ -30982,14 +30982,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred"
+            "state" : "translated",
+            "value" : "흐림 효과"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred"
+            "state" : "translated",
+            "value" : "Vervaagd"
           }
         },
         "no" : {
@@ -31060,14 +31060,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred"
+            "state" : "translated",
+            "value" : "模糊"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred"
+            "state" : "translated",
+            "value" : "模糊"
           }
         }
       }
@@ -31160,8 +31160,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows."
+            "state" : "translated",
+            "value" : "Lo sfondo sfocato lascia trasparire la scrivania; i colori pieni e personalizzati sono più leggibili sopra finestre ricche di elementi."
           }
         },
         "ja" : {
@@ -31172,8 +31172,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows."
+            "state" : "translated",
+            "value" : "흐림 효과를 적용하면 바탕 화면이 드러나고, 단색 및 사용자 지정 색상은 복잡한 창 위에서도 읽기 쉽습니다."
           }
         },
         "nl" : {
@@ -31250,14 +31250,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows."
+            "state" : "translated",
+            "value" : "模糊可让桌面透出；纯色和自定义颜色在杂乱窗口上更易阅读。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blurred lets the desktop show through; solid and custom colors are easier to read over busy windows."
+            "state" : "translated",
+            "value" : "模糊會透出桌面背景；實色和自訂顏色在視窗繁多時較易閱讀。"
           }
         }
       }
@@ -31922,8 +31922,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom"
+            "state" : "translated",
+            "value" : "In basso"
           }
         },
         "ja" : {
@@ -34972,8 +34972,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancelled"
+            "state" : "translated",
+            "value" : "Annullato"
           }
         },
         "ja" : {
@@ -36114,8 +36114,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Casts a soft shadow around preview panels so their edges stay visible over light backgrounds."
+            "state" : "translated",
+            "value" : "Proietta un'ombra morbida intorno ai pannelli di anteprima, così i bordi restano visibili sugli sfondi chiari."
           }
         },
         "ja" : {
@@ -40871,8 +40871,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clearer"
+            "state" : "translated",
+            "value" : "Più trasparente"
           }
         },
         "ja" : {
@@ -41633,8 +41633,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all."
+            "state" : "translated",
+            "value" : "Fai clic sui tasti modificatori per attivarli o disattivarli; puoi combinarne diversi. Funzionano sia i tasti Comando, Opzione o Control di sinistra sia quelli di destra. Puoi anche tenere premuti i modificatori mentre premi il tasto di attivazione per acquisirli tutti insieme."
           }
         },
         "ja" : {
@@ -41645,8 +41645,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all."
+            "state" : "translated",
+            "value" : "보조 키를 클릭하여 기능을 전환할 수 있으며, 여러 키를 조합하여 사용할 수도 있습니다. 왼쪽 또는 오른쪽 Command, Option 또는 Control 키를 모두 사용할 수 있습니다. 또한, 보조 키를 누른 상태에서 트리거를 누르면 모든 보조 키가 동시에 활성화됩니다."
           }
         },
         "nl" : {
@@ -41723,14 +41723,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all."
+            "state" : "translated",
+            "value" : "点按修饰键以切换它们；你可以组合多个。左侧或右侧的 Command、Option 或 Control 键均可。你也可以在按下触发键时按住修饰键，将它们全部捕获。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click the modifier keys to toggle them; you can combine several. Either left or right Command, Option, or Control keys work. You can also hold the modifiers while pressing the trigger to capture them all."
+            "state" : "translated",
+            "value" : "點一下變更鍵來切換其啟用狀態；可同時組合多個變更鍵。可使用左右側Command、Option或Control鍵。同時按下變更鍵與最終鍵來同時擷取。"
           }
         }
       }
@@ -42013,8 +42013,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after"
+            "state" : "translated",
+            "value" : "Chiudi dopo"
           }
         },
         "ja" : {
@@ -42025,8 +42025,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after"
+            "state" : "translated",
+            "value" : "후 닫기"
           }
         },
         "nl" : {
@@ -42103,14 +42103,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after"
+            "state" : "translated",
+            "value" : "关闭时机"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after"
+            "state" : "translated",
+            "value" : "關閉於"
           }
         }
       }
@@ -42203,8 +42203,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after a delay"
+            "state" : "translated",
+            "value" : "Chiudi dopo un intervallo"
           }
         },
         "ja" : {
@@ -42215,8 +42215,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after a delay"
+            "state" : "translated",
+            "value" : "잠시 후 닫기"
           }
         },
         "nl" : {
@@ -42293,14 +42293,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after a delay"
+            "state" : "translated",
+            "value" : "延迟后关闭"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close after a delay"
+            "state" : "translated",
+            "value" : "延遲後關閉"
           }
         }
       }
@@ -42584,8 +42584,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close Tab"
+            "state" : "translated",
+            "value" : "Chiudi pannello"
           }
         },
         "ja" : {
@@ -44687,8 +44687,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab enhancements"
+            "state" : "translated",
+            "value" : "Miglioramenti Cmd+Tab"
           }
         },
         "ja" : {
@@ -44699,8 +44699,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab enhancements"
+            "state" : "translated",
+            "value" : "Cmd+Tab 향상"
           }
         },
         "nl" : {
@@ -44777,14 +44777,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab enhancements"
+            "state" : "translated",
+            "value" : "Cmd+Tab 增强功能"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab enhancements"
+            "state" : "translated",
+            "value" : "啟用Cmd+Tab強化功能"
           }
         }
       }
@@ -45450,8 +45450,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Collapse native tabs into a single window"
+            "state" : "translated",
+            "value" : "Raggruppa i pannelli nativi in un'unica finestra"
           }
         },
         "ja" : {
@@ -46973,8 +46973,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact list appearance"
+            "state" : "translated",
+            "value" : "Aspetto elenco compatto"
           }
         },
         "ja" : {
@@ -46985,8 +46985,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact list appearance"
+            "state" : "translated",
+            "value" : "컴팩트한 목록 표시 방식"
           }
         },
         "nl" : {
@@ -47063,14 +47063,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact list appearance"
+            "state" : "translated",
+            "value" : "紧凑列表外观"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact list appearance"
+            "state" : "translated",
+            "value" : "精簡列表外觀"
           }
         }
       }
@@ -52489,8 +52489,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Copy"
+            "state" : "translated",
+            "value" : "Copia"
           }
         },
         "ja" : {
@@ -52679,8 +52679,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Corner Radius"
+            "state" : "translated",
+            "value" : "Raggio degli angoli"
           }
         },
         "ja" : {
@@ -54776,8 +54776,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom color"
+            "state" : "translated",
+            "value" : "Colore personalizzato"
           }
         },
         "ja" : {
@@ -54788,14 +54788,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom color"
+            "state" : "translated",
+            "value" : "커스텀 색상"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom color"
+            "state" : "translated",
+            "value" : "Aangepaste kleur"
           }
         },
         "no" : {
@@ -54866,14 +54866,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom color"
+            "state" : "translated",
+            "value" : "自定义颜色"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom color"
+            "state" : "translated",
+            "value" : "自訂顏色"
           }
         }
       }
@@ -55347,8 +55347,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cut"
+            "state" : "translated",
+            "value" : "Taglia"
           }
         },
         "ja" : {
@@ -57254,8 +57254,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Desktop %lld"
+            "state" : "translated",
+            "value" : "Scrivania %lld"
           }
         },
         "ja" : {
@@ -61060,8 +61060,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Do nothing"
+            "state" : "translated",
+            "value" : "Non fare nulla"
           }
         },
         "ja" : {
@@ -61072,14 +61072,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Do nothing"
+            "state" : "translated",
+            "value" : "아무것도 하지 않음"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Do nothing"
+            "state" : "translated",
+            "value" : "Niets doen"
           }
         },
         "no" : {
@@ -61150,14 +61150,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Do nothing"
+            "state" : "translated",
+            "value" : "不执行任何操作"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Do nothing"
+            "state" : "translated",
+            "value" : "無"
           }
         }
       }
@@ -61440,8 +61440,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock edge"
+            "state" : "translated",
+            "value" : "Bordo del Dock"
           }
         },
         "ja" : {
@@ -61821,8 +61821,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Height"
+            "state" : "translated",
+            "value" : "Altezza Dock"
           }
         },
         "ja" : {
@@ -64295,8 +64295,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Modifier"
+            "state" : "translated",
+            "value" : "Modificatore anteprima Dock"
           }
         },
         "ja" : {
@@ -64308,7 +64308,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dock 미리보기 수정 키"
+            "value" : "Dock 미리보기 보조 키"
           }
         },
         "nl" : {
@@ -65057,8 +65057,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Trigger"
+            "state" : "translated",
+            "value" : "Attivazione anteprima Dock"
           }
         },
         "ja" : {
@@ -66202,8 +66202,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Width"
+            "state" : "translated",
+            "value" : "Larghezza Dock"
           }
         },
         "ja" : {
@@ -67154,8 +67154,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project."
+            "state" : "translated",
+            "value" : "DockDoor Free non ha contenuti a pagamento e non li avrà mai. Pro è un'app separata che sostituisce completamente il Dock di macOS per un controllo del sistema molto più profondo, e acquistarla è il modo migliore per sostenere il progetto gratuito."
           }
         },
         "ja" : {
@@ -68678,8 +68678,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Double-tap a title bar to center the window at its earlier size."
+            "state" : "translated",
+            "value" : "Tocca due volte una barra del titolo per centrare la finestra alla dimensione precedente."
           }
         },
         "ja" : {
@@ -68868,8 +68868,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Double-taps need \"Smart zoom\" turned on in Trackpad settings."
+            "state" : "translated",
+            "value" : "Per il doppio tocco deve essere attivo \"Zoom intelligente\" nelle impostazioni Trackpad."
           }
         },
         "ja" : {
@@ -69248,8 +69248,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "Modifica"
           }
         },
         "ja" : {
@@ -74976,7 +74976,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "윈도우 스위치 활성화"
+            "value" : "윈도우 전환기 활성화"
           }
         },
         "nl" : {
@@ -76485,8 +76485,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every setting goes back to its default. This can't be undone."
+            "state" : "translated",
+            "value" : "Tutte le impostazioni tornano ai valori predefiniti. L'operazione non può essere annullata."
           }
         },
         "ja" : {
@@ -76497,8 +76497,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every setting goes back to its default. This can't be undone."
+            "state" : "translated",
+            "value" : "모든 설정이 기본이 됩니다. 되돌릴 수 없습니다."
           }
         },
         "nl" : {
@@ -76575,14 +76575,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every setting goes back to its default. This can't be undone."
+            "state" : "translated",
+            "value" : "所有设置都将恢复为默认值。此操作无法撤销。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every setting goes back to its default. This can't be undone."
+            "state" : "translated",
+            "value" : "會重置所有設定為預設值。你將無法還原這個動作。"
           }
         }
       }
@@ -77819,8 +77819,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Explain what each setting does underneath its row."
+            "state" : "translated",
+            "value" : "Spiega sotto ogni riga a cosa serve l'impostazione."
           }
         },
         "ja" : {
@@ -77831,8 +77831,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Explain what each setting does underneath its row."
+            "state" : "translated",
+            "value" : "각 설정이 어떤 기능을 하는지 해당 행 아래에 설명하십시오."
           }
         },
         "nl" : {
@@ -77909,14 +77909,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Explain what each setting does underneath its row."
+            "state" : "translated",
+            "value" : "在每项设置下方说明其作用。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Explain what each setting does underneath its row."
+            "state" : "translated",
+            "value" : "在每列設定下方說明用途。"
           }
         }
       }
@@ -78009,8 +78009,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Export DockDoor Settings"
+            "state" : "translated",
+            "value" : "Esporta impostazioni di DockDoor"
           }
         },
         "ja" : {
@@ -78389,8 +78389,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Export Settings…"
+            "state" : "translated",
+            "value" : "Esporta impostazioni…"
           }
         },
         "ja" : {
@@ -80306,8 +80306,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Screen"
+            "state" : "translated",
+            "value" : "Riempi schermo"
           }
         },
         "ja" : {
@@ -81451,8 +81451,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Find"
+            "state" : "translated",
+            "value" : "Trova"
           }
         },
         "ja" : {
@@ -81463,14 +81463,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Find"
+            "state" : "translated",
+            "value" : "찾기"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Find"
+            "state" : "translated",
+            "value" : "Vind"
           }
         },
         "no" : {
@@ -81541,14 +81541,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Find"
+            "state" : "translated",
+            "value" : "查找"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Find"
+            "state" : "translated",
+            "value" : "尋找"
           }
         }
       }
@@ -82022,8 +82022,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fingers:"
+            "state" : "translated",
+            "value" : "Dita:"
           }
         },
         "ja" : {
@@ -84689,8 +84689,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit App"
+            "state" : "translated",
+            "value" : "Uscita forzata dall'app"
           }
         },
         "ja" : {
@@ -84880,8 +84880,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Forward 15 seconds"
+            "state" : "translated",
+            "value" : "Avanti di 15 secondi"
           }
         },
         "ja" : {
@@ -84898,8 +84898,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Forward 15 seconds"
+            "state" : "translated",
+            "value" : "15 seconden vooruit"
           }
         },
         "no" : {
@@ -84970,14 +84970,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Forward 15 seconds"
+            "state" : "translated",
+            "value" : "前进 15 秒"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Forward 15 seconds"
+            "state" : "translated",
+            "value" : "前進15秒"
           }
         }
       }
@@ -85833,8 +85833,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Full Screen"
+            "state" : "translated",
+            "value" : "Tutto schermo"
           }
         },
         "ja" : {
@@ -87547,8 +87547,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gestures"
+            "state" : "translated",
+            "value" : "Gesti"
           }
         },
         "ja" : {
@@ -87930,8 +87930,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro"
+            "state" : "translated",
+            "value" : "Ottieni DockDoor Pro"
           }
         },
         "ja" : {
@@ -88120,8 +88120,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get DockDoor Pro…"
+            "state" : "translated",
+            "value" : "Ottieni DockDoor Pro…"
           }
         },
         "ja" : {
@@ -90594,8 +90594,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Haptic feedback"
+            "state" : "translated",
+            "value" : "Feedback aptico"
           }
         },
         "ja" : {
@@ -95357,8 +95357,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Higher values open the switcher and change the selection with shorter swipes."
+            "state" : "translated",
+            "value" : "Con valori più alti il selettore si apre e la selezione cambia con scorrimenti più brevi."
           }
         },
         "ja" : {
@@ -95737,8 +95737,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight the frontmost app"
+            "state" : "translated",
+            "value" : "Evidenzia l'app in primo piano"
           }
         },
         "ja" : {
@@ -96220,7 +96220,194 @@
       }
     },
     "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only." : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hold Cmd, or the window switcher's modifier while the switcher is open, and press a key to act on the selected window preview. Cmd+Tab enhancement mode uses Cmd only."
+          }
+        }
+      }
     },
     "Hold this key to temporarily allow the Dock to move freely." : {
       "localizations" : {
@@ -96691,8 +96878,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Horizontal offset"
+            "state" : "translated",
+            "value" : "Spostamento orizzontale"
           }
         },
         "ja" : {
@@ -96703,8 +96890,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Horizontal offset"
+            "state" : "translated",
+            "value" : "수평 시야"
           }
         },
         "nl" : {
@@ -96781,14 +96968,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Horizontal offset"
+            "state" : "translated",
+            "value" : "水平偏移"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Horizontal offset"
+            "state" : "translated",
+            "value" : "水平偏移"
           }
         }
       }
@@ -97072,8 +97259,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover"
+            "state" : "translated",
+            "value" : "Passaggio del mouse"
           }
         },
         "ja" : {
@@ -98216,8 +98403,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Icon only"
+            "state" : "translated",
+            "value" : "Solo icona"
           }
         },
         "ja" : {
@@ -98228,8 +98415,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Icon only"
+            "state" : "translated",
+            "value" : "아이콘만 표시"
           }
         },
         "nl" : {
@@ -98306,14 +98493,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Icon only"
+            "state" : "translated",
+            "value" : "仅图标"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Icon only"
+            "state" : "translated",
+            "value" : "僅圖像"
           }
         }
       }
@@ -98788,8 +98975,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If macOS uses the same swipe for Mission Control, App Exposé or switching between full-screen apps, turn that gesture off in System Settings > Trackpad > More Gestures."
+            "state" : "translated",
+            "value" : "Se macOS usa lo stesso gesto per Mission Control, App Exposé o il passaggio tra app a tutto schermo, disattiva quel gesto in Impostazioni di Sistema > Trackpad > Altri gesti."
           }
         },
         "ja" : {
@@ -100121,8 +100308,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Import DockDoor Settings"
+            "state" : "translated",
+            "value" : "Importa impostazioni di DockDoor"
           }
         },
         "ja" : {
@@ -100311,8 +100498,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Import Settings"
+            "state" : "translated",
+            "value" : "Importa impostazioni"
           }
         },
         "ja" : {
@@ -100501,8 +100688,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Import Settings…"
+            "state" : "translated",
+            "value" : "Importa impostazioni…"
           }
         },
         "ja" : {
@@ -104123,8 +104310,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep a strip of the screen free so snapped windows don't cover a custom dock."
+            "state" : "translated",
+            "value" : "Lascia libera una fascia dello schermo, così le finestre agganciate non coprono un dock personalizzato."
           }
         },
         "ja" : {
@@ -104313,8 +104500,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."
+            "state" : "translated",
+            "value" : "Mantieni visibili le anteprime del Dock finché il puntatore resta sopra di esse, dopo che il passaggio del mouse ha portato una finestra in primo piano."
           }
         },
         "ja" : {
@@ -104693,8 +104880,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview open after hover activation"
+            "state" : "translated",
+            "value" : "Mantieni aperta l'anteprima dopo l'attivazione al passaggio del mouse"
           }
         },
         "ja" : {
@@ -105645,8 +105832,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keybinds"
+            "state" : "translated",
+            "value" : "Combinazioni di tasti"
           }
         },
         "ja" : {
@@ -106027,8 +106214,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard-driven window switching"
+            "state" : "translated",
+            "value" : "Passaggio tra finestre da tastiera"
           }
         },
         "ja" : {
@@ -106039,8 +106226,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard-driven window switching"
+            "state" : "translated",
+            "value" : "키보드를 이용한 윈도우 전환"
           }
         },
         "nl" : {
@@ -106117,14 +106304,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard-driven window switching"
+            "state" : "translated",
+            "value" : "键盘驱动的窗口切换"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard-driven window switching"
+            "state" : "translated",
+            "value" : "以鍵盤操作的視窗切換"
           }
         }
       }
@@ -106408,8 +106595,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Labels each preview with the number of the desktop (Space) its window is on. Only shown when you have more than one desktop."
+            "state" : "translated",
+            "value" : "Indica su ogni anteprima il numero della scrivania (Spazio) in cui si trova la finestra. Viene mostrato solo se hai più di una scrivania."
           }
         },
         "ja" : {
@@ -108125,8 +108312,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left"
+            "state" : "translated",
+            "value" : "Sinistra"
           }
         },
         "ja" : {
@@ -108316,8 +108503,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Left or right"
+            "state" : "translated",
+            "value" : "Sinistra o destra"
           }
         },
         "ja" : {
@@ -112505,8 +112692,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lyrics"
+            "state" : "translated",
+            "value" : "Testo"
           }
         },
         "ja" : {
@@ -112523,8 +112710,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lyrics"
+            "state" : "translated",
+            "value" : "Songteksten"
           }
         },
         "no" : {
@@ -112595,14 +112782,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lyrics"
+            "state" : "translated",
+            "value" : "歌词"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lyrics"
+            "state" : "translated",
+            "value" : "歌詞"
           }
         }
       }
@@ -112695,8 +112882,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free."
+            "state" : "translated",
+            "value" : "macOS non può posizionare il Dock su questo schermo perché un altro schermo è adiacente al bordo del Dock. Ridisponi gli schermi in Impostazioni di Sistema → Schermi in modo che una parte di quel bordo resti libera."
           }
         },
         "ja" : {
@@ -113075,8 +113262,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Manage windows and apps with two-finger swipes, pinches and taps on title bars, Dock icons and the menu bar."
+            "state" : "translated",
+            "value" : "Gestisci finestre e app con scorrimenti, pizzicamenti e tocchi a due dita su barre del titolo, icone del Dock e barra dei menu."
           }
         },
         "ja" : {
@@ -116695,8 +116882,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media, calendar and folder panels"
+            "state" : "translated",
+            "value" : "Pannelli multimedia, calendario e cartelle"
           }
         },
         "ja" : {
@@ -116707,14 +116894,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media, calendar and folder panels"
+            "state" : "translated",
+            "value" : "미디어, 캘린더, 폴더 패널"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media, calendar and folder panels"
+            "state" : "translated",
+            "value" : "Media, agenda en map panelen"
           }
         },
         "no" : {
@@ -116785,14 +116972,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media, calendar and folder panels"
+            "state" : "translated",
+            "value" : "媒体、日历和文件夹面板"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media, calendar and folder panels"
+            "state" : "translated",
+            "value" : "媒體、行事曆與檔案夾面板"
           }
         }
       }
@@ -118223,8 +118410,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All Windows"
+            "state" : "translated",
+            "value" : "Riduci a icona tutte le finestre"
           }
         },
         "ja" : {
@@ -118796,8 +118983,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize Windows"
+            "state" : "translated",
+            "value" : "Riduci a icona le finestre"
           }
         },
         "ja" : {
@@ -119748,8 +119935,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier"
+            "state" : "translated",
+            "value" : "Modificatore"
           }
         },
         "ja" : {
@@ -119761,7 +119948,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "수정 키"
+            "value" : "보조 키"
           }
         },
         "nl" : {
@@ -119939,8 +120126,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier Click"
+            "state" : "translated",
+            "value" : "Clic con modificatore"
           }
         },
         "ja" : {
@@ -119952,7 +120139,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "수정 키 클릭"
+            "value" : "보조 키 클릭"
           }
         },
         "nl" : {
@@ -120130,8 +120317,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "More Gestures"
+            "state" : "translated",
+            "value" : "Altri gesti"
           }
         },
         "ja" : {
@@ -120320,8 +120507,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "More Opaque"
+            "state" : "translated",
+            "value" : "Più opaco"
           }
         },
         "ja" : {
@@ -122034,8 +122221,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon"
+            "state" : "translated",
+            "value" : "Nome e icona"
           }
         },
         "ja" : {
@@ -122046,14 +122233,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon"
+            "state" : "translated",
+            "value" : "이름 및 아이콘"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon"
+            "state" : "translated",
+            "value" : "Naam en pictogram"
           }
         },
         "no" : {
@@ -122124,14 +122311,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon"
+            "state" : "translated",
+            "value" : "名称和图标"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon"
+            "state" : "translated",
+            "value" : "名稱和圖像"
           }
         }
       }
@@ -122225,8 +122412,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon (shadowed)"
+            "state" : "translated",
+            "value" : "Nome e icona (con ombra)"
           }
         },
         "ja" : {
@@ -122237,8 +122424,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon (shadowed)"
+            "state" : "translated",
+            "value" : "이름 및 아이콘 (그림자 처리됨)"
           }
         },
         "nl" : {
@@ -122315,14 +122502,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon (shadowed)"
+            "state" : "translated",
+            "value" : "名称和图标（带阴影）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name and icon (shadowed)"
+            "state" : "translated",
+            "value" : "名稱和圖像（陰影）"
           }
         }
       }
@@ -122796,8 +122983,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigation"
+            "state" : "translated",
+            "value" : "Navigazione"
           }
         },
         "ja" : {
@@ -122808,14 +122995,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigation"
+            "state" : "translated",
+            "value" : "길찾기"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigation"
+            "state" : "translated",
+            "value" : "Navigatie"
           }
         },
         "no" : {
@@ -122886,14 +123073,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigation"
+            "state" : "translated",
+            "value" : "导航"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigation"
+            "state" : "translated",
+            "value" : "導覽"
           }
         }
       }
@@ -123177,8 +123364,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never quit these apps"
+            "state" : "translated",
+            "value" : "Non chiudere mai queste app"
           }
         },
         "ja" : {
@@ -123267,14 +123454,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never quit these apps"
+            "state" : "translated",
+            "value" : "永不退出这些 App"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never quit these apps"
+            "state" : "translated",
+            "value" : "永不結束這些App"
           }
         }
       }
@@ -124131,8 +124318,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next App"
+            "state" : "translated",
+            "value" : "App successiva"
           }
         },
         "ja" : {
@@ -124512,8 +124699,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next track"
+            "state" : "translated",
+            "value" : "Brano successivo"
           }
         },
         "ja" : {
@@ -124530,8 +124717,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next track"
+            "state" : "translated",
+            "value" : "Volgend nummer"
           }
         },
         "no" : {
@@ -124602,14 +124789,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next track"
+            "state" : "translated",
+            "value" : "下一曲"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next track"
+            "state" : "translated",
+            "value" : "下一首"
           }
         }
       }
@@ -128890,8 +129077,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Windows"
+            "state" : "translated",
+            "value" : "Nessuna finestra"
           }
         },
         "ja" : {
@@ -129844,8 +130031,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Off"
+            "state" : "translated",
+            "value" : "Disattivato"
           }
         },
         "ja" : {
@@ -130415,8 +130602,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a Dock icon"
+            "state" : "translated",
+            "value" : "su un'icona del Dock"
           }
         },
         "ja" : {
@@ -130605,8 +130792,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On a Dock Icon"
+            "state" : "translated",
+            "value" : "Su un'icona del Dock"
           }
         },
         "ja" : {
@@ -130796,8 +130983,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a tab"
+            "state" : "translated",
+            "value" : "su un pannello"
           }
         },
         "ja" : {
@@ -130987,8 +131174,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on a title bar"
+            "state" : "translated",
+            "value" : "su una barra del titolo"
           }
         },
         "ja" : {
@@ -131177,8 +131364,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On a Window's Title Bar"
+            "state" : "translated",
+            "value" : "Sulla barra del titolo di una finestra"
           }
         },
         "ja" : {
@@ -131368,8 +131555,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "on the menu bar"
+            "state" : "translated",
+            "value" : "sulla barra dei menu"
           }
         },
         "ja" : {
@@ -131558,8 +131745,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On the Menu Bar"
+            "state" : "translated",
+            "value" : "Sulla barra dei menu"
           }
         },
         "ja" : {
@@ -134223,8 +134410,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open %@"
+            "state" : "translated",
+            "value" : "Apri %@"
           }
         },
         "ja" : {
@@ -134235,14 +134422,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open %@"
+            "state" : "translated",
+            "value" : "열기 %@"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open %@"
+            "state" : "translated",
+            "value" : "%@ openen"
           }
         },
         "no" : {
@@ -134313,14 +134500,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open %@"
+            "state" : "translated",
+            "value" : "打开 %@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open %@"
+            "state" : "translated",
+            "value" : "打開%@"
           }
         }
       }
@@ -134796,8 +134983,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open App Window"
+            "state" : "translated",
+            "value" : "Apri finestra dell'app"
           }
         },
         "ja" : {
@@ -136128,8 +136315,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Trackpad Settings"
+            "state" : "translated",
+            "value" : "Apri impostazioni Trackpad"
           }
         },
         "ja" : {
@@ -136318,8 +136505,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open window switcher with a trackpad swipe"
+            "state" : "translated",
+            "value" : "Apri il selettore finestre con uno scorrimento sul trackpad"
           }
         },
         "ja" : {
@@ -137269,8 +137456,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Options"
+            "state" : "translated",
+            "value" : "Opzioni"
           }
         },
         "ja" : {
@@ -137472,7 +137659,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "기본 흐린 배경을 고정된 사용자 지정 색상으로 재정의하기."
+            "value" : "기본 흐린 배경을 단색 사용자 지정 색상으로 재정의하기."
           }
         },
         "nl" : {
@@ -138599,8 +138786,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Paste"
+            "state" : "translated",
+            "value" : "Incolla"
           }
         },
         "ja" : {
@@ -138790,8 +138977,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pause"
+            "state" : "translated",
+            "value" : "Pausa"
           }
         },
         "ja" : {
@@ -138808,8 +138995,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pause"
+            "state" : "translated",
+            "value" : "Pauze"
           }
         },
         "no" : {
@@ -138880,14 +139067,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pause"
+            "state" : "translated",
+            "value" : "暂停"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pause"
+            "state" : "translated",
+            "value" : "暫停"
           }
         }
       }
@@ -139553,8 +139740,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance, previews and the Dock position lock"
+            "state" : "translated",
+            "value" : "Prestazioni, anteprime e blocco della posizione del Dock"
           }
         },
         "ja" : {
@@ -139565,8 +139752,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance, previews and the Dock position lock"
+            "state" : "translated",
+            "value" : "성능, 미리보기 및 Dock 위치 잠금"
           }
         },
         "nl" : {
@@ -139643,14 +139830,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance, previews and the Dock position lock"
+            "state" : "translated",
+            "value" : "性能、预览和 Dock 位置锁定"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance, previews and the Dock position lock"
+            "state" : "translated",
+            "value" : "效能、預覽與Dock位置"
           }
         }
       }
@@ -140507,8 +140694,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions, updates and credits"
+            "state" : "translated",
+            "value" : "Autorizzazioni, aggiornamenti e riconoscimenti"
           }
         },
         "ja" : {
@@ -140519,8 +140706,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions, updates and credits"
+            "state" : "translated",
+            "value" : "권한, 업데이트 및 크레딧"
           }
         },
         "nl" : {
@@ -140597,14 +140784,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions, updates and credits"
+            "state" : "translated",
+            "value" : "权限、更新和致谢"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions, updates and credits"
+            "state" : "translated",
+            "value" : "權限、更新與貢獻"
           }
         }
       }
@@ -141460,8 +141647,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a running app's Dock icon to quit it."
+            "state" : "translated",
+            "value" : "Pizzica verso l'interno sull'icona del Dock di un'app in esecuzione per chiuderla."
           }
         },
         "ja" : {
@@ -141651,8 +141838,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a tab to close just that tab."
+            "state" : "translated",
+            "value" : "Pizzica verso l'interno su un pannello per chiudere solo quel pannello."
           }
         },
         "ja" : {
@@ -141842,8 +142029,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch in on a title bar."
+            "state" : "translated",
+            "value" : "Pizzica verso l'interno su una barra del titolo."
           }
         },
         "ja" : {
@@ -142033,8 +142220,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinch out on a title bar to enter or leave full screen."
+            "state" : "translated",
+            "value" : "Pizzica verso l'esterno su una barra del titolo per attivare o disattivare il tutto schermo."
           }
         },
         "ja" : {
@@ -142223,8 +142410,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinches need \"Zoom in or out\" turned on in Trackpad settings."
+            "state" : "translated",
+            "value" : "Per i pizzicamenti deve essere attivo \"Ingrandisci o riduci\" nelle impostazioni Trackpad."
           }
         },
         "ja" : {
@@ -143556,8 +143743,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Play"
+            "state" : "translated",
+            "value" : "Riproduci"
           }
         },
         "ja" : {
@@ -143574,8 +143761,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Play"
+            "state" : "translated",
+            "value" : "Afspelen"
           }
         },
         "no" : {
@@ -143646,14 +143833,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Play"
+            "state" : "translated",
+            "value" : "播放"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Play"
+            "state" : "translated",
+            "value" : "播放"
           }
         }
       }
@@ -149855,7 +150042,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "레이아웃 미리보기(스위쳐)"
+            "value" : "레이아웃 미리보기(전환기)"
           }
         },
         "nl" : {
@@ -151747,8 +151934,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previews shown when hovering the Dock"
+            "state" : "translated",
+            "value" : "Anteprime mostrate al passaggio del mouse sul Dock"
           }
         },
         "ja" : {
@@ -151759,8 +151946,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previews shown when hovering the Dock"
+            "state" : "translated",
+            "value" : "Dock에 마우스를 올릴 때 미리보기 보이기"
           }
         },
         "nl" : {
@@ -151837,14 +152024,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previews shown when hovering the Dock"
+            "state" : "translated",
+            "value" : "悬停在 Dock 上时显示预览"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previews shown when hovering the Dock"
+            "state" : "translated",
+            "value" : "指標停留在Dock上時顯示的預覽"
           }
         }
       }
@@ -151938,8 +152125,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous App"
+            "state" : "translated",
+            "value" : "App precedente"
           }
         },
         "ja" : {
@@ -152129,8 +152316,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous track"
+            "state" : "translated",
+            "value" : "Brano precedente"
           }
         },
         "ja" : {
@@ -152147,8 +152334,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous track"
+            "state" : "translated",
+            "value" : "Vorig nummer"
           }
         },
         "no" : {
@@ -152219,14 +152406,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous track"
+            "state" : "translated",
+            "value" : "上一曲"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Previous track"
+            "state" : "translated",
+            "value" : "前一首"
           }
         }
       }
@@ -153273,8 +153460,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit %@"
+            "state" : "translated",
+            "value" : "Esci da %@"
           }
         },
         "ja" : {
@@ -154415,8 +154602,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Redo"
+            "state" : "translated",
+            "value" : "Ripeti"
           }
         },
         "ja" : {
@@ -154795,8 +154982,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Refraction"
+            "state" : "translated",
+            "value" : "Rifrazione"
           }
         },
         "ja" : {
@@ -156319,8 +156506,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove %@"
+            "state" : "translated",
+            "value" : "Rimuovi %@"
           }
         },
         "ja" : {
@@ -156331,8 +156518,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove %@"
+            "state" : "translated",
+            "value" : "제거 %@"
           }
         },
         "nl" : {
@@ -156409,14 +156596,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove %@"
+            "state" : "translated",
+            "value" : "移除 %@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove %@"
+            "state" : "translated",
+            "value" : "移除 %@"
           }
         }
       }
@@ -156700,8 +156887,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove alternate shortcut"
+            "state" : "translated",
+            "value" : "Rimuovi scorciatoia alternativa"
           }
         },
         "ja" : {
@@ -156712,8 +156899,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove alternate shortcut"
+            "state" : "translated",
+            "value" : "대체 단축키 제거"
           }
         },
         "nl" : {
@@ -156790,14 +156977,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove alternate shortcut"
+            "state" : "translated",
+            "value" : "移除备用快捷键"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove alternate shortcut"
+            "state" : "translated",
+            "value" : "移除替代快速鍵"
           }
         }
       }
@@ -158791,8 +158978,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Replace the Dock entirely with the paid app from the same developer"
+            "state" : "translated",
+            "value" : "Sostituisci completamente il Dock con l'app a pagamento dello stesso sviluppatore"
           }
         },
         "ja" : {
@@ -159361,8 +159548,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reported by Apps"
+            "state" : "translated",
+            "value" : "Indicato dalle app"
           }
         },
         "ja" : {
@@ -159754,7 +159941,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스위처에서 뒤로 가려면 %@+Tab을 눌러야 합니다."
+            "value" : "전환기에서 뒤로 가려면 %@+Tab을 눌러야 합니다."
           }
         },
         "nl" : {
@@ -159944,7 +160131,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스위처에서 뒤로 가려면 ⇧+Tab을 눌러야 합니다."
+            "value" : "전환기에서 뒤로 가려면 ⇧+Tab을 눌러야 합니다."
           }
         },
         "nl" : {
@@ -160135,7 +160322,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스위처에서 뒤로 가려면 Shift+Tab을 눌러야 합니다."
+            "value" : "전환기에서 뒤로 가려면 Shift+Tab을 눌러야 합니다."
           }
         },
         "nl" : {
@@ -160897,7 +161084,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "도크 호버 감지 및 창 전환기 핫키에 필요합니다"
+            "value" : "Dock 호버 감지 및 창 전환기 핫키에 필요합니다"
           }
         },
         "nl" : {
@@ -161645,8 +161832,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset and quit"
+            "state" : "translated",
+            "value" : "Ripristina ed esci"
           }
         },
         "ja" : {
@@ -161657,14 +161844,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset and quit"
+            "state" : "translated",
+            "value" : "초기화 및 종료"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset and quit"
+            "state" : "translated",
+            "value" : "Reset en sluiten"
           }
         },
         "no" : {
@@ -161735,14 +161922,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset and quit"
+            "state" : "translated",
+            "value" : "重置并退出"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset and quit"
+            "state" : "translated",
+            "value" : "重置並結束"
           }
         }
       }
@@ -161835,8 +162022,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to default"
+            "state" : "translated",
+            "value" : "Ripristina predefiniti"
           }
         },
         "ja" : {
@@ -161847,14 +162034,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to default"
+            "state" : "translated",
+            "value" : "기본값으로 초기화"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to default"
+            "state" : "translated",
+            "value" : "Standaardinstellingen terugzetten"
           }
         },
         "no" : {
@@ -161925,14 +162112,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to default"
+            "state" : "translated",
+            "value" : "重置为默认值"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to default"
+            "state" : "translated",
+            "value" : "重置為預設值"
           }
         }
       }
@@ -162978,8 +163165,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore All"
+            "state" : "translated",
+            "value" : "Ripristina tutto"
           }
         },
         "ja" : {
@@ -163359,8 +163546,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore All Windows"
+            "state" : "translated",
+            "value" : "Ripristina tutte le finestre"
           }
         },
         "ja" : {
@@ -163550,8 +163737,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore Minimized"
+            "state" : "translated",
+            "value" : "Ripristina finestre ridotte a icona"
           }
         },
         "ja" : {
@@ -163932,8 +164119,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restore Window"
+            "state" : "translated",
+            "value" : "Ripristina finestra"
           }
         },
         "ja" : {
@@ -164693,8 +164880,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right"
+            "state" : "translated",
+            "value" : "Destra"
           }
         },
         "ja" : {
@@ -165835,8 +166022,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Same as main (%@)"
+            "state" : "translated",
+            "value" : "Come la principale (%@)"
           }
         },
         "ja" : {
@@ -166977,8 +167164,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen position (left to right)"
+            "state" : "translated",
+            "value" : "Posizione sullo schermo (da sinistra a destra)"
           }
         },
         "ja" : {
@@ -166989,8 +167176,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen position (left to right)"
+            "state" : "translated",
+            "value" : "스크린 위치 (좌우)"
           }
         },
         "nl" : {
@@ -167067,14 +167254,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen position (left to right)"
+            "state" : "translated",
+            "value" : "屏幕位置（从左到右）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen position (left to right)"
+            "state" : "translated",
+            "value" : "螢幕位置（由左至右）"
           }
         }
       }
@@ -169836,8 +170023,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scrolling on Dock icons and title bars, swipes on previews, and a trackpad swipe for the window switcher."
+            "state" : "translated",
+            "value" : "Scorrimento su icone del Dock e barre del titolo, scorrimenti sulle anteprime e scorrimento del trackpad per il selettore finestre."
           }
         },
         "ja" : {
@@ -169849,7 +170036,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dock 아이콘과 제목 표시줄을 스크롤하고, 미리 보기를 스와이프하고, 트랙패드를 스와이프하여 창 전환기를 사용할 수 있습니다."
+            "value" : "Dock 아이콘과 제목 표시줄을 스크롤하고, 미리 보기를 스와이프하고, 트랙패드를 스와이프하여 윈도우 전환기를 사용할 수 있습니다."
           }
         },
         "nl" : {
@@ -170027,8 +170214,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "Cerca"
           }
         },
         "ja" : {
@@ -170039,14 +170226,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "검색"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "Zoeken"
           }
         },
         "no" : {
@@ -170117,14 +170304,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "搜索"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "搜尋"
           }
         }
       }
@@ -172315,8 +172502,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "Seleziona tutto"
           }
         },
         "ja" : {
@@ -175740,8 +175927,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sensitivity"
+            "state" : "translated",
+            "value" : "Sensibilità"
           }
         },
         "ja" : {
@@ -176898,7 +177085,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "창 전환기에서 사용할 최대 행 수를 설정합니다. '0'은 화면 높이에 따라 행을 동적으로 결정합니다."
+            "value" : "윈도우 전환기에서 사용할 최대 행 수를 설정합니다. '0'은 화면 높이에 따라 행을 동적으로 결정합니다."
           }
         },
         "nl" : {
@@ -177075,8 +177262,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings are saved as a JSON file you can keep in iCloud Drive or a dotfiles repository. Importing replaces your current settings and restarts DockDoor."
+            "state" : "translated",
+            "value" : "Le impostazioni vengono salvate in un file JSON che puoi conservare in iCloud Drive o in un repository di dotfile. L'importazione sostituisce le impostazioni attuali e riavvia DockDoor."
           }
         },
         "ja" : {
@@ -177265,8 +177452,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings Backup Failed"
+            "state" : "translated",
+            "value" : "Backup delle impostazioni non riuscito"
           }
         },
         "ja" : {
@@ -177455,8 +177642,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings file"
+            "state" : "translated",
+            "value" : "File delle impostazioni"
           }
         },
         "ja" : {
@@ -177467,14 +177654,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings file"
+            "state" : "translated",
+            "value" : "설정 파일"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings file"
+            "state" : "translated",
+            "value" : "Instellingenbestand"
           }
         },
         "no" : {
@@ -177545,14 +177732,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings file"
+            "state" : "translated",
+            "value" : "设置文件"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings file"
+            "state" : "translated",
+            "value" : "設定檔案"
           }
         }
       }
@@ -177645,8 +177832,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Opacity"
+            "state" : "translated",
+            "value" : "Opacità ombra"
           }
         },
         "ja" : {
@@ -177835,8 +178022,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadow Size"
+            "state" : "translated",
+            "value" : "Dimensione ombra"
           }
         },
         "ja" : {
@@ -178787,8 +178974,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shift ⇧"
+            "state" : "translated",
+            "value" : "Maiuscole ⇧"
           }
         },
         "ja" : {
@@ -179168,8 +179355,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shortcut %lld"
+            "state" : "translated",
+            "value" : "Scorciatoia %lld"
           }
         },
         "ja" : {
@@ -179180,14 +179367,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shortcut %lld"
+            "state" : "translated",
+            "value" : "단축키 %lld"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shortcut %lld"
+            "state" : "translated",
+            "value" : "Sneltoets %lld"
           }
         },
         "no" : {
@@ -179258,8 +179445,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shortcut %lld"
+            "state" : "translated",
+            "value" : "快捷键 %lld"
           }
         },
         "zh-Hant" : {
@@ -183548,8 +183735,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab."
+            "state" : "translated",
+            "value" : "Mostra un'unica anteprima per le app che usano i pannelli nativi delle finestre di macOS (ad es. Ghostty, Finder, Terminale) invece di un'anteprima per ogni pannello."
           }
         },
         "ja" : {
@@ -183738,8 +183925,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab. Restart the app for this to take effect."
+            "state" : "translated",
+            "value" : "Mostra un'unica anteprima per le app che usano i pannelli nativi delle finestre di macOS (ad es. Ghostty, Finder, Terminale) invece di un'anteprima per ogni pannello. Riavvia l'app per applicare la modifica."
           }
         },
         "ja" : {
@@ -184308,8 +184495,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews automatically on hover, or require a click trigger on the Dock icon."
+            "state" : "translated",
+            "value" : "Mostra le anteprime automaticamente al passaggio del mouse, oppure richiedi un clic sull'icona del Dock."
           }
         },
         "ja" : {
@@ -185068,8 +185255,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show setting descriptions"
+            "state" : "translated",
+            "value" : "Mostra descrizioni delle impostazioni"
           }
         },
         "ja" : {
@@ -185080,8 +185267,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show setting descriptions"
+            "state" : "translated",
+            "value" : "설정 설명 표시"
           }
         },
         "nl" : {
@@ -185158,14 +185345,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show setting descriptions"
+            "state" : "translated",
+            "value" : "显示设置说明"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show setting descriptions"
+            "state" : "translated",
+            "value" : "顯示設定描述"
           }
         }
       }
@@ -185258,8 +185445,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show shadow beneath previews"
+            "state" : "translated",
+            "value" : "Mostra l'ombra sotto le anteprime"
           }
         },
         "ja" : {
@@ -185638,8 +185825,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Space number on previews"
+            "state" : "translated",
+            "value" : "Mostra il numero dello Spazio sulle anteprime"
           }
         },
         "ja" : {
@@ -185828,8 +186015,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show the app name and icon above dock previews. Shared with widget headers."
+            "state" : "translated",
+            "value" : "Mostra il nome e l'icona dell'app sopra le anteprime del Dock. Impostazione condivisa con le intestazioni dei widget."
           }
         },
         "ja" : {
@@ -185840,8 +186027,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show the app name and icon above dock previews. Shared with widget headers."
+            "state" : "translated",
+            "value" : "Dock 미리보기 위에 앱 이름과 아이콘을 표시합니다. 위젯 헤더와 공유됩니다."
           }
         },
         "nl" : {
@@ -185918,14 +186105,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show the app name and icon above dock previews. Shared with widget headers."
+            "state" : "translated",
+            "value" : "在 Dock 预览上方显示 App 名称和图标。与小组件标题共用。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show the app name and icon above dock previews. Shared with widget headers."
+            "state" : "translated",
+            "value" : "在Dock預覽上方顯示App名稱與圖像。與小工具標題共用。"
           }
         }
       }
@@ -186208,8 +186395,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show where the window will land"
+            "state" : "translated",
+            "value" : "Mostra dove verrà posizionata la finestra"
           }
         },
         "ja" : {
@@ -186588,8 +186775,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews for Dock icons."
+            "state" : "translated",
+            "value" : "Mostra le anteprime delle finestre per le icone del Dock."
           }
         },
         "ja" : {
@@ -189254,8 +189441,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows a dot under every running application: bright for apps with open windows, black for apps with none."
+            "state" : "translated",
+            "value" : "Mostra un punto sotto ogni applicazione in esecuzione: luminoso per le app con finestre aperte, nero per quelle senza finestre."
           }
         },
         "ja" : {
@@ -192118,8 +192305,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap Left or Right"
+            "state" : "translated",
+            "value" : "Aggancia a sinistra o a destra"
           }
         },
         "ja" : {
@@ -192309,8 +192496,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap to a Corner"
+            "state" : "translated",
+            "value" : "Aggancia a un angolo"
           }
         },
         "ja" : {
@@ -192499,8 +192686,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snap, minimize and close windows with two fingers on your trackpad. Swipe or pinch on a window's title bar, a Dock icon or the menu bar."
+            "state" : "translated",
+            "value" : "Aggancia, riduci a icona e chiudi le finestre con due dita sul trackpad. Scorri o pizzica sulla barra del titolo di una finestra, su un'icona del Dock o sulla barra dei menu."
           }
         },
         "ja" : {
@@ -192881,8 +193068,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Solid"
+            "state" : "translated",
+            "value" : "Pieno"
           }
         },
         "ja" : {
@@ -192893,14 +193080,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Solid"
+            "state" : "translated",
+            "value" : "단색"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Solid"
+            "state" : "translated",
+            "value" : "Effen"
           }
         },
         "no" : {
@@ -192971,14 +193158,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Solid"
+            "state" : "translated",
+            "value" : "纯色"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Solid"
+            "state" : "translated",
+            "value" : "實色"
           }
         }
       }
@@ -194213,8 +194400,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Space for a Custom Dock"
+            "state" : "translated",
+            "value" : "Spazio per un dock personalizzato"
           }
         },
         "ja" : {
@@ -198406,8 +198593,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support links, startup, menu bar and backups"
+            "state" : "translated",
+            "value" : "Link di supporto, avvio, barra dei menu e backup"
           }
         },
         "ja" : {
@@ -198418,8 +198605,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support links, startup, menu bar and backups"
+            "state" : "translated",
+            "value" : "지원 링크, 시작 프로그램, 메뉴 바 및 백업"
           }
         },
         "nl" : {
@@ -198496,14 +198683,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support links, startup, menu bar and backups"
+            "state" : "translated",
+            "value" : "支持链接、启动、菜单栏和备份"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support links, startup, menu bar and backups"
+            "state" : "translated",
+            "value" : "支援連結、啟動、選單列與備份"
           }
         }
       }
@@ -199171,8 +199358,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on a running app's Dock icon to minimize its front window."
+            "state" : "translated",
+            "value" : "Scorri verso il basso sull'icona del Dock di un'app in esecuzione per ridurre a icona la sua finestra in primo piano."
           }
         },
         "ja" : {
@@ -199362,8 +199549,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on a title bar."
+            "state" : "translated",
+            "value" : "Scorri verso il basso su una barra del titolo."
           }
         },
         "ja" : {
@@ -199553,8 +199740,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe down on an empty part of the menu bar to minimize every window on that display."
+            "state" : "translated",
+            "value" : "Scorri verso il basso su una parte vuota della barra dei menu per ridurre a icona tutte le finestre di quello schermo."
           }
         },
         "ja" : {
@@ -199744,8 +199931,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe left or right on a title bar to fill that half of the screen."
+            "state" : "translated",
+            "value" : "Scorri a sinistra o a destra su una barra del titolo per occupare quella metà dello schermo."
           }
         },
         "ja" : {
@@ -199935,8 +200122,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe left or right on an empty part of the menu bar to go to the previous or next app."
+            "state" : "translated",
+            "value" : "Scorri a sinistra o a destra su una parte vuota della barra dei menu per passare all'app precedente o successiva."
           }
         },
         "ja" : {
@@ -200315,8 +200502,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe Sensitivity"
+            "state" : "translated",
+            "value" : "Sensibilità dello scorrimento"
           }
         },
         "ja" : {
@@ -200506,8 +200693,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe sideways, then up or down, to fill a corner."
+            "state" : "translated",
+            "value" : "Scorri lateralmente, poi verso l'alto o il basso, per occupare un angolo."
           }
         },
         "ja" : {
@@ -200696,8 +200883,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe to open the switcher, keep your fingers down and move left or right to change the selection, then lift your fingers to switch."
+            "state" : "translated",
+            "value" : "Scorri per aprire il selettore, tieni le dita appoggiate e spostale a sinistra o a destra per cambiare la selezione, poi sollevale per passare alla finestra."
           }
         },
         "ja" : {
@@ -201270,8 +201457,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on a Dock icon to bring back its last minimized window."
+            "state" : "translated",
+            "value" : "Scorri verso l'alto su un'icona del Dock per ripristinare l'ultima finestra ridotta a icona."
           }
         },
         "ja" : {
@@ -201461,8 +201648,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on a title bar to fill the screen."
+            "state" : "translated",
+            "value" : "Scorri verso l'alto su una barra del titolo per riempire lo schermo."
           }
         },
         "ja" : {
@@ -201652,8 +201839,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up on an empty part of the menu bar to bring those windows back."
+            "state" : "translated",
+            "value" : "Scorri verso l'alto su una parte vuota della barra dei menu per ripristinare quelle finestre."
           }
         },
         "ja" : {
@@ -202034,8 +202221,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch Apps"
+            "state" : "translated",
+            "value" : "Cambia app"
           }
         },
         "ja" : {
@@ -203941,8 +204128,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switcher shortcuts and keyboard actions on previews"
+            "state" : "translated",
+            "value" : "Scorciatoie del selettore e azioni da tastiera sulle anteprime"
           }
         },
         "ja" : {
@@ -203953,8 +204140,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switcher shortcuts and keyboard actions on previews"
+            "state" : "translated",
+            "value" : "미리보기 화면에서 전환 단축키 및 키보드 동작"
           }
         },
         "nl" : {
@@ -204031,8 +204218,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switcher shortcuts and keyboard actions on previews"
+            "state" : "translated",
+            "value" : "切换器快捷键和预览上的键盘操作"
           }
         },
         "zh-Hant" : {
@@ -204703,8 +204890,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display"
+            "state" : "translated",
+            "value" : "Schermo principale di sistema"
           }
         },
         "ja" : {
@@ -204893,8 +205080,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge."
+            "state" : "translated",
+            "value" : "Lo schermo principale di sistema segue lo schermo che contiene la barra dei menu. DockDoor sposta automaticamente il Dock sullo schermo bloccato; puoi anche spingere il puntatore contro il bordo del Dock di quello schermo."
           }
         },
         "ja" : {
@@ -205655,8 +205842,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup could not be read: %@"
+            "state" : "translated",
+            "value" : "Impossibile leggere il backup: %@"
           }
         },
         "ja" : {
@@ -205845,8 +206032,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup could not be saved: %@"
+            "state" : "translated",
+            "value" : "Impossibile salvare il backup: %@"
           }
         },
         "ja" : {
@@ -206035,8 +206222,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The backup was created with DockDoor %@. Settings that no longer exist are ignored, and any new settings keep their defaults."
+            "state" : "translated",
+            "value" : "Il backup è stato creato con DockDoor %@. Le impostazioni non più esistenti vengono ignorate e quelle nuove mantengono i valori predefiniti."
           }
         },
         "ja" : {
@@ -207175,8 +207362,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected file is not a DockDoor settings backup."
+            "state" : "translated",
+            "value" : "Il file selezionato non è un backup delle impostazioni di DockDoor."
           }
         },
         "ja" : {
@@ -207569,7 +207756,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "창 전환기(보통 Alt/Cmd-Tab)를 사용하면 키보드 단축키로 열려 있는 앱 창 사이를 빠르게 전환할 수 있습니다."
+            "value" : "윈도우 전환기(보통 Alt/Cmd-Tab)를 사용하면 키보드 단축키로 열려 있는 앱 창 사이를 빠르게 전환할 수 있습니다."
           }
         },
         "nl" : {
@@ -209462,8 +209649,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This shortcut is already used by another window switcher shortcut."
+            "state" : "translated",
+            "value" : "Questa scorciatoia è già usata da un'altra scorciatoia del selettore finestre."
           }
         },
         "ja" : {
@@ -209474,8 +209661,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This shortcut is already used by another window switcher shortcut."
+            "state" : "translated",
+            "value" : "이 단축키는 다른 윈도우 전환기 단축키에서 사용되고 있습니다."
           }
         },
         "nl" : {
@@ -209552,14 +209739,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This shortcut is already used by another window switcher shortcut."
+            "state" : "translated",
+            "value" : "此快捷键已被另一个窗口切换器快捷键使用。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This shortcut is already used by another window switcher shortcut."
+            "state" : "translated",
+            "value" : "這組快速鍵已被其他視窗切換器佔用。"
           }
         }
       }
@@ -209842,8 +210029,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will replace all current DockDoor settings with the %lld settings in the backup. DockDoor will restart to apply them."
+            "state" : "translated",
+            "value" : "Tutte le impostazioni attuali di DockDoor verranno sostituite con le %lld impostazioni del backup. DockDoor si riavvierà per applicarle."
           }
         },
         "ja" : {
@@ -212320,8 +212507,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top"
+            "state" : "translated",
+            "value" : "In alto"
           }
         },
         "ja" : {
@@ -213273,8 +213460,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad Swipe for Window Switcher"
+            "state" : "translated",
+            "value" : "Scorrimento trackpad per il selettore finestre"
           }
         },
         "ja" : {
@@ -213464,8 +213651,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad, scroll and mouse actions"
+            "state" : "translated",
+            "value" : "Azioni di trackpad, scorrimento e mouse"
           }
         },
         "ja" : {
@@ -213476,8 +213663,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad, scroll and mouse actions"
+            "state" : "translated",
+            "value" : "트랙패드, 스크롤 및 마우스 동작"
           }
         },
         "nl" : {
@@ -213554,14 +213741,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad, scroll and mouse actions"
+            "state" : "translated",
+            "value" : "触控板、滚动和鼠标操作"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trackpad, scroll and mouse actions"
+            "state" : "translated",
+            "value" : "觸控式軌跡板、捲動與滑鼠動作"
           }
         }
       }
@@ -215751,8 +215938,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn on the Window Switcher to change its shortcuts."
+            "state" : "translated",
+            "value" : "Attiva il selettore finestre per modificarne le scorciatoie."
           }
         },
         "ja" : {
@@ -215763,8 +215950,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn on the Window Switcher to change its shortcuts."
+            "state" : "translated",
+            "value" : "단축키를 바꾸기 위해 윈도우 전환기를 켜세요."
           }
         },
         "nl" : {
@@ -215841,14 +216028,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn on the Window Switcher to change its shortcuts."
+            "state" : "translated",
+            "value" : "开启窗口切换器以更改其快捷键。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn on the Window Switcher to change its shortcuts."
+            "state" : "translated",
+            "value" : "啟用視窗切換器來變更其快速鍵。"
           }
         }
       }
@@ -215941,8 +216128,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn this up if gestures need too much finger movement."
+            "state" : "translated",
+            "value" : "Aumenta questo valore se i gesti richiedono troppo movimento delle dita."
           }
         },
         "ja" : {
@@ -216894,8 +217081,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Undo"
+            "state" : "translated",
+            "value" : "Annulla"
           }
         },
         "ja" : {
@@ -217085,8 +217272,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unhide App"
+            "state" : "translated",
+            "value" : "Mostra app"
           }
         },
         "ja" : {
@@ -217467,8 +217654,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown App"
+            "state" : "translated",
+            "value" : "App sconosciuta"
           }
         },
         "ja" : {
@@ -218419,8 +218606,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Untitled"
+            "state" : "translated",
+            "value" : "Senza titolo"
           }
         },
         "ja" : {
@@ -218610,8 +218797,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up or down"
+            "state" : "translated",
+            "value" : "Su o giù"
           }
         },
         "ja" : {
@@ -223184,8 +223371,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Using a dock other than the macOS Dock? Keep a strip of the screen free so snapped windows don't cover it."
+            "state" : "translated",
+            "value" : "Usi un dock diverso dal Dock di macOS? Lascia libera una fascia dello schermo, così le finestre agganciate non lo coprono."
           }
         },
         "ja" : {
@@ -224326,8 +224513,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Vertical offset"
+            "state" : "translated",
+            "value" : "Spostamento verticale"
           }
         },
         "ja" : {
@@ -224338,8 +224525,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Vertical offset"
+            "state" : "translated",
+            "value" : "세로 위치"
           }
         },
         "nl" : {
@@ -224416,14 +224603,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Vertical offset"
+            "state" : "translated",
+            "value" : "垂直偏移"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Vertical offset"
+            "state" : "translated",
+            "value" : "垂直偏移"
           }
         }
       }
@@ -225850,8 +226037,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What clicking the icon of an app that is already in front does to its windows."
+            "state" : "translated",
+            "value" : "Cosa succede alle finestre quando fai clic sull'icona di un'app già in primo piano."
           }
         },
         "ja" : {
@@ -225862,8 +226049,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What clicking the icon of an app that is already in front does to its windows."
+            "state" : "translated",
+            "value" : "이미 열려 있는 앱의 아이콘을 클릭했을 때 해당 앱의 창에 어떤 변화가 생기는지 보여줍니다."
           }
         },
         "nl" : {
@@ -225940,14 +226127,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What clicking the icon of an app that is already in front does to its windows."
+            "state" : "translated",
+            "value" : "点按已在前台的 App 图标时对其窗口执行的操作。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What clicking the icon of an app that is already in front does to its windows."
+            "state" : "translated",
+            "value" : "點一下已在最前方的App圖像時要執行的動作。"
           }
         }
       }
@@ -228535,7 +228722,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이 기능을 활성화하면 Shift 키만 눌러서는 이전 위치로 이동할 수 없습니다. Shift+Tab(또는 키를 떼면 선택되는 기능이 활성화된 경우 수정 키+Shift+Tab)을 사용하여 이전 위치로 이동하세요."
+            "value" : "이 기능을 활성화하면 Shift 키만 눌러서는 이전 위치로 이동할 수 없습니다. Shift+Tab(또는 키를 떼면 선택되는 기능이 활성화된 경우 보조 키+Shift+Tab)을 사용하여 이전 위치로 이동하세요."
           }
         },
         "nl" : {
@@ -230826,7 +231013,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "윈도우 스위쳐를 사용하는 경우"
+            "value" : "윈도우 전환기를 사용하는 경우"
           }
         },
         "nl" : {
@@ -231194,8 +231381,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Which apps and titles appear"
+            "state" : "translated",
+            "value" : "Quali app e titoli vengono mostrati"
           }
         },
         "ja" : {
@@ -231206,8 +231393,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Which apps and titles appear"
+            "state" : "translated",
+            "value" : "어떤 앱과 타이틀이 표시되나요"
           }
         },
         "nl" : {
@@ -231284,14 +231471,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Which apps and titles appear"
+            "state" : "translated",
+            "value" : "显示哪些 App 和标题"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Which apps and titles appear"
+            "state" : "translated",
+            "value" : "要顯示的App和標題"
           }
         }
       }
@@ -231384,8 +231571,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "While Window Gestures is on, two-finger scrolling on title bars, running Dock icons and the menu bar is used for these gestures."
+            "state" : "translated",
+            "value" : "Quando Gesti finestre è attivo, lo scorrimento a due dita su barre del titolo, icone del Dock delle app in esecuzione e barra dei menu viene usato per questi gesti."
           }
         },
         "ja" : {
@@ -232909,8 +233096,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window"
+            "state" : "translated",
+            "value" : "Finestra"
           }
         },
         "ja" : {
@@ -233100,8 +233287,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Actions"
+            "state" : "translated",
+            "value" : "Azioni finestra"
           }
         },
         "ja" : {
@@ -234243,8 +234430,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Gestures"
+            "state" : "translated",
+            "value" : "Gesti finestre"
           }
         },
         "ja" : {
@@ -234434,8 +234621,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Gestures handles scrolling on Dock icons and title bars, so these two are off while it's on."
+            "state" : "translated",
+            "value" : "Gesti finestre gestisce lo scorrimento su icone del Dock e barre del titolo, quindi queste due opzioni restano disattivate mentre è attivo."
           }
         },
         "ja" : {
@@ -237494,7 +237681,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "윈도우 스위쳐"
+            "value" : "윈도우 전환기"
           }
         },
         "nl" : {
@@ -238448,7 +238635,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "창 전환기 전용"
+            "value" : "윈도우 전환기 전용"
           }
         },
         "nl" : {
@@ -238639,7 +238826,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "창 전환기 배치"
+            "value" : "윈도우 전환기 배치"
           }
         },
         "nl" : {
@@ -238830,7 +239017,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "창 전환기 설정"
+            "value" : "윈도우 전환기 설정"
           }
         },
         "nl" : {
