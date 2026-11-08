@@ -478,6 +478,11 @@ extension WindowInfo {
             while retryCount < maxRetries {
                 if attemptActivation() {
                     WindowUtil.updateTimestampOptimistically(for: window)
+                    // Raising a minimized window restores it; record that now rather than after the debounced AX notification,
+                    // so reopening the switcher right away doesn't still list it as minimized
+                    if window.isMinimized {
+                        WindowUtil.updateCachedWindowState(window, isMinimized: false)
+                    }
                     // An already active app posts no activation notification, so tiling window managers (AeroSpace, yabai) miss the switch.
                     // Re-activate it after the raise, once the target is main and key, so only that window comes forward.
                     if wasOwnerActive {

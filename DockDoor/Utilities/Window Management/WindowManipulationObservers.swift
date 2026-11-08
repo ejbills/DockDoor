@@ -252,6 +252,7 @@ class WindowManipulationObservers {
 
         let details = "App: \(app.localizedName ?? "Unknown") (PID: \(pid))"
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let start = CFAbsoluteTimeGetCurrent()
             let registrationFailed: Bool = DebugLogger.measure("createObserverForApp", details: details) {
                 let appElement = AXUIElementCreateApplication(pid)
                 return observedAXNotifications.map {
@@ -259,7 +260,9 @@ class WindowManipulationObservers {
                 }.contains(.cannotComplete)
             }
             guard registrationFailed else { return }
-            AXResponsiveness.markUnresponsive(pid)
+            if CFAbsoluteTimeGetCurrent() - start >= AXResponsiveness.hangThreshold {
+                AXResponsiveness.markUnresponsive(pid)
+            }
             DispatchQueue.main.async {
                 guard let self, self.observers[pid] === observer else { return }
                 self.removeObserver(for: pid)
@@ -519,7 +522,11 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let pid = pid_t(Int(bitPattern: userData))
     let notification = notificationName as String
     var key = "\(pid)-\(notification)"
-    if notification == kAXTitleChangedNotification, let windowID = try? element.cgWindowId() {
+    // Per-window notifications get their own key, so several windows changing at once (e.g. ⌥⌘M) don't cancel each other
+    let isPerWindow = notification == kAXTitleChangedNotification
+        || notification == kAXWindowMiniaturizedNotification
+        || notification == kAXWindowDeminiaturizedNotification
+    if isPerWindow, let windowID = try? element.cgWindowId() {
         key += "-\(windowID)"
     }
 
