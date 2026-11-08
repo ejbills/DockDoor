@@ -101,7 +101,7 @@ struct WindowPreviewInteractionModifier: ViewModifier {
 
     private func handleWindowTap() {
         // Avoid activating the target while the temporarily pinned Dock reduces the usable screen area.
-        SharedPreviewWindowCoordinator.activeInstance?.restoreDockAutoHideState()
+        let didRestoreDock = SharedPreviewWindowCoordinator.activeInstance?.restoreDockAutoHideState() ?? false
 
         if NSEvent.modifierFlags.contains(.shift) {
             WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
@@ -121,7 +121,10 @@ struct WindowPreviewInteractionModifier: ViewModifier {
         } else if windowInfo.isHidden {
             handleWindowAction(.hide)
         } else {
-            windowInfo.bringToFront()
+            // Re-raising the focused window can resize it before the Dock's work area updates.
+            if !didRestoreDock || !windowInfo.app.isActive || (try? windowInfo.appAxElement.focusedWindow()) != windowInfo.axElement {
+                windowInfo.bringToFront()
+            }
             onTap?()
         }
     }

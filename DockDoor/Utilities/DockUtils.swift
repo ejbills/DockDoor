@@ -101,12 +101,15 @@ final class DockAutoHideManager {
         }
     }
 
-    func restoreDockState() {
+    @discardableResult
+    func restoreDockState() -> Bool {
         if isManagingDock, let wasEnabled = wasAutoHideEnabled {
             CoreDockSetAutoHideEnabled(wasEnabled)
             wasAutoHideEnabled = nil
             isManagingDock = false
+            return true
         }
+        return false
     }
 
     func cleanup() {
