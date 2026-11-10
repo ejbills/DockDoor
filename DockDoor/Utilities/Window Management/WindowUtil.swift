@@ -897,8 +897,7 @@ extension WindowUtil {
                 pid: window.app.processIdentifier,
                 frame: window.frame,
                 recency: window.lastAccessedTime,
-                groupable: !window.isMinimized
-                    && !window.isHidden
+                groupable: !window.isHidden
                     && !window.isWindowlessApp
                     && window.frame.width > 0
                     && window.frame.height > 0,
