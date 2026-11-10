@@ -145,7 +145,8 @@ struct NativeTabGroupingTests {
         Defaults[.collapseNativeTabsIntoSingleWindow] = false
         let uncollapsed = WindowUtil.collapseNativeTabsIfNeeded(windows)
         #expect(uncollapsed.map(\.id) == windows.map(\.id))
-        #expect(uncollapsed.allSatisfy(\.isMinimized))
+        let uncollapsedAllMinimized = uncollapsed.allSatisfy(\.isMinimized)
+        #expect(uncollapsedAllMinimized)
 
         Defaults[.collapseNativeTabsIntoSingleWindow] = true
         let collapsed = WindowUtil.collapseNativeTabsIfNeeded(windows)
@@ -165,7 +166,7 @@ struct NativeTabGroupingTests {
 
         var hiddenWindows = windows
         hiddenWindows[0].isHidden = true
-        #expect(WindowUtil.collapseNativeTabsIfNeeded(hiddenWindows).map(\.id) == [windows[0].id, windows[1].id])
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(hiddenWindows).map(\.id) == [windows[1].id])
 
         var windowless = WindowInfo.windowlessEntry(for: app)
         windowless.frame = frame
