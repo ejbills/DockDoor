@@ -1,10 +1,14 @@
+import ApplicationServices
+import Cocoa
 import CoreGraphics
+import Defaults
 @testable import DockDoor
 import Foundation
 import Testing
 
 // MARK: - NativeTabGrouping Tests
 
+@Suite(.serialized)
 struct NativeTabGroupingTests {
     private func candidate(
         id: CGWindowID,
@@ -77,7 +81,7 @@ struct NativeTabGroupingTests {
             candidate(id: 2, frame: frame, recency: 9, groupable: false),
             candidate(id: 3, frame: frame, recency: 1, groupable: true),
         ])
-        // The minimized/hidden window (id 2) is always kept; the two groupable
+        // The non-groupable window (id 2) is always kept; the two groupable
         // tabs collapse to the more recent one (id 3).
         #expect(kept == [2, 3])
     }
@@ -101,5 +105,78 @@ struct NativeTabGroupingTests {
 
     @Test func emptyInputYieldsEmpty() {
         #expect(NativeTabGrouping.representativeIDs(from: []).isEmpty)
+    }
+
+    @Test @MainActor func collapsesMinimizedNativeTabsWhenEnabled() throws {
+        let originalSetting = Defaults[.collapseNativeTabsIntoSingleWindow]
+        defer { Defaults[.collapseNativeTabsIntoSingleWindow] = originalSetting }
+
+        let app = NSRunningApplication.current
+        let appAX = AXUIElementCreateApplication(app.processIdentifier)
+        let frame = CGRect(x: 10, y: 20, width: 800, height: 600)
+        let windows = [1.0, 3.0, 2.0].enumerated().map { index, recency in
+            WindowInfo(
+                windowProvider: MockPreviewWindow(
+                    windowID: CGWindowID.max - CGWindowID(index + 1),
+                    frame: frame,
+                    title: "Tab \(index)",
+                    owningApplicationBundleIdentifier: app.bundleIdentifier,
+                    owningApplicationProcessID: app.processIdentifier,
+                    isOnScreen: false,
+                    windowLayer: 0
+                ),
+                app: app,
+                image: nil,
+                axElement: appAX,
+                appAxElement: appAX,
+                closeButton: nil,
+                lastAccessedTime: Date(timeIntervalSinceReferenceDate: recency),
+                isMinimized: true,
+                isHidden: false,
+                readsAXTitle: false
+            )
+        }
+        let onScreenWindows = try #require(
+            CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as? [[String: Any]]
+        )
+        let onScreenIDs = Set(onScreenWindows.compactMap { $0[kCGWindowNumber as String] as? CGWindowID })
+        try #require(windows.allSatisfy { !onScreenIDs.contains($0.id) })
+
+        Defaults[.collapseNativeTabsIntoSingleWindow] = false
+        let uncollapsed = WindowUtil.collapseNativeTabsIfNeeded(windows)
+        #expect(uncollapsed.map(\.id) == windows.map(\.id))
+        let uncollapsedAllMinimized = uncollapsed.allSatisfy(\.isMinimized)
+        #expect(uncollapsedAllMinimized)
+
+        Defaults[.collapseNativeTabsIntoSingleWindow] = true
+        let collapsed = WindowUtil.collapseNativeTabsIfNeeded(windows)
+        #expect(collapsed.map(\.id) == [windows[1].id])
+        #expect(collapsed.first?.isMinimized == true)
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(collapsed).map(\.id) == collapsed.map(\.id))
+
+        var differentFrames = windows
+        differentFrames[0].frame = frame.offsetBy(dx: 100, dy: 100)
+        let separateGroups = WindowUtil.collapseNativeTabsIfNeeded(differentFrames)
+        #expect(separateGroups.map(\.id) == [windows[0].id, windows[1].id])
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(separateGroups).map(\.id) == separateGroups.map(\.id))
+
+        var mixedMinimizeState = windows
+        mixedMinimizeState[0].isMinimized = false
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(mixedMinimizeState).map(\.id) == [windows[1].id])
+
+        var hiddenWindows = windows
+        hiddenWindows[0].isHidden = true
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(hiddenWindows).map(\.id) == [windows[1].id])
+
+        var windowless = WindowInfo.windowlessEntry(for: app)
+        windowless.frame = frame
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(windows + [windowless]).map(\.id) == [windows[1].id, windowless.id])
+
+        let zeroSized = windows.map { window in
+            var window = window
+            window.frame = .zero
+            return window
+        }
+        #expect(WindowUtil.collapseNativeTabsIfNeeded(zeroSized).map(\.id) == windows.map(\.id))
     }
 }
