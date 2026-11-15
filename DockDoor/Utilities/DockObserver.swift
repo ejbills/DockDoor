@@ -915,7 +915,7 @@ final class DockObserver {
         if type == .leftMouseDown, appUnderMouse.dockItemElement != nil {
             DispatchQueue.main.async { [weak self] in
                 self?.previewCoordinator.cancelPendingShow()
-                self?.previewCoordinator.restoreDockAutoHideState()
+                self?.previewCoordinator.releaseDockReveal()
             }
         }
 

@@ -336,9 +336,17 @@ enum SettingsSearchCatalog {
             icon: "xmark.app.fill"
         ),
         SettingsSearchItem(
+            id: "dockPreviews.quitOnCloseScope",
+            title: String(localized: "Apps to quit"),
+            keywords: ["quit", "close", "last window", "whitelist", "blacklist", "allowlist", "only", "selected"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "xmark.app"
+        ),
+        SettingsSearchItem(
             id: "dockPreviews.quitOnCloseExclusions",
             title: String(localized: "Never quit these apps"),
-            keywords: ["quit", "close", "last window", "exclude", "exclusion", "ignore"],
+            keywords: ["quit", "close", "last window", "exclude", "exclusion", "ignore", "only quit these apps", "include"],
             tab: "DockPreviews",
             section: String(localized: "Dock Interaction"),
             icon: "xmark.app"
