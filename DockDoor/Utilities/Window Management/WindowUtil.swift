@@ -126,7 +126,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 
     /// Actions that can be assigned to trackpad gestures
     static var gestureActions: [WindowAction] {
-        [.none, .close, .minimize, .maximize, .toggleFullScreen, .hide, .quit,
+        [.none, .close, .minimize, .maximize, .toggleFullScreen, .hide, .quit, .bringToCurrentSpace,
          .fillLeftHalf, .fillRightHalf, .fillTopHalf, .fillBottomHalf,
          .fillTopLeftQuarter, .fillTopRightQuarter, .fillBottomLeftQuarter, .fillBottomRightQuarter, .center]
     }
@@ -224,10 +224,17 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
             return .dismissed
 
         case .bringToCurrentSpace:
-            if WindowUtil.moveWindowToCurrentManagedSpace(window) {
-                return .dismissed
+            guard WindowUtil.moveWindowToCurrentManagedSpace(window) else { return .noChange }
+            if window.app.isHidden {
+                window.app.unhide()
             }
-            return .noChange
+            if window.isMinimized {
+                var updatedWindow = window
+                _ = updatedWindow.toggleMinimize()
+            } else {
+                window.bringToFront()
+            }
+            return .dismissed
 
         case .fillLeftHalf:
             window.fillLeftHalf()
