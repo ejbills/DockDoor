@@ -15,11 +15,26 @@ enum EmbeddedContentType: Equatable {
 private final class DockRevealTapContext {
     let pid: pid_t
     let revealPoint: CGPoint
+    let edgeIsHorizontal: Bool
+    let edgeRange: ClosedRange<CGFloat>
     var tap: CFMachPort?
+    var lastPostedPoint: CGPoint?
 
-    init(pid: pid_t, revealPoint: CGPoint) {
+    init(pid: pid_t, revealPoint: CGPoint, edgeIsHorizontal: Bool, edgeRange: ClosedRange<CGFloat>) {
         self.pid = pid
         self.revealPoint = revealPoint
+        self.edgeIsHorizontal = edgeIsHorizontal
+        self.edgeRange = edgeRange
+    }
+
+    func revealPoint(alignedTo location: CGPoint) -> CGPoint {
+        var point = revealPoint
+        if edgeIsHorizontal {
+            point.x = min(max(location.x, edgeRange.lowerBound), edgeRange.upperBound)
+        } else {
+            point.y = min(max(location.y, edgeRange.lowerBound), edgeRange.upperBound)
+        }
+        return point
     }
 }
 
@@ -28,6 +43,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     let windowSwitcherCoordinator = PreviewStateCoordinator()
     private var dockRevealTap: (tap: CFMachPort, source: CFRunLoopSource, context: Unmanaged<DockRevealTapContext>)?
+    private(set) var isDockRevealActive = false
     private var searchWindow: SearchWindow?
 
     private var appName: String = ""
@@ -198,7 +214,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
               let target = DockUtils.dockRevealTarget()
         else { return }
 
-        let context = Unmanaged.passRetained(DockRevealTapContext(pid: target.pid, revealPoint: target.revealPoint))
+        let context = Unmanaged.passRetained(DockRevealTapContext(
+            pid: target.pid,
+            revealPoint: target.revealPoint,
+            edgeIsHorizontal: target.edgeIsHorizontal,
+            edgeRange: target.edgeRange
+        ))
         guard let tap = CGEvent.tapCreateForPid(
             pid: target.pid,
             place: .tailAppendEventTap,
@@ -211,7 +232,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     return passthrough
                 }
                 if type == DockUtils.mouseExitedEventType {
-                    DockUtils.postMouseEvent(.mouseMoved, at: context.revealPoint, toDock: context.pid)
+                    let point = context.revealPoint(alignedTo: event.location)
+                    context.lastPostedPoint = point
+                    DockUtils.postMouseEvent(.mouseMoved, at: point, toDock: context.pid)
                 }
                 return Unmanaged.passUnretained(event)
             },
@@ -229,6 +252,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         context.takeUnretainedValue().tap = tap
         EventTapThread.shared.add(source)
         dockRevealTap = (tap, source, context)
+        isDockRevealActive = true
 
         if !target.dockRegion.contains(DockObserver.getMousePosition()) {
             DockUtils.postMouseEvent(.mouseMoved, at: target.revealPoint, toDock: target.pid)
@@ -238,6 +262,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     func releaseDockReveal() {
         guard let pin = dockRevealTap else { return }
         dockRevealTap = nil
+        isDockRevealActive = false
 
         let pid = pin.context.takeUnretainedValue().pid
         let mouseLocation = DockObserver.getMousePosition()
@@ -245,7 +270,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         EventTapThread.shared.remove(pin.tap, source: pin.source) {
             if shouldPostLeave {
-                DockUtils.postMouseEvent(DockUtils.mouseExitedEventType, at: mouseLocation, toDock: pid)
+                let leavePoint = pin.context.takeUnretainedValue().lastPostedPoint ?? mouseLocation
+                DockUtils.postMouseEvent(DockUtils.mouseExitedEventType, at: leavePoint, toDock: pid)
             }
             pin.context.release()
         }
