@@ -38,6 +38,23 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.42.5"></a>
+# [Release 1.42.5](https://github.com/ejbills/DockDoor/releases/tag/1.42.5) - 2026-11-18
+
+## 🔧 Improvements & Stability
+- Bring to Current Space now focuses the window
+- Assign Bring to Current Space to a trackpad swipe
+  - Pick it as the action for a gesture in the trackpad gesture settings
+- Updated translations in supported languages
+
+## 🐛 Bug Fixes
+- Minimized or hidden native tabs now show as one preview
+- Dock magnification no longer twitches with an auto-hidden Dock during previews
+
+
+[Changes][1.42.5]
+
+
 <a id="1.42.4"></a>
 # [Release 1.42.4](https://github.com/ejbills/DockDoor/releases/tag/1.42.4) - 2026-11-08
 
@@ -2726,6 +2743,7 @@ v1.0
 [Changes][releases]
 
 
+[1.42.5]: https://github.com/ejbills/DockDoor/compare/1.42.4...1.42.5
 [1.42.4]: https://github.com/ejbills/DockDoor/compare/1.42.3...1.42.4
 [1.42.3]: https://github.com/ejbills/DockDoor/compare/1.42.2...1.42.3
 [1.42.2]: https://github.com/ejbills/DockDoor/compare/1.42.1...1.42.2
