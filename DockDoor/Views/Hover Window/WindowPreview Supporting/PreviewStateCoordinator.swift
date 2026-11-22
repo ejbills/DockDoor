@@ -771,14 +771,16 @@ class PreviewStateCoordinator: ObservableObject {
 
     /// Initialize for window switcher keybind activation
     @MainActor
-    func initializeForWindowSwitcher(with newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) {
+    func initializeForWindowSwitcher(with newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, startsOnLastWindow: Bool = false) {
         setWindows(newWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
         searchQuery = ""
         hasMovedSinceOpen = false
         initialHoverLocation = NSEvent.mouseLocation
 
         if !windows.isEmpty {
-            if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
+            if startsOnLastWindow, windows.count >= 2 {
+                currIndex = windows.count - 1
+            } else if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
                 currIndex = 1
             } else {
                 currIndex = 0

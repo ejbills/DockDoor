@@ -522,7 +522,11 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let pid = pid_t(Int(bitPattern: userData))
     let notification = notificationName as String
     var key = "\(pid)-\(notification)"
-    if notification == kAXTitleChangedNotification, let windowID = try? element.cgWindowId() {
+    // Per-window notifications get their own key, so several windows changing at once (e.g. ⌥⌘M) don't cancel each other
+    let isPerWindow = notification == kAXTitleChangedNotification
+        || notification == kAXWindowMiniaturizedNotification
+        || notification == kAXWindowDeminiaturizedNotification
+    if isPerWindow, let windowID = try? element.cgWindowId() {
         key += "-\(windowID)"
     }
 
