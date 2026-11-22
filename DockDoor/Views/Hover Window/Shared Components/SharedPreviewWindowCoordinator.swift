@@ -1058,13 +1058,19 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             guard let self else { return }
 
             if let dockItemElement {
-                guard let currentDockItem = DockObserver.activeInstance?.getHoveredDockItemElement(),
-                      currentDockItem == dockItemElement
+                guard let dockObserver = DockObserver.activeInstance,
+                      let currentDockItem = dockObserver.getHoveredDockItemElement(),
+                      currentDockItem == dockItemElement,
+                      dockObserver.isPointOverDockItem(DockObserver.getMousePosition(), item: dockItemElement)
                 else { return }
             }
 
             Task { @MainActor [weak self] in
                 guard let self else { return }
+
+                if let dockItemElement, anchoredDockItem?.element == dockItemElement, isVisible {
+                    return
+                }
 
                 let screen = mouseScreen ?? NSScreen.main!
                 let activeDockPosition = DockUtils.getDockPosition()
